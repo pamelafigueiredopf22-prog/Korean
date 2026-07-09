@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="한글 길">
+<meta name="theme-color" content="#F4EEE0">
+<title>한글 길 · Learn Korean</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F4EEE0; --card:#FBF8F1; --ink:#24282C; --muted:#8C8578; --line:#E6DECC;
+    --jade:#4F9781; --jade-soft:#E4EFEA; --persimmon:#C85F3C; --persimmon-soft:#F6E6DE;
+    --serif:'Gowun Batang','Apple SD Gothic Neo','Nanum Myeongjo',ui-serif,Georgia,serif;
+    --sans:'Gowun Dodum',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Segoe UI',Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-text-size-adjust:100%}
+  .wrap{max-width:680px;margin:0 auto;padding:0 20px calc(96px + env(safe-area-inset-bottom))}
+  a{color:inherit}
+
+  /* top bar */
+  .topbar{position:sticky;top:0;z-index:5;background:var(--paper);display:flex;align-items:center;gap:14px;
+    padding:calc(14px + env(safe-area-inset-top)) 20px 12px;max-width:680px;margin:0 auto}
+  .back{font-family:var(--sans);font-size:15px;color:var(--ink);background:transparent;border:1.5px solid var(--line);
+    border-radius:999px;padding:7px 14px;cursor:pointer;display:none}
+  .back.show{display:inline-block}
+  .back:hover{border-color:var(--jade)}
+  .crumb{font-family:var(--serif);font-size:16px;color:var(--muted)}
+
+  h1{font-family:var(--serif);font-weight:700;margin:0;letter-spacing:-.01em}
+  .brandmark{display:inline-block;font-family:var(--serif);font-weight:700;font-size:14px;letter-spacing:.16em;
+    color:var(--jade);text-transform:uppercase;margin-bottom:12px}
+  .screen{display:none;animation:fade .25s ease}
+  .screen.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+  /* ---------- HOME ---------- */
+  .home-head{padding:26px 0 8px}
+  .home-head h1{font-size:40px;line-height:1.05}
+  .home-head .en{display:block;font-size:17px;font-weight:400;color:var(--muted);margin-top:8px}
+  .path{margin-top:24px;display:flex;flex-direction:column;gap:0;position:relative}
+  .step{display:flex;gap:16px;align-items:stretch;padding:0;cursor:pointer;background:none;border:none;text-align:left;font-family:inherit;width:100%}
+  .step:disabled{cursor:default}
+  .rail{display:flex;flex-direction:column;align-items:center;width:34px;flex:none}
+  .dot{width:34px;height:34px;border-radius:50%;border:2px solid var(--jade);background:var(--card);
+    display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:16px;color:var(--jade);flex:none}
+  .step.soon .dot{border-color:var(--line);color:var(--muted)}
+  .line{width:2px;flex:1;background:var(--line);min-height:14px}
+  .step:last-child .line{display:none}
+  .step-body{flex:1;padding:0 0 20px 2px}
+  .step-title{font-family:var(--serif);font-size:20px;font-weight:700}
+  .step-title .ko{color:var(--jade);margin-right:8px}
+  .step.soon .step-title{color:var(--muted)}
+  .step.soon .step-title .ko{color:var(--muted)}
+  .step-desc{font-size:14px;color:var(--muted);margin-top:1px}
+  .step-meta{font-size:12px;color:var(--jade);margin-top:5px;font-variant-numeric:tabular-nums}
+  .step.soon .step-meta{color:var(--muted)}
+
+  .review-tile{margin-top:8px;background:var(--card);border:1.5px solid var(--line);border-radius:16px;
+    padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;width:100%;font-family:inherit;text-align:left}
+  .review-tile:hover{border-color:var(--jade)}
+  .review-tile .rt-title{font-family:var(--serif);font-size:18px;font-weight:700}
+  .review-tile .rt-title .ko{color:var(--jade);margin-right:7px}
+  .review-tile .rt-desc{font-size:13px;color:var(--muted);margin-top:1px}
+  .review-tile .count{font-family:var(--serif);font-size:24px;font-weight:700;color:var(--persimmon)}
+  .review-tile .count.zero{color:var(--jade)}
+  .streak{margin-top:18px;text-align:center;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+  /* ---------- LESSON (hangul learn) ---------- */
+  .lesson h1{font-size:32px;margin-bottom:4px}
+  .lesson .sub{color:var(--muted);font-size:16px;margin:0 0 20px}
+  .lesson h2{font-family:var(--serif);font-size:20px;margin:26px 0 6px}
+  .lesson p{font-size:15.5px;margin:0 0 12px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:10px;margin:12px 0 6px}
+  .tile{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:12px 6px 10px;text-align:center;cursor:pointer;transition:border-color .15s,transform .1s}
+  .tile:hover{border-color:var(--jade)}
+  .tile:active{transform:scale(.96)}
+  .tile .han{font-family:var(--serif);font-size:30px;line-height:1}
+  .tile .snd{font-size:13px;color:var(--muted);font-style:italic;margin-top:5px}
+  .callout{background:var(--jade-soft);border:1.5px solid #CFE2DA;border-radius:14px;padding:14px 16px;margin:14px 0;font-size:15px}
+  .callout .big{font-family:var(--serif);font-size:22px}
+  .cta{margin:22px 0 8px}
+
+  /* ---------- DRILL ---------- */
+  .score{display:none;margin:8px 0 4px;border-radius:16px;padding:16px 18px;background:var(--jade-soft);border:1.5px solid #CFE2DA}
+  .score.show{display:block}
+  .score.low{background:var(--persimmon-soft);border-color:#EDD3C7}
+  .score .big{font-family:var(--serif);font-size:24px;font-weight:700}
+  .score .sub{font-size:14px;margin-top:2px}
+  main.cards{margin-top:14px;display:flex;flex-direction:column;gap:14px}
+  .card{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 16px 18px}
+  .card .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .chip{display:inline-flex;gap:8px;align-items:baseline;border:1.5px solid var(--line);border-radius:8px;padding:4px 10px;background:#fff}
+  .chip .role{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .chip .pair{font-family:var(--serif);font-size:15px}
+  .num{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .prompt-han{font-family:var(--serif);font-size:58px;line-height:1.1;text-align:center;margin:6px 0 2px}
+  .prompt-sound-hint{text-align:center;font-size:13px;color:var(--muted);margin-bottom:6px}
+  .en{color:var(--muted);font-size:14px;margin:0 0 8px}
+  .kr{font-family:var(--serif);font-size:25px;line-height:1.5;word-break:keep-all}
+  .rom{color:var(--muted);font-style:italic;font-size:14px;margin-top:3px}
+  .slot{display:inline-block;min-width:2em;text-align:center;border-bottom:2.5px solid var(--jade);color:var(--jade);padding:0 .15em;margin:0 .05em}
+  .rom .slot{border-bottom-width:2px;min-width:2.4em;font-style:normal}
+  .answer{margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}
+  .answer.left{justify-content:flex-start}
+  input[type=text]{font-family:var(--sans);font-size:17px;color:var(--ink);background:#fff;border:1.5px solid var(--line);
+    border-radius:10px;padding:10px 13px;width:130px;text-align:center}
+  input[type=text]:focus{outline:none;border-color:var(--jade);box-shadow:0 0 0 3px var(--jade-soft)}
+  .speak{border:1.5px solid var(--line);background:#fff;border-radius:10px;width:42px;height:42px;font-size:18px;cursor:pointer;color:var(--jade)}
+  .speak:hover{border-color:var(--jade)}
+  .verdict{display:none;margin-top:12px;font-size:14.5px;padding-left:22px;position:relative}
+  .card.correct .verdict,.card.wrong .verdict{display:block}
+  .verdict::before{position:absolute;left:0;top:0;font-family:var(--serif);font-weight:700}
+  .card.correct .verdict::before{content:"○";color:var(--jade)}
+  .card.wrong .verdict::before{content:"✕";color:var(--persimmon)}
+  .card.correct{border-color:#BFDDD2}.card.wrong{border-color:#E9C9BC}
+  .card.correct input{border-color:var(--jade)}.card.wrong input{border-color:var(--persimmon)}
+  .verdict .sol{font-family:var(--serif);color:var(--persimmon);font-size:16px}
+  .verdict .ok{color:var(--jade)}
+  .empty{background:var(--card);border:1.5px dashed var(--line);border-radius:16px;padding:28px 20px;text-align:center;color:var(--muted);margin-top:16px}
+  .empty .big{font-family:var(--serif);font-size:22px;color:var(--ink);margin-bottom:6px}
+
+  /* action bar */
+  .bar{position:fixed;left:0;right:0;bottom:0;background:linear-gradient(to top,var(--paper) 72%,rgba(244,238,224,0));
+    padding:14px 20px calc(20px + env(safe-area-inset-bottom))}
+  .bar-inner{max-width:680px;margin:0 auto;display:flex;gap:12px}
+  button.act{font-family:var(--sans);font-size:16px;border-radius:12px;padding:14px 22px;cursor:pointer;border:1.5px solid transparent}
+  .primary{background:var(--jade);color:#fff;flex:1}.primary:hover{background:#437f6c}
+  .ghost{background:transparent;color:var(--ink);border-color:var(--line)}.ghost:hover{border-color:var(--ink)}
+  .bar.hidden{display:none}
+
+  @media (max-width:480px){.home-head h1{font-size:34px}.prompt-han{font-size:50px}.kr{font-size:22px}}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <button class="back" id="backBtn">← Path</button>
+  <span class="crumb" id="crumb"></span>
+</div>
+
+<div class="wrap">
+  <!-- HOME -->
+  <section class="screen active" id="s-home">
+    <div class="home-head">
+      <span class="brandmark">한글 길 · Hangul-gil</span>
+      <h1>Your Korean path<span class="en">Learn a little, practise it, review what slips.</span></h1>
+    </div>
+    <div class="path" id="path"></div>
+    <button class="review-tile" id="reviewTile">
+      <span>
+        <span class="rt-title"><span class="ko">복습</span>Review</span>
+        <span class="rt-desc">Re-drill the answers you've missed</span>
+      </span>
+      <span class="count" id="reviewCount">0</span>
+    </button>
+    <div class="streak" id="streak"></div>
+  </section>
+
+  <!-- HANGUL LEARN -->
+  <section class="screen lesson" id="s-hangul">
+    <h1><span style="color:var(--jade)">한글</span> Hangul</h1>
+    <p class="sub">The Korean alphabet. Tap any letter to hear it.</p>
+    <p>Korean isn't drawn as a line of letters — sounds stack into little square <b>syllable blocks</b>. A block is a consonant + a vowel: <span style="font-family:var(--serif);font-size:20px">ㄱ + ㅏ = 가</span> <i>(ga)</i>. Learn the pieces and you can read the blocks.</p>
+
+    <h2>Vowels · 모음</h2>
+    <p>These set the main sound of a block.</p>
+    <div class="grid" id="gridVowels"></div>
+
+    <h2>Consonants · 자음</h2>
+    <p>These start (and sometimes end) a block.</p>
+    <div class="grid" id="gridCons"></div>
+
+    <div class="callout">
+      <span class="big">ㅇ</span> is the quiet one. At the <b>start</b> of a block it makes no sound — it's just a placeholder so a vowel can stand alone: <span style="font-family:var(--serif);font-size:20px">아</span> is simply <i>a</i>. At the <b>end</b> of a block it sounds like <i>ng</i>.
+    </div>
+
+    <h2>Reading blocks</h2>
+    <p>Now the payoff — sound these out left-to-right, top-to-bottom:</p>
+    <div class="grid" id="gridSyll"></div>
+
+    <div class="cta">
+      <button class="act primary" style="width:100%" onclick="go('#drill-hangul')">Practise these sounds →</button>
+    </div>
+  </section>
+
+  <!-- DRILL screens share this container -->
+  <section class="screen" id="s-drill">
+    <div class="score" id="score" role="status" aria-live="polite">
+      <div class="big" id="scoreBig"></div><div class="sub" id="scoreSub"></div>
+    </div>
+    <p class="sub" id="drillIntro" style="color:var(--muted);font-size:15px;margin:8px 0 0"></p>
+    <main class="cards" id="cards"></main>
+    <div class="empty" id="drillEmpty" style="display:none">
+      <div class="big">Nothing to review yet</div>
+      Get some answers wrong first — they'll gather here so you can drill just those.
+    </div>
+  </section>
+</div>
+
+<div class="bar" id="actionBar">
+  <div class="bar-inner">
+    <button class="act primary" id="checkBtn">Check answers</button>
+    <button class="act ghost" id="againBtn">New round</button>
+  </div>
+</div>
+
+<script>
+/* ===================== DATA ===================== */
+const VOWELS=[
+  ["ㅏ","a"],["ㅑ","ya"],["ㅓ","eo"],["ㅕ","yeo"],["ㅗ","o"],
+  ["ㅛ","yo"],["ㅜ","u"],["ㅠ","yu"],["ㅡ","eu"],["ㅣ","i"]
+];
+const CONS=[
+  ["ㄱ","g"],["ㄴ","n"],["ㄷ","d"],["ㄹ","r"],["ㅁ","m"],["ㅂ","b"],["ㅅ","s"],
+  ["ㅇ","(silent)"],["ㅈ","j"],["ㅊ","ch"],["ㅋ","k"],["ㅌ","t"],["ㅍ","p"],["ㅎ","h"]
+];
+const SYLL=[
+  ["가","ga"],["나","na"],["다","da"],["마","ma"],["바","ba"],["사","sa"],
+  ["자","ja"],["하","ha"],["고","go"],["노","no"],["두","du"],["미","mi"]
+];
+// accepted romanisation variants for the sound drill
+const ACCEPT={a:["a"],ya:["ya"],eo:["eo"],yeo:["yeo"],o:["o"],yo:["yo"],u:["u"],yu:["yu"],eu:["eu"],i:["i","ee"],
+  g:["g","k"],n:["n"],d:["d","t"],r:["r","l"],m:["m"],b:["b","p"],s:["s"],j:["j"],ch:["ch"],k:["k","kh"],t:["t","th"],p:["p","ph"],h:["h"],
+  ga:["ga"],na:["na"],da:["da"],ma:["ma"],ba:["ba"],sa:["sa"],ja:["ja"],ha:["ha"],go:["go"],no:["no"],du:["du"],mi:["mi"]};
+
+// build hangul drill items (skip silent ㅇ from the typing drill)
+const HANGUL_ITEMS=[];
+[...VOWELS,...CONS.filter(c=>c[1]!=="(silent)"),...SYLL].forEach((p,i)=>{
+  const kind = i<VOWELS.length?"vowel":(i<VOWELS.length+13?"consonant":"syllable");
+  HANGUL_ITEMS.push({id:"hangul-"+i,type:"sound",unit:"hangul",ko:p[0],answer:p[1],
+    accept:ACCEPT[p[1]]||[p[1]],kindLabel:kind,
+    explain:`<span style="font-family:var(--serif);font-size:19px">${p[0]}</span> sounds like <span class="ok">${p[1]}</span>.`});
+});
+
+const PARTICLE_ITEMS=[
+  {role:"topic",pair:"은 / 는",krB:"저",krA:"학생이에요.",romB:"jeo",romA:"haksaeng-ieyo",en:"I am a student.",ans:"는",accept:["neun"],why:"저 (I) is the topic and ends in a <b>vowel</b>, so use <span class='ok'>는</span>."},
+  {role:"topic",pair:"은 / 는",krB:"이름",krA:"뭐예요?",romB:"ireum",romA:"mwoyeyo?",en:"What is your name?",ans:"은",accept:["eun"],why:"이름 (name) ends in a <b>consonant</b> (ㅁ), so use <span class='ok'>은</span>."},
+  {role:"topic",pair:"은 / 는",krB:"오늘",krA:"월요일이에요.",romB:"oneul",romA:"woryoil-ieyo",en:"Today is Monday.",ans:"은",accept:["eun"],why:"오늘 (today) ends in a <b>consonant</b> (ㄹ), so use <span class='ok'>은</span>."},
+  {role:"subject",pair:"이 / 가",krB:"고양이",krA:"귀여워요.",romB:"goyangi",romA:"gwiyeowoyo",en:"The cat is cute.",ans:"가",accept:["ga","ka"],why:"고양이 (cat) ends in a <b>vowel</b>, so use <span class='ok'>가</span>."},
+  {role:"subject",pair:"이 / 가",krB:"날씨",krA:"좋아요.",romB:"nalssi",romA:"joayo",en:"The weather is nice.",ans:"가",accept:["ga","ka"],why:"날씨 (weather) ends in a <b>vowel</b>, so use <span class='ok'>가</span>."},
+  {role:"subject",pair:"이 / 가",krB:"책",krA:"있어요.",romB:"chaek",romA:"isseoyo",en:"There is a book.",ans:"이",accept:["i","ee"],why:"책 (book) ends in a <b>consonant</b> (ㄱ), so use <span class='ok'>이</span>."},
+  {role:"subject",pair:"이 / 가",krB:"시간",krA:"없어요.",romB:"sigan",romA:"eopseoyo",en:"There is no time.",ans:"이",accept:["i","ee"],why:"시간 (time) ends in a <b>consonant</b> (ㄴ), so use <span class='ok'>이</span>."},
+  {role:"object",pair:"을 / 를",krB:"물",krA:"마셔요.",romB:"mul",romA:"masyeoyo",en:"I drink water.",ans:"을",accept:["eul","ul"],why:"물 (water) ends in a <b>consonant</b> (ㄹ), so use <span class='ok'>을</span>."},
+  {role:"object",pair:"을 / 를",krB:"커피",krA:"좋아해요.",romB:"keopi",romA:"joahaeyo",en:"I like coffee.",ans:"를",accept:["reul","leul","rul"],why:"커피 (coffee) ends in a <b>vowel</b>, so use <span class='ok'>를</span>."},
+  {role:"object",pair:"을 / 를",krB:"책",krA:"읽어요.",romB:"chaek",romA:"ilgeoyo",en:"I read a book.",ans:"을",accept:["eul","ul"],why:"책 (book) ends in a <b>consonant</b> (ㄱ), so use <span class='ok'>을</span>."},
+  {role:"object",pair:"을 / 를",krB:"사과",krA:"먹어요.",romB:"sagwa",romA:"meogeoyo",en:"I eat an apple.",ans:"를",accept:["reul","leul","rul"],why:"사과 (apple) ends in a <b>vowel</b>, so use <span class='ok'>를</span>."},
+  {role:"object",pair:"을 / 를",krB:"한국어",krA:"배워요.",romB:"hangugeo",romA:"baewoyo",en:"I learn Korean.",ans:"를",accept:["reul","leul","rul"],why:"한국어 (Korean) ends in a <b>vowel</b>, so use <span class='ok'>를</span>."}
+].map((it,i)=>({...it,id:"particles-"+i,type:"particle",unit:"particles"}));
+
+const ALL=[...HANGUL_ITEMS,...PARTICLE_ITEMS];
+const BY_ID={}; ALL.forEach(it=>BY_ID[it.id]=it);
+
+const UNITS=[
+  {id:"hangul",ko:"한글",en:"Hangul",desc:"Read the Korean alphabet",status:"active",go:"#hangul"},
+  {id:"particles",ko:"조사",en:"Particles",desc:"Mark topic, subject and object",status:"active",go:"#drill-particles"},
+  {id:"sentence",ko:"문장",en:"Sentence structure",desc:"Word order: subject–object–verb",status:"soon"},
+  {id:"tenses",ko:"시제",en:"Tenses",desc:"Present, past and future",status:"soon"},
+  {id:"stories",ko:"이야기",en:"Short stories",desc:"Tiny stories to grow vocabulary",status:"soon"}
+];
+
+/* ===================== STORAGE ===================== */
+let STATE={mistakes:[],progress:{},streak:{count:0,last:""}};
+async function load(){
+  try{const r=await window.storage.get('kr-app'); if(r&&r.value)STATE=Object.assign(STATE,JSON.parse(r.value));}catch(e){}
+}
+async function save(){ try{await window.storage.set('kr-app',JSON.stringify(STATE));}catch(e){} }
+function today(){return new Date().toISOString().slice(0,10)}
+function bumpStreak(){
+  const t=today(), y=new Date(Date.now()-864e5).toISOString().slice(0,10);
+  if(STATE.streak.last===t)return;
+  STATE.streak.count = STATE.streak.last===y ? STATE.streak.count+1 : 1;
+  STATE.streak.last=t;
+}
+function addMistake(id){ if(!STATE.mistakes.includes(id))STATE.mistakes.push(id); }
+function clearMistake(id){ STATE.mistakes=STATE.mistakes.filter(x=>x!==id); }
+
+/* ===================== HELPERS ===================== */
+function norm(s){return (s||'').trim().toLowerCase().replace(/[\s\-.'’·()]/g,'')}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function speak(t){try{const u=new SpeechSynthesisUtterance(t);u.lang='ko-KR';const v=speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang));if(v)u.voice=v;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){}}
+
+/* ===================== ROUTER ===================== */
+const screens={'#home':'s-home','#hangul':'s-hangul','#drill-hangul':'s-drill','#drill-particles':'s-drill','#review':'s-drill'};
+function go(hash){ if(location.hash!==hash)location.hash=hash; else route(); }
+function route(){
+  const h=location.hash||'#home';
+  const id=screens[h]||'s-home';
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const onHome=(h==='#home'||!screens[h]);
+  document.getElementById('backBtn').classList.toggle('show',!onHome);
+  document.getElementById('actionBar').classList.toggle('hidden', id!=='s-drill');
+  const crumbs={'#hangul':'Hangul','#drill-hangul':'Hangul · practice','#drill-particles':'Particles · practice','#review':'Review'};
+  document.getElementById('crumb').textContent=crumbs[h]||'';
+  window.scrollTo(0,0);
+  if(id==='s-home')renderHome();
+  if(h==='#hangul')renderHangulLesson();
+  if(h==='#drill-hangul')startDrill(shuffle(HANGUL_ITEMS).slice(0,12),{intro:"Type each sound in romanised letters (e.g. a, g, ga). Tap ▶ to hear it."});
+  if(h==='#drill-particles')startDrill(shuffle(PARTICLE_ITEMS),{intro:"Each card names the role. Pick the right form for the noun's ending. Type romanised (neun, ga, eul)."});
+  if(h==='#review')startReview();
+}
+window.addEventListener('hashchange',route);
+document.getElementById('backBtn').onclick=()=>go('#home');
+
+/* ===================== HOME ===================== */
+function renderHome(){
+  const path=document.getElementById('path'); path.innerHTML='';
+  UNITS.forEach(u=>{
+    const done=(STATE.progress[u.id]||{}).rounds||0;
+    const best=(STATE.progress[u.id]||{}).best;
+    const meta=u.status==='soon'?'Coming soon':(done?`Best ${Math.round(best*100)}% · ${done} round${done>1?'s':''}`:'Not started yet');
+    const b=document.createElement('button');
+    b.className='step'+(u.status==='soon'?' soon':'');
+    b.disabled=u.status==='soon';
+    b.innerHTML=`<span class="rail"><span class="dot">${u.status==='soon'?'·':'✓'.replace('✓',u.ko[0])}</span><span class="line"></span></span>
+      <span class="step-body"><span class="step-title"><span class="ko">${u.ko}</span>${u.en}</span>
+      <span class="step-desc">${u.desc}</span><span class="step-meta">${meta}</span></span>`;
+    if(u.status!=='soon')b.onclick=()=>go(u.go);
+    path.appendChild(b);
+  });
+  const n=STATE.mistakes.length;
+  const c=document.getElementById('reviewCount'); c.textContent=n; c.classList.toggle('zero',n===0);
+  document.getElementById('streak').textContent = STATE.streak.count>0 ? `🔥 ${STATE.streak.count}-day streak · keep it going` : 'Do one round to start a streak';
+}
+document.getElementById('reviewTile').onclick=()=>go('#review');
+
+/* ===================== HANGUL LESSON ===================== */
+function tileHTML(pair){return `<button class="tile" onclick="speak('${pair[0]}')"><div class="han">${pair[0]}</div><div class="snd">${pair[1]}</div></button>`}
+function renderHangulLesson(){
+  document.getElementById('gridVowels').innerHTML=VOWELS.map(tileHTML).join('');
+  document.getElementById('gridCons').innerHTML=CONS.map(tileHTML).join('');
+  document.getElementById('gridSyll').innerHTML=SYLL.map(tileHTML).join('');
+}
+
+/* ===================== DRILL ENGINE ===================== */
+let current=[], mode='drill';
+function startDrill(items,opts){
+  mode='drill'; current=items;
+  document.getElementById('drillEmpty').style.display='none';
+  document.getElementById('actionBar').classList.remove('hidden');
+  document.getElementById('drillIntro').textContent=opts.intro||'';
+  document.getElementById('score').classList.remove('show','low');
+  renderCards();
+}
+function startReview(){
+  mode='review';
+  const ids=[...STATE.mistakes];
+  document.getElementById('drillIntro').textContent='';
+  document.getElementById('score').classList.remove('show','low');
+  if(ids.length===0){
+    document.getElementById('cards').innerHTML='';
+    document.getElementById('drillEmpty').style.display='block';
+    document.getElementById('actionBar').classList.add('hidden');
+    return;
+  }
+  document.getElementById('drillEmpty').style.display='none';
+  document.getElementById('actionBar').classList.remove('hidden');
+  document.getElementById('drillIntro').textContent='Get one right and it leaves your review list.';
+  current=shuffle(ids.map(id=>BY_ID[id]).filter(Boolean));
+  renderCards();
+}
+function cardHTML(it,pos){
+  const head=`<div class="top"><span class="chip">${it.type==='particle'
+      ?`<span class="role">${it.role}</span><span class="pair">${it.pair}</span>`
+      :`<span class="role">${it.kindLabel}</span>`}</span><span class="num">${pos+1} / ${current.length}</span></div>`;
+  if(it.type==='sound'){
+    return `<section class="card" data-i="${pos}">${head}
+      <div class="prompt-han">${it.ko}</div>
+      <div class="answer">
+        <button class="speak" onclick="speak('${it.ko}')" aria-label="Hear it">▶</button>
+        <input id="in${pos}" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="sound">
+      </div><div class="verdict"></div></section>`;
+  }
+  return `<section class="card" data-i="${pos}">${head}
+    <p class="en">${it.en}</p>
+    <div class="kr">${it.krB} <span class="slot" data-fill></span> ${it.krA}</div>
+    <div class="rom">${it.romB} <span class="slot" data-fill></span> ${it.romA}</div>
+    <div class="answer left"><input id="in${pos}" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="particle"></div>
+    <div class="verdict"></div></section>`;
+}
+function renderCards(){
+  const wrap=document.getElementById('cards');
+  wrap.innerHTML=current.map((it,i)=>cardHTML(it,i)).join('');
+  const inputs=[...wrap.querySelectorAll('input')];
+  inputs.forEach((inp,i)=>{
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();i<inputs.length-1?inputs[i+1].focus():check();}});
+  });
+}
+function check(){
+  let correct=0;
+  const cards=[...document.querySelectorAll('#cards .card')];
+  current.forEach((it,pos)=>{
+    const card=cards[pos], val=norm(document.getElementById('in'+pos).value);
+    const good = val!=='' && (it.accept.map(norm).includes(val) || norm(it.answer||it.ans)===val);
+    card.classList.remove('correct','wrong');
+    card.querySelectorAll('.slot[data-fill]').forEach(s=>s.textContent=it.ans);
+    const v=card.querySelector('.verdict');
+    if(good){correct++;card.classList.add('correct');v.innerHTML=(it.why||it.explain);if(mode==='review')clearMistake(it.id);}
+    else{card.classList.add('wrong');
+      const typed=document.getElementById('in'+pos).value.trim();
+      const shown=typed===''?'<i>left blank</i>':`“${typed}”`;
+      v.innerHTML=`You wrote ${shown}. Answer: <span class="sol">${it.answer||it.ans}</span>. ${(it.why||it.explain)}`;
+      addMistake(it.id);
+    }
+  });
+  // progress
+  const unit = mode==='review' ? null : current[0].unit;
+  if(unit){
+    const p=STATE.progress[unit]||{best:0,rounds:0};
+    p.rounds=(p.rounds||0)+1; const pct=correct/current.length; if(pct>(p.best||0))p.best=pct;
+    STATE.progress[unit]=p;
+  }
+  bumpStreak(); save();
+  const s=document.getElementById('score'); s.classList.add('show'); s.classList.toggle('low',correct/current.length<0.6);
+  document.getElementById('scoreBig').textContent=`${correct} / ${current.length} correct`;
+  document.getElementById('scoreSub').textContent = mode==='review'
+    ? (STATE.mistakes.length? `${STATE.mistakes.length} still to master. Correct ones have left your list.` : 'Cleared your whole review list. 잘했어요!')
+    : (correct===current.length?'Perfect. 잘했어요!':'Read the corrections, then go again.');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.getElementById('checkBtn').onclick=check;
+document.getElementById('againBtn').onclick=()=>{
+  if(mode==='review')startReview();
+  else{const h=location.hash; route();} // reshuffle same unit
+};
+
+/* ===================== INIT ===================== */
+(async function(){ await load(); if(speechSynthesis&&speechSynthesis.getVoices().length===0)speechSynthesis.onvoiceschanged=()=>{}; route(); })();
+</script>
+</body>
+</html>
