@@ -32,6 +32,10 @@
   .back.show{display:inline-block}
   .back:hover{border-color:var(--jade)}
   .crumb{font-family:var(--serif);font-size:16px;color:var(--muted)}
+  .optbtn{font-family:var(--sans);font-size:14px;color:var(--ink);background:transparent;border:1.5px solid var(--line);border-radius:999px;padding:7px 15px;cursor:pointer}
+  .optbtn:hover{border-color:var(--jade)}
+  .optbtn[aria-pressed="true"]{background:var(--jade-soft);border-color:var(--jade);color:var(--jade)}
+  #drillOpts{margin:12px 0 0}
 
   h1{font-family:var(--serif);font-weight:700;margin:0;letter-spacing:-.01em}
   .brandmark{display:inline-block;font-family:var(--serif);font-weight:700;font-size:14px;letter-spacing:.16em;
@@ -196,6 +200,9 @@
       <div class="big" id="scoreBig"></div><div class="sub" id="scoreSub"></div>
     </div>
     <p class="sub" id="drillIntro" style="color:var(--muted);font-size:15px;margin:8px 0 0"></p>
+    <div id="drillOpts" style="display:none">
+      <button class="optbtn" id="roleToggle" aria-pressed="false">Hide roles · hard mode</button>
+    </div>
     <main class="cards" id="cards"></main>
     <div class="empty" id="drillEmpty" style="display:none">
       <div class="big">Nothing to review yet</div>
@@ -266,7 +273,7 @@ const UNITS=[
 ];
 
 /* ===================== STORAGE ===================== */
-let STATE={mistakes:[],progress:{},streak:{count:0,last:""}};
+let STATE={mistakes:[],progress:{},streak:{count:0,last:""},hideRoles:false};
 async function load(){
   try{const r=await window.storage.get('kr-app'); if(r&&r.value)STATE=Object.assign(STATE,JSON.parse(r.value));}catch(e){}
 }
@@ -297,13 +304,16 @@ function route(){
   const onHome=(h==='#home'||!screens[h]);
   document.getElementById('backBtn').classList.toggle('show',!onHome);
   document.getElementById('actionBar').classList.toggle('hidden', id!=='s-drill');
+  const showOpts=(h==='#drill-particles');
+  document.getElementById('drillOpts').style.display=showOpts?'block':'none';
+  if(showOpts)syncRoleToggle();
   const crumbs={'#hangul':'Hangul','#drill-hangul':'Hangul · practice','#drill-particles':'Particles · practice','#review':'Review'};
   document.getElementById('crumb').textContent=crumbs[h]||'';
   window.scrollTo(0,0);
   if(id==='s-home')renderHome();
   if(h==='#hangul')renderHangulLesson();
   if(h==='#drill-hangul')startDrill(shuffle(HANGUL_ITEMS).slice(0,12),{intro:"Type each sound in romanised letters (e.g. a, g, ga). Tap ▶ to hear it."});
-  if(h==='#drill-particles')startDrill(shuffle(PARTICLE_ITEMS),{intro:"Each card names the role. Pick the right form for the noun's ending. Type romanised (neun, ga, eul)."});
+  if(h==='#drill-particles')startDrill(shuffle(PARTICLE_ITEMS),{intro:"Type the romanised particle (neun, ga, eul). Turn on hard mode to hide the role and work it out from the sentence yourself."});
   if(h==='#review')startReview();
 }
 window.addEventListener('hashchange',route);
@@ -340,7 +350,7 @@ function renderHangulLesson(){
 }
 
 /* ===================== DRILL ENGINE ===================== */
-let current=[], mode='drill';
+let current=[], mode='drill', hideRoles=false;
 function startDrill(items,opts){
   mode='drill'; current=items;
   document.getElementById('drillEmpty').style.display='none';
@@ -367,9 +377,12 @@ function startReview(){
   renderCards();
 }
 function cardHTML(it,pos){
-  const head=`<div class="top"><span class="chip">${it.type==='particle'
-      ?`<span class="role">${it.role}</span><span class="pair">${it.pair}</span>`
-      :`<span class="role">${it.kindLabel}</span>`}</span><span class="num">${pos+1} / ${current.length}</span></div>`;
+  const chip = it.type==='particle'
+      ? (hideRoles
+          ? `<span class="role">?</span>`
+          : `<span class="role">${it.role}</span><span class="pair">${it.pair}</span>`)
+      : `<span class="role">${it.kindLabel}</span>`;
+  const head=`<div class="top"><span class="chip">${chip}</span><span class="num">${pos+1} / ${current.length}</span></div>`;
   if(it.type==='sound'){
     return `<section class="card" data-i="${pos}">${head}
       <div class="prompt-han">${it.ko}</div>
@@ -430,9 +443,18 @@ document.getElementById('againBtn').onclick=()=>{
   if(mode==='review')startReview();
   else{const h=location.hash; route();} // reshuffle same unit
 };
+function syncRoleToggle(){
+  const rt=document.getElementById('roleToggle');
+  rt.setAttribute('aria-pressed',hideRoles);
+  rt.textContent = hideRoles ? 'Show roles' : 'Hide roles · hard mode';
+}
+document.getElementById('roleToggle').onclick=function(){
+  hideRoles=!hideRoles; STATE.hideRoles=hideRoles; save();
+  syncRoleToggle(); renderCards();
+};
 
 /* ===================== INIT ===================== */
-(async function(){ await load(); if(speechSynthesis&&speechSynthesis.getVoices().length===0)speechSynthesis.onvoiceschanged=()=>{}; route(); })();
+(async function(){ await load(); hideRoles=!!STATE.hideRoles; if(speechSynthesis&&speechSynthesis.getVoices().length===0)speechSynthesis.onvoiceschanged=()=>{}; route(); })();
 </script>
 </body>
 </html>
