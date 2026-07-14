@@ -32,10 +32,6 @@
   .back.show{display:inline-block}
   .back:hover{border-color:var(--jade)}
   .crumb{font-family:var(--serif);font-size:16px;color:var(--muted)}
-  .optbtn{font-family:var(--sans);font-size:14px;color:var(--ink);background:transparent;border:1.5px solid var(--line);border-radius:999px;padding:7px 15px;cursor:pointer}
-  .optbtn:hover{border-color:var(--jade)}
-  .optbtn[aria-pressed="true"]{background:var(--jade-soft);border-color:var(--jade);color:var(--jade)}
-  #drillOpts{margin:12px 0 0}
 
   h1{font-family:var(--serif);font-weight:700;margin:0;letter-spacing:-.01em}
   .brandmark{display:inline-block;font-family:var(--serif);font-weight:700;font-size:14px;letter-spacing:.16em;
@@ -139,6 +135,34 @@
   .ghost{background:transparent;color:var(--ink);border-color:var(--line)}.ghost:hover{border-color:var(--ink)}
   .bar.hidden{display:none}
 
+  /* arrange (order) + choice cards */
+  .build,.bank{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .build{min-height:52px;margin-top:10px;padding-bottom:12px;border-bottom:2px dashed var(--line)}
+  .bank{margin-top:12px}
+  .chunk,.opt{font-family:var(--serif);background:#fff;border:1.5px solid var(--line);border-radius:12px;
+    padding:9px 14px;cursor:pointer;text-align:center;line-height:1.15;color:var(--ink)}
+  .chunk .ko,.opt .ko{font-size:20px;display:block}
+  .chunk .rom,.opt .rom{font-size:11px;color:var(--muted);font-style:italic;display:block;margin-top:2px}
+  .chunk:disabled,.opt:disabled{cursor:default}
+  .chunk.placed{border-color:var(--jade);background:var(--jade-soft)}
+  .card.wrong .chunk.placed{border-color:var(--persimmon);background:var(--persimmon-soft)}
+  .opts{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;justify-content:center}
+  .opt.sel{border-color:var(--jade)}
+  .opt.right{border-color:var(--jade);background:var(--jade-soft)}
+  .opt.bad{border-color:var(--persimmon);background:var(--persimmon-soft)}
+  .stem{font-family:var(--serif);font-size:22px;text-align:center;margin:8px 0 2px}
+  .stem .rom{font-size:13px;color:var(--muted);font-style:italic}
+  .ph{color:var(--muted);font-size:13px;font-style:italic}
+
+  /* diary vocab reference */
+  .vocab{display:flex;flex-direction:column;border:1.5px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card);margin:8px 0 4px}
+  .vrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;
+    border:none;border-bottom:1px solid var(--line);background:none;font-family:inherit;cursor:pointer;text-align:left;width:100%;color:var(--ink)}
+  .vrow:last-child{border-bottom:none}
+  .vrow:hover{background:var(--jade-soft)}
+  .vrow .vko{font-family:var(--serif);font-size:20px}
+  .vrow .ven{font-size:14px;color:var(--muted)}
+
   @media (max-width:480px){.home-head h1{font-size:34px}.prompt-han{font-size:50px}.kr{font-size:22px}}
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -177,9 +201,17 @@
     <p>These set the main sound of a block.</p>
     <div class="grid" id="gridVowels"></div>
 
+    <h2>Combined vowels · 겹모음</h2>
+    <p>Basic vowels run together into one sound. A few have nearly merged in modern Korean — <b>ㅐ</b> and <b>ㅔ</b> are both about <i>e</i>, and <b>ㅙ ㅚ ㅞ</b> all land near <i>we</i>.</p>
+    <div class="grid" id="gridComplexVowels"></div>
+
     <h2>Consonants · 자음</h2>
     <p>These start (and sometimes end) a block.</p>
     <div class="grid" id="gridCons"></div>
+
+    <h2>Tense consonants · 쌍자음</h2>
+    <p>The same shapes doubled. Say them harder and tighter, with no puff of air — almost like you catch the sound before it leaves.</p>
+    <div class="grid" id="gridDoubleCons"></div>
 
     <div class="callout">
       <span class="big">ㅇ</span> is the quiet one. At the <b>start</b> of a block it makes no sound — it's just a placeholder so a vowel can stand alone: <span style="font-family:var(--serif);font-size:20px">아</span> is simply <i>a</i>. At the <b>end</b> of a block it sounds like <i>ng</i>.
@@ -194,15 +226,61 @@
     </div>
   </section>
 
+  <!-- SENTENCE STRUCTURE LEARN -->
+  <section class="screen lesson" id="s-sentence">
+    <h1><span style="color:var(--jade)">문장</span> Sentence structure</h1>
+    <p class="sub">Korean word order — and why the verb waits until the end.</p>
+    <p>English runs <b>Subject → Verb → Object</b>: “I drink coffee.” Korean runs <b>Subject → Object → Verb</b> — the verb always comes <b>last</b>.</p>
+    <div class="callout">
+      <div style="font-family:var(--serif);font-size:24px;line-height:1.5"><span style="color:var(--jade)">저는</span> <span style="color:var(--persimmon)">커피를</span> 마셔요.</div>
+      <div style="font-size:14px;color:var(--muted);margin-top:6px"><span style="color:var(--jade)">I</span> · <span style="color:var(--persimmon)">coffee</span> · drink</div>
+    </div>
+    <p>The particles you already know (은/는, 이/가, 을/를) tag each word’s job, so Korean can reshuffle for emphasis. But the neutral, safe order is S–O–V, and the verb stays at the end no matter what.</p>
+    <div class="cta"><button class="act primary" style="width:100%" onclick="go('#drill-sentence')">Practise word order →</button></div>
+  </section>
+
+  <!-- PAST TENSE LEARN -->
+  <section class="screen lesson" id="s-past">
+    <h1><span style="color:var(--jade)">과거</span> Past tense</h1>
+    <p class="sub">A diary is mostly “today I did…”. Here’s how to say it.</p>
+    <p>Drop 다 from the dictionary form, look at the stem’s last vowel, and add one of three endings:</p>
+    <div class="callout">
+      <div style="font-size:16px;line-height:2">
+        stem vowel <b>ㅏ</b> or <b>ㅗ</b> → <span style="font-family:var(--serif);color:var(--jade);font-size:19px">았어요</span><br>
+        any other vowel → <span style="font-family:var(--serif);color:var(--jade);font-size:19px">었어요</span><br>
+        <b>하다</b> verbs → <span style="font-family:var(--serif);color:var(--jade);font-size:19px">했어요</span>
+      </div>
+    </div>
+    <p>Often the stem and ending squeeze together: 가 + 았어요 → <span style="font-family:var(--serif);font-size:19px">갔어요</span>, 보 + 았어요 → <span style="font-family:var(--serif);font-size:19px">봤어요</span>, 마시 + 었어요 → <span style="font-family:var(--serif);font-size:19px">마셨어요</span>.</p>
+    <div class="cta"><button class="act primary" style="width:100%" onclick="go('#drill-past')">Practise past tense →</button></div>
+  </section>
+
+  <!-- DIARY KIT LEARN / REFERENCE -->
+  <section class="screen lesson" id="s-diary">
+    <h1><span style="color:var(--jade)">일기</span> Diary kit</h1>
+    <p class="sub">The words to actually start writing your day in Korean. Tap any line to hear it.</p>
+    <h2>Openers · when</h2>
+    <div class="vocab" id="dvOpeners"></div>
+    <h2>Everyday verbs · past</h2>
+    <div class="vocab" id="dvVerbs"></div>
+    <h2>How the day felt</h2>
+    <div class="vocab" id="dvFeel"></div>
+    <h2>Joining your lines</h2>
+    <div class="vocab" id="dvJoin"></div>
+    <div class="callout" style="margin-top:22px">
+      <div style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">A whole entry</div>
+      <div style="font-family:var(--serif);font-size:20px;line-height:1.7">오늘 커피를 마셨어요. 그리고 그림을 그렸어요. 재미있었어요.</div>
+      <div style="font-size:14px;color:var(--muted);margin-top:8px">Today I drank coffee. And I drew. It was fun.</div>
+    </div>
+    <div class="cta"><button class="act primary" style="width:100%" onclick="go('#drill-diary')">Practise diary lines →</button></div>
+  </section>
+
   <!-- DRILL screens share this container -->
   <section class="screen" id="s-drill">
     <div class="score" id="score" role="status" aria-live="polite">
       <div class="big" id="scoreBig"></div><div class="sub" id="scoreSub"></div>
     </div>
     <p class="sub" id="drillIntro" style="color:var(--muted);font-size:15px;margin:8px 0 0"></p>
-    <div id="drillOpts" style="display:none">
-      <button class="optbtn" id="roleToggle" aria-pressed="false">Hide roles · hard mode</button>
-    </div>
     <main class="cards" id="cards"></main>
     <div class="empty" id="drillEmpty" style="display:none">
       <div class="big">Nothing to review yet</div>
@@ -228,22 +306,40 @@ const CONS=[
   ["ㄱ","g"],["ㄴ","n"],["ㄷ","d"],["ㄹ","r"],["ㅁ","m"],["ㅂ","b"],["ㅅ","s"],
   ["ㅇ","(silent)"],["ㅈ","j"],["ㅊ","ch"],["ㅋ","k"],["ㅌ","t"],["ㅍ","p"],["ㅎ","h"]
 ];
+const COMPLEX_VOWELS=[
+  ["ㅐ","ae"],["ㅒ","yae"],["ㅔ","e"],["ㅖ","ye"],["ㅘ","wa"],["ㅙ","wae"],
+  ["ㅚ","oe"],["ㅝ","wo"],["ㅞ","we"],["ㅟ","wi"],["ㅢ","ui"]
+];
+const DOUBLE_CONS=[
+  ["ㄲ","kk"],["ㄸ","tt"],["ㅃ","pp"],["ㅆ","ss"],["ㅉ","jj"]
+];
 const SYLL=[
   ["가","ga"],["나","na"],["다","da"],["마","ma"],["바","ba"],["사","sa"],
   ["자","ja"],["하","ha"],["고","go"],["노","no"],["두","du"],["미","mi"]
 ];
 // accepted romanisation variants for the sound drill
 const ACCEPT={a:["a"],ya:["ya"],eo:["eo"],yeo:["yeo"],o:["o"],yo:["yo"],u:["u"],yu:["yu"],eu:["eu"],i:["i","ee"],
+  ae:["ae"],yae:["yae"],e:["e"],ye:["ye"],wa:["wa"],wae:["wae"],oe:["oe","we"],wo:["wo"],we:["we"],wi:["wi"],ui:["ui","eui"],
   g:["g","k"],n:["n"],d:["d","t"],r:["r","l"],m:["m"],b:["b","p"],s:["s"],j:["j"],ch:["ch"],k:["k","kh"],t:["t","th"],p:["p","ph"],h:["h"],
+  kk:["kk","gg"],tt:["tt","dd"],pp:["pp","bb"],ss:["ss"],jj:["jj"],
   ga:["ga"],na:["na"],da:["da"],ma:["ma"],ba:["ba"],sa:["sa"],ja:["ja"],ha:["ha"],go:["go"],no:["no"],du:["du"],mi:["mi"]};
 
 // build hangul drill items (skip silent ㅇ from the typing drill)
+// order keeps existing ids stable, then appends the new groups
 const HANGUL_ITEMS=[];
-[...VOWELS,...CONS.filter(c=>c[1]!=="(silent)"),...SYLL].forEach((p,i)=>{
-  const kind = i<VOWELS.length?"vowel":(i<VOWELS.length+13?"consonant":"syllable");
-  HANGUL_ITEMS.push({id:"hangul-"+i,type:"sound",unit:"hangul",ko:p[0],answer:p[1],
-    accept:ACCEPT[p[1]]||[p[1]],kindLabel:kind,
-    explain:`<span style="font-family:var(--serif);font-size:19px">${p[0]}</span> sounds like <span class="ok">${p[1]}</span>.`});
+let _hid=0;
+[
+  {label:"vowel",     list:VOWELS},
+  {label:"consonant", list:CONS.filter(c=>c[1]!=="(silent)")},
+  {label:"syllable",  list:SYLL},
+  {label:"vowel",     list:COMPLEX_VOWELS},
+  {label:"consonant", list:DOUBLE_CONS}
+].forEach(group=>{
+  group.list.forEach(p=>{
+    HANGUL_ITEMS.push({id:"hangul-"+(_hid++),type:"sound",unit:"hangul",ko:p[0],answer:p[1],
+      accept:ACCEPT[p[1]]||[p[1]],kindLabel:group.label,
+      explain:`<span style="font-family:var(--serif);font-size:19px">${p[0]}</span> sounds like <span class="ok">${p[1]}</span>.`});
+  });
 });
 
 const PARTICLE_ITEMS=[
@@ -261,19 +357,68 @@ const PARTICLE_ITEMS=[
   {role:"object",pair:"을 / 를",krB:"한국어",krA:"배워요.",romB:"hangugeo",romA:"baewoyo",en:"I learn Korean.",ans:"를",accept:["reul","leul","rul"],why:"한국어 (Korean) ends in a <b>vowel</b>, so use <span class='ok'>를</span>."}
 ].map((it,i)=>({...it,id:"particles-"+i,type:"particle",unit:"particles"}));
 
-const ALL=[...HANGUL_ITEMS,...PARTICLE_ITEMS];
+// --- Sentence structure: arrange chunks into S–O–V order (array order = correct) ---
+const SENTENCE_ITEMS=[
+  {en:"I drink coffee.",chunks:[{ko:"저는",rom:"jeoneun"},{ko:"커피를",rom:"keopireul"},{ko:"마셔요",rom:"masyeoyo"}],why:"Korean saves the verb for the end: 저는 (I) → 커피를 (coffee) → 마셔요 (drink). English puts the verb in the middle."},
+  {en:"I eat an apple.",chunks:[{ko:"저는",rom:"jeoneun"},{ko:"사과를",rom:"sagwareul"},{ko:"먹어요",rom:"meogeoyo"}],why:"Subject–Object–Verb. The verb 먹어요 lands last."},
+  {en:"I read a book.",chunks:[{ko:"저는",rom:"jeoneun"},{ko:"책을",rom:"chaegeul"},{ko:"읽어요",rom:"ilgeoyo"}],why:"저는 (I) → 책을 (book) → 읽어요 (read). Verb last."},
+  {en:"I learn Korean.",chunks:[{ko:"저는",rom:"jeoneun"},{ko:"한국어를",rom:"hangugeoreul"},{ko:"배워요",rom:"baewoyo"}],why:"Object 한국어를 comes before the verb 배워요."},
+  {en:"The cat drinks water.",chunks:[{ko:"고양이가",rom:"goyangiga"},{ko:"물을",rom:"mureul"},{ko:"마셔요",rom:"masyeoyo"}],why:"Subject 고양이가, object 물을, then verb 마셔요."},
+  {en:"The weather is nice.",chunks:[{ko:"날씨가",rom:"nalssiga"},{ko:"좋아요",rom:"joayo"}],why:"No object here — just subject 날씨가 and the verb 좋아요 at the end."},
+  {en:"The cat is cute.",chunks:[{ko:"고양이가",rom:"goyangiga"},{ko:"귀여워요",rom:"gwiyeowoyo"}],why:"Even with no object, the verb still comes last."}
+].map((it,i)=>({...it,id:"sentence-"+i,type:"order",unit:"sentence",tag:"word order"}));
+
+// --- Past tense: choose the ending 았/었/했어요 by vowel harmony ---
+const PAST_OPTS=[{ko:"았어요",rom:"asseoyo"},{ko:"었어요",rom:"eosseoyo"},{ko:"했어요",rom:"haesseoyo"}];
+const PAST_ITEMS=[
+  {en:"I went.",dict:{ko:"가다",rom:"gada"},ansIndex:0,full:"갔어요",why:"Stem 가 has the vowel ㅏ → 았어요, and 가+았 squeezes into 갔어요."},
+  {en:"I ate.",dict:{ko:"먹다",rom:"meokda"},ansIndex:1,full:"먹었어요",why:"Stem 먹 has ㅓ (not ㅏ/ㅗ) → 었어요 → 먹었어요."},
+  {en:"I watched.",dict:{ko:"보다",rom:"boda"},ansIndex:0,full:"봤어요",why:"Stem 보 has ㅗ → 았어요, and 보+았 contracts to 봤어요."},
+  {en:"I read.",dict:{ko:"읽다",rom:"ikda"},ansIndex:1,full:"읽었어요",why:"Stem 읽 has ㅣ, not ㅏ/ㅗ → 었어요 → 읽었어요."},
+  {en:"I drank.",dict:{ko:"마시다",rom:"masida"},ansIndex:1,full:"마셨어요",why:"Stem vowel ㅣ → 었어요, and 시+었 contracts to 셨 → 마셨어요."},
+  {en:"I did.",dict:{ko:"하다",rom:"hada"},ansIndex:2,full:"했어요",why:"하다 is the one to memorise: it always becomes 했어요."},
+  {en:"I slept.",dict:{ko:"자다",rom:"jada"},ansIndex:0,full:"잤어요",why:"Stem 자 has ㅏ → 았어요, and 자+았 contracts to 잤어요."},
+  {en:"I came.",dict:{ko:"오다",rom:"oda"},ansIndex:0,full:"왔어요",why:"Stem 오 has ㅗ → 았어요, and 오+았 contracts to 왔어요."},
+  {en:"I learned.",dict:{ko:"배우다",rom:"baeuda"},ansIndex:1,full:"배웠어요",why:"Stem vowel ㅜ → 었어요, and 우+었 contracts to 웠 → 배웠어요."},
+  {en:"I drew.",dict:{ko:"그리다",rom:"geurida"},ansIndex:1,full:"그렸어요",why:"Stem vowel ㅣ → 었어요, and 리+었 contracts to 렸 → 그렸어요."},
+  {en:"I worked.",dict:{ko:"일하다",rom:"ilhada"},ansIndex:2,full:"일했어요",why:"Any 하다 verb takes 했어요 → 일했어요."},
+  {en:"It was good.",dict:{ko:"좋다",rom:"jota"},ansIndex:0,full:"좋았어요",why:"Stem 좋 has ㅗ → 았어요 → 좋았어요."}
+].map((it,i)=>({...it,id:"past-"+i,type:"choice",unit:"past",options:PAST_OPTS}));
+
+// --- Diary kit: arrange real past-tense diary lines (combines it all) ---
+const DIARY_ITEMS=[
+  {en:"Today I drank coffee.",chunks:[{ko:"오늘",rom:"oneul"},{ko:"커피를",rom:"keopireul"},{ko:"마셨어요",rom:"masyeosseoyo"}],why:"Time word 오늘 opens, object 커피를 next, past verb 마셨어요 last."},
+  {en:"Yesterday I drew a picture.",chunks:[{ko:"어제",rom:"eoje"},{ko:"그림을",rom:"geurimeul"},{ko:"그렸어요",rom:"geuryeosseoyo"}],why:"어제 (yesterday) → 그림을 (a picture) → 그렸어요 (drew)."},
+  {en:"I ate an apple.",chunks:[{ko:"사과를",rom:"sagwareul"},{ko:"먹었어요",rom:"meogeosseoyo"}],why:"Object then past verb: 사과를 먹었어요."},
+  {en:"I watched a movie.",chunks:[{ko:"영화를",rom:"yeonghwareul"},{ko:"봤어요",rom:"bwasseoyo"}],why:"영화를 (a movie) → 봤어요 (watched)."},
+  {en:"I worked today.",chunks:[{ko:"오늘",rom:"oneul"},{ko:"일했어요",rom:"ilhaesseoyo"}],why:"오늘 (today) → 일했어요 (worked)."},
+  {en:"I learned Korean.",chunks:[{ko:"한국어를",rom:"hangugeoreul"},{ko:"배웠어요",rom:"baewosseoyo"}],why:"한국어를 (Korean) → 배웠어요 (learned)."},
+  {en:"I drank coffee and slept.",chunks:[{ko:"커피를",rom:"keopireul"},{ko:"마셨어요",rom:"masyeosseoyo"},{ko:"그리고",rom:"geurigo"},{ko:"잤어요",rom:"jasseoyo"}],why:"Two actions joined by 그리고 (and): 커피를 마셨어요, 그리고 잤어요."}
+].map((it,i)=>({...it,id:"diary-"+i,type:"order",unit:"diary",tag:"diary"}));
+
+// vocab reference shown on the Diary kit lesson (tap to hear)
+const DIARY_VOCAB={
+  openers:[["오늘","today"],["어제","yesterday"],["아침에","in the morning"],["저녁에","in the evening"]],
+  verbs:[["마셨어요","drank"],["먹었어요","ate"],["갔어요","went"],["봤어요","watched · saw"],["읽었어요","read"],["그렸어요","drew"],["잤어요","slept"],["일했어요","worked"],["배웠어요","learned"],["했어요","did"]],
+  feel:[["재미있었어요","it was fun"],["좋았어요","it was good"],["피곤했어요","I was tired"],["행복했어요","I was happy"]],
+  join:[["그리고","and · then"],["그래서","so"]]
+};
+
+const ALL=[...HANGUL_ITEMS,...PARTICLE_ITEMS,...SENTENCE_ITEMS,...PAST_ITEMS,...DIARY_ITEMS];
 const BY_ID={}; ALL.forEach(it=>BY_ID[it.id]=it);
 
 const UNITS=[
   {id:"hangul",ko:"한글",en:"Hangul",desc:"Read the Korean alphabet",status:"active",go:"#hangul"},
   {id:"particles",ko:"조사",en:"Particles",desc:"Mark topic, subject and object",status:"active",go:"#drill-particles"},
-  {id:"sentence",ko:"문장",en:"Sentence structure",desc:"Word order: subject–object–verb",status:"soon"},
-  {id:"tenses",ko:"시제",en:"Tenses",desc:"Present, past and future",status:"soon"},
+  {id:"sentence",ko:"문장",en:"Sentence structure",desc:"Word order: subject–object–verb",status:"active",go:"#sentence"},
+  {id:"past",ko:"과거",en:"Past tense",desc:"Say what you did: –았 / 었 / 했어요",status:"active",go:"#past"},
+  {id:"diary",ko:"일기",en:"Diary kit",desc:"Build real past-tense diary lines",status:"active",go:"#diary"},
+  {id:"tenses",ko:"시제",en:"Present & future",desc:"Round out the other tenses",status:"soon"},
   {id:"stories",ko:"이야기",en:"Short stories",desc:"Tiny stories to grow vocabulary",status:"soon"}
 ];
 
 /* ===================== STORAGE ===================== */
-let STATE={mistakes:[],progress:{},streak:{count:0,last:""},hideRoles:false};
+let STATE={mistakes:[],progress:{},streak:{count:0,last:""}};
 async function load(){
   try{const r=await window.storage.get('kr-app'); if(r&&r.value)STATE=Object.assign(STATE,JSON.parse(r.value));}catch(e){}
 }
@@ -294,7 +439,9 @@ function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor
 function speak(t){try{const u=new SpeechSynthesisUtterance(t);u.lang='ko-KR';const v=speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang));if(v)u.voice=v;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){}}
 
 /* ===================== ROUTER ===================== */
-const screens={'#home':'s-home','#hangul':'s-hangul','#drill-hangul':'s-drill','#drill-particles':'s-drill','#review':'s-drill'};
+const screens={'#home':'s-home','#hangul':'s-hangul','#drill-hangul':'s-drill','#drill-particles':'s-drill',
+  '#sentence':'s-sentence','#drill-sentence':'s-drill','#past':'s-past','#drill-past':'s-drill',
+  '#diary':'s-diary','#drill-diary':'s-drill','#review':'s-drill'};
 function go(hash){ if(location.hash!==hash)location.hash=hash; else route(); }
 function route(){
   const h=location.hash||'#home';
@@ -304,16 +451,20 @@ function route(){
   const onHome=(h==='#home'||!screens[h]);
   document.getElementById('backBtn').classList.toggle('show',!onHome);
   document.getElementById('actionBar').classList.toggle('hidden', id!=='s-drill');
-  const showOpts=(h==='#drill-particles');
-  document.getElementById('drillOpts').style.display=showOpts?'block':'none';
-  if(showOpts)syncRoleToggle();
-  const crumbs={'#hangul':'Hangul','#drill-hangul':'Hangul · practice','#drill-particles':'Particles · practice','#review':'Review'};
+  const crumbs={'#hangul':'Hangul','#drill-hangul':'Hangul · practice','#drill-particles':'Particles · practice',
+    '#sentence':'Sentence structure','#drill-sentence':'Sentence · practice',
+    '#past':'Past tense','#drill-past':'Past tense · practice',
+    '#diary':'Diary kit','#drill-diary':'Diary · practice','#review':'Review'};
   document.getElementById('crumb').textContent=crumbs[h]||'';
   window.scrollTo(0,0);
   if(id==='s-home')renderHome();
   if(h==='#hangul')renderHangulLesson();
   if(h==='#drill-hangul')startDrill(shuffle(HANGUL_ITEMS).slice(0,12),{intro:"Type each sound in romanised letters (e.g. a, g, ga). Tap ▶ to hear it."});
-  if(h==='#drill-particles')startDrill(shuffle(PARTICLE_ITEMS),{intro:"Type the romanised particle (neun, ga, eul). Turn on hard mode to hide the role and work it out from the sentence yourself."});
+  if(h==='#drill-particles')startDrill(shuffle(PARTICLE_ITEMS),{intro:"Each card names the role. Pick the right form for the noun's ending. Type romanised (neun, ga, eul)."});
+  if(h==='#diary')renderDiaryKit();
+  if(h==='#drill-sentence')startDrill(shuffle(SENTENCE_ITEMS),{intro:"Tap the words to build each sentence in order. Korean is Subject–Object–Verb — the verb goes last."});
+  if(h==='#drill-past')startDrill(shuffle(PAST_ITEMS),{intro:"Pick the past ending for each verb. ㅏ/ㅗ stems → 았어요, other vowels → 었어요, 하다 → 했어요."});
+  if(h==='#drill-diary')startDrill(shuffle(DIARY_ITEMS),{intro:"Arrange each real diary line — time word, object, then the past-tense verb."});
   if(h==='#review')startReview();
 }
 window.addEventListener('hashchange',route);
@@ -345,12 +496,14 @@ document.getElementById('reviewTile').onclick=()=>go('#review');
 function tileHTML(pair){return `<button class="tile" onclick="speak('${pair[0]}')"><div class="han">${pair[0]}</div><div class="snd">${pair[1]}</div></button>`}
 function renderHangulLesson(){
   document.getElementById('gridVowels').innerHTML=VOWELS.map(tileHTML).join('');
+  document.getElementById('gridComplexVowels').innerHTML=COMPLEX_VOWELS.map(tileHTML).join('');
   document.getElementById('gridCons').innerHTML=CONS.map(tileHTML).join('');
+  document.getElementById('gridDoubleCons').innerHTML=DOUBLE_CONS.map(tileHTML).join('');
   document.getElementById('gridSyll').innerHTML=SYLL.map(tileHTML).join('');
 }
 
 /* ===================== DRILL ENGINE ===================== */
-let current=[], mode='drill', hideRoles=false;
+let current=[], mode='drill', SEL={}, checked=false;
 function startDrill(items,opts){
   mode='drill'; current=items;
   document.getElementById('drillEmpty').style.display='none';
@@ -377,12 +530,25 @@ function startReview(){
   renderCards();
 }
 function cardHTML(it,pos){
-  const chip = it.type==='particle'
-      ? (hideRoles
-          ? `<span class="role">?</span>`
-          : `<span class="role">${it.role}</span><span class="pair">${it.pair}</span>`)
-      : `<span class="role">${it.kindLabel}</span>`;
-  const head=`<div class="top"><span class="chip">${chip}</span><span class="num">${pos+1} / ${current.length}</span></div>`;
+  const head=`<div class="top"><span class="chip">${it.type==='particle'
+      ?`<span class="role">${it.role}</span><span class="pair">${it.pair}</span>`
+      :`<span class="role">${it.kindLabel}</span>`}</span><span class="num">${pos+1} / ${current.length}</span></div>`;
+  if(it.type==='order'){
+    return `<section class="card order" data-i="${pos}">
+      <div class="top"><span class="chip"><span class="role">${it.tag}</span></span><span class="num">${pos+1} / ${current.length}</span></div>
+      <p class="en">${it.en}</p>
+      <div class="build" id="build${pos}"></div>
+      <div class="bank" id="bank${pos}"></div>
+      <div class="verdict"></div></section>`;
+  }
+  if(it.type==='choice'){
+    return `<section class="card choice" data-i="${pos}">
+      <div class="top"><span class="chip"><span class="role">past tense</span><span class="pair">${it.dict.ko}</span></span><span class="num">${pos+1} / ${current.length}</span></div>
+      <p class="en">${it.en}</p>
+      <div class="stem"><span class="ko">${it.dict.ko}</span> <span class="rom">${it.dict.rom}</span> → ?</div>
+      <div class="opts" id="opts${pos}"></div>
+      <div class="verdict"></div></section>`;
+  }
   if(it.type==='sound'){
     return `<section class="card" data-i="${pos}">${head}
       <div class="prompt-han">${it.ko}</div>
@@ -399,29 +565,74 @@ function cardHTML(it,pos){
     <div class="verdict"></div></section>`;
 }
 function renderCards(){
+  SEL={}; checked=false;
   const wrap=document.getElementById('cards');
+  current.forEach(it=>{ if(it.type==='order') it._shuf=shuffle(it.chunks.map((_,k)=>k)); });
   wrap.innerHTML=current.map((it,i)=>cardHTML(it,i)).join('');
   const inputs=[...wrap.querySelectorAll('input')];
   inputs.forEach((inp,i)=>{
     inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();i<inputs.length-1?inputs[i+1].focus():check();}});
   });
+  current.forEach((it,pos)=>{ if(it.type==='order')renderOrder(pos); else if(it.type==='choice')renderChoice(pos); });
+}
+
+/* ----- tap interactions: arrange (order) & pick ending (choice) ----- */
+function renderOrder(pos){
+  const it=current[pos], placed=SEL[pos]||[];
+  const build=document.getElementById('build'+pos), bank=document.getElementById('bank'+pos);
+  build.innerHTML = placed.length
+    ? placed.map((ci,k)=>`<button class="chunk placed" ${checked?'disabled':''} onclick="unplaceChunk(${pos},${k})"><span class="ko">${it.chunks[ci].ko}</span><span class="rom">${it.chunks[ci].rom}</span></button>`).join('')
+    : `<span class="ph">tap the words in order →</span>`;
+  const remaining=it._shuf.filter(ci=>!placed.includes(ci));
+  bank.innerHTML = remaining.length
+    ? remaining.map(ci=>`<button class="chunk" ${checked?'disabled':''} onclick="placeChunk(${pos},${ci})"><span class="ko">${it.chunks[ci].ko}</span><span class="rom">${it.chunks[ci].rom}</span></button>`).join('')
+    : `<span class="ph">— all placed —</span>`;
+}
+function placeChunk(pos,ci){ if(checked)return; (SEL[pos]=SEL[pos]||[]).push(ci); renderOrder(pos); }
+function unplaceChunk(pos,k){ if(checked)return; SEL[pos].splice(k,1); renderOrder(pos); }
+function renderChoice(pos){
+  const it=current[pos], sel=SEL[pos];
+  document.getElementById('opts'+pos).innerHTML=it.options.map((o,i)=>{
+    let cls='opt'+(sel===i?' sel':'');
+    if(checked){ if(i===it.ansIndex)cls+=' right'; else if(sel===i)cls+=' bad'; }
+    return `<button class="${cls}" ${checked?'disabled':''} onclick="pickOpt(${pos},${i})"><span class="ko">${o.ko}</span><span class="rom">${o.rom}</span></button>`;
+  }).join('');
+}
+function pickOpt(pos,i){ if(checked)return; SEL[pos]=i; renderChoice(pos); }
+
+/* ----- diary kit vocab reference ----- */
+function vocabRow(p){return `<button class="vrow" onclick="speak('${p[0]}')"><span class="vko">${p[0]}</span><span class="ven">${p[1]}</span></button>`}
+function renderDiaryKit(){
+  document.getElementById('dvOpeners').innerHTML=DIARY_VOCAB.openers.map(vocabRow).join('');
+  document.getElementById('dvVerbs').innerHTML=DIARY_VOCAB.verbs.map(vocabRow).join('');
+  document.getElementById('dvFeel').innerHTML=DIARY_VOCAB.feel.map(vocabRow).join('');
+  document.getElementById('dvJoin').innerHTML=DIARY_VOCAB.join.map(vocabRow).join('');
 }
 function check(){
+  checked=true;
   let correct=0;
   const cards=[...document.querySelectorAll('#cards .card')];
   current.forEach((it,pos)=>{
-    const card=cards[pos], val=norm(document.getElementById('in'+pos).value);
-    const good = val!=='' && (it.accept.map(norm).includes(val) || norm(it.answer||it.ans)===val);
-    card.classList.remove('correct','wrong');
-    card.querySelectorAll('.slot[data-fill]').forEach(s=>s.textContent=it.ans);
-    const v=card.querySelector('.verdict');
-    if(good){correct++;card.classList.add('correct');v.innerHTML=(it.why||it.explain);if(mode==='review')clearMistake(it.id);}
-    else{card.classList.add('wrong');
-      const typed=document.getElementById('in'+pos).value.trim();
-      const shown=typed===''?'<i>left blank</i>':`“${typed}”`;
-      v.innerHTML=`You wrote ${shown}. Answer: <span class="sol">${it.answer||it.ans}</span>. ${(it.why||it.explain)}`;
-      addMistake(it.id);
+    const card=cards[pos], v=card.querySelector('.verdict');
+    let good=false, wrongMsg='';
+    if(it.type==='order'){
+      const placed=SEL[pos]||[];
+      good = placed.length===it.chunks.length && placed.every((val,k)=>val===k);
+      renderOrder(pos);
+      if(!good) wrongMsg=`Right order: <span class="sol">${it.chunks.map(c=>c.ko).join(' ')}</span>. `;
+    }else if(it.type==='choice'){
+      good = SEL[pos]===it.ansIndex;
+      renderChoice(pos);
+      if(!good) wrongMsg=`Answer: <span class="sol">${it.full}</span>. `;
+    }else{
+      const inp=document.getElementById('in'+pos), val=norm(inp.value);
+      good = val!=='' && (it.accept.map(norm).includes(val) || norm(it.answer||it.ans)===val);
+      card.querySelectorAll('.slot[data-fill]').forEach(s=>s.textContent=it.ans);
+      if(!good){ const typed=inp.value.trim(); wrongMsg=`You wrote ${typed===''?'<i>left blank</i>':`“${typed}”`}. Answer: <span class="sol">${it.answer||it.ans}</span>. `; }
     }
+    card.classList.remove('correct','wrong');
+    if(good){correct++;card.classList.add('correct');v.innerHTML=(it.why||it.explain);if(mode==='review')clearMistake(it.id);}
+    else{card.classList.add('wrong');v.innerHTML=wrongMsg+(it.why||it.explain);addMistake(it.id);}
   });
   // progress
   const unit = mode==='review' ? null : current[0].unit;
@@ -443,18 +654,9 @@ document.getElementById('againBtn').onclick=()=>{
   if(mode==='review')startReview();
   else{const h=location.hash; route();} // reshuffle same unit
 };
-function syncRoleToggle(){
-  const rt=document.getElementById('roleToggle');
-  rt.setAttribute('aria-pressed',hideRoles);
-  rt.textContent = hideRoles ? 'Show roles' : 'Hide roles · hard mode';
-}
-document.getElementById('roleToggle').onclick=function(){
-  hideRoles=!hideRoles; STATE.hideRoles=hideRoles; save();
-  syncRoleToggle(); renderCards();
-};
 
 /* ===================== INIT ===================== */
-(async function(){ await load(); hideRoles=!!STATE.hideRoles; if(speechSynthesis&&speechSynthesis.getVoices().length===0)speechSynthesis.onvoiceschanged=()=>{}; route(); })();
+(async function(){ await load(); if(speechSynthesis&&speechSynthesis.getVoices().length===0)speechSynthesis.onvoiceschanged=()=>{}; route(); })();
 </script>
 </body>
 </html>
