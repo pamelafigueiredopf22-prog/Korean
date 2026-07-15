@@ -154,6 +154,34 @@
   .stem .rom{font-size:13px;color:var(--muted);font-style:italic}
   .ph{color:var(--muted);font-size:13px;font-style:italic}
 
+  /* pronunciation / particle rule blocks */
+  .rule{border-top:1.5px solid var(--line);padding:18px 0 4px;margin-top:8px}
+  .rule-head{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+  .rule-ko{font-family:var(--serif);font-size:22px;font-weight:700;color:var(--jade)}
+  .rule-en{font-family:var(--serif);font-size:17px;font-weight:700}
+  .rule p{font-size:15px;margin:0 0 10px}
+  .rule-ex{display:flex;flex-direction:column;gap:6px;margin:10px 0 4px}
+  .ex{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;background:var(--card);border:1.5px solid var(--line);
+    border-radius:12px;padding:9px 13px;cursor:pointer;font-family:inherit;text-align:left;width:100%;color:var(--ink)}
+  .ex:hover{border-color:var(--jade)}
+  .ex-from{font-family:var(--serif);font-size:19px}
+  .ex-arrow{color:var(--muted);font-size:13px}
+  .ex-to{font-family:var(--serif);font-size:19px;color:var(--persimmon)}
+  .ex-gloss{font-size:12.5px;color:var(--muted);margin-left:auto}
+
+  /* particle key panel */
+  .keybtn{font-family:var(--sans);font-size:14px;color:var(--ink);background:transparent;border:1.5px solid var(--line);
+    border-radius:999px;padding:7px 15px;cursor:pointer;margin-top:12px}
+  .keybtn:hover{border-color:var(--jade)}
+  .key{display:none;margin-top:10px}
+  .key.open{display:flex}
+  .keyrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 16px;
+    font-size:14.5px;border-bottom:1px solid var(--line)}
+  .keyrow:last-child{border-bottom:none}
+  .khan{font-family:var(--serif);font-size:19px}
+  .krom{color:var(--muted);font-style:italic}
+  .krole{color:var(--jade);font-size:13px}
+
   /* diary vocab reference */
   .vocab{display:flex;flex-direction:column;border:1.5px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card);margin:8px 0 4px}
   .vrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;
@@ -226,6 +254,109 @@
     </div>
   </section>
 
+  <!-- PRONUNCIATION LEARN -->
+  <section class="screen lesson" id="s-pron">
+    <h1><span style="color:var(--jade)">발음</span> Pronunciation</h1>
+    <p class="sub">Why Korean words aren’t said the way they’re spelled. Tap any example to hear it.</p>
+    <p>Korean spelling keeps each word looking the same, but <b>speech runs syllables together</b>, and sounds bend to fit their neighbours. These aren’t sloppiness or slang — they’re the standard rules (표준 발음법), and they’re what stands between knowing Hangul and actually reading Korean aloud.</p>
+    <div class="callout">Don’t memorise these. Read them once, then drill — they sink in through your ear, not your notes.</div>
+
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">연음</span><span class="rule-en">Linking</span></div>
+      <p>The big one. A final consonant (받침) can’t sit still if the next block starts with the silent <b>ㅇ</b> — it slides over into that empty slot.</p>
+      <div class="rule-ex" data-tag="linking"></div>
+    </div>
+
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">받침</span><span class="rule-en">The seven final sounds</span></div>
+      <p>Sixteen consonants can be <i>written</i> at the bottom of a block, but only <b>seven sounds</b> can actually close one: <b>ㄱ ㄴ ㄷ ㄹ ㅁ ㅂ ㅇ</b>. Everything else collapses into the nearest of those — ㅋ ㄲ → [ㄱ], ㅍ → [ㅂ], and ㄷ ㅌ ㅅ ㅆ ㅈ ㅊ ㅎ all → [ㄷ]. The sound also stops dead, with no puff of air after it.</p>
+      <div class="rule-ex" data-tag="7 finals"></div>
+    </div>
+
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">비음화</span><span class="rule-en">Nasalising</span></div>
+      <p>ㄴ and ㅁ are nasal, and they’re contagious. A hard stop landing in front of one turns nasal too: <b>[ㄱ] → ㅇ</b>, <b>[ㄷ] → ㄴ</b>, <b>[ㅂ] → ㅁ</b>.</p>
+      <div class="rule-ex" data-tag="nasalising"></div>
+    </div>
+
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">유음화</span><span class="rule-en">Liquidising</span></div>
+      <p>When <b>ㄴ</b> and <b>ㄹ</b> end up next to each other — in either order — the ㄴ gives in and becomes <b>ㄹ</b>.</p>
+      <div class="rule-ex" data-tag="liquidising"></div>
+    </div>
+
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">경음화</span><span class="rule-en">Tensing</span></div>
+      <p>After a <b>[ㄱ] [ㄷ] [ㅂ]</b> sound, a following <b>ㄱ ㄷ ㅂ ㅅ ㅈ</b> goes tense — ㄲ ㄸ ㅃ ㅆ ㅉ. Nothing is written differently; you just hear it tighten.</p>
+      <div class="rule-ex" data-tag="tensing"></div>
+    </div>
+
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">격음화</span><span class="rule-en">Aspirating</span></div>
+      <p><b>ㅎ</b> next to <b>ㄱ ㄷ ㅂ ㅈ</b> — before or after — merges with it and makes it breathy: <b>ㅋ ㅌ ㅍ ㅊ</b>.</p>
+      <div class="rule-ex" data-tag="aspirating"></div>
+    </div>
+
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">ㅎ 탈락</span><span class="rule-en">ㅎ dropping</span></div>
+      <p>The flip side: a <b>ㅎ</b> 받침 followed by a vowel just disappears. This one catches everybody — 좋아요 is never “조하요”.</p>
+      <div class="rule-ex" data-tag="ㅎ dropping"></div>
+    </div>
+
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">구개음화</span><span class="rule-en">Palatalising</span></div>
+      <p><b>ㄷ</b> and <b>ㅌ</b> followed by <b>이</b> slide forward into <b>ㅈ</b> and <b>ㅊ</b> — the same laziness that turns English “would you” into “wouldja”.</p>
+      <div class="rule-ex" data-tag="palatalising"></div>
+    </div>
+
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">겹받침</span><span class="rule-en">Double batchim</span></div>
+      <p>Some blocks carry <i>two</i> consonants underneath (ㄺ ㅄ ㄵ ㄶ). Before a consonant only <b>one of them sounds</b> — but before a vowel, the second one links across instead: 읽다 [익따] yet 읽어요 [일거요].</p>
+      <div class="rule-ex" data-tag="double batchim"></div>
+    </div>
+
+    <div class="cta"><button class="act primary" style="width:100%" onclick="go('#drill-pron')">Practise pronunciation →</button></div>
+  </section>
+
+  <!-- PARTICLES LEARN -->
+  <section class="screen lesson" id="s-particles">
+    <h1><span style="color:var(--jade)">조사</span> Particles</h1>
+    <p class="sub">Little tags that tell you what job each word is doing.</p>
+    <p>English uses word order to show who did what to whom: “the cat drinks water” means something different from “the water drinks cat”. Korean tags each word instead — so the tag, not the position, carries the meaning. Three pairs matter first.</p>
+
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">은 / 는</span><span class="rule-en">Topic</span></div>
+      <p>Sets up <b>what the sentence is about</b> — “as for X…”. Use it to introduce yourself or your subject, and to contrast one thing with another.</p>
+      <div class="callout" style="margin:10px 0 0"><span style="font-family:var(--serif);font-size:20px">저<span style="color:var(--jade)">는</span> 학생이에요.</span><br><span style="font-size:14px;color:var(--muted)">As for me, I’m a student.</span></div>
+    </div>
+
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">이 / 가</span><span class="rule-en">Subject</span></div>
+      <p>Marks <b>who or what is actually doing the verb</b>, or being described. It tends to point something out as new or specific — “it’s the <i>cat</i> that’s cute”.</p>
+      <div class="callout" style="margin:10px 0 0"><span style="font-family:var(--serif);font-size:20px">고양이<span style="color:var(--jade)">가</span> 귀여워요.</span><br><span style="font-size:14px;color:var(--muted)">The cat is cute.</span></div>
+    </div>
+
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">을 / 를</span><span class="rule-en">Object</span></div>
+      <p>Marks <b>what the verb is done to</b>. This one is the least ambiguous of the three — if something is being drunk, eaten, read or drawn, it takes 을/를.</p>
+      <div class="callout" style="margin:10px 0 0"><span style="font-family:var(--serif);font-size:20px">커피<span style="color:var(--jade)">를</span> 마셔요.</span><br><span style="font-size:14px;color:var(--muted)">I drink coffee.</span></div>
+    </div>
+
+    <h2>Then: which of the pair?</h2>
+    <p>Once you know the job, the form is a spelling rule, not a judgement call. Look at the <b>last letter of the noun</b>:</p>
+    <div class="callout">
+      ends in a <b>consonant</b> → <span style="font-family:var(--serif);color:var(--jade);font-size:19px">은 · 이 · 을</span><br>
+      ends in a <b>vowel</b> → <span style="font-family:var(--serif);color:var(--jade);font-size:19px">는 · 가 · 를</span>
+      <div style="font-size:14px;color:var(--muted);margin-top:8px">It’s purely for the mouth: 이름은 is easier to say than 이름는.</div>
+    </div>
+    <div class="vocab" id="lessonKey" style="margin-top:14px"></div>
+
+    <h2>The honest bit</h2>
+    <p>Topic vs subject (은/는 vs 이/가) is the one that takes ages, and native speakers choose by nuance rather than rule — both are often grammatical in the same sentence. Don’t expect to nail it from a chart; you’ll absorb it from reading. That’s why every card in the drill <b>tells you the role</b> — so you can practise the ending rule cleanly, without guessing the nuance too.</p>
+
+    <div class="cta"><button class="act primary" style="width:100%" onclick="go('#drill-particles')">Practise particles →</button></div>
+  </section>
+
   <!-- SENTENCE STRUCTURE LEARN -->
   <section class="screen lesson" id="s-sentence">
     <h1><span style="color:var(--jade)">문장</span> Sentence structure</h1>
@@ -281,6 +412,10 @@
       <div class="big" id="scoreBig"></div><div class="sub" id="scoreSub"></div>
     </div>
     <p class="sub" id="drillIntro" style="color:var(--muted);font-size:15px;margin:8px 0 0"></p>
+    <div id="drillKey" style="display:none">
+      <button class="keybtn" id="keyToggle" aria-expanded="false">Show particle key</button>
+      <div class="vocab key" id="keyPanel"></div>
+    </div>
     <main class="cards" id="cards"></main>
     <div class="empty" id="drillEmpty" style="display:none">
       <div class="big">Nothing to review yet</div>
@@ -404,12 +539,114 @@ const DIARY_VOCAB={
   join:[["그리고","and · then"],["그래서","so"]]
 };
 
-const ALL=[...HANGUL_ITEMS,...PARTICLE_ITEMS,...SENTENCE_ITEMS,...PAST_ITEMS,...DIARY_ITEMS];
+/* --- Pronunciation rules (표준 발음법 · Standard Korean Pronunciation) --- */
+const PRON_ITEMS=[
+  // 연음 · linking
+  {word:"한국어",mean:"Korean (language)",say:"한구거",rom:["hangugeo","hangugeo"],tag:"linking",
+   why:"The ㄱ of 국 has nothing to hold it — 어 starts with the silent ㅇ, so ㄱ slides over: 한·구·거."},
+  {word:"음악",mean:"music",say:"으막",rom:["eumak","eumag"],tag:"linking",
+   why:"ㅁ hops into the empty ㅇ slot of 악 → 으·막."},
+  {word:"밥을",mean:"rice (object)",say:"바블",rom:["babeul","bapeul","babul"],tag:"linking",
+   why:"ㅂ moves across to 을 → 바·블. This is why particles make words sound so different."},
+  {word:"옷이",mean:"clothes (subject)",say:"오시",rom:["osi","oshi"],tag:"linking",
+   why:"Alone, 옷 is [옫]. But before a vowel the ㅅ survives and links: 오·시."},
+  {word:"책을",mean:"book (object)",say:"채글",rom:["chaegeul","chaekeul","chaegul"],tag:"linking",
+   why:"ㄱ links into 을 → 채·글."},
+  // 받침 · the seven final sounds
+  {word:"꽃",mean:"flower",say:"꼳",rom:["kkot","ggot","kkod"],tag:"7 finals",
+   why:"ㅊ can't close a syllable. ㄷ ㅌ ㅅ ㅆ ㅈ ㅊ ㅎ all land on [ㄷ] → 꼳."},
+  {word:"부엌",mean:"kitchen",say:"부억",rom:["bueok","buok","bueog"],tag:"7 finals",
+   why:"ㅋ at the end simplifies to [ㄱ] → 부억."},
+  {word:"앞",mean:"front",say:"압",rom:["ap","ab"],tag:"7 finals",
+   why:"ㅍ at the end simplifies to [ㅂ] → 압. No puff of air — the sound stops."},
+  {word:"밖",mean:"outside",say:"박",rom:["bak","pak","bag"],tag:"7 finals",
+   why:"ㄲ at the end simplifies to [ㄱ] → 박."},
+  {word:"맛",mean:"taste",say:"맏",rom:["mat","mad"],tag:"7 finals",
+   why:"ㅅ at the end becomes [ㄷ] → 맏. Only ㄱ ㄴ ㄷ ㄹ ㅁ ㅂ ㅇ can ever close a syllable."},
+  // 비음화 · nasalisation
+  {word:"한국말",mean:"the Korean language",say:"한궁말",rom:["hangungmal"],tag:"nasalising",
+   why:"[ㄱ] meets the nasal ㅁ and turns nasal itself: ㄱ → ㅇ, giving 한·궁·말."},
+  {word:"감사합니다",mean:"thank you",say:"감사함니다",rom:["gamsahamnida","kamsahamnida"],tag:"nasalising",
+   why:"[ㅂ] before ㄴ becomes ㅁ → 감사함니다. Never “-hap-ni-da”."},
+  {word:"입니다",mean:"it is",say:"임니다",rom:["imnida"],tag:"nasalising",
+   why:"[ㅂ] before ㄴ becomes ㅁ → 임니다."},
+  {word:"국물",mean:"soup, broth",say:"궁물",rom:["gungmul","kungmul"],tag:"nasalising",
+   why:"[ㄱ] before ㅁ becomes ㅇ → 궁물."},
+  {word:"작년",mean:"last year",say:"장년",rom:["jangnyeon","changnyeon"],tag:"nasalising",
+   why:"[ㄱ] before ㄴ becomes ㅇ → 장년."},
+  // 유음화 · liquidising
+  {word:"신라",mean:"Silla (old kingdom)",say:"실라",rom:["silla","shilla"],tag:"liquidising",
+   why:"ㄴ next to ㄹ gives in and becomes ㄹ → 실라. That's why it's spelled “Silla” in English."},
+  {word:"연락",mean:"contact",say:"열락",rom:["yeollak","yeolrak","yeollag"],tag:"liquidising",
+   why:"ㄴ before ㄹ becomes ㄹ → 열락."},
+  {word:"설날",mean:"Lunar New Year",say:"설랄",rom:["seollal","sollal"],tag:"liquidising",
+   why:"Here it's the other way round: ㄹ pulls the following ㄴ into ㄹ → 설랄."},
+  {word:"실내",mean:"indoors",say:"실래",rom:["sillae","shillae"],tag:"liquidising",
+   why:"ㄹ pulls ㄴ into ㄹ → 실래."},
+  // 경음화 · tensing
+  {word:"학교",mean:"school",say:"학꾜",rom:["hakkyo","hakgyo","hakkkyo"],tag:"tensing",
+   why:"After a [ㄱ] [ㄷ] [ㅂ] sound, a following ㄱ ㄷ ㅂ ㅅ ㅈ goes tense: ㄱ → ㄲ, so 학꾜."},
+  {word:"식당",mean:"restaurant",say:"식땅",rom:["siktang","sikttang","sikdang"],tag:"tensing",
+   why:"[ㄱ] tenses the following ㄷ → ㄸ, giving 식땅."},
+  {word:"학생",mean:"student",say:"학쌩",rom:["haksaeng","hakssaeng"],tag:"tensing",
+   why:"[ㄱ] tenses the following ㅅ → ㅆ, giving 학쌩. You already met this word in Particles."},
+  {word:"잡지",mean:"magazine",say:"잡찌",rom:["japjji","japji","japtchi"],tag:"tensing",
+   why:"[ㅂ] tenses the following ㅈ → ㅉ, giving 잡찌."},
+  {word:"숙제",mean:"homework",say:"숙쩨",rom:["sukjje","sukje","sukzze"],tag:"tensing",
+   why:"[ㄱ] tenses the following ㅈ → ㅉ, giving 숙쩨."},
+  // 격음화 · aspirating
+  {word:"좋다",mean:"to be good",say:"조타",rom:["jota","chota","jotha"],tag:"aspirating",
+   why:"ㅎ merges with the following ㄷ and makes it breathy: ㄷ → ㅌ, giving 조타."},
+  {word:"축하",mean:"congratulations",say:"추카",rom:["chuka","chukha"],tag:"aspirating",
+   why:"Here ㅎ comes second: [ㄱ] + ㅎ → ㅋ, giving 추카."},
+  {word:"백화점",mean:"department store",say:"배콰점",rom:["baekwajeom","paekwajeom"],tag:"aspirating",
+   why:"[ㄱ] + ㅎ → ㅋ, giving 배·콰·점."},
+  {word:"많다",mean:"to be many",say:"만타",rom:["manta","mantha"],tag:"aspirating",
+   why:"The ㅎ of ㄶ aspirates the following ㄷ → ㅌ, giving 만타."},
+  // ㅎ 탈락 · ㅎ dropping
+  {word:"좋아요",mean:"it's good",say:"조아요",rom:["joayo","choayo"],tag:"ㅎ dropping",
+   why:"ㅎ before a vowel simply vanishes — not “조하요”, just 조아요."},
+  {word:"많이",mean:"a lot",say:"마니",rom:["mani","manhi"],tag:"ㅎ dropping",
+   why:"ㅎ drops, then ㄴ links across → 마니."},
+  {word:"싫어요",mean:"I dislike it",say:"시러요",rom:["sireoyo","shireoyo"],tag:"ㅎ dropping",
+   why:"ㅎ drops and ㄹ links across → 시러요."},
+  {word:"놓아요",mean:"I put it down",say:"노아요",rom:["noayo"],tag:"ㅎ dropping",
+   why:"ㅎ vanishes before the vowel → 노아요."},
+  // 구개음화 · palatalising
+  {word:"같이",mean:"together",say:"가치",rom:["gachi","kachi"],tag:"palatalising",
+   why:"ㅌ before 이 slides to ㅊ → 가치. Like English “would you” becoming “wouldja”."},
+  {word:"굳이",mean:"stubbornly, needlessly",say:"구지",rom:["guji","kuji"],tag:"palatalising",
+   why:"ㄷ before 이 slides to ㅈ → 구지."},
+  {word:"해돋이",mean:"sunrise",say:"해도지",rom:["haedoji","haedodji"],tag:"palatalising",
+   why:"ㄷ before 이 becomes ㅈ → 해도지."},
+  // 겹받침 · double batchim
+  {word:"읽다",mean:"to read",say:"익따",rom:["ikda","ikta","iktta","ikdda"],tag:"double batchim",
+   why:"Of ㄺ only [ㄱ] sounds, and it then tenses the ㄷ → 익따. (But 읽어요 links: 일거요.)"},
+  {word:"없다",mean:"to not exist",say:"업따",rom:["eopda","eopta","eoptta"],tag:"double batchim",
+   why:"Of ㅄ only [ㅂ] sounds, which then tenses the ㄷ → 업따."},
+  {word:"값",mean:"price",say:"갑",rom:["gap","kap","gab"],tag:"double batchim",
+   why:"Of ㅄ only [ㅂ] survives at the end → 갑."},
+  {word:"앉다",mean:"to sit",say:"안따",rom:["anda","anta","antta"],tag:"double batchim",
+   why:"Of ㄵ only [ㄴ] sounds, and the ㄷ tenses after it → 안따."}
+].map((it,i)=>({...it,id:"pron-"+i,type:"pron",unit:"pron",answer:it.say,
+  accept:[...it.rom,it.say]}));
+
+/* --- particle key, shared by the lesson and the drill's quick reference --- */
+const PARTICLE_KEY=[
+  ["Topic","은","eun","after a consonant"],["Topic","는","neun","after a vowel"],
+  ["Subject","이","i","after a consonant"],["Subject","가","ga","after a vowel"],
+  ["Object","을","eul","after a consonant"],["Object","를","reul","after a vowel"]
+];
+function keyHTML(){return PARTICLE_KEY.map(r=>
+  `<div class="keyrow"><span class="krole">${r[0]}</span><span><span class="khan">${r[1]}</span> <span class="krom">${r[2]}</span> · ${r[3]}</span></div>`).join('')}
+
+const ALL=[...HANGUL_ITEMS,...PRON_ITEMS,...PARTICLE_ITEMS,...SENTENCE_ITEMS,...PAST_ITEMS,...DIARY_ITEMS];
 const BY_ID={}; ALL.forEach(it=>BY_ID[it.id]=it);
 
 const UNITS=[
   {id:"hangul",ko:"한글",en:"Hangul",desc:"Read the Korean alphabet",status:"active",go:"#hangul"},
-  {id:"particles",ko:"조사",en:"Particles",desc:"Mark topic, subject and object",status:"active",go:"#drill-particles"},
+  {id:"pron",ko:"발음",en:"Pronunciation",desc:"Why words aren't said how they're spelled",status:"active",go:"#pron"},
+  {id:"particles",ko:"조사",en:"Particles",desc:"Mark topic, subject and object",status:"active",go:"#particles"},
   {id:"sentence",ko:"문장",en:"Sentence structure",desc:"Word order: subject–object–verb",status:"active",go:"#sentence"},
   {id:"past",ko:"과거",en:"Past tense",desc:"Say what you did: –았 / 었 / 했어요",status:"active",go:"#past"},
   {id:"diary",ko:"일기",en:"Diary kit",desc:"Build real past-tense diary lines",status:"active",go:"#diary"},
@@ -439,7 +676,8 @@ function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor
 function speak(t){try{const u=new SpeechSynthesisUtterance(t);u.lang='ko-KR';const v=speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang));if(v)u.voice=v;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){}}
 
 /* ===================== ROUTER ===================== */
-const screens={'#home':'s-home','#hangul':'s-hangul','#drill-hangul':'s-drill','#drill-particles':'s-drill',
+const screens={'#home':'s-home','#hangul':'s-hangul','#drill-hangul':'s-drill',
+  '#pron':'s-pron','#drill-pron':'s-drill','#particles':'s-particles','#drill-particles':'s-drill',
   '#sentence':'s-sentence','#drill-sentence':'s-drill','#past':'s-past','#drill-past':'s-drill',
   '#diary':'s-diary','#drill-diary':'s-drill','#review':'s-drill'};
 function go(hash){ if(location.hash!==hash)location.hash=hash; else route(); }
@@ -451,7 +689,9 @@ function route(){
   const onHome=(h==='#home'||!screens[h]);
   document.getElementById('backBtn').classList.toggle('show',!onHome);
   document.getElementById('actionBar').classList.toggle('hidden', id!=='s-drill');
-  const crumbs={'#hangul':'Hangul','#drill-hangul':'Hangul · practice','#drill-particles':'Particles · practice',
+  const crumbs={'#hangul':'Hangul','#drill-hangul':'Hangul · practice',
+    '#pron':'Pronunciation','#drill-pron':'Pronunciation · practice',
+    '#particles':'Particles','#drill-particles':'Particles · practice',
     '#sentence':'Sentence structure','#drill-sentence':'Sentence · practice',
     '#past':'Past tense','#drill-past':'Past tense · practice',
     '#diary':'Diary kit','#drill-diary':'Diary · practice','#review':'Review'};
@@ -460,7 +700,10 @@ function route(){
   if(id==='s-home')renderHome();
   if(h==='#hangul')renderHangulLesson();
   if(h==='#drill-hangul')startDrill(shuffle(HANGUL_ITEMS).slice(0,12),{intro:"Type each sound in romanised letters (e.g. a, g, ga). Tap ▶ to hear it."});
-  if(h==='#drill-particles')startDrill(shuffle(PARTICLE_ITEMS),{intro:"Each card names the role. Pick the right form for the noun's ending. Type romanised (neun, ga, eul)."});
+  if(h==='#pron')renderPronLesson();
+  if(h==='#particles')renderParticleLesson();
+  if(h==='#drill-pron')startDrill(shuffle(PRON_ITEMS).slice(0,12),{intro:"Write how each word is actually said — in Hangul (한구거) or romanised (hangugeo). Tap ▶ to hear it."});
+  if(h==='#drill-particles')startDrill(shuffle(PARTICLE_ITEMS),{intro:"Each card names the role. Pick the right form for the noun's ending. Type romanised (neun, ga, eul).",showKey:true});
   if(h==='#diary')renderDiaryKit();
   if(h==='#drill-sentence')startDrill(shuffle(SENTENCE_ITEMS),{intro:"Tap the words to build each sentence in order. Korean is Subject–Object–Verb — the verb goes last."});
   if(h==='#drill-past')startDrill(shuffle(PAST_ITEMS),{intro:"Pick the past ending for each verb. ㅏ/ㅗ stems → 았어요, other vowels → 었어요, 하다 → 했어요."});
@@ -510,10 +753,17 @@ function startDrill(items,opts){
   document.getElementById('actionBar').classList.remove('hidden');
   document.getElementById('drillIntro').textContent=opts.intro||'';
   document.getElementById('score').classList.remove('show','low');
+  showDrillKey(!!opts.showKey);
   renderCards();
+}
+function showDrillKey(on){
+  const box=document.getElementById('drillKey');
+  box.style.display=on?'block':'none';
+  if(on&&!box.dataset.filled){document.getElementById('keyPanel').innerHTML=keyHTML();box.dataset.filled='1';}
 }
 function startReview(){
   mode='review';
+  showDrillKey(false);
   const ids=[...STATE.mistakes];
   document.getElementById('drillIntro').textContent='';
   document.getElementById('score').classList.remove('show','low');
@@ -548,6 +798,16 @@ function cardHTML(it,pos){
       <div class="stem"><span class="ko">${it.dict.ko}</span> <span class="rom">${it.dict.rom}</span> → ?</div>
       <div class="opts" id="opts${pos}"></div>
       <div class="verdict"></div></section>`;
+  }
+  if(it.type==='pron'){
+    return `<section class="card" data-i="${pos}">
+      <div class="top"><span class="chip"><span class="role">${it.tag}</span></span><span class="num">${pos+1} / ${current.length}</span></div>
+      <div class="prompt-han" style="font-size:44px">${it.word}</div>
+      <div class="prompt-sound-hint">${it.mean}</div>
+      <div class="answer">
+        <button class="speak" onclick="speak('${it.word}')" aria-label="Hear it">▶</button>
+        <input id="in${pos}" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="how it's said" style="width:170px">
+      </div><div class="verdict"></div></section>`;
   }
   if(it.type==='sound'){
     return `<section class="card" data-i="${pos}">${head}
@@ -600,6 +860,16 @@ function renderChoice(pos){
 }
 function pickOpt(pos,i){ if(checked)return; SEL[pos]=i; renderChoice(pos); }
 
+/* ----- pronunciation + particle lesson renderers ----- */
+function pronExamples(tag){
+  return PRON_ITEMS.filter(i=>i.tag===tag).map(i=>
+    `<button class="ex" onclick="speak('${i.word}')"><span class="ex-from">${i.word}</span><span class="ex-arrow">→</span><span class="ex-to">${i.say}</span><span class="ex-gloss">${i.mean}</span></button>`).join('');
+}
+function renderPronLesson(){
+  document.querySelectorAll('.rule-ex').forEach(el=>{ el.innerHTML=pronExamples(el.dataset.tag); });
+}
+function renderParticleLesson(){ document.getElementById('lessonKey').innerHTML=keyHTML(); }
+
 /* ----- diary kit vocab reference ----- */
 function vocabRow(p){return `<button class="vrow" onclick="speak('${p[0]}')"><span class="vko">${p[0]}</span><span class="ven">${p[1]}</span></button>`}
 function renderDiaryKit(){
@@ -649,6 +919,9 @@ function check(){
     : (correct===current.length?'Perfect. 잘했어요!':'Read the corrections, then go again.');
   window.scrollTo({top:0,behavior:'smooth'});
 }
+const _kt=document.getElementById('keyToggle'), _kp=document.getElementById('keyPanel');
+_kt.onclick=()=>{const open=_kp.classList.toggle('open');_kt.setAttribute('aria-expanded',open);_kt.textContent=open?'Hide particle key':'Show particle key';};
+
 document.getElementById('checkBtn').onclick=check;
 document.getElementById('againBtn').onclick=()=>{
   if(mode==='review')startReview();
