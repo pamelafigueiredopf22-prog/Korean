@@ -210,6 +210,22 @@
   .krom{color:var(--muted);font-style:italic}
   .krole{color:var(--jade);font-size:13px}
 
+  /* three-level comparison table */
+  .lvtable{border:1.5px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card);margin:8px 0 4px}
+  .lvhead,.lvrow{display:grid;grid-template-columns:1.1fr 1.3fr 1.1fr .9fr;gap:6px;align-items:center;
+    padding:11px 13px;border-bottom:1px solid var(--line);text-align:left}
+  .lvhead{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--jade-soft)}
+  .lvrow{border-left:none;border-right:none;border-top:none;background:none;font-family:var(--serif);
+    font-size:16px;cursor:pointer;width:100%;color:var(--ink)}
+  .lvrow:last-child{border-bottom:none}
+  .lvrow:hover{background:var(--jade-soft)}
+  .lvrow .lvd{font-family:var(--sans);font-size:13px;color:var(--muted)}
+
+  /* situational choice cards: options stack, since they hold phrases not endings */
+  .card.situational .en{font-size:17px;line-height:1.5}
+  .card.situational .opts{flex-direction:column;align-items:stretch}
+  .card.situational .opt{width:100%}
+
   /* diary vocab reference */
   .vocab{display:flex;flex-direction:column;border:1.5px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card);margin:8px 0 4px}
   .vrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;
@@ -483,6 +499,87 @@
     </div>
 
     <div class="cta"><button class="act primary" style="width:100%" onclick="go('#drill-tenses')">Practise present &amp; future →</button></div>
+  </section>
+
+  <!-- POLITENESS LEARN -->
+  <section class="screen lesson" id="s-polite">
+    <h1><span style="color:var(--jade)">존댓말</span> Politeness</h1>
+    <p class="sub">Korean doesn’t add “please”. It changes the end of the verb.</p>
+    <div class="callout">Everything you’ve learned in this app so far — 마셔요, 갔어요, 할 거예요 — is one particular level called <b>해요체</b>. You already speak it. This unit shows you its neighbours.</div>
+    <p>Which level you use isn’t about how you feel; it’s about who’s listening. Age, rank, closeness and setting decide it. There are seven levels in the grammar books, but three carry modern life:</p>
+
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">합니다체</span><span class="rule-en">Formal</span></div>
+      <p>Presentations, job interviews, the news, the military, announcements, customer service. Crisp and public. You’ll <i>hear</i> far more of it than you produce.</p>
+    </div>
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">해요체</span><span class="rule-en">Polite</span></div>
+      <p>The everyday workhorse — shops, colleagues, new acquaintances, anyone you’re unsure about. <b>Your default.</b> It’s never offensive to be too polite.</p>
+    </div>
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">반말</span><span class="rule-en">Casual</span></div>
+      <p>Close friends of similar age, younger siblings, partners, talking to yourself. Mostly just 해요체 with the 요 dropped.</p>
+      <p><b>The part learners get wrong:</b> you don’t decide to use 반말 on your own. The relationship decides, and the switch is usually offered out loud — 말 놓으세요 (“speak comfortably”). Using it uninvited with someone older or new reads as disrespect.</p>
+    </div>
+
+    <h2>The same verb, three ways</h2>
+    <div class="lvtable" id="levelTable"></div>
+
+    <h2>Building the formal ending</h2>
+    <p>It’s the same consonant-or-vowel question you’ve answered for particles and the future tense:</p>
+    <div class="callout">
+      <div style="font-size:16px;line-height:2">
+        stem ends in a <b>consonant</b> → <span style="font-family:var(--serif);color:var(--jade);font-size:19px">-습니다</span> &nbsp;<span style="color:var(--muted);font-size:14px">먹 → 먹습니다</span><br>
+        stem ends in a <b>vowel</b> → <span style="font-family:var(--serif);color:var(--jade);font-size:19px">-ㅂ니다</span> &nbsp;<span style="color:var(--muted);font-size:14px">가 → 갑니다</span>
+      </div>
+      <div style="font-size:14px;color:var(--muted);margin-top:10px">Questions swap 다 for 까: 갑니까? 먹습니까?</div>
+    </div>
+    <p>Notice you’ve already been saying this: <b>감사합니다</b> and <b>입니다</b> are 합니다체. And both follow your nasalising rule — [감사함니다], [임니다]. The ㅂ never sounds like a ㅂ here.</p>
+    <p style="color:var(--muted);font-size:14px">One exception worth parking: stems ending in ㄹ drop it before ㅂ니다 — 살다 → 삽니다, 만들다 → 만듭니다.</p>
+    <div class="vocab" id="formalTable"></div>
+
+    <div class="cta"><button class="act primary" style="width:100%" onclick="go('#drill-polite')">Practise politeness →</button></div>
+  </section>
+
+  <!-- PEOPLE & PRONOUNS LEARN -->
+  <section class="screen lesson" id="s-people">
+    <h1><span style="color:var(--jade)">사람</span> People &amp; pronouns</h1>
+    <p class="sub">How to say I and we — and why “you” barely exists.</p>
+    <p>Korean has pronouns, but uses them far less than English does. If who you mean is obvious, you leave it out. 어디 가요? is a whole, natural sentence with no word for “you” anywhere in it.</p>
+
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">저 · 나</span><span class="rule-en">I, we</span></div>
+      <p>Two sets, split by politeness rather than grammar. <b>저</b> and <b>저희</b> are the humble forms for anyone you’d speak politely to; <b>나</b> and <b>우리</b> are for 반말. Korean shows respect by lowering yourself, not by raising the other person.</p>
+      <div class="vocab" id="peopleTable"></div>
+      <p style="margin-top:12px">Two things to watch. The subject forms contract irregularly — 저 + 가 → <b>제가</b>, never 저가. And <b>우리나라</b> stays 우리 even in the politest speech: you can’t humble a country you share with your listener.</p>
+      <p>One quirk with no English parallel: 우리 often covers what English calls <i>my</i>. 우리 엄마 is “my mum”, 우리 집 is “my house”.</p>
+    </div>
+
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">당신?</span><span class="rule-en">The “you” trap</span></div>
+      <p>Phrasebooks list <b>당신</b> as “you”. Treat that as a warning. In real speech it means one of three things: what spouses call each other, the “you” of adverts, songs and prayers — or, most often, the “you” of someone starting a fight.</p>
+      <div class="callout" style="border-color:var(--persimmon)">
+        <div style="font-family:var(--serif);font-size:20px;color:var(--persimmon)">당신 뭐야?</div>
+        <div style="font-size:14px;color:var(--muted);margin-top:6px">Not “what are you?” so much as “who do you think you are?” — this is a line from an argument.</div>
+      </div>
+      <p><b>너</b> isn’t a neutral substitute either: it’s intimate and downward, 반말 only. (Its subject form is 네가, though almost everyone says 니가 aloud to keep it distinct from 내가, “I”.)</p>
+      <p>So what do you actually say? In order of preference:</p>
+      <div class="vocab" id="youTable"></div>
+      <p style="margin-top:12px">Two details on 씨: attach it to a <b>given name or full name</b>, never a family name on its own (김 씨 is for someone beneath you), and it’s for peers and juniors — calling your boss 민수 씨 would land badly. For seniors, use their title with 님.</p>
+    </div>
+
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">그분</span><span class="rule-en">He, she, they</span></div>
+      <p>Strictly, Korean has no third-person pronouns. <b>그</b>, <b>그녀</b> and <b>그들</b> exist, but they were invented by twentieth-century writers to translate European novels, and they still live on the page. Say them aloud and you sound like a book.</p>
+      <p>In speech: <b>그 사람</b> (that person), <b>그분</b> (the same, respectful), <b>그분들</b> for several. Or, most often, the person’s name — or nothing at all.</p>
+    </div>
+
+    <div class="callout" style="margin-top:22px">
+      <div style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">The habit to build</div>
+      Each time you reach for “you”, try in this order: leave it out → their name + 씨 → their title. A bare pronoun is the last resort, not the first.
+    </div>
+
+    <div class="cta"><button class="act primary" style="width:100%" onclick="go('#drill-people')">Practise people →</button></div>
   </section>
 
   <!-- WORD OF THE DAY -->
@@ -776,6 +873,68 @@ const PARTICLE_KEY=[
 function keyHTML(){return PARTICLE_KEY.map(r=>
   `<div class="keyrow"><span class="krole">${r[0]}</span><span><span class="khan">${r[1]}</span> <span class="krom">${r[2]}</span> · ${r[3]}</span></div>`).join('')}
 
+/* --- Politeness: formal endings (-습니다 / -ㅂ니다) --- */
+const FORMAL_OPTS=[{ko:"-습니다",rom:"-seumnida"},{ko:"-ㅂ니다",rom:"-mnida"}];
+const POLITE_FORM_ITEMS=[
+  {en:"I go. (formal)",dict:{ko:"가다",rom:"gada"},ansIndex:1,full:"갑니다",why:"Stem 가 ends in a <b>vowel</b> → ㅂ tucks under it → 갑니다."},
+  {en:"I eat. (formal)",dict:{ko:"먹다",rom:"meokda"},ansIndex:0,full:"먹습니다",why:"Stem 먹 ends in a <b>consonant</b> → 습니다 → 먹습니다."},
+  {en:"I do. (formal)",dict:{ko:"하다",rom:"hada"},ansIndex:1,full:"합니다",why:"Stem 하 ends in a <b>vowel</b> → 합니다. Said [함니다] — nasalising, as you learned."},
+  {en:"I read. (formal)",dict:{ko:"읽다",rom:"ikda"},ansIndex:0,full:"읽습니다",why:"Stem 읽 ends in a <b>consonant</b> → 읽습니다."},
+  {en:"I watch. (formal)",dict:{ko:"보다",rom:"boda"},ansIndex:1,full:"봅니다",why:"Stem 보 ends in a <b>vowel</b> → 봅니다."},
+  {en:"There is / I have. (formal)",dict:{ko:"있다",rom:"itda"},ansIndex:0,full:"있습니다",why:"Stem 있 ends in a <b>consonant</b> → 있습니다. You'll hear this one constantly."},
+  {en:"It is good. (formal)",dict:{ko:"좋다",rom:"jota"},ansIndex:0,full:"좋습니다",why:"Stem 좋 ends in a <b>consonant</b> → 좋습니다."},
+  {en:"I drink. (formal)",dict:{ko:"마시다",rom:"masida"},ansIndex:1,full:"마십니다",why:"Stem 마시 ends in a <b>vowel</b> → 마십니다."},
+  {en:"I learn. (formal)",dict:{ko:"배우다",rom:"baeuda"},ansIndex:1,full:"배웁니다",why:"Stem 배우 ends in a <b>vowel</b> → 배웁니다."},
+  {en:"I sit. (formal)",dict:{ko:"앉다",rom:"anda"},ansIndex:0,full:"앉습니다",why:"Stem 앉 ends in a <b>consonant</b> → 앉습니다."},
+  {en:"I receive. (formal)",dict:{ko:"받다",rom:"batda"},ansIndex:0,full:"받습니다",why:"Stem 받 ends in a <b>consonant</b> → 받습니다."},
+  {en:"I draw. (formal)",dict:{ko:"그리다",rom:"geurida"},ansIndex:1,full:"그립니다",why:"Stem 그리 ends in a <b>vowel</b> → 그립니다."}
+].map((it,i)=>({...it,id:"polform-"+i,type:"choice",unit:"polite",options:FORMAL_OPTS,tag:"formal"}));
+
+/* --- Politeness: which level fits the situation --- */
+const LEVEL_OPTS=[{ko:"합니다체",rom:"formal"},{ko:"해요체",rom:"polite"},{ko:"반말",rom:"casual"}];
+const POLITE_LEVEL_ITEMS=[
+  {en:"Presenting your research at a conference.",ansIndex:0,full:"합니다체",why:"Public and professional — 합니다체 is the register for presentations, reports and announcements."},
+  {en:"Texting your closest friend from school.",ansIndex:2,full:"반말",why:"Close friend, same age → 반말. Using 해요체 here would quietly signal you want distance."},
+  {en:"Ordering coffee from a barista you don't know.",ansIndex:1,full:"해요체",why:"Stranger, everyday setting → 해요체. Polite without being stiff."},
+  {en:"Reading the evening news on television.",ansIndex:0,full:"합니다체",why:"Broadcast to a public audience → 합니다체."},
+  {en:"Chatting with your younger sister at home.",ansIndex:2,full:"반말",why:"Family, younger → 반말."},
+  {en:"A colleague you met for the first time today.",ansIndex:1,full:"해요체",why:"New acquaintance → 해요체. Safe and warm."},
+  {en:"Answering questions in a job interview.",ansIndex:0,full:"합니다체",why:"Formal assessment → 합니다체 throughout."},
+  {en:"Someone clearly older whose name you don't know.",ansIndex:1,full:"해요체",why:"When unsure, 해요체. It's never offensive to be too polite."},
+  {en:"Your partner of several years, at home.",ansIndex:2,full:"반말",why:"Established closeness → 반말."},
+  {en:"A shopkeeper you see most weeks but aren't friends with.",ansIndex:1,full:"해요체",why:"Familiar but not close → 해요체 stays right."}
+].map((it,i)=>({...it,id:"pollevel-"+i,type:"choice",unit:"polite",options:LEVEL_OPTS,tag:"which level"}));
+
+const POLITE_ITEMS=[...POLITE_FORM_ITEMS,...POLITE_LEVEL_ITEMS];
+
+/* --- People & pronouns --- */
+const PEOPLE_ITEMS=[
+  {en:"Introducing yourself in a job interview: “I'm a student.”",options:[{ko:"저는",rom:"jeoneun"},{ko:"나는",rom:"naneun"}],ansIndex:0,full:"저는",tag:"I",
+   why:"저 is the humble “I”, used with anyone you'd speak politely to. 나 would sound far too casual here."},
+  {en:"Telling your closest friend you're tired.",options:[{ko:"나",rom:"na"},{ko:"저",rom:"jeo"}],ansIndex:0,full:"나",tag:"I",
+   why:"With a close friend you're in 반말, and 반말 takes 나. Mixing 저 into casual speech sounds off."},
+  {en:"“I” as the subject, politely — which form?",options:[{ko:"제가",rom:"jega"},{ko:"저가",rom:"jeoga"}],ansIndex:0,full:"제가",tag:"I",
+   why:"저 + 가 contracts to 제가. 저가 simply doesn't exist. (Casually: 나 + 가 → 내가.)"},
+  {en:"“My book”, speaking politely.",options:[{ko:"제 책",rom:"je chaek"},{ko:"내 책",rom:"nae chaek"}],ansIndex:0,full:"제 책",tag:"my",
+   why:"저의 contracts to 제, so 제 책. The casual pair is 나의 → 내 책."},
+  {en:"Your colleague is called 민수. How do you address him?",options:[{ko:"민수 씨",rom:"Minsu ssi"},{ko:"당신",rom:"dangsin"}],ansIndex:0,full:"민수 씨",tag:"you",
+   why:"Name + 씨 is the everyday polite way to address a peer. 당신 would sound cold or confrontational."},
+  {en:"Addressing your teacher directly.",options:[{ko:"선생님",rom:"seonsaengnim"},{ko:"당신",rom:"dangsin"}],ansIndex:0,full:"선생님",tag:"you",
+   why:"Use the title, not a pronoun. 선생님 works for teachers and as a general respectful address."},
+  {en:"Asking a friend where they're going.",options:[{ko:"어디 가요?",rom:"eodi gayo?"},{ko:"당신은 어디 가요?",rom:"dangsineun eodi gayo?"}],ansIndex:0,full:"어디 가요?",tag:"you",
+   why:"Korean drops what's obvious. No word for “you” at all — that's the natural sentence."},
+  {en:"Telling a client about the company you work for.",options:[{ko:"저희 회사",rom:"jeohui hoesa"},{ko:"우리 회사",rom:"uri hoesa"}],ansIndex:0,full:"저희 회사",tag:"we",
+   why:"저희 is the humble “we/our”, lowering your side before a client."},
+  {en:"Saying “we” to a group of your own friends.",options:[{ko:"우리",rom:"uri"},{ko:"저희",rom:"jeohui"}],ansIndex:0,full:"우리",tag:"we",
+   why:"Among peers there's nobody to defer to, so the plain 우리 is right."},
+  {en:"Talking about your own country with another Korean.",options:[{ko:"우리나라",rom:"urinara"},{ko:"저희 나라",rom:"jeohui nara"}],ansIndex:0,full:"우리나라",tag:"we",
+   why:"우리나라 is a fixed word and never humbled — you can't lower a country you both share."},
+  {en:"Referring respectfully to a person you and your listener both know.",options:[{ko:"그분",rom:"geubun"},{ko:"그녀",rom:"geunyeo"}],ansIndex:0,full:"그분",tag:"he · she",
+   why:"그분 is “that person”, respectful and normal in speech. 그녀 belongs to the page, not the mouth."},
+  {en:"Writing “she” in a novel you're translating.",options:[{ko:"그녀",rom:"geunyeo"},{ko:"그분",rom:"geubun"}],ansIndex:0,full:"그녀",tag:"he · she",
+   why:"This is the one place 그녀 belongs — literature and translation. It was coined by writers for exactly this."}
+].map((it,i)=>({...it,id:"people-"+i,type:"choice",unit:"people"}));
+
 /* --- Word of the day: 75 practical words, each with a usable example --- */
 const WORDS=[
   {ko:"물",rom:"mul",en:"water",type:"noun",exKo:"물을 마셔요.",exRom:"mureul masyeoyo.",exEn:"I drink water."},
@@ -863,7 +1022,8 @@ function dayNumber(){const d=new Date();return Math.floor(Date.UTC(d.getFullYear
 function wordIndexFor(day){return (day*37)%WORDS.length;}
 function wordOfDay(){return WORDS[wordIndexFor(dayNumber())];}
 
-const ALL=[...HANGUL_ITEMS,...PRON_ITEMS,...PARTICLE_ITEMS,...SENTENCE_ITEMS,...PAST_ITEMS,...TENSE_ITEMS,...DIARY_ITEMS];
+const ALL=[...HANGUL_ITEMS,...PRON_ITEMS,...PARTICLE_ITEMS,...SENTENCE_ITEMS,...PAST_ITEMS,...TENSE_ITEMS,
+  ...POLITE_ITEMS,...PEOPLE_ITEMS,...DIARY_ITEMS];
 const BY_ID={}; ALL.forEach(it=>BY_ID[it.id]=it);
 
 const UNITS=[
@@ -874,6 +1034,8 @@ const UNITS=[
   {id:"past",ko:"과거",en:"Past tense",desc:"Say what you did: –았 / 었 / 했어요",status:"active",go:"#past"},
   {id:"diary",ko:"일기",en:"Diary kit",desc:"Build real past-tense diary lines",status:"active",go:"#diary"},
   {id:"tenses",ko:"시제",en:"Present & future",desc:"Say what you do and what you'll do",status:"active",go:"#tenses"},
+  {id:"polite",ko:"존댓말",en:"Politeness",desc:"Formal, polite and casual speech",status:"active",go:"#polite"},
+  {id:"people",ko:"사람",en:"People & pronouns",desc:"I, we, and why “you” is a trap",status:"active",go:"#people"},
   {id:"stories",ko:"이야기",en:"Short stories",desc:"Tiny stories to grow vocabulary",status:"soon"}
 ];
 
@@ -904,6 +1066,7 @@ const screens={'#home':'s-home','#hangul':'s-hangul','#drill-hangul':'s-drill',
   '#pron':'s-pron','#drill-pron':'s-drill','#particles':'s-particles','#drill-particles':'s-drill',
   '#sentence':'s-sentence','#drill-sentence':'s-drill','#past':'s-past','#drill-past':'s-drill',
   '#diary':'s-diary','#drill-diary':'s-drill','#tenses':'s-tenses','#drill-tenses':'s-drill',
+  '#polite':'s-polite','#drill-polite':'s-drill','#people':'s-people','#drill-people':'s-drill',
   '#word':'s-word','#review':'s-drill'};
 function go(hash){ if(location.hash!==hash)location.hash=hash; else route(); }
 function route(){
@@ -921,6 +1084,8 @@ function route(){
     '#past':'Past tense','#drill-past':'Past tense · practice',
     '#diary':'Diary kit','#drill-diary':'Diary · practice',
     '#tenses':'Present & future','#drill-tenses':'Present & future · practice',
+    '#polite':'Politeness','#drill-polite':'Politeness · practice',
+    '#people':'People & pronouns','#drill-people':'People · practice',
     '#word':'Word of the day','#review':'Review'};
   document.getElementById('crumb').textContent=crumbs[h]||'';
   window.scrollTo(0,0);
@@ -933,6 +1098,10 @@ function route(){
   if(h==='#drill-particles')startDrill(shuffle(PARTICLE_ITEMS),{intro:"Each card names the role. Pick the right form for the noun's ending. Type romanised (neun, ga, eul).",showKey:true});
   if(h==='#diary')renderDiaryKit();
   if(h==='#tenses')renderTenseLesson();
+  if(h==='#polite')renderPoliteLesson();
+  if(h==='#people')renderPeopleLesson();
+  if(h==='#drill-polite')startDrill(shuffle(POLITE_ITEMS).slice(0,12),{intro:"Two things mixed: build the formal ending, and judge which level fits the person you're speaking to."});
+  if(h==='#drill-people')startDrill(shuffle(PEOPLE_ITEMS),{intro:"Pick what a Korean speaker would actually say. Often the right answer is the one that leaves the pronoun out."});
   if(h==='#word')renderWordScreen();
   if(h==='#drill-tenses')startDrill(shuffle(TENSE_ITEMS).slice(0,12),{intro:"Pick the right ending. Present follows the same ㅏ/ㅗ rule as the past; future depends on whether the stem ends in a vowel or consonant."});
   if(h==='#drill-sentence')startDrill(shuffle(SENTENCE_ITEMS),{intro:"Tap the words to build each sentence in order. Korean is Subject–Object–Verb — the verb goes last."});
@@ -1056,10 +1225,12 @@ function cardHTML(it,pos){
       <div class="verdict"></div></section>`;
   }
   if(it.type==='choice'){
-    return `<section class="card choice" data-i="${pos}">
-      <div class="top"><span class="chip"><span class="role">${it.tag}</span><span class="pair">${it.dict.ko}</span></span><span class="num">${pos+1} / ${current.length}</span></div>
+    const pair = it.dict?`<span class="pair">${it.dict.ko}</span>`:'';
+    const stem = it.dict?`<div class="stem"><span class="ko">${it.dict.ko}</span> <span class="rom">${it.dict.rom}</span> → ?</div>`:'';
+    return `<section class="card choice${it.dict?'':' situational'}" data-i="${pos}">
+      <div class="top"><span class="chip"><span class="role">${it.tag}</span>${pair}</span><span class="num">${pos+1} / ${current.length}</span></div>
       <p class="en">${it.en}</p>
-      <div class="stem"><span class="ko">${it.dict.ko}</span> <span class="rom">${it.dict.rom}</span> → ?</div>
+      ${stem}
       <div class="opts" id="opts${pos}"></div>
       <div class="verdict"></div></section>`;
   }
@@ -1133,6 +1304,26 @@ function renderPronLesson(){
   document.querySelectorAll('.rule-ex').forEach(el=>{ el.innerHTML=pronExamples(el.dataset.tag); });
 }
 function renderParticleLesson(){ document.getElementById('lessonKey').innerHTML=keyHTML(); }
+function renderPoliteLesson(){
+  const rows=[["가다","갑니다","가요","가"],["먹다","먹습니다","먹어요","먹어"],["하다","합니다","해요","해"],
+    ["보다","봅니다","봐요","봐"],["읽다","읽습니다","읽어요","읽어"],["마시다","마십니다","마셔요","마셔"]];
+  document.getElementById('levelTable').innerHTML=
+    `<div class="lvhead"><span></span><span>합니다체</span><span>해요체</span><span>반말</span></div>`+
+    rows.map(r=>`<button class="lvrow" onclick="speak('${r[1]}')"><span class="lvd">${r[0]}</span><span>${r[1]}</span><span>${r[2]}</span><span>${r[3]}</span></button>`).join('');
+  document.getElementById('formalTable').innerHTML=POLITE_FORM_ITEMS.map(it=>
+    `<button class="vrow" onclick="speak('${it.full}')"><span class="vko">${it.dict.ko} → <span style="color:var(--jade)">${it.full}</span></span><span class="ven">${it.options[it.ansIndex].ko}</span></button>`).join('');
+}
+function renderPeopleLesson(){
+  const people=[["저","jeo","I — polite"],["나","na","I — casual"],["제가","jega","I as subject — polite"],
+    ["내가","naega","I as subject — casual"],["제","je","my — polite"],["내","nae","my — casual"],
+    ["저희","jeohui","we · our — polite"],["우리","uri","we · our — casual"]];
+  document.getElementById('peopleTable').innerHTML=people.map(p=>
+    `<button class="vrow" onclick="speak('${p[0]}')"><span class="vko">${p[0]} <span class="krom">${p[1]}</span></span><span class="ven">${p[2]}</span></button>`).join('');
+  const you=[["민수 씨","name + 씨 — a peer or someone younger"],["선생님","a title — teacher, or general respect"],
+    ["사장님","a job title + 님 — boss, shop owner"],["(nothing)","by far the most common — just leave it out"]];
+  document.getElementById('youTable').innerHTML=you.map(p=>
+    `<button class="vrow" onclick="speak('${p[0].replace(/\(nothing\)/,'')}')"><span class="vko">${p[0]}</span><span class="ven">${p[1]}</span></button>`).join('');
+}
 function renderTenseLesson(){
   document.getElementById('presTable').innerHTML=PRESENT_ITEMS.map(it=>
     `<button class="vrow" onclick="speak('${it.full}')"><span class="vko">${it.dict.ko} → <span style="color:var(--jade)">${it.full}</span></span><span class="ven">${it.en}</span></button>`).join('');
