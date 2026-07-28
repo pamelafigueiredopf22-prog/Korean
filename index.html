@@ -226,6 +226,21 @@
   .card.situational .opts{flex-direction:column;align-items:stretch}
   .card.situational .opt{width:100%}
 
+  /* choice-card cue line (negation/connectives hint) */
+  .cue{font-family:var(--serif);font-size:17px;color:var(--muted);text-align:center;margin:6px 0 2px}
+
+  /* common verbs table */
+  .vbtable{border:1.5px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card);margin:8px 0 4px}
+  .vbhead,.vbrow{display:grid;grid-template-columns:1fr 1fr 1.15fr 1fr;gap:6px;align-items:center;padding:10px 13px;
+    border-bottom:1px solid var(--line);text-align:left}
+  .vbhead{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--jade-soft)}
+  .vbrow{border:none;border-bottom:1px solid var(--line);background:none;cursor:pointer;width:100%;
+    font-family:var(--serif);font-size:16px;color:var(--ink)}
+  .vbrow:last-child{border-bottom:none}
+  .vbrow:hover{background:var(--jade-soft)}
+  .vbrow .vbko{color:var(--jade)}
+  .vbrow .vben{font-family:var(--sans);font-size:12.5px;color:var(--muted)}
+
   /* diary vocab reference */
   .vocab{display:flex;flex-direction:column;border:1.5px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card);margin:8px 0 4px}
   .vrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;
@@ -582,6 +597,117 @@
     <div class="cta"><button class="act primary" style="width:100%" onclick="go('#drill-people')">Practise people →</button></div>
   </section>
 
+  <!-- EVERYDAY PARTICLES LEARN -->
+  <section class="screen lesson" id="s-everyday">
+    <h1><span style="color:var(--jade)">조사 2</span> Everyday particles</h1>
+    <p class="sub">Three the app has leaned on without ever naming them.</p>
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">에</span><span class="rule-en">to · at</span></div>
+      <p>Marks a <b>destination</b> or a <b>point in time</b>. 학교<b>에</b> 가요 (to school), 아침<b>에</b> (in the morning), 세 시<b>에</b> (at three).</p>
+    </div>
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">에서</span><span class="rule-en">where it happens</span></div>
+      <p>When an <b>action</b> takes place somewhere, use 에서, not 에. 도서관<b>에서</b> 공부해요 (study at the library). The rule of thumb: 에 for going <i>to</i> a place or being <i>at</i> it; 에서 for <i>doing</i> something there.</p>
+    </div>
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">있다 · 없다</span><span class="rule-en">there is · isn't</span></div>
+      <p>있어요 = exists / I have. 없어요 = doesn't exist / I don't have. They're a pair of opposite words — 없다 is <i>not</i> 안 있다. With 에: 방에 고양이가 있어요.</p>
+    </div>
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">하고</span><span class="rule-en">and · with</span></div>
+      <p>Joins two nouns (빵하고 우유 = bread and milk) and means “with” for company (친구하고 = with a friend). Sticks straight onto the noun.</p>
+    </div>
+    <div class="cta"><button class="act primary" style="width:100%" onclick="go('#drill-everyday')">Practise everyday particles →</button></div>
+  </section>
+
+  <!-- NEGATION LEARN -->
+  <section class="screen lesson" id="s-negation">
+    <h1><span style="color:var(--jade)">부정</span> Negation</h1>
+    <p class="sub">How to say you don't, didn't, and isn't.</p>
+    <p>Two ways to negate almost anything — same meaning, different register:</p>
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">안</span><span class="rule-en">short · casual</span></div>
+      <p>Drop <b>안</b> right before the verb: 안 가요, 안 먹었어요. This is what you'll say most of the time.</p>
+      <div class="callout" style="margin:8px 0 0">One catch: with 하다 verbs, 안 goes <b>inside</b> — 공부 안 해요, not ✗안 공부해요.</div>
+    </div>
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">-지 않다</span><span class="rule-en">long · careful</span></div>
+      <p>Attach <b>-지 않다</b> to the stem: 가지 않아요, 공부하지 않아요. Sounds more formal and considered; common in writing. Works on every verb and adjective, no splitting.</p>
+    </div>
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">special forms</span><span class="rule-en">own word</span></div>
+      <p>A few don't take 안 at all — they flip to a different word:</p>
+      <div class="callout">
+        <div style="font-size:16px;line-height:2">
+          있어요 (have) → <span style="font-family:var(--serif);color:var(--jade);font-size:19px">없어요</span><br>
+          재미있어요 (fun) → <span style="font-family:var(--serif);color:var(--jade);font-size:19px">재미없어요</span><br>
+          알아요 (know) → <span style="font-family:var(--serif);color:var(--jade);font-size:19px">몰라요</span>
+        </div>
+      </div>
+      <p style="color:var(--muted);font-size:14px">Aside: 안 is “don't (choose to)”. “Can't” is a different word, 못 — a lesson for later.</p>
+    </div>
+    <div class="cta"><button class="act primary" style="width:100%" onclick="go('#drill-negation')">Practise negation →</button></div>
+  </section>
+
+  <!-- NUMBERS LEARN -->
+  <section class="screen lesson" id="s-numbers">
+    <h1><span style="color:var(--jade)">숫자</span> Numbers</h1>
+    <p class="sub">Korean has two full number systems. The trick is knowing which.</p>
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">고유어</span><span class="rule-en">Native</span></div>
+      <p>하나, 둘, 셋, 넷, 다섯, 여섯, 일곱, 여덟, 아홉, 열. For <b>counting things and people</b>, <b>your age</b>, and the <b>hour</b>. Runs out at 99.</p>
+      <div class="callout" style="margin:8px 0 0">1–4 shrink before a counter: 하나→<b>한</b>, 둘→<b>두</b>, 셋→<b>세</b>, 넷→<b>네</b>. So “three apples” is 사과 세 개, not ✗셋 개.</div>
+    </div>
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">한자어</span><span class="rule-en">Sino</span></div>
+      <p>일, 이, 삼, 사, 오, 육, 칠, 팔, 구, 십. For <b>money, dates, minutes, phone numbers, addresses</b> — and anything big. Just 십(10), 백(100), 천(1,000), 만(10,000) and you can build the rest.</p>
+    </div>
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">시 · 분</span><span class="rule-en">the clock uses both</span></div>
+      <p>The famous one: the <b>hour is native</b>, the <b>minute is Sino</b>, in the same breath.</p>
+      <div class="callout" style="margin:8px 0 0">
+        <div style="font-family:var(--serif);font-size:20px">세 시 삼십 분</div>
+        <div style="font-size:14px;color:var(--muted);margin-top:4px"><b>세</b> (native 3) 시 · <b>삼십</b> (Sino 30) 분 — 3:30</div>
+      </div>
+    </div>
+    <div class="cta"><button class="act primary" style="width:100%" onclick="go('#drill-numbers')">Practise numbers →</button></div>
+  </section>
+
+  <!-- CONNECTIVES LEARN -->
+  <section class="screen lesson" id="s-connect">
+    <h1><span style="color:var(--jade)">연결</span> Joining sentences</h1>
+    <p class="sub">Turn two short sentences into one — the leap from choppy to flowing.</p>
+    <p>So far you've joined ideas with 그리고 between two full sentences. These endings do it <b>inside</b> one, attached to the first verb's stem.</p>
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">-고</span><span class="rule-en">and</span></div>
+      <p>Lists actions in sequence. 커피를 <b>마시고</b> 책을 읽어요 (drink coffee and read). Straight on the stem — 마시<b>고</b>, never ✗마셔고 or ✗마셨고.</p>
+    </div>
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">-아서 / 어서</span><span class="rule-en">so · because</span></div>
+      <p>First clause is the reason for the second. 피곤<b>해서</b> 잤어요 (tired, so slept). Uses the same 아/어 vowel rule as the present tense.</p>
+    </div>
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">-지만</span><span class="rule-en">but</span></div>
+      <p>Contrast. 싸<b>지만</b> 좋아요 (cheap but good). Straight on the stem.</p>
+    </div>
+    <div class="callout" style="border-color:var(--jade)">
+      The rule that catches everyone: <b>tense goes on the last verb only</b>. “I ate and drank” is 먹<b>고</b> 마셨어요 — the past sits on 마셨어요 alone, never on 먹고.
+    </div>
+    <div class="cta"><button class="act primary" style="width:100%" onclick="go('#drill-connect')">Practise joining →</button></div>
+  </section>
+
+  <!-- COMMON VERBS LEARN -->
+  <section class="screen lesson" id="s-verbs">
+    <h1><span style="color:var(--jade)">동사</span> Common verbs</h1>
+    <p class="sub">26 verbs that carry most of everyday Korean. Tap to hear the present form.</p>
+    <p>You've met many of these in drills; here they are together, each with its present and past. These are your building blocks — combine them with what you know (objects, 에, negation, connectives) to make real sentences.</p>
+    <div class="vbtable">
+      <div id="verbHead"></div>
+      <div id="verbTable"></div>
+    </div>
+    <div class="callout" style="margin-top:18px">Notice the irregulars you can now half-predict: 듣다 → 들어요 (ㄷ→ㄹ), 모르다 → 몰라요 (르 doubling), 쓰다 → 써요 (ㅡ drops). Don't drill them as rules yet — just meet them.</div>
+  </section>
+
   <!-- WORD OF THE DAY -->
   <section class="screen lesson" id="s-word">
     <h1><span style="color:var(--jade)">오늘의 단어</span></h1>
@@ -935,6 +1061,128 @@ const PEOPLE_ITEMS=[
    why:"This is the one place 그녀 belongs — literature and translation. It was coined by writers for exactly this."}
 ].map((it,i)=>({...it,id:"people-"+i,type:"choice",unit:"people"}));
 
+/* --- Negation: choose 안 (short) or 지 않다 (long), plus suppletive 없다/재미없다 --- */
+const NEG_OPTS=[{ko:"안 + verb",rom:"an ..."},{ko:"verb + 지 않다",rom:"... ji anta"},{ko:"없어요 / 재미없어요",rom:"special word"}];
+const NEG_ITEMS=[
+  {en:"I don't drink coffee. (casual, everyday)",cue:"마시다 · drink",ansIndex:0,full:"커피를 안 마셔요",why:"안 goes right before the verb: 안 마셔요. Short 안 is the natural choice in everyday speech."},
+  {en:"I do not exercise. (formal, careful)",cue:"운동하다 · exercise",ansIndex:1,full:"운동하지 않아요",why:"The long form attaches to the stem: 운동하지 않아요. It sounds more formal and considered."},
+  {en:"I don't have time.",cue:"시간이 있다 → ?",ansIndex:2,full:"시간이 없어요",why:"있다 has no 안 form — its negative is the separate word 없어요. Never 안 있어요."},
+  {en:"It wasn't fun.",cue:"재미있다 → ?",ansIndex:2,full:"재미없었어요",why:"재미있다 flips to its own word 재미없다 → past 재미없었어요. Not 안 재미있어요."},
+  {en:"I'm not going to school today. (casual)",cue:"가다 · go",ansIndex:0,full:"학교에 안 가요",why:"안 sits just before the verb → 안 가요."},
+  {en:"I don't work on Sundays. (careful)",cue:"일하다 · work",ansIndex:1,full:"일하지 않아요",why:"Long form on the stem → 일하지 않아요."},
+  {en:"There is no milk.",cue:"우유가 있다 → ?",ansIndex:2,full:"우유가 없어요",why:"Existence again: the negative of 있다 is 없어요."},
+  {en:"I didn't eat. (casual)",cue:"먹다 · eat",ansIndex:0,full:"안 먹었어요",why:"안 before the verb, tense on the verb itself → 안 먹었어요."},
+  {en:"This book is not interesting.",cue:"재미있다 → ?",ansIndex:2,full:"재미없어요",why:"재미있다 → 재미없어요, its own word."},
+  {en:"I don't watch films. (formal writing)",cue:"보다 · watch",ansIndex:1,full:"영화를 보지 않아요",why:"Long 지 않다 suits writing and careful speech → 보지 않아요."}
+].map((it,i)=>({...it,id:"neg-"+i,type:"choice",unit:"negation",options:NEG_OPTS,tag:"negation"}));
+
+/* --- 하다-verb split: does 안 go before, or inside? --- */
+const HADASPLIT_OPTS=[{ko:"운동 안 해요",rom:"noun + 안 + 해요"},{ko:"안 운동해요",rom:"안 + whole verb"}];
+const NEG_SPLIT_ITEMS=[
+  {en:"I don't study. (안 + 공부하다)",ansIndex:0,full:"공부 안 해요",why:"With 하다 verbs, 안 splits the noun from 하다: 공부 안 해요. 안 공부해요 sounds wrong to Koreans."},
+  {en:"I don't cook. (안 + 요리하다)",ansIndex:0,full:"요리 안 해요",why:"Split it: 요리 안 해요, not 안 요리해요."},
+  {en:"I don't exercise. (안 + 운동하다)",ansIndex:0,full:"운동 안 해요",why:"운동 안 해요 — the noun comes off, then 안, then 해요."}
+].map((it,i)=>({...it,id:"negsplit-"+i,type:"choice",unit:"negation",options:HADASPLIT_OPTS,tag:"하다 + 안"}));
+
+const NEGATION_ITEMS=[...NEG_ITEMS,...NEG_SPLIT_ITEMS];
+
+/* --- Numbers: which system? then read the value --- */
+const NUMSYS_OPTS=[{ko:"native",rom:"하나 · 둘 · 셋"},{ko:"Sino",rom:"일 · 이 · 삼"}];
+const NUM_SYSTEM_ITEMS=[
+  {en:"Counting things — “three apples”",ansIndex:0,full:"native → 사과 세 개",why:"Counting objects uses native numbers, and 셋 shrinks to 세 before a counter: 사과 세 개."},
+  {en:"The hour — “3 o'clock”",ansIndex:0,full:"native → 세 시",why:"Hours are native: 세 시. (Minutes flip to Sino.)"},
+  {en:"Your age in conversation — “I'm 25”",ansIndex:0,full:"native → 스물다섯 살",why:"Spoken age is native: 스물다섯 살."},
+  {en:"The minute — “:30”",ansIndex:1,full:"Sino → 삼십 분",why:"Minutes are Sino: 삼십 분. This is why one clock uses both systems."},
+  {en:"Money — “5,000 won”",ansIndex:1,full:"Sino → 오천 원",why:"Money is always Sino: 오천 원."},
+  {en:"A date — “the 15th”",ansIndex:1,full:"Sino → 십오 일",why:"Dates are Sino: 십오 일."},
+  {en:"A phone number",ansIndex:1,full:"Sino (공 for 0)",why:"Phone numbers are read digit by digit in Sino, with 공 for zero."},
+  {en:"Counting people — “four people”",ansIndex:0,full:"native → 네 명",why:"People are counted native, and 넷 shrinks to 네: 네 명."}
+].map((it,i)=>({...it,id:"numsys-"+i,type:"choice",unit:"numbers",options:NUMSYS_OPTS,tag:"which system"}));
+
+/* --- Numbers: read the value (typed) --- */
+const NUM_READ_ITEMS=[
+  {ko:"셋",mean:"3 · native",answer:"set",accept:["set","셋"]},
+  {ko:"다섯",mean:"5 · native",answer:"daseot",accept:["daseot","다섯"]},
+  {ko:"열",mean:"10 · native",answer:"yeol",accept:["yeol","열"]},
+  {ko:"삼",mean:"3 · Sino",answer:"sam",accept:["sam","삼"]},
+  {ko:"육",mean:"6 · Sino",answer:"yuk",accept:["yuk","yook","육"]},
+  {ko:"십",mean:"10 · Sino",answer:"sip",accept:["sip","ship","십"]},
+  {ko:"한 개",mean:"one item",answer:"han gae",accept:["han gae","hangae","한 개","한개"]},
+  {ko:"두 시",mean:"2 o'clock",answer:"du si",accept:["du si","dusi","두 시","두시"]},
+  {ko:"오천 원",mean:"5,000 won",answer:"ocheon won",accept:["ocheon won","ocheonwon","오천 원","오천원"]}
+].map((it,i)=>({...it,id:"numread-"+i,type:"pron",unit:"numbers",tag:"read it",say:it.ko,rom:[it.answer],
+  answer:it.answer,accept:it.accept,word:it.ko,
+  why:`<span style="font-family:var(--serif)">${it.ko}</span> = ${it.mean}.`}));
+
+const NUMBER_ITEMS=[...NUM_SYSTEM_ITEMS,...NUM_READ_ITEMS];
+
+/* --- Connective endings: join two clauses into one --- */
+const CONN_OPTS=[{ko:"-고",rom:"and"},{ko:"-아서 / 어서",rom:"so · because"},{ko:"-지만",rom:"but"}];
+const CONNECT_ITEMS=[
+  {en:"“I drink coffee ___ read a book.” (and)",cue:"마시다 + 읽다",ansIndex:0,full:"커피를 마시고 책을 읽어요",why:"-고 links actions as “and”. It attaches straight to the stem, no tense: 마시고. Tense lives on the last verb only."},
+  {en:"“I was tired, ___ I slept.” (so)",cue:"피곤하다 + 자다",ansIndex:1,full:"피곤해서 잤어요",why:"-아서/어서 gives reason → result. 피곤하다 → 피곤해서. Note: no past tense on this half — only 잤어요 carries it."},
+  {en:"“It's cheap ___ good.” (but)",cue:"싸다 + 좋다",ansIndex:2,full:"싸지만 좋아요",why:"-지만 means “but”, straight onto the stem: 싸지만 좋아요."},
+  {en:"“I went home ___ studied.” (and then)",cue:"가다 + 공부하다",ansIndex:1,full:"집에 가서 공부했어요",why:"With movement, -아서/어서 means “and then”: 가서. The two actions are linked in sequence."},
+  {en:"“I like it, ___ it's expensive.” (but)",cue:"좋아하다 + 비싸다",ansIndex:2,full:"좋아하지만 비싸요",why:"-지만 for contrast: 좋아하지만 비싸요."},
+  {en:"“I ate ___ drank coffee.” (and)",cue:"먹다 + 마시다",ansIndex:0,full:"먹고 커피를 마셨어요",why:"-고 for “and”, tense only on the final verb: 먹고 … 마셨어요, never 먹었고."},
+  {en:"“It rained, ___ I stayed home.” (so)",cue:"오다 + 있다",ansIndex:1,full:"비가 와서 집에 있었어요",why:"-아서/어서 for cause: 오다 → 와서. The reason clause takes no tense."},
+  {en:"“I'm busy ___ I'm happy.” (but)",cue:"바쁘다 + 행복하다",ansIndex:2,full:"바쁘지만 행복해요",why:"-지만 joins two contrasting states: 바쁘지만 행복해요."}
+].map((it,i)=>({...it,id:"conn-"+i,type:"choice",unit:"connect",options:CONN_OPTS,tag:"join them"}));
+
+/* --- Everyday particles the app already leaned on: 에, 있다/없다, 하고 --- */
+const PART2_OPTS_EDA=[{ko:"있어요",rom:"there is · I have"},{ko:"없어요",rom:"there isn't · I don't have"}];
+const EDA_ITEMS=[
+  {en:"I have time.",ansIndex:0,full:"시간이 있어요",why:"있어요 = exists / have. 시간이 있어요."},
+  {en:"There's a cat in the room.",ansIndex:0,full:"방에 고양이가 있어요",why:"있어요 places something: 방에 고양이가 있어요."},
+  {en:"I don't have money.",ansIndex:1,full:"돈이 없어요",why:"없어요 is the plain opposite of 있어요 — a whole separate word, no 안."},
+  {en:"There's no milk at home.",ansIndex:1,full:"집에 우유가 없어요",why:"없어요 = doesn't exist: 집에 우유가 없어요."}
+].map((it,i)=>({...it,id:"eda-"+i,type:"choice",unit:"everyday",options:PART2_OPTS_EDA,tag:"있다 · 없다"}));
+
+const PART2_OPTS_E=[{ko:"에",rom:"to · at (place)"},{ko:"에서",rom:"where the action happens"}];
+const E_ITEMS=[
+  {en:"I go to school.",ansIndex:0,full:"학교에 가요",why:"에 marks a destination or a point in time: 학교에 가요, 아침에 마셔요."},
+  {en:"There's a cat in the room.",ansIndex:0,full:"방에 있어요",why:"With 있다, 에 marks where something sits: 방에 있어요."},
+  {en:"I study at the library.",ansIndex:1,full:"도서관에서 공부해요",why:"When an action happens somewhere, use 에서: 도서관에서 공부해요. 에 = to/at a point; 에서 = where you do something."},
+  {en:"I eat at home.",ansIndex:1,full:"집에서 먹어요",why:"An action's location takes 에서: 집에서 먹어요."}
+].map((it,i)=>({...it,id:"e-"+i,type:"choice",unit:"everyday",options:PART2_OPTS_E,tag:"에 · 에서"}));
+
+const HAGO_ITEMS=[
+  {en:"“bread ___ milk” (and)",cue:"빵 ___ 우유",options:[{ko:"하고",rom:"and · with"},{ko:"을",rom:"object marker"}],ansIndex:0,full:"빵하고 우유",why:"하고 joins two nouns as “and”: 빵하고 우유. It also means “with”: 친구하고."},
+  {en:"“I watch a film with a friend.”",cue:"친구 ___ 영화를 봐요",options:[{ko:"친구하고",rom:"with a friend"},{ko:"친구가",rom:"the friend (subject)"}],ansIndex:0,full:"친구하고 영화를 봐요",why:"하고 = “with” for company: 친구하고 영화를 봐요."}
+].map((it,i)=>({...it,id:"hago-"+i,type:"choice",unit:"everyday",tag:"하고"}));
+
+const EVERYDAY_ITEMS=[...EDA_ITEMS,...E_ITEMS,...HAGO_ITEMS];
+
+// vocab reference shown on the Diary kit lesson (tap to hear)
+const COMMON_VERBS=[
+  {dict:"가다",pres:"가요",past:"갔어요",en:"go"},
+  {dict:"오다",pres:"와요",past:"왔어요",en:"come"},
+  {dict:"먹다",pres:"먹어요",past:"먹었어요",en:"eat"},
+  {dict:"마시다",pres:"마셔요",past:"마셨어요",en:"drink"},
+  {dict:"보다",pres:"봐요",past:"봤어요",en:"see · watch"},
+  {dict:"읽다",pres:"읽어요",past:"읽었어요",en:"read"},
+  {dict:"쓰다",pres:"써요",past:"썼어요",en:"write · use"},
+  {dict:"듣다",pres:"들어요",past:"들었어요",en:"listen"},
+  {dict:"말하다",pres:"말해요",past:"말했어요",en:"speak · say"},
+  {dict:"하다",pres:"해요",past:"했어요",en:"do"},
+  {dict:"만나다",pres:"만나요",past:"만났어요",en:"meet"},
+  {dict:"사다",pres:"사요",past:"샀어요",en:"buy"},
+  {dict:"주다",pres:"줘요",past:"줬어요",en:"give"},
+  {dict:"받다",pres:"받아요",past:"받았어요",en:"receive"},
+  {dict:"알다",pres:"알아요",past:"알았어요",en:"know"},
+  {dict:"모르다",pres:"몰라요",past:"몰랐어요",en:"not know"},
+  {dict:"좋아하다",pres:"좋아해요",past:"좋아했어요",en:"like"},
+  {dict:"생각하다",pres:"생각해요",past:"생각했어요",en:"think"},
+  {dict:"일하다",pres:"일해요",past:"일했어요",en:"work"},
+  {dict:"자다",pres:"자요",past:"잤어요",en:"sleep"},
+  {dict:"일어나다",pres:"일어나요",past:"일어났어요",en:"get up"},
+  {dict:"기다리다",pres:"기다려요",past:"기다렸어요",en:"wait"},
+  {dict:"배우다",pres:"배워요",past:"배웠어요",en:"learn"},
+  {dict:"가르치다",pres:"가르쳐요",past:"가르쳤어요",en:"teach"},
+  {dict:"있다",pres:"있어요",past:"있었어요",en:"exist · have"},
+  {dict:"없다",pres:"없어요",past:"없었어요",en:"not exist · lack"}
+];
+
 /* --- Word of the day: 75 practical words, each with a usable example --- */
 const WORDS=[
   {ko:"물",rom:"mul",en:"water",type:"noun",exKo:"물을 마셔요.",exRom:"mureul masyeoyo.",exEn:"I drink water."},
@@ -1023,7 +1271,7 @@ function wordIndexFor(day){return (day*37)%WORDS.length;}
 function wordOfDay(){return WORDS[wordIndexFor(dayNumber())];}
 
 const ALL=[...HANGUL_ITEMS,...PRON_ITEMS,...PARTICLE_ITEMS,...SENTENCE_ITEMS,...PAST_ITEMS,...TENSE_ITEMS,
-  ...POLITE_ITEMS,...PEOPLE_ITEMS,...DIARY_ITEMS];
+  ...POLITE_ITEMS,...PEOPLE_ITEMS,...NEGATION_ITEMS,...NUMBER_ITEMS,...CONNECT_ITEMS,...EVERYDAY_ITEMS,...DIARY_ITEMS];
 const BY_ID={}; ALL.forEach(it=>BY_ID[it.id]=it);
 
 const UNITS=[
@@ -1036,6 +1284,11 @@ const UNITS=[
   {id:"tenses",ko:"시제",en:"Present & future",desc:"Say what you do and what you'll do",status:"active",go:"#tenses"},
   {id:"polite",ko:"존댓말",en:"Politeness",desc:"Formal, polite and casual speech",status:"active",go:"#polite"},
   {id:"people",ko:"사람",en:"People & pronouns",desc:"I, we, and why “you” is a trap",status:"active",go:"#people"},
+  {id:"everyday",ko:"조사2",en:"Everyday particles",desc:"에, 있다/없다, 하고",status:"active",go:"#everyday"},
+  {id:"negation",ko:"부정",en:"Negation",desc:"Say what you don't and didn't do",status:"active",go:"#negation"},
+  {id:"numbers",ko:"숫자",en:"Numbers",desc:"Both counting systems, and when",status:"active",go:"#numbers"},
+  {id:"connect",ko:"연결",en:"Joining sentences",desc:"and, so, but — in one sentence",status:"active",go:"#connect"},
+  {id:"verbs",ko:"동사",en:"Common verbs",desc:"26 everyday verbs, present & past",status:"active",go:"#verbs"},
   {id:"stories",ko:"이야기",en:"Short stories",desc:"Tiny stories to grow vocabulary",status:"soon"}
 ];
 
@@ -1067,6 +1320,9 @@ const screens={'#home':'s-home','#hangul':'s-hangul','#drill-hangul':'s-drill',
   '#sentence':'s-sentence','#drill-sentence':'s-drill','#past':'s-past','#drill-past':'s-drill',
   '#diary':'s-diary','#drill-diary':'s-drill','#tenses':'s-tenses','#drill-tenses':'s-drill',
   '#polite':'s-polite','#drill-polite':'s-drill','#people':'s-people','#drill-people':'s-drill',
+  '#everyday':'s-everyday','#drill-everyday':'s-drill','#negation':'s-negation','#drill-negation':'s-drill',
+  '#numbers':'s-numbers','#drill-numbers':'s-drill','#connect':'s-connect','#drill-connect':'s-drill',
+  '#verbs':'s-verbs',
   '#word':'s-word','#review':'s-drill'};
 function go(hash){ if(location.hash!==hash)location.hash=hash; else route(); }
 function route(){
@@ -1086,6 +1342,11 @@ function route(){
     '#tenses':'Present & future','#drill-tenses':'Present & future · practice',
     '#polite':'Politeness','#drill-polite':'Politeness · practice',
     '#people':'People & pronouns','#drill-people':'People · practice',
+    '#everyday':'Everyday particles','#drill-everyday':'Everyday particles · practice',
+    '#negation':'Negation','#drill-negation':'Negation · practice',
+    '#numbers':'Numbers','#drill-numbers':'Numbers · practice',
+    '#connect':'Joining sentences','#drill-connect':'Joining · practice',
+    '#verbs':'Common verbs',
     '#word':'Word of the day','#review':'Review'};
   document.getElementById('crumb').textContent=crumbs[h]||'';
   window.scrollTo(0,0);
@@ -1100,6 +1361,11 @@ function route(){
   if(h==='#tenses')renderTenseLesson();
   if(h==='#polite')renderPoliteLesson();
   if(h==='#people')renderPeopleLesson();
+  if(h==='#verbs')renderVerbsLesson();
+  if(h==='#drill-everyday')startDrill(shuffle(EVERYDAY_ITEMS),{intro:"The particles the app has quietly used all along: 에 vs 에서, 있다 vs 없다, and 하고."});
+  if(h==='#drill-negation')startDrill(shuffle(NEGATION_ITEMS),{intro:"Choose how to make it negative. 안 is for casual speech, 지 않다 for careful; a few verbs swap to a whole different word."});
+  if(h==='#drill-numbers')startDrill(shuffle(NUMBER_ITEMS),{intro:"First: native or Sino? Then read some values aloud — type the romanisation or Hangul."});
+  if(h==='#drill-connect')startDrill(shuffle(CONNECT_ITEMS),{intro:"Pick the ending that joins the two clauses: -고 (and), -아서/어서 (so), -지만 (but). Tense goes on the final verb only."});
   if(h==='#drill-polite')startDrill(shuffle(POLITE_ITEMS).slice(0,12),{intro:"Two things mixed: build the formal ending, and judge which level fits the person you're speaking to."});
   if(h==='#drill-people')startDrill(shuffle(PEOPLE_ITEMS),{intro:"Pick what a Korean speaker would actually say. Often the right answer is the one that leaves the pronoun out."});
   if(h==='#word')renderWordScreen();
@@ -1226,8 +1492,9 @@ function cardHTML(it,pos){
   }
   if(it.type==='choice'){
     const pair = it.dict?`<span class="pair">${it.dict.ko}</span>`:'';
-    const stem = it.dict?`<div class="stem"><span class="ko">${it.dict.ko}</span> <span class="rom">${it.dict.rom}</span> → ?</div>`:'';
-    return `<section class="card choice${it.dict?'':' situational'}" data-i="${pos}">
+    const stem = it.dict?`<div class="stem"><span class="ko">${it.dict.ko}</span> <span class="rom">${it.dict.rom}</span> → ?</div>`
+               : it.cue?`<div class="cue">${it.cue}</div>`:'';
+    return `<section class="card choice${(it.dict||it.cue)?'':' situational'}" data-i="${pos}">
       <div class="top"><span class="chip"><span class="role">${it.tag}</span>${pair}</span><span class="num">${pos+1} / ${current.length}</span></div>
       <p class="en">${it.en}</p>
       ${stem}
@@ -1312,6 +1579,11 @@ function renderPoliteLesson(){
     rows.map(r=>`<button class="lvrow" onclick="speak('${r[1]}')"><span class="lvd">${r[0]}</span><span>${r[1]}</span><span>${r[2]}</span><span>${r[3]}</span></button>`).join('');
   document.getElementById('formalTable').innerHTML=POLITE_FORM_ITEMS.map(it=>
     `<button class="vrow" onclick="speak('${it.full}')"><span class="vko">${it.dict.ko} → <span style="color:var(--jade)">${it.full}</span></span><span class="ven">${it.options[it.ansIndex].ko}</span></button>`).join('');
+}
+function renderVerbsLesson(){
+  document.getElementById('verbHead').innerHTML=`<div class="vbhead"><span>dictionary</span><span>present</span><span>past</span><span></span></div>`;
+  document.getElementById('verbTable').innerHTML=COMMON_VERBS.map(v=>
+    `<button class="vbrow" onclick="speak('${v.pres}')"><span class="vbko">${v.dict}</span><span>${v.pres}</span><span>${v.past}</span><span class="vben">${v.en}</span></button>`).join('');
 }
 function renderPeopleLesson(){
   const people=[["저","jeo","I — polite"],["나","na","I — casual"],["제가","jega","I as subject — polite"],
