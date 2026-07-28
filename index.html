@@ -44,7 +44,21 @@
   .home-head{padding:26px 0 8px}
   .home-head h1{font-size:40px;line-height:1.05}
   .home-head .en{display:block;font-size:17px;font-weight:400;color:var(--muted);margin-top:8px}
-  .path{margin-top:24px;display:flex;flex-direction:column;gap:0;position:relative}
+  .path{margin-top:22px;display:flex;flex-direction:column;gap:14px;position:relative}
+  .section{border-top:1px solid var(--line);padding-top:14px}
+  .section:first-child{border-top:none;padding-top:0}
+  .sec-head{display:flex;align-items:center;justify-content:space-between;width:100%;background:none;border:none;
+    font-family:inherit;cursor:pointer;padding:0;text-align:left}
+  .sec-head-main{display:flex;align-items:baseline;gap:10px}
+  .sec-ko{font-family:var(--serif);font-size:19px;font-weight:700;color:var(--jade)}
+  .sec-en{font-family:var(--serif);font-size:17px;font-weight:700;color:var(--ink)}
+  .sec-right{display:flex;align-items:center;gap:12px}
+  .sec-prog{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .sec-chev{font-size:13px;color:var(--muted);width:14px;text-align:center}
+  .sec-note{font-size:13px;color:var(--muted);margin:2px 0 14px}
+  .section.collapsed .sec-note{display:none}
+  .sec-steps{display:flex;flex-direction:column;gap:0;overflow:hidden}
+  .section.collapsed .sec-steps{display:none}
   .step{display:flex;gap:16px;align-items:stretch;padding:0;cursor:pointer;background:none;border:none;text-align:left;font-family:inherit;width:100%}
   .step:disabled{cursor:default}
   .rail{display:flex;flex-direction:column;align-items:center;width:34px;flex:none}
@@ -52,7 +66,8 @@
     display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:16px;color:var(--jade);flex:none}
   .step.soon .dot{border-color:var(--line);color:var(--muted)}
   .line{width:2px;flex:1;background:var(--line);min-height:14px}
-  .step:last-child .line{display:none}
+  .sec-steps .step:last-child .line{display:none}
+  .step.started .dot{background:var(--jade);color:#fff;border-color:var(--jade)}
   .step-body{flex:1;padding:0 0 20px 2px}
   .step-title{font-family:var(--serif);font-size:20px;font-weight:700}
   .step-title .ko{color:var(--jade);margin-right:8px}
@@ -240,6 +255,40 @@
   .vbrow:hover{background:var(--jade-soft)}
   .vbrow .vbko{color:var(--jade)}
   .vbrow .vben{font-family:var(--sans);font-size:12.5px;color:var(--muted)}
+
+  /* vocabulary theme cards */
+  .themes{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+  .themecard{display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;
+    background:var(--card);border:1.5px solid var(--line);border-radius:15px;padding:14px 16px;font-family:inherit;color:var(--ink)}
+  .themecard:hover{border-color:var(--jade);background:var(--jade-soft)}
+  .theme-ko{font-family:var(--serif);font-size:24px;font-weight:700;color:var(--jade);min-width:44px}
+  .theme-body{display:flex;flex-direction:column;flex:1}
+  .theme-en{font-family:var(--serif);font-size:18px;font-weight:700}
+  .theme-meta{font-size:13px;color:var(--muted);margin-top:2px}
+  .theme-arrow{color:var(--muted);font-size:18px}
+
+  /* story reader */
+  .reveal-bar{display:flex;justify-content:flex-end;margin:2px 0 10px}
+  .reveal-all{background:none;border:1px solid var(--line);color:var(--muted);font-family:inherit;font-size:13px;
+    padding:6px 13px;border-radius:999px;cursor:pointer}
+  .reveal-all:hover{border-color:var(--jade);color:var(--jade)}
+  .storylines{display:flex;flex-direction:column;gap:10px}
+  .sline{display:flex;align-items:flex-start;gap:11px;background:var(--card);border:1.5px solid var(--line);
+    border-radius:14px;padding:13px 14px}
+  .sline-speak{flex:none;width:34px;height:34px;border-radius:50%;border:1.5px solid var(--jade);background:var(--jade-soft);
+    color:var(--jade);font-size:12px;cursor:pointer;margin-top:2px}
+  .sline-body{flex:1}
+  .sline-ko{font-family:var(--serif);font-size:20px;line-height:1.5;color:var(--ink)}
+  .sline-meaning{display:none;margin-top:7px;padding-top:7px;border-top:1px dashed var(--line)}
+  .sline.open .sline-meaning,.storylines.revealed .sline-meaning{display:block}
+  .sline-rom{display:block;font-size:13px;color:var(--muted);font-style:italic}
+  .sline-en{display:block;font-size:14.5px;color:var(--ink);margin-top:3px}
+  .sline-toggle{flex:none;width:26px;height:26px;border-radius:50%;border:1px solid var(--line);background:none;
+    color:var(--muted);font-size:13px;cursor:pointer;margin-top:4px}
+  .sline-toggle:hover,.sline.open .sline-toggle{border-color:var(--jade);color:var(--jade)}
+  .newwords{margin-top:18px;background:var(--jade-soft);border:1.5px solid var(--line);border-radius:14px;padding:14px}
+  .newword-head{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .newwords .vrow{background:var(--card)}
 
   /* diary vocab reference */
   .vocab{display:flex;flex-direction:column;border:1.5px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card);margin:8px 0 4px}
@@ -620,6 +669,77 @@
     <div class="cta"><button class="act primary" style="width:100%" onclick="go('#drill-everyday')">Practise everyday particles →</button></div>
   </section>
 
+  <!-- QUESTION WORDS LEARN -->
+  <section class="screen lesson" id="s-questions">
+    <h1><span style="color:var(--jade)">질문</span> Question words</h1>
+    <p class="sub">The words that let you actually ask, not just answer.</p>
+    <p>Good news on placement: a question word usually just <b>sits where the answer would go</b>, right before the verb, and the sentence order doesn't change. 밥을 먹어요 → <b>뭐</b> 먹어요? You don't invert anything the way English does.</p>
+
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">뭐 · 어디 · 언제 · 왜 · 어떻게</span><span class="rule-en">the core five</span></div>
+      <div class="callout" style="margin:8px 0 0">
+        <div style="font-size:15.5px;line-height:2">
+          <b>뭐</b> what · <span style="color:var(--muted)">뭐 먹어요? — what are you eating?</span><br>
+          <b>어디</b> where · <span style="color:var(--muted)">화장실이 어디예요?</span><br>
+          <b>언제</b> when · <span style="color:var(--muted)">언제 만날까요?</span><br>
+          <b>왜</b> why · <span style="color:var(--muted)">왜 안 왔어요?</span><br>
+          <b>어떻게</b> how · <span style="color:var(--muted)">어떻게 가요?</span>
+        </div>
+      </div>
+      <p style="color:var(--muted);font-size:14px;margin-top:10px">뭐 is the everyday form of the more formal 무엇. Any of these can stand alone as a one-word question too: 왜? 어디?</p>
+    </div>
+
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">누구 → 누가</span><span class="rule-en">who</span></div>
+      <p>Plain <b>누구</b> is “who” — 저 사람은 누구예요? But when “who” is the one <i>doing</i> the verb (the subject), it contracts to <b>누가</b>: 누가 왔어요? Never 누구가.</p>
+    </div>
+
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">몇 · 얼마</span><span class="rule-en">how many · how much</span></div>
+      <p><b>몇</b> = how many / what number, and it clips onto a counter: 몇 시 (what time), 몇 개 (how many). <b>얼마</b> = how much it costs: 이거 얼마예요? Don't mix them — 몇 counts, 얼마 prices.</p>
+    </div>
+
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">무슨</span><span class="rule-en">what kind of</span></div>
+      <p><b>무슨</b> goes in front of a noun to ask “what kind of”: 무슨 음식 좋아해요? Where 뭐 stands alone, 무슨 leans on the noun after it.</p>
+    </div>
+
+    <div class="cta"><button class="act primary" style="width:100%" onclick="go('#drill-questions')">Practise question words →</button></div>
+  </section>
+
+  <!-- WANT / PLEASE / MUST / CAN'T LEARN -->
+  <section class="screen lesson" id="s-doing">
+    <h1><span style="color:var(--jade)">표현</span> Want · please · must · can't</h1>
+    <p class="sub">Four patterns that turn “I understand” into “I can actually do this”.</p>
+
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">-고 싶어요</span><span class="rule-en">want to</span></div>
+      <p>The easy one — it clips straight onto the stem, <b>no vowel harmony</b>. 가다 → 가<b>고 싶어요</b>, 먹다 → 먹<b>고 싶어요</b>, 마시다 → 마시<b>고 싶어요</b>.</p>
+      <div class="callout" style="margin:8px 0 0"><span style="font-family:var(--serif);font-size:19px">한국에 가고 싶어요.</span> <span style="color:var(--muted);font-size:14px">— I want to go to Korea.</span></div>
+    </div>
+
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">-아/어 주세요</span><span class="rule-en">please (do for me)</span></div>
+      <p>Your single most useful travel pattern. Take the verb into its <b>아/어/해</b> form (the same harmony as the present tense) and add 주세요. 읽다 → 읽<b>어 주세요</b>, 보다 → 봐 주세요, 설명하다 → 설명<b>해 주세요</b>.</p>
+      <div class="callout" style="margin:8px 0 0"><span style="font-family:var(--serif);font-size:19px">물 주세요.</span> · <span style="font-family:var(--serif);font-size:19px">도와주세요.</span> <span style="color:var(--muted);font-size:14px">— Water please. / Help me.</span></div>
+    </div>
+
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">-아/어야 해요</span><span class="rule-en">have to / must</span></div>
+      <p>Same 아/어/해 form, then 야 해요. 가다 → 가<b>야 해요</b>, 먹다 → 먹<b>어야 해요</b>, 공부하다 → 공부<b>해야 해요</b>.</p>
+      <div class="callout" style="margin:8px 0 0"><span style="font-family:var(--serif);font-size:19px">지금 가야 해요.</span> <span style="color:var(--muted);font-size:14px">— I have to go now.</span></div>
+    </div>
+
+    <div class="rule">
+      <div class="rule-head"><span class="rule-ko">못</span><span class="rule-en">can't (unable)</span></div>
+      <p>Drop <b>못</b> right before the verb — it's the “can't” to match the 안 you learned for “don't”. 못 가요 (can't go), 못 먹어요 (can't eat).</p>
+      <div class="callout" style="margin:8px 0 0">Same 하다 split as 안: 공부 <b>못</b> 해요, never ✗못 공부해요.</div>
+      <p style="color:var(--muted);font-size:14px;margin-top:10px">안 = choose not to. 못 = unable to. 학교에 안 가요 (I'm not going) vs 학교에 못 가요 (I can't go).</p>
+    </div>
+
+    <div class="cta"><button class="act primary" style="width:100%" onclick="go('#drill-doing')">Practise these →</button></div>
+  </section>
+
   <!-- NEGATION LEARN -->
   <section class="screen lesson" id="s-negation">
     <h1><span style="color:var(--jade)">부정</span> Negation</h1>
@@ -706,6 +826,40 @@
       <div id="verbTable"></div>
     </div>
     <div class="callout" style="margin-top:18px">Notice the irregulars you can now half-predict: 듣다 → 들어요 (ㄷ→ㄹ), 모르다 → 몰라요 (르 doubling), 쓰다 → 써요 (ㅡ drops). Don't drill them as rules yet — just meet them.</div>
+  </section>
+
+  <!-- VOCABULARY HUB -->
+  <section class="screen lesson" id="s-vocab">
+    <h1><span style="color:var(--jade)">어휘</span> Vocabulary</h1>
+    <p class="sub">The words that get you around Korea. Pick a theme to learn and drill it.</p>
+    <p>Grammar tells you how to build a sentence; these give you something to put in it. Each set is the highest-frequency words for that situation — enough to read a menu, find a toilet, or ask a price. Learn them, then drill: you'll see the Korean and type the meaning, and misses go to Review like everything else.</p>
+    <div class="themes" id="vocabThemes"></div>
+  </section>
+
+  <!-- VOCABULARY THEME BROWSER -->
+  <section class="screen lesson" id="s-vocab-theme">
+    <h1 id="vocabThemeTitle"></h1>
+    <p class="sub" id="vocabThemeSub"></p>
+    <div class="vocab" id="vocabList"></div>
+    <div class="cta"><button class="act primary" style="width:100%" id="vocabPractiseBtn" onclick="">Practise this set →</button></div>
+  </section>
+
+  <!-- STORIES HUB -->
+  <section class="screen lesson" id="s-stories">
+    <h1><span style="color:var(--jade)">이야기</span> Short stories</h1>
+    <p class="sub">Everything you've learned, finally in one place — as something to read.</p>
+    <p>These are short diary entries built almost entirely from grammar and words you've already drilled. Read each line in Korean first; tap <b>?</b> on any line to check the meaning, and <b>▶</b> to hear it. At the end there are a couple of questions, which flow into Review like everything else. Don't rush — reading slowly is the point.</p>
+    <div class="themes" id="storyCards"></div>
+  </section>
+
+  <!-- STORY READER -->
+  <section class="screen lesson" id="s-story">
+    <h1 id="storyTitle"></h1>
+    <p class="sub" id="storySub"></p>
+    <div class="reveal-bar"><button class="reveal-all" id="storyReveal" onclick="toggleStoryMeanings(this)">Show all meanings</button></div>
+    <div class="storylines" id="storyLines"></div>
+    <div class="newwords" id="storyNew" style="display:none"></div>
+    <div class="cta"><button class="act primary" style="width:100%" id="storyCheckBtn" onclick="">Check understanding →</button></div>
   </section>
 
   <!-- WORD OF THE DAY -->
@@ -1153,6 +1307,237 @@ const HAGO_ITEMS=[
 
 const EVERYDAY_ITEMS=[...EDA_ITEMS,...E_ITEMS,...HAGO_ITEMS];
 
+/* --- Doing things: want to / please / have to / can't --- */
+const DO_PATTERN_OPTS=[{ko:"-고 싶어요",rom:"want to"},{ko:"-아/어 주세요",rom:"please do"},{ko:"-아/어야 해요",rom:"have to"},{ko:"못 ...",rom:"can't"}];
+const DO_MEAN_ITEMS=[
+  {en:"You want to go to Korea.",cue:"가다 → ?",ansIndex:0,full:"한국에 가고 싶어요",why:"-고 싶어요 = want to. It clips onto the stem with no vowel change: 가고 싶어요."},
+  {en:"You ask someone to please give you water.",cue:"주다 → ?",ansIndex:1,full:"물 주세요",why:"-아/어 주세요 = please do (for me). 주다 → 주세요."},
+  {en:"You have to study today.",cue:"공부하다 → ?",ansIndex:2,full:"오늘 공부해야 해요",why:"-아/어야 해요 = have to / must. 공부하다 → 공부해야 해요."},
+  {en:"You can't eat spicy food.",cue:"먹다 → ?",ansIndex:3,full:"매운 음식을 못 먹어요",why:"못 before the verb = can't (unable): 못 먹어요."},
+  {en:"You want to drink coffee.",cue:"마시다 → ?",ansIndex:0,full:"커피를 마시고 싶어요",why:"-고 싶어요 on the stem: 마시고 싶어요."},
+  {en:"You ask them to please wait.",cue:"기다리다 → ?",ansIndex:1,full:"기다려 주세요",why:"-아/어 주세요, stem 기다리 + 어 → 기다려 주세요."},
+  {en:"You have to go now.",cue:"가다 → ?",ansIndex:2,full:"지금 가야 해요",why:"-아/어야 해요: 가 + 아야 → 가야 해요."},
+  {en:"You can't sleep.",cue:"자다 → ?",ansIndex:3,full:"잠을 못 자요",why:"못 자요 = can't sleep. 못 sits right before the verb."}
+].map((it,i)=>({...it,id:"domean-"+i,type:"choice",unit:"doing",options:DO_PATTERN_OPTS,tag:"which pattern"}));
+
+const MOT_SPLIT_OPTS=[{ko:"운동 못 해요",rom:"noun + 못 + 해요"},{ko:"못 운동해요",rom:"못 + whole verb"}];
+const MOT_SPLIT_ITEMS=[
+  {en:"“I can't exercise.” (못 + 운동하다)",ansIndex:0,full:"운동 못 해요",why:"Like 안, 못 splits 하다 verbs: 운동 못 해요, not ✗못 운동해요."},
+  {en:"“I can't study.” (못 + 공부하다)",ansIndex:0,full:"공부 못 해요",why:"공부 못 해요 — noun, then 못, then 해요."},
+  {en:"“I can't cook.” (못 + 요리하다)",ansIndex:0,full:"요리 못 해요",why:"요리 못 해요. The 하다 splits off the noun."}
+].map((it,i)=>({...it,id:"motsplit-"+i,type:"choice",unit:"doing",options:MOT_SPLIT_OPTS,tag:"못 + 하다"}));
+
+const REQ_OPTS=[{ko:"아 주세요",rom:"a juseyo"},{ko:"어 주세요",rom:"eo juseyo"},{ko:"해 주세요",rom:"hae juseyo"}];
+const REQ_ITEMS=[
+  {en:"“Please look.” (보다)",dict:{ko:"보다",rom:"boda"},ansIndex:0,full:"봐 주세요",why:"Stem 보 has ㅗ → 아 주세요, and 보+아 contracts → 봐 주세요."},
+  {en:"“Please read it.” (읽다)",dict:{ko:"읽다",rom:"ikda"},ansIndex:1,full:"읽어 주세요",why:"Stem 읽 has ㅣ → 어 주세요 → 읽어 주세요."},
+  {en:"“Please explain.” (설명하다)",dict:{ko:"설명하다",rom:"seolmyeonghada"},ansIndex:2,full:"설명해 주세요",why:"하다 verb → 해 주세요 → 설명해 주세요."},
+  {en:"“Please make it.” (만들다)",dict:{ko:"만들다",rom:"mandeulda"},ansIndex:1,full:"만들어 주세요",why:"Stem 만들 has ㅡ → 어 주세요 → 만들어 주세요."},
+  {en:"“Please sit.” (앉다)",dict:{ko:"앉다",rom:"anda"},ansIndex:0,full:"앉아 주세요",why:"Stem 앉 has ㅏ → 아 주세요 → 앉아 주세요."},
+  {en:"“Please close it.” (닫다)",dict:{ko:"닫다",rom:"datda"},ansIndex:0,full:"닫아 주세요",why:"Stem 닫 has ㅏ → 아 주세요 → 닫아 주세요."}
+].map((it,i)=>({...it,id:"req-"+i,type:"choice",unit:"doing",options:REQ_OPTS,tag:"please + form"}));
+
+const DOING_ITEMS=[...DO_MEAN_ITEMS,...MOT_SPLIT_ITEMS,...REQ_ITEMS];
+
+/* --- Short stories: graded first-person readers, built from taught grammar/vocab.
+   Each line has ko/rom/en; a few flag genuinely new words. Comprehension feeds Review. --- */
+const STORIES=[
+  {id:"day",ko:"나의 하루",en:"My day",intro:"A simple past-tense day — every word here you've already drilled.",
+   new:[],
+   lines:[
+     {ko:"오늘 아침에 일어났어요.",rom:"oneul achime ireonasseoyo",en:"This morning I got up."},
+     {ko:"커피를 마시고 빵을 먹었어요.",rom:"keopireul masigo ppangeul meogeosseoyo",en:"I drank coffee and ate bread."},
+     {ko:"그리고 친구를 만났어요.",rom:"geurigo chingureul mannasseoyo",en:"And I met a friend."},
+     {ko:"우리는 같이 시장에 갔어요.",rom:"urineun gachi sijange gasseoyo",en:"We went to the market together."},
+     {ko:"시장에서 과일을 샀어요.",rom:"sijangeseo gwaireul sasseoyo",en:"At the market we bought fruit."},
+     {ko:"오늘은 정말 재미있었어요.",rom:"oneureun jeongmal jaemiisseosseoyo",en:"Today was really fun."}
+   ],
+   questions:[
+     {en:"(My day) What did they buy at the market?",options:[{ko:"과일",rom:"fruit"},{ko:"빵",rom:"bread"}],ansIndex:0,full:"과일",
+      why:"시장에서 과일을 샀어요 — they bought fruit. The 빵 was eaten at home earlier."},
+     {en:"(My day) How was the day?",options:[{ko:"재미있었어요",rom:"it was fun"},{ko:"피곤했어요",rom:"it was tiring"}],ansIndex:0,full:"재미있었어요",
+      why:"오늘은 정말 재미있었어요 — it was really fun."}
+   ]},
+  {id:"weather",ko:"날씨",en:"The weather",intro:"Present, want-to, can't and future all in six lines.",
+   new:[["하지만","hajiman","but (sentence start)"]],
+   lines:[
+     {ko:"오늘은 날씨가 좋아요.",rom:"oneureun nalssiga joayo",en:"Today the weather is nice."},
+     {ko:"바람이 시원하고 하늘이 예뻐요.",rom:"barami siwonhago haneuri yeppeoyo",en:"The wind is cool and the sky is pretty."},
+     {ko:"산에 가고 싶어요.",rom:"sane gago sipeoyo",en:"I want to go to the mountain."},
+     {ko:"하지만 오늘은 일해야 해요.",rom:"hajiman oneureun ilhaeya haeyo",en:"But today I have to work."},
+     {ko:"그래서 못 가요.",rom:"geuraeseo mot gayo",en:"So I can't go."},
+     {ko:"내일은 갈 거예요.",rom:"naeireun gal geoyeyo",en:"Tomorrow I will go."}
+   ],
+   questions:[
+     {en:"(Weather) Why can't they go to the mountain today?",options:[{ko:"일해야 해서",rom:"has to work"},{ko:"비가 와서",rom:"it's raining"}],ansIndex:0,full:"일해야 해서",
+      why:"오늘은 일해야 해요, 그래서 못 가요 — they have to work."},
+     {en:"(Weather) When will they go?",options:[{ko:"내일",rom:"tomorrow"},{ko:"오늘",rom:"today"}],ansIndex:0,full:"내일",
+      why:"내일은 갈 거예요 — tomorrow (future tense)."}
+   ]},
+  {id:"restaurant",ko:"식당에서",en:"At the restaurant",intro:"A meal out — with numbers, counters and a price.",
+   new:[["비빔밥","bibimbap","bibimbap (a rice dish)"],["이었어요","ieosseoyo","it was (past of 예요)"]],
+   lines:[
+     {ko:"어제 저녁에 친구하고 식당에 갔어요.",rom:"eoje jeonyeoge chinguhago sikdange gasseoyo",en:"Yesterday evening I went to a restaurant with a friend."},
+     {ko:"우리는 메뉴를 봤어요.",rom:"urineun menyureul bwasseoyo",en:"We looked at the menu."},
+     {ko:"저는 비빔밥을 먹었어요.",rom:"jeoneun bibimbabeul meogeosseoyo",en:"I ate bibimbap."},
+     {ko:"음식이 정말 맛있었어요.",rom:"eumsigi jeongmal masisseosseoyo",en:"The food was really delicious."},
+     {ko:"그리고 계산서를 받았어요.",rom:"geurigo gyesanseoreul badasseoyo",en:"And we got the bill."},
+     {ko:"삼만 원이었어요.",rom:"samman wonieosseoyo",en:"It was 30,000 won."}
+   ],
+   questions:[
+     {en:"(Restaurant) What did they eat?",options:[{ko:"비빔밥",rom:"bibimbap"},{ko:"빵",rom:"bread"}],ansIndex:0,full:"비빔밥",
+      why:"저는 비빔밥을 먹었어요."},
+     {en:"(Restaurant) How much was the bill?",options:[{ko:"삼만 원",rom:"30,000 won"},{ko:"오만 원",rom:"50,000 won"}],ansIndex:0,full:"삼만 원",
+      why:"삼만 원이었어요 — 삼만 (Sino 30,000) 원."}
+   ]},
+  {id:"korean",ko:"한국어",en:"Learning Korean",intro:"Why you're doing all this — want-to, but, and a plan.",
+   new:[["내년","naenyeon","next year"]],
+   lines:[
+     {ko:"저는 매일 한국어를 공부해요.",rom:"jeoneun maeil hangugeoreul gongbuhaeyo",en:"I study Korean every day."},
+     {ko:"한국어는 어렵지만 재미있어요.",rom:"hangugeoneun eoryeopjiman jaemiisseoyo",en:"Korean is difficult but fun."},
+     {ko:"저는 한국에 가고 싶어요.",rom:"jeoneun hanguge gago sipeoyo",en:"I want to go to Korea."},
+     {ko:"한국에서 김치를 먹고 싶어요.",rom:"hangugeseo gimchireul meokgo sipeoyo",en:"I want to eat kimchi in Korea."},
+     {ko:"그래서 매일 공부해야 해요.",rom:"geuraeseo maeil gongbuhaeya haeyo",en:"So I have to study every day."},
+     {ko:"내년에 한국에 갈 거예요!",rom:"naenyeone hanguge gal geoyeyo",en:"Next year I will go to Korea!"}
+   ],
+   questions:[
+     {en:"(Korean) Korean is difficult, but also…?",options:[{ko:"재미있어요",rom:"fun"},{ko:"쉬워요",rom:"easy"}],ansIndex:0,full:"재미있어요",
+      why:"한국어는 어렵지만 재미있어요 — difficult but fun."},
+     {en:"(Korean) When will they go to Korea?",options:[{ko:"내년",rom:"next year"},{ko:"어제",rom:"yesterday"}],ansIndex:0,full:"내년",
+      why:"내년에 한국에 갈 거예요 — next year."}
+   ]}
+];
+const STORY_ITEMS=[];
+STORIES.forEach(s=>s.questions.forEach((q,i)=>{
+  STORY_ITEMS.push({...q,id:"story-"+s.id+"-q"+i,type:"choice",unit:"story-"+s.id,story:s.id,tag:"story"});
+}));
+
+/* --- Question words: pick the right one for the situation --- */
+const QUESTION_ITEMS=[
+  {en:"“___ are you eating?” (what)",cue:"___ 먹어요?",options:[{ko:"뭐",rom:"mwo"},{ko:"어디",rom:"eodi"}],ansIndex:0,full:"뭐 먹어요?",tag:"what",
+   why:"뭐 = what (the everyday form of 무엇). 뭐 먹어요? — what are you eating?"},
+  {en:"“___ is the toilet?” (where)",cue:"화장실이 ___예요?",options:[{ko:"어디",rom:"eodi"},{ko:"언제",rom:"eonje"}],ansIndex:0,full:"화장실이 어디예요?",tag:"where",
+   why:"어디 = where. 화장실이 어디예요? is the single most useful travel question."},
+  {en:"“___ shall we meet?” (when)",cue:"___ 만날까요?",options:[{ko:"언제",rom:"eonje"},{ko:"어디",rom:"eodi"}],ansIndex:0,full:"언제 만날까요?",tag:"when",
+   why:"언제 = when. 언제 만날까요? — when shall we meet?"},
+  {en:"“___ didn't you come?” (why)",cue:"___ 안 왔어요?",options:[{ko:"왜",rom:"wae"},{ko:"어떻게",rom:"eotteoke"}],ansIndex:0,full:"왜 안 왔어요?",tag:"why",
+   why:"왜 = why. Short and direct: 왜 안 왔어요?"},
+  {en:"“___ do you go there?” (how / by what means)",cue:"___ 가요?",options:[{ko:"어떻게",rom:"eotteoke"},{ko:"왜",rom:"wae"}],ansIndex:0,full:"어떻게 가요?",tag:"how",
+   why:"어떻게 = how / by what means. 어떻게 가요? — how do you get there?"},
+  {en:"“Who is coming?” — the ___ does the verb",cue:"___ 와요?",options:[{ko:"누가",rom:"nuga"},{ko:"누구",rom:"nugu"}],ansIndex:0,full:"누가 와요?",tag:"who (subject)",
+   why:"누구 contracts to 누가 before the subject particle. When 'who' is doing the verb, it's 누가 와요? — never 누구가."},
+  {en:"“Who is that person?” — asking their identity",cue:"저 사람은 ___예요?",options:[{ko:"누구",rom:"nugu"},{ko:"누가",rom:"nuga"}],ansIndex:0,full:"저 사람은 누구예요?",tag:"who",
+   why:"Plain 누구 = who. With 예요 (identity), not the subject role, so it stays 누구: 저 사람은 누구예요?"},
+  {en:"“___ o'clock is it now?” (what number)",cue:"지금 ___ 시예요?",options:[{ko:"몇",rom:"myeot"},{ko:"얼마",rom:"eolma"}],ansIndex:0,full:"지금 몇 시예요?",tag:"how many",
+   why:"몇 = how many / what number, and it sits right before a counter: 몇 시 (what hour), 몇 개 (how many items)."},
+  {en:"“___ is this?” (what price)",cue:"이거 ___예요?",options:[{ko:"얼마",rom:"eolma"},{ko:"몇",rom:"myeot"}],ansIndex:0,full:"이거 얼마예요?",tag:"how much",
+   why:"얼마 = how much (price). 이거 얼마예요? is the phrase for every shop and market."},
+  {en:"“___ food do you want?” (what kind of)",cue:"___ 음식 좋아해요?",options:[{ko:"무슨",rom:"museun"},{ko:"뭐",rom:"mwo"}],ansIndex:0,full:"무슨 음식 좋아해요?",tag:"what kind",
+   why:"무슨 = what kind of, and it goes before a noun: 무슨 음식. 뭐 stands alone; 무슨 attaches to the thing."}
+].map((it,i)=>({...it,id:"quest-"+i,type:"choice",unit:"questions"}));
+
+/* --- THEMED VOCABULARY (travel-first). Drill shows Korean; learner types English or romanisation. --- */
+const VOCAB_THEMES=[
+  {id:"food",ko:"음식",en:"Food & drink",words:[
+    ["물","mul","water"],["밥","bap","rice · meal"],["김치","gimchi","kimchi"],["고기","gogi","meat"],
+    ["빵","ppang","bread"],["커피","keopi","coffee"],["차","cha","tea · car"],["맥주","maekju","beer"],
+    ["과일","gwail","fruit"],["국","guk","soup"],["면","myeon","noodles"],["채소","chaeso","vegetables"],
+    ["계란","gyeran","egg"],["설탕","seoltang","sugar"],["소금","sogeum","salt"],["맛있다","masitda","to be tasty"]
+  ]},
+  {id:"restaurant",ko:"식당",en:"At a restaurant",words:[
+    ["메뉴","menyu","menu"],["주세요","juseyo","please give me"],["얼마예요","eolmayeyo","how much is it"],
+    ["계산서","gyesanseo","the bill"],["카드","kadeu","card"],["현금","hyeongeum","cash"],
+    ["숟가락","sutgarak","spoon"],["젓가락","jeotgarak","chopsticks"],["잔","jan","glass · cup"],
+    ["병","byeong","bottle"],["개","gae","item · piece"],["여기요","yeogiyo","excuse me"],
+    ["포장","pojang","takeaway"],["반찬","banchan","side dishes"],["맵다","maepda","to be spicy"]
+  ]},
+  {id:"places",ko:"장소",en:"Places in town",words:[
+    ["화장실","hwajangsil","toilet · restroom · bathroom"],["역","yeok","station"],["은행","eunhaeng","bank"],
+    ["병원","byeongwon","hospital"],["약국","yakguk","pharmacy"],["학교","hakgyo","school"],
+    ["가게","gage","shop"],["시장","sijang","market"],["공항","gonghang","airport"],
+    ["호텔","hotel","hotel"],["집","jip","house · home"],["카페","kape","cafe"],
+    ["편의점","pyeonuijeom","convenience store"],["지하철","jihacheol","subway"],["버스","beoseu","bus"]
+  ]},
+  {id:"directions",ko:"길",en:"Directions",words:[
+    ["여기","yeogi","here"],["거기","geogi","there"],["저기","jeogi","over there"],
+    ["왼쪽","oenjjok","left"],["오른쪽","oreunjjok","right"],["앞","ap","front"],
+    ["뒤","dwi","behind"],["옆","yeop","beside"],["안","an","inside"],
+    ["밖","bak","outside"],["위","wi","above"],["아래","arae","below"],
+    ["가깝다","gakkapda","to be near"],["멀다","meolda","to be far"],["어디","eodi","where"]
+  ]},
+  {id:"time",ko:"시간",en:"Time & days",words:[
+    ["오늘","oneul","today"],["어제","eoje","yesterday"],["내일","naeil","tomorrow"],
+    ["지금","jigeum","now"],["아침","achim","morning"],["점심","jeomsim","noon · lunch"],
+    ["저녁","jeonyeok","evening"],["주말","jumal","weekend"],["시","si","o'clock"],
+    ["분","bun","minute"],["요일","yoil","day of the week"],["월요일","woryoil","Monday"],
+    ["주","ju","week"],["달","dal","month"],["년","nyeon","year"]
+  ]},
+  {id:"family",ko:"사람들",en:"People & family",words:[
+    ["사람","saram","person"],["친구","chingu","friend"],["가족","gajok","family"],
+    ["엄마","eomma","mum"],["아빠","appa","dad"],["언니","eonni","older sister"],
+    ["오빠","oppa","older brother"],["동생","dongsaeng","younger sibling"],["아이","ai","child"],
+    ["남자","namja","man"],["여자","yeoja","woman"],["선생님","seonsaengnim","teacher"],
+    ["학생","haksaeng","student"],["이름","ireum","name"],["나이","nai","age"]
+  ]},
+  {id:"shopping",ko:"쇼핑",en:"Shopping & money",words:[
+    ["돈","don","money"],["가격","gagyeok","price"],["원","won","won (currency)"],
+    ["싸다","ssada","to be cheap"],["비싸다","bissada","to be expensive"],["옷","ot","clothes"],
+    ["신발","sinbal","shoes"],["가방","gabang","bag"],["색깔","saekkkal","colour"],
+    ["크다","keuda","to be big"],["작다","jakda","to be small"],["사다","sada","to buy"],
+    ["팔다","palda","to sell"],["봉투","bongtu","bag · envelope"],["영수증","yeongsujeung","receipt"]
+  ]},
+  {id:"transport",ko:"교통",en:"Getting around",words:[
+    ["차","cha","car · tea"],["기차","gicha","train"],["비행기","bihaenggi","aeroplane"],
+    ["택시","taeksi","taxi"],["자전거","jajeongeo","bicycle"],["표","pyo","ticket"],
+    ["길","gil","road · way"],["다리","dari","bridge · leg"],["신호등","sinhodeung","traffic light"],
+    ["타다","tada","to ride · board"],["내리다","naerida","to get off"],["걷다","geotda","to walk"],
+    ["빠르다","ppareuda","to be fast"],["느리다","neurida","to be slow"],["기다리다","gidarida","to wait"]
+  ]},
+  {id:"weather",ko:"날씨",en:"Weather & nature",words:[
+    ["날씨","nalssi","weather"],["비","bi","rain"],["눈","nun","snow · eye"],
+    ["바람","baram","wind"],["구름","gureum","cloud"],["해","hae","sun"],
+    ["하늘","haneul","sky"],["산","san","mountain"],["바다","bada","sea"],
+    ["나무","namu","tree"],["꽃","kkot","flower"],["덥다","deopda","to be hot"],
+    ["춥다","chupda","to be cold"],["따뜻하다","ttatteutada","to be warm"],["시원하다","siwonhada","to be cool"]
+  ]},
+  {id:"body",ko:"몸",en:"Body & health",words:[
+    ["몸","mom","body"],["머리","meori","head · hair"],["얼굴","eolgul","face"],
+    ["손","son","hand"],["발","bal","foot"],["배","bae","stomach · pear · boat"],
+    ["약","yak","medicine"],["아프다","apeuda","to hurt · be sick"],["감기","gamgi","a cold"],
+    ["열","yeol","fever"],["병원","byeongwon","hospital"],["쉬다","swida","to rest"],
+    ["자다","jada","to sleep"],["씻다","ssitda","to wash"],["건강","geongang","health"]
+  ]},
+  {id:"home",ko:"집",en:"Home & things",words:[
+    ["방","bang","room"],["문","mun","door"],["창문","changmun","window"],
+    ["책상","chaeksang","desk"],["의자","uija","chair"],["침대","chimdae","bed"],
+    ["부엌","bueok","kitchen"],["화장실","hwajangsil","bathroom · toilet · restroom"],["전화","jeonhwa","phone"],
+    ["컴퓨터","keompyuteo","computer"],["텔레비전","tellebijeon","television"],["시계","sigye","clock · watch"],
+    ["열쇠","yeolsoe","key"],["불","bul","light · fire"],["물건","mulgeon","thing · object"]
+  ]},
+  {id:"describing",ko:"묘사",en:"Describing things",words:[
+    ["좋다","jota","to be good"],["나쁘다","nappeuda","to be bad"],["많다","manta","to be many"],
+    ["적다","jeokda","to be few"],["새롭다","saeropda","to be new"],["예쁘다","yeppeuda","to be pretty"],
+    ["재미있다","jaemiitda","to be fun"],["재미없다","jaemieopda","to be boring"],["쉽다","swipda","to be easy"],
+    ["어렵다","eoryeopda","to be difficult"],["길다","gilda","to be long"],["짧다","jjalda","to be short"],
+    ["높다","nopda","to be high"],["낮다","natda","to be low"],["같다","gatda","to be the same"]
+  ]}
+];
+const VOCAB_ITEMS=[];
+VOCAB_THEMES.forEach(theme=>{
+  theme.words.forEach((w,i)=>{
+    const en=w[2], enParts=en.split('·').map(s=>s.trim()), enAccept=[];
+    enParts.forEach(p=>{
+      enAccept.push(p, p.replace(/^to /,''), p.replace(/^to be /,''), p.replace(/^(a|an|the) /,''), p.replace(/ \(.*\)/,''));
+    });
+    VOCAB_ITEMS.push({
+      id:"vocab-"+theme.id+"-"+i, type:"vocab", unit:"vocab-"+theme.id, theme:theme.id,
+      ko:w[0], rom:w[1], en:en, answer:en,
+      accept:[...new Set(enAccept.map(s=>s.toLowerCase().trim()).filter(Boolean)), w[1]],
+      why:`<span style="font-family:var(--serif);font-size:19px">${w[0]}</span> · <span class="solrom">${w[1]}</span> — ${en}.`
+    });
+  });
+});
+
 // vocab reference shown on the Diary kit lesson (tap to hear)
 const COMMON_VERBS=[
   {dict:"가다",pres:"가요",past:"갔어요",en:"go"},
@@ -1271,29 +1656,40 @@ function wordIndexFor(day){return (day*37)%WORDS.length;}
 function wordOfDay(){return WORDS[wordIndexFor(dayNumber())];}
 
 const ALL=[...HANGUL_ITEMS,...PRON_ITEMS,...PARTICLE_ITEMS,...SENTENCE_ITEMS,...PAST_ITEMS,...TENSE_ITEMS,
-  ...POLITE_ITEMS,...PEOPLE_ITEMS,...NEGATION_ITEMS,...NUMBER_ITEMS,...CONNECT_ITEMS,...EVERYDAY_ITEMS,...DIARY_ITEMS];
+  ...POLITE_ITEMS,...PEOPLE_ITEMS,...NEGATION_ITEMS,...NUMBER_ITEMS,...CONNECT_ITEMS,...EVERYDAY_ITEMS,...QUESTION_ITEMS,...DOING_ITEMS,
+  ...VOCAB_ITEMS,...STORY_ITEMS,...DIARY_ITEMS];
 const BY_ID={}; ALL.forEach(it=>BY_ID[it.id]=it);
 
 const UNITS=[
-  {id:"hangul",ko:"한글",en:"Hangul",desc:"Read the Korean alphabet",status:"active",go:"#hangul"},
-  {id:"pron",ko:"발음",en:"Pronunciation",desc:"Why words aren't said how they're spelled",status:"active",go:"#pron"},
-  {id:"particles",ko:"조사",en:"Particles",desc:"Mark topic, subject and object",status:"active",go:"#particles"},
-  {id:"sentence",ko:"문장",en:"Sentence structure",desc:"Word order: subject–object–verb",status:"active",go:"#sentence"},
-  {id:"past",ko:"과거",en:"Past tense",desc:"Say what you did: –았 / 었 / 했어요",status:"active",go:"#past"},
-  {id:"diary",ko:"일기",en:"Diary kit",desc:"Build real past-tense diary lines",status:"active",go:"#diary"},
-  {id:"tenses",ko:"시제",en:"Present & future",desc:"Say what you do and what you'll do",status:"active",go:"#tenses"},
-  {id:"polite",ko:"존댓말",en:"Politeness",desc:"Formal, polite and casual speech",status:"active",go:"#polite"},
-  {id:"people",ko:"사람",en:"People & pronouns",desc:"I, we, and why “you” is a trap",status:"active",go:"#people"},
-  {id:"everyday",ko:"조사2",en:"Everyday particles",desc:"에, 있다/없다, 하고",status:"active",go:"#everyday"},
-  {id:"negation",ko:"부정",en:"Negation",desc:"Say what you don't and didn't do",status:"active",go:"#negation"},
-  {id:"numbers",ko:"숫자",en:"Numbers",desc:"Both counting systems, and when",status:"active",go:"#numbers"},
-  {id:"connect",ko:"연결",en:"Joining sentences",desc:"and, so, but — in one sentence",status:"active",go:"#connect"},
-  {id:"verbs",ko:"동사",en:"Common verbs",desc:"26 everyday verbs, present & past",status:"active",go:"#verbs"},
-  {id:"stories",ko:"이야기",en:"Short stories",desc:"Tiny stories to grow vocabulary",status:"soon"}
+  {id:"hangul",ko:"한글",en:"Hangul",desc:"Read the Korean alphabet",status:"active",go:"#hangul",sec:"foundations"},
+  {id:"pron",ko:"발음",en:"Pronunciation",desc:"Why words aren't said how they're spelled",status:"active",go:"#pron",sec:"foundations"},
+  {id:"particles",ko:"조사",en:"Particles",desc:"Mark topic, subject and object",status:"active",go:"#particles",sec:"grammar"},
+  {id:"sentence",ko:"문장",en:"Sentence structure",desc:"Word order: subject–object–verb",status:"active",go:"#sentence",sec:"grammar"},
+  {id:"past",ko:"과거",en:"Past tense",desc:"Say what you did: –았 / 었 / 했어요",status:"active",go:"#past",sec:"grammar"},
+  {id:"tenses",ko:"시제",en:"Present & future",desc:"Say what you do and what you'll do",status:"active",go:"#tenses",sec:"grammar"},
+  {id:"everyday",ko:"조사2",en:"Everyday particles",desc:"에, 있다/없다, 하고",status:"active",go:"#everyday",sec:"grammar"},
+  {id:"negation",ko:"부정",en:"Negation",desc:"Say what you don't and didn't do",status:"active",go:"#negation",sec:"grammar"},
+  {id:"connect",ko:"연결",en:"Joining sentences",desc:"and, so, but — in one sentence",status:"active",go:"#connect",sec:"grammar"},
+  {id:"numbers",ko:"숫자",en:"Numbers",desc:"Both counting systems, and when",status:"active",go:"#numbers",sec:"grammar"},
+  {id:"polite",ko:"존댓말",en:"Politeness",desc:"Formal, polite and casual speech",status:"active",go:"#polite",sec:"talking"},
+  {id:"people",ko:"사람",en:"People & pronouns",desc:"I, we, and why “you” is a trap",status:"active",go:"#people",sec:"talking"},
+  {id:"questions",ko:"질문",en:"Question words",desc:"who, what, where, when, why, how",status:"active",go:"#questions",sec:"talking"},
+  {id:"doing",ko:"표현",en:"Want · please · must · can't",desc:"-고 싶다, 주세요, -아야 하다, 못",status:"active",go:"#doing",sec:"talking"},
+  {id:"verbs",ko:"동사",en:"Common verbs",desc:"26 everyday verbs, present & past",status:"active",go:"#verbs",sec:"words"},
+  {id:"vocab",ko:"어휘",en:"Vocabulary",desc:"Travel-ready words, by theme",status:"active",go:"#vocab",sec:"words"},
+  {id:"diary",ko:"일기",en:"Diary kit",desc:"Build real past-tense diary lines",status:"active",go:"#diary",sec:"reading"},
+  {id:"stories",ko:"이야기",en:"Short stories",desc:"Read everything you've learned, together",status:"active",go:"#stories",sec:"reading"}
+];
+const SECTIONS=[
+  {id:"foundations",ko:"기초",en:"Foundations",note:"Read and sound out Korean"},
+  {id:"grammar",ko:"문법",en:"Grammar",note:"How sentences are built"},
+  {id:"talking",ko:"대화",en:"Talking to people",desc:"",note:"Register, pronouns, asking, requesting"},
+  {id:"words",ko:"어휘",en:"Words",note:"Verbs and vocabulary by theme"},
+  {id:"reading",ko:"읽기·쓰기",en:"Reading & writing",note:"Put it all together"}
 ];
 
 /* ===================== STORAGE ===================== */
-let STATE={mistakes:[],progress:{},streak:{count:0,last:""},words:{seen:[]}};
+let STATE={mistakes:[],progress:{},streak:{count:0,last:""},words:{seen:[]},collapsed:[]};
 async function load(){
   try{const r=await window.storage.get('kr-app'); if(r&&r.value)STATE=Object.assign(STATE,JSON.parse(r.value));}catch(e){}
   if(!STATE.words||!Array.isArray(STATE.words.seen))STATE.words={seen:[]};
@@ -1321,16 +1717,23 @@ const screens={'#home':'s-home','#hangul':'s-hangul','#drill-hangul':'s-drill',
   '#diary':'s-diary','#drill-diary':'s-drill','#tenses':'s-tenses','#drill-tenses':'s-drill',
   '#polite':'s-polite','#drill-polite':'s-drill','#people':'s-people','#drill-people':'s-drill',
   '#everyday':'s-everyday','#drill-everyday':'s-drill','#negation':'s-negation','#drill-negation':'s-drill',
+  '#questions':'s-questions','#drill-questions':'s-drill',
+  '#doing':'s-doing','#drill-doing':'s-drill',
   '#numbers':'s-numbers','#drill-numbers':'s-drill','#connect':'s-connect','#drill-connect':'s-drill',
-  '#verbs':'s-verbs',
+  '#verbs':'s-verbs','#vocab':'s-vocab','#stories':'s-stories',
   '#word':'s-word','#review':'s-drill'};
 function go(hash){ if(location.hash!==hash)location.hash=hash; else route(); }
 function route(){
   const h=location.hash||'#home';
-  const id=screens[h]||'s-home';
+  // vocab theme sub-routes: #vocab-<theme> uses the vocab browser, #drill-vocab-<theme> the drill screen
+  let id=screens[h]||'s-home';
+  if(h.startsWith('#drill-vocab-')) id='s-drill';
+  else if(h.startsWith('#vocab-')) id='s-vocab-theme';
+  else if(h.startsWith('#drill-story-')) id='s-drill';
+  else if(h.startsWith('#story-')) id='s-story';
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  const onHome=(h==='#home'||!screens[h]);
+  const onHome=(h==='#home'||(!screens[h]&&!h.startsWith('#vocab-')&&!h.startsWith('#drill-vocab-')&&!h.startsWith('#story-')&&!h.startsWith('#drill-story-')));
   document.getElementById('backBtn').classList.toggle('show',!onHome);
   document.getElementById('actionBar').classList.toggle('hidden', id!=='s-drill');
   const crumbs={'#hangul':'Hangul','#drill-hangul':'Hangul · practice',
@@ -1343,12 +1746,19 @@ function route(){
     '#polite':'Politeness','#drill-polite':'Politeness · practice',
     '#people':'People & pronouns','#drill-people':'People · practice',
     '#everyday':'Everyday particles','#drill-everyday':'Everyday particles · practice',
+    '#questions':'Question words','#drill-questions':'Question words · practice',
+    '#doing':'Want · please · must · can\'t','#drill-doing':'Expressions · practice',
     '#negation':'Negation','#drill-negation':'Negation · practice',
     '#numbers':'Numbers','#drill-numbers':'Numbers · practice',
     '#connect':'Joining sentences','#drill-connect':'Joining · practice',
-    '#verbs':'Common verbs',
+    '#verbs':'Common verbs','#vocab':'Vocabulary','#stories':'Short stories',
     '#word':'Word of the day','#review':'Review'};
-  document.getElementById('crumb').textContent=crumbs[h]||'';
+  let crumbText=crumbs[h]||'';
+  if(h.startsWith('#drill-vocab-')){const t=VOCAB_THEMES.find(x=>x.id===h.slice('#drill-vocab-'.length));crumbText=(t?t.en:'Vocabulary')+' · practice';}
+  else if(h.startsWith('#vocab-')){const t=VOCAB_THEMES.find(x=>x.id===h.slice('#vocab-'.length));crumbText=t?t.en:'Vocabulary';}
+  else if(h.startsWith('#drill-story-')){const s=STORIES.find(x=>x.id===h.slice('#drill-story-'.length));crumbText=(s?s.en:'Story')+' · questions';}
+  else if(h.startsWith('#story-')){const s=STORIES.find(x=>x.id===h.slice('#story-'.length));crumbText=s?s.en:'Story';}
+  document.getElementById('crumb').textContent=crumbText;
   window.scrollTo(0,0);
   if(id==='s-home')renderHome();
   if(h==='#hangul')renderHangulLesson();
@@ -1362,7 +1772,22 @@ function route(){
   if(h==='#polite')renderPoliteLesson();
   if(h==='#people')renderPeopleLesson();
   if(h==='#verbs')renderVerbsLesson();
+  if(h==='#vocab')renderVocabHub();
+  if(h==='#stories')renderStoriesHub();
+  if(h.startsWith('#story-'))renderStory(h.slice('#story-'.length));
+  if(h.startsWith('#drill-story-')){
+    const sid=h.slice('#drill-story-'.length), s=STORIES.find(x=>x.id===sid);
+    startDrill(shuffle(STORY_ITEMS.filter(it=>it.story===sid)),{intro:`${s?s.en:''} — a couple of questions on what you just read.`});
+  }
+  if(h.startsWith('#vocab-'))renderVocabTheme(h.slice('#vocab-'.length));
+  if(h.startsWith('#drill-vocab-')){
+    const tid=h.slice('#drill-vocab-'.length), t=VOCAB_THEMES.find(x=>x.id===tid);
+    const items=VOCAB_ITEMS.filter(it=>it.theme===tid);
+    startDrill(shuffle(items),{intro:`See the Korean, type the meaning in English. ${t?t.en:''} — ${items.length} words. Tap ▶ to hear each.`});
+  }
   if(h==='#drill-everyday')startDrill(shuffle(EVERYDAY_ITEMS),{intro:"The particles the app has quietly used all along: 에 vs 에서, 있다 vs 없다, and 하고."});
+  if(h==='#drill-questions')startDrill(shuffle(QUESTION_ITEMS),{intro:"Pick the right question word for each situation. Watch for 누구→누가 (subject), 얼마 (price) vs 몇 (number), and 무슨 before a noun."});
+  if(h==='#drill-doing')startDrill(shuffle(DOING_ITEMS),{intro:"Say what you want, ask politely, say what you must, and what you can't. Match the pattern to the meaning, then build the form."});
   if(h==='#drill-negation')startDrill(shuffle(NEGATION_ITEMS),{intro:"Choose how to make it negative. 안 is for casual speech, 지 않다 for careful; a few verbs swap to a whole different word."});
   if(h==='#drill-numbers')startDrill(shuffle(NUMBER_ITEMS),{intro:"First: native or Sino? Then read some values aloud — type the romanisation or Hangul."});
   if(h==='#drill-connect')startDrill(shuffle(CONNECT_ITEMS),{intro:"Pick the ending that joins the two clauses: -고 (and), -아서/어서 (so), -지만 (but). Tense goes on the final verb only."});
@@ -1411,21 +1836,54 @@ function renderWordScreen(){
       return `<button class="vrow" onclick="speak('${p.ko}')"><span class="vko">${p.ko}</span><span class="ven">${p.en}</span></button>`;}).join('');
   }
 }
+function stepHTML(u){
+  const done=(STATE.progress[u.id]||{}).rounds||0;
+  const best=(STATE.progress[u.id]||{}).best;
+  // vocab & stories track progress per sub-item, so summarise across their keys
+  let doneAny=done, bestShown=best;
+  if(u.id==='vocab'){const ks=Object.keys(STATE.progress).filter(k=>k.startsWith('vocab-'));doneAny=ks.length;bestShown=ks.length?Math.max(...ks.map(k=>STATE.progress[k].best||0)):0;}
+  if(u.id==='stories'){const ks=Object.keys(STATE.progress).filter(k=>k.startsWith('story-'));doneAny=ks.length;bestShown=ks.length?Math.max(...ks.map(k=>STATE.progress[k].best||0)):0;}
+  const meta=u.status==='soon'?'Coming soon'
+    :(doneAny?(u.id==='vocab'?`${doneAny} theme${doneAny>1?'s':''} started`
+      :u.id==='stories'?`${doneAny} story${doneAny>1?' set':''} read`
+      :`Best ${Math.round(bestShown*100)}% · ${done} round${done>1?'s':''}`)
+     :'Not started yet');
+  const started=doneAny>0;
+  return `<button class="step${u.status==='soon'?' soon':''}${started?' started':''}" data-go="${u.go}">
+    <span class="rail"><span class="dot">${u.ko[0]}</span><span class="line"></span></span>
+    <span class="step-body"><span class="step-title"><span class="ko">${u.ko}</span>${u.en}</span>
+    <span class="step-desc">${u.desc}</span><span class="step-meta">${meta}</span></span></button>`;
+}
 function renderHome(){
   const path=document.getElementById('path'); path.innerHTML='';
-  UNITS.forEach(u=>{
-    const done=(STATE.progress[u.id]||{}).rounds||0;
-    const best=(STATE.progress[u.id]||{}).best;
-    const meta=u.status==='soon'?'Coming soon':(done?`Best ${Math.round(best*100)}% · ${done} round${done>1?'s':''}`:'Not started yet');
-    const b=document.createElement('button');
-    b.className='step'+(u.status==='soon'?' soon':'');
-    b.disabled=u.status==='soon';
-    b.innerHTML=`<span class="rail"><span class="dot">${u.status==='soon'?'·':'✓'.replace('✓',u.ko[0])}</span><span class="line"></span></span>
-      <span class="step-body"><span class="step-title"><span class="ko">${u.ko}</span>${u.en}</span>
-      <span class="step-desc">${u.desc}</span><span class="step-meta">${meta}</span></span>`;
-    if(u.status!=='soon')b.onclick=()=>go(u.go);
-    path.appendChild(b);
+  const collapsed=new Set(STATE.collapsed||[]);
+  SECTIONS.forEach(sec=>{
+    const units=UNITS.filter(u=>u.sec===sec.id);
+    if(!units.length)return;
+    const isCollapsed=collapsed.has(sec.id);
+    const started=units.filter(u=>{
+      if(u.id==='vocab')return Object.keys(STATE.progress).some(k=>k.startsWith('vocab-'));
+      if(u.id==='stories')return Object.keys(STATE.progress).some(k=>k.startsWith('story-'));
+      return ((STATE.progress[u.id]||{}).rounds||0)>0;
+    }).length;
+    const wrap=document.createElement('div');
+    wrap.className='section'+(isCollapsed?' collapsed':'');
+    wrap.innerHTML=`<button class="sec-head" data-sec="${sec.id}">
+      <span class="sec-head-main"><span class="sec-ko">${sec.ko}</span><span class="sec-en">${sec.en}</span></span>
+      <span class="sec-right"><span class="sec-prog">${started}/${units.length}</span><span class="sec-chev">${isCollapsed?'▸':'▾'}</span></span>
+    </button>
+    <div class="sec-note">${sec.note}</div>
+    <div class="sec-steps">${units.map(stepHTML).join('')}</div>`;
+    path.appendChild(wrap);
   });
+  // wire section toggles and step navigation (delegated)
+  path.querySelectorAll('.sec-head').forEach(h=>h.onclick=()=>{
+    const id=h.getAttribute('data-sec');
+    const set=new Set(STATE.collapsed||[]);
+    if(set.has(id))set.delete(id); else set.add(id);
+    STATE.collapsed=[...set]; save(); renderHome();
+  });
+  path.querySelectorAll('.step:not(.soon)').forEach(b=>b.onclick=()=>go(b.getAttribute('data-go')));
   const n=STATE.mistakes.length;
   const c=document.getElementById('reviewCount'); c.textContent=n; c.classList.toggle('zero',n===0);
   document.getElementById('streak').textContent = STATE.streak.count>0 ? `🔥 ${STATE.streak.count}-day streak · keep it going` : 'Do one round to start a streak';
@@ -1500,6 +1958,15 @@ function cardHTML(it,pos){
       ${stem}
       <div class="opts" id="opts${pos}"></div>
       <div class="verdict"></div></section>`;
+  }
+  if(it.type==='vocab'){
+    return `<section class="card" data-i="${pos}">
+      <div class="top"><span class="chip"><span class="role">${it.rom}</span></span><span class="num">${pos+1} / ${current.length}</span></div>
+      <div class="prompt-han" style="font-size:40px">${it.ko}</div>
+      <div class="answer">
+        <button class="speak" onclick="speak('${it.ko}')" aria-label="Hear it">▶</button>
+        <input id="in${pos}" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="meaning in English" style="width:190px">
+      </div><div class="verdict"></div></section>`;
   }
   if(it.type==='pron'){
     return `<section class="card" data-i="${pos}">
@@ -1585,6 +2052,63 @@ function renderVerbsLesson(){
   document.getElementById('verbTable').innerHTML=COMMON_VERBS.map(v=>
     `<button class="vbrow" onclick="speak('${v.pres}')"><span class="vbko">${v.dict}</span><span>${v.pres}</span><span>${v.past}</span><span class="vben">${v.en}</span></button>`).join('');
 }
+function vocabThemeProgress(tid){
+  const p=STATE.progress['vocab-'+tid];
+  return p&&p.best?Math.round(p.best*100)+'%':null;
+}
+function renderVocabHub(){
+  document.getElementById('vocabThemes').innerHTML=VOCAB_THEMES.map(t=>{
+    const pct=vocabThemeProgress(t.id);
+    return `<button class="themecard" onclick="go('#vocab-${t.id}')">
+      <span class="theme-ko">${t.ko}</span>
+      <span class="theme-body"><span class="theme-en">${t.en}</span><span class="theme-meta">${t.words.length} words${pct?' · best '+pct:''}</span></span>
+      <span class="theme-arrow">→</span></button>`;
+  }).join('');
+}
+function renderVocabTheme(tid){
+  const t=VOCAB_THEMES.find(x=>x.id===tid); if(!t)return;
+  document.getElementById('vocabThemeTitle').innerHTML=`<span style="color:var(--jade)">${t.ko}</span> ${t.en}`;
+  document.getElementById('vocabThemeSub').textContent=`${t.words.length} words. Tap any to hear it, then practise.`;
+  document.getElementById('vocabList').innerHTML=t.words.map(w=>
+    `<button class="vrow" onclick="speak('${w[0]}')"><span class="vko">${w[0]} <span class="krom">${w[1]}</span></span><span class="ven">${w[2]}</span></button>`).join('');
+  document.getElementById('vocabPractiseBtn').setAttribute('onclick',`go('#drill-vocab-${tid}')`);
+}
+function renderStoriesHub(){
+  document.getElementById('storyCards').innerHTML=STORIES.map(s=>{
+    const p=STATE.progress['story-'+s.id], done=p&&p.rounds>0;
+    return `<button class="themecard" onclick="go('#story-${s.id}')">
+      <span class="theme-ko">${s.ko}</span>
+      <span class="theme-body"><span class="theme-en">${s.en}</span><span class="theme-meta">${s.lines.length} lines${done?' · read ✓':''}</span></span>
+      <span class="theme-arrow">→</span></button>`;
+  }).join('');
+}
+function toggleStoryMeanings(btn){
+  const on=document.getElementById('storyLines').classList.toggle('revealed');
+  btn.textContent=on?'Hide meanings':'Show all meanings';
+}
+function renderStory(sid){
+  const s=STORIES.find(x=>x.id===sid); if(!s)return;
+  document.getElementById('storyTitle').innerHTML=`<span style="color:var(--jade)">${s.ko}</span> ${s.en}`;
+  document.getElementById('storySub').textContent=s.intro;
+  const box=document.getElementById('storyLines');
+  box.classList.remove('revealed');
+  box.innerHTML=s.lines.map(ln=>
+    `<div class="sline">
+       <button class="sline-speak" onclick="speak('${ln.ko}')" aria-label="Hear line">▶</button>
+       <div class="sline-body">
+         <div class="sline-ko">${ln.ko}</div>
+         <div class="sline-meaning"><span class="sline-rom">${ln.rom}</span><span class="sline-en">${ln.en}</span></div>
+       </div>
+       <button class="sline-toggle" onclick="this.closest('.sline').classList.toggle('open')" aria-label="Show meaning">?</button>
+     </div>`).join('');
+  const nw=document.getElementById('storyNew');
+  if(s.new&&s.new.length){ nw.style.display='block';
+    nw.innerHTML=`<div class="newword-head">New words in this story</div>`+s.new.map(w=>
+      `<button class="vrow" onclick="speak('${w[0]}')"><span class="vko">${w[0]} <span class="krom">${w[1]}</span></span><span class="ven">${w[2]}</span></button>`).join('');
+  } else nw.style.display='none';
+  const rb=document.getElementById('storyReveal'); rb.textContent='Show all meanings';
+  document.getElementById('storyCheckBtn').setAttribute('onclick',`go('#drill-story-${sid}')`);
+}
 function renderPeopleLesson(){
   const people=[["저","jeo","I — polite"],["나","na","I — casual"],["제가","jega","I as subject — polite"],
     ["내가","naega","I as subject — casual"],["제","je","my — polite"],["내","nae","my — casual"],
@@ -1636,6 +2160,9 @@ function check(){
         if(good) goodMsg=`Said ${ansHTML}. `;
         else{ const typed=inp.value.trim();
           wrongMsg=`You wrote ${typed===''?'<i>left blank</i>':`“${typed}”`}. Answer: ${ansHTML}. `; }
+      }else if(it.type==='vocab'){
+        if(!good){ const typed=inp.value.trim();
+          wrongMsg=`You wrote ${typed===''?'<i>left blank</i>':`“${typed}”`}. `; }
       }else if(!good){ const typed=inp.value.trim();
         wrongMsg=`You wrote ${typed===''?'<i>left blank</i>':`“${typed}”`}. Answer: <span class="sol">${it.answer||it.ans}</span>. `; }
     }
