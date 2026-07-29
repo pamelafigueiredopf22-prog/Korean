@@ -68,13 +68,13 @@
   .line{width:2px;flex:1;background:var(--line);min-height:14px}
   .sec-steps .step:last-child .line{display:none}
   .step.started .dot{background:var(--jade);color:#fff;border-color:var(--jade)}
-  .step-body{flex:1;padding:0 0 20px 2px}
+  .step-body{flex:1;padding:0 0 30px 2px}
   .step-title{font-family:var(--serif);font-size:20px;font-weight:700}
   .step-title .ko{color:var(--jade);margin-right:8px}
   .step.soon .step-title{color:var(--muted)}
   .step.soon .step-title .ko{color:var(--muted)}
-  .step-desc{font-size:14px;color:var(--muted);margin-top:1px}
-  .step-meta{font-size:12px;color:var(--jade);margin-top:5px;font-variant-numeric:tabular-nums}
+  .step-desc{font-size:14px;color:var(--muted);margin-top:2px}
+  .step-meta{font-size:12px;color:var(--jade);margin-top:8px;font-variant-numeric:tabular-nums}
   .step.soon .step-meta{color:var(--muted)}
 
   .review-tile{margin-top:8px;background:var(--card);border:1.5px solid var(--line);border-radius:16px;
@@ -382,7 +382,7 @@
 
     <div class="rule">
       <div class="rule-head"><span class="rule-ko">받침</span><span class="rule-en">The seven final sounds</span></div>
-      <p>Sixteen consonants can be <i>written</i> at the bottom of a block, but only <b>seven sounds</b> can actually close one: <b>ㄱ ㄴ ㄷ ㄹ ㅁ ㅂ ㅇ</b>. Everything else collapses into the nearest of those — ㅋ ㄲ → [ㄱ], ㅍ → [ㅂ], and ㄷ ㅌ ㅅ ㅆ ㅈ ㅊ ㅎ all → [ㄷ]. The sound also stops dead, with no puff of air after it.</p>
+      <p>Sixteen consonants can be <i>written</i> at the bottom of a block, but only <b>seven sounds</b> can actually close one: <b>ㄱ ㄴ ㄷ ㄹ ㅁ ㅂ ㅇ</b>. Everything else collapses into the nearest of those — ㅋ ㄲ → [ㄱ], ㅍ → [ㅂ], and ㄷ ㅌ ㅅ ㅆ ㅈ ㅊ ㅎ all → [ㄷ]. The sound also stops dead, with no puff of air after it — which is why the romanisation letter changes too: <b>ㄱ ㄷ ㅂ</b> are <b>g d b</b> at the start of a block (released, softer) but <b>k t p</b> when they close one (unreleased, harder). 밥 is <b>bap</b>, not "bab" — same jamo, different position, different letter.</p>
       <div class="rule-ex" data-tag="7 finals"></div>
     </div>
 
@@ -1520,7 +1520,215 @@ const VOCAB_THEMES=[
     ["재미있다","jaemiitda","to be fun"],["재미없다","jaemieopda","to be boring"],["쉽다","swipda","to be easy"],
     ["어렵다","eoryeopda","to be difficult"],["길다","gilda","to be long"],["짧다","jjalda","to be short"],
     ["높다","nopda","to be high"],["낮다","natda","to be low"],["같다","gatda","to be the same"]
-  ]}
+  ]},
+  {id:"countries",ko:"나라",en:"Countries & places",words:[
+    ["한국","hanguk","Korea"],["미국","miguk","the United States"],["영국","yeongguk","the United Kingdom"],["중국","jungguk","China"],
+    ["일본","ilbon","Japan"],["독일","dogil","Germany"],["프랑스","peurangseu","France"],["러시아","reosia","Russia"],
+    ["캐나다","kaenada","Canada"],["호주","hoju","Australia"],["서울","seoul","Seoul"],["부산","busan","Busan"],
+    ["인천","incheon","Incheon"],["제주도","jejudo","Jeju Island"],["경주","gyeongju","Gyeongju"],["경복궁","gyeongbokgung","Gyeongbokgung"],
+    ["남대문","namdaemun","Namdaemun"],["남대문시장","namdaemunsijang","Namdaemun Market"],["서울역","seouryeok","Seoul Station"],["설악산","seoraksan","Seoraksan"],
+    ["한강","hangang","the Han River"]
+  ]},
+  {id:"school",ko:"학교",en:"School & study",words:[
+    ["고등학교","godeunghakgyo","high school"],["고등학생","godeunghaksaeng","high school student"],["중학교","junghakgyo","middle school"],["중학생","junghaksaeng","middle school student"],
+    ["초등학교","chodeunghakgyo","elementary school"],["대학","daehak","university · college"],["대학교","daehakgyo","university"],["대학생","daehaksaeng","university student"],
+    ["교수","gyosu","professor"],["교과서","gyogwaseo","textbook"],["교실","gyosil","classroom"],["도서관","doseogwan","library"],
+    ["문제","munje","problem · question"],["방학","banghak","school vacation"],["볼펜","bolpen","ballpoint pen"],["공책","gongchaek","notebook"],
+    ["노트","noteu","notebook"],["연필","yeonpil","pencil"],["지우개","jiugae","eraser"],["칠판","chilpan","blackboard"],
+    ["단어","daneo","word · vocabulary"],["시험","siheom","exam · test"],["학년","haknyeon","grade · year"],["공부","gongbu","studying"],
+    ["과","gwa","department · section"],["급","geup","grade · level"]
+  ]},
+  {id:"languages",ko:"언어",en:"Languages & subjects",words:[
+    ["영어","yeoeo","English"],["일본어","ilboneo","Japanese"],["중국어","junggugeo","Chinese"],["외국어","oegugeo","foreign language"],
+    ["외국","oeguk","foreign country"],["외국인","oegugin","foreigner"],["한자","hanja","Chinese character"]
+  ]},
+  {id:"jobs",ko:"직업",en:"Jobs & people",words:[
+    ["가수","gasu","singer"],["간호사","ganhosa","nurse"],["경찰","gyeongchal","police"],["경찰관","gyeongchalgwan","police officer"],
+    ["경찰서","gyeongchalseo","police station"],["군인","gunin","soldier"],["사장","sajang","company president · boss"],["선생","seonsaeng","teacher"],
+    ["의사","uisa","doctor"],["손님","sonnim","guest · customer"],["주인","juin","owner"],["환자","hwanja","patient"],
+    ["회사","hoesa","company"],["회의","hoeui","meeting"],["사무실","samusil","office"]
+  ]},
+  {id:"family2",ko:"가족2",en:"Family & people",words:[
+    ["남동생","namdongsaeng","younger brother"],["여동생","yeodongsaeng","younger sister"],["아내","anae","wife"],["남편","nampyeon","husband"],
+    ["아들","adeul","son"],["딸","ttal","daughter"],["부모","bumo","parents"],["부모님","bumonim","parents (honorific)"],
+    ["부부","bubu","married couple"],["부인","buin","wife (someone else's)"],["할머니","halmeoni","grandmother"],["할아버지","harabeoji","grandfather"],
+    ["형","hyeong","older brother (of a male)"],["누나","nuna","older sister (of a male)"],["어른","eoreun","adult"],["어린이","eorini","child"],
+    ["아기","agi","baby"],["아저씨","ajeossi","mister · uncle"],["아주머니","ajumeoni","ma'am · aunt"],["아줌마","ajumma","ma'am (casual)"],
+    ["댁","daek","house · home (honorific)"],["남녀","namnyeo","men and women"],["혼자","honja","alone"],["남학생","namhaksaeng","male student"],
+    ["여학생","yeohaksaeng","female student"]
+  ]},
+  {id:"household",ko:"집안",en:"Household & things",words:[
+    ["냉장고","naengjanggo","fridge"],["세탁기","setakgi","washing machine"],["소파","sopa","sofa"],["에어컨","eeokeon","air conditioner"],
+    ["거울","geoul","mirror"],["달력","dallyeok","calendar"],["안경","angyeong","glasses"],["우산","usan","umbrella"],
+    ["지갑","jigap","wallet"],["핸드폰","haendeupon","cell phone"],["카메라","kamera","camera"],["라디오","radio","radio"],
+    ["비디오","bidio","video"],["티브이","tibeui","TV"],["컵","keop","cup"],["칼","kal","knife"],
+    ["수건","sugeon","towel"],["비누","binu","soap"],["치약","chiyak","toothpaste"],["칫솔","chitsol","toothbrush"],
+    ["쓰레기","sseuregi","trash"],["휴지","hyuji","tissue"],["휴지통","hyujitong","trash can"],["종이","joi","paper"],
+    ["식탁","siktak","dining table"],["자리","jari","seat · spot"],["층","cheung","floor · storey"]
+  ]},
+  {id:"clothes",ko:"옷",en:"Clothes & colours",words:[
+    ["바지","baji","trousers"],["치마","chima","skirt"],["양말","yangmal","socks"],["양복","yangbok","suit"],
+    ["넥타이","nektai","necktie"],["모자","moja","hat"],["구두","gudu","dress shoes"],["운동화","undonghwa","sneakers"],
+    ["청바지","cheongbaji","jeans"],["한복","hanbok","hanbok"],["검은색","geomeunsaek","black"],["노란색","noransaek","yellow"],
+    ["빨간색","ppalgansaek","red"],["파란색","paransaek","blue"],["흰색","huinsaek","white"]
+  ]},
+  {id:"food2",ko:"음식2",en:"Food & drink",words:[
+    ["갈비","galbi","ribs"],["김밥","gimbap","gimbap"],["냉면","naengmyeon","cold noodles"],["닭","dak","chicken (animal)"],
+    ["닭고기","dakgogi","chicken (meat)"],["돼지","dwaeji","pig"],["돼지고기","dwaejigogi","pork"],["쇠고기","soegogi","beef"],
+    ["떡","tteok","rice cake"],["라면","ramyeon","ramen"],["불고기","bulgogi","bulgogi"],["수박","subak","watermelon"],
+    ["아이스크림","aiseukeurim","ice cream"],["오렌지","orenji","orange"],["자장면","jajangmyeon","black bean noodles"],["찌개","jjigae","stew"],
+    ["초콜릿","chokollit","chocolate"],["콜라","kolla","cola"],["포도","podo","grape"],["피자","pija","pizza"],
+    ["햄버거","haembeogeo","hamburger"],["바나나","banana","banana"],["과자","gwaja","snack · cookie"],["사탕","satang","candy"],
+    ["생선","saengseon","fish (food)"],["술","sul","alcohol"],["주스","juseu","juice"],["샌드위치","saendeuwichi","sandwich"]
+  ]},
+  {id:"calendar",ko:"달력",en:"Time, months & days",words:[
+    ["일월","irwol","January"],["이월","iwol","February"],["삼월","samwol","March"],["사월","sawol","April"],
+    ["오월","owol","May"],["유월","yuwol","June"],["칠월","chirwol","July"],["팔월","parwol","August"],
+    ["구월","guwol","September"],["시월","siwol","October"],["십일월","sibirwol","November"],["십이월","sibiwol","December"],
+    ["화요일","hwayoil","Tuesday"],["수요일","suyoil","Wednesday"],["목요일","mogyoil","Thursday"],["금요일","geumyoil","Friday"],
+    ["토요일","toyoil","Saturday"],["일요일","iryoil","Sunday"],["봄","bom","spring"],["여름","yeoreum","summer"],
+    ["가을","gaeul","autumn"],["겨울","gyeoul","winter"],["계절","gyejeol","season"],["오전","ojeon","morning · a.m."],
+    ["오후","ohu","afternoon · p.m."],["매일","maeil","every day"],["이번","ibeon","this time"],["다음","daeum","next"],
+    ["지난주","jinanju","last week"],["지난달","jinandal","last month"],["올해","olhae","this year"],["나중","najung","later"],
+    ["처음","cheoeum","the first time"],["마지막","majimak","the last"],["잠깐","jamkkan","a moment"],["동안","doan","while · during"],
+    ["날","nal","day"],["날짜","naljja","date"],["때","ttae","time · when"],["그때","geuttae","at that time"],
+    ["그날","geunal","that day"],["이때","ittae","this time"],["일주일","iljuil","one week"],["며칠","myeochil","a few days"],
+    ["옛날","yetnal","the old days"],["요즘","yojeum","these days"],["요즈음","yojeueum","these days"],["오래간만","oraeganman","it's been a while"],
+    ["오랜만","oraenman","it's been a while"],["낮","nat","daytime"],["한번","hanbeon","once"]
+  ]},
+  {id:"verbs1",ko:"동사1",en:"Everyday verbs",words:[
+    ["가지다","gajida","to have · hold"],["가져오다","gajyeooda","to bring"],["걸다","geolda","to hang · to call"],["걸어가다","georeogada","to walk (there)"],
+    ["걸어오다","georeooda","to walk (here)"],["계시다","gyesida","to be · stay (honorific)"],["공부하다","gongbuhada","to study"],["끝나다","kkeutnada","to end · finish"],
+    ["끝내다","kkeutnaeda","to finish (something)"],["나가다","nagada","to go out"],["나다","nada","to occur · arise"],["나오다","naoda","to come out"],
+    ["날다","nalda","to fly"],["내다","naeda","to pay · give off"],["내려가다","naeryeogada","to go down"],["내려오다","naeryeooda","to come down"],
+    ["넣다","neotda","to put in"],["놀라다","nollada","to be surprised"],["놓다","notda","to put down"],["늦다","neutda","to be late"],
+    ["다녀오다","danyeooda","to go and come back"],["다니다","danida","to attend · go regularly"],["닦다","dakda","to wipe · brush"],["대답하다","daedaphada","to answer"],
+    ["도와주다","dowajuda","to help"],["도착하다","dochakhada","to arrive"],["돌아가다","doragada","to go back"],["돌아오다","doraoda","to come back"],
+    ["돕다","dopda","to help"],["되다","doeda","to become"],["드리다","deurida","to give (honorific)"],["들다","deulda","to hold · lift · cost"],
+    ["들어가다","deureogada","to go in"],["들어오다","deureooda","to come in"],["떠나다","tteonada","to leave · depart"],["뛰다","ttwida","to run · jump"],
+    ["말다","malda","to stop doing"],["못하다","mothada","to be unable to do"],["묻다","mutda","to ask"],["물어보다","mureoboda","to ask · find out"],
+    ["바꾸다","bakkuda","to change · exchange"],["벗다","beotda","to take off (clothes)"],["보내다","bonaeda","to send"],["부르다","bureuda","to call · sing"],
+    ["불다","bulda","to blow"],["사용하다","sayonghada","to use"],["살다","salda","to live"]
+  ]},
+  {id:"verbs2",ko:"동사2",en:"More everyday verbs",words:[
+    ["생기다","saenggida","to occur · come to be"],["서다","seoda","to stand"],["소개하다","sogaehada","to introduce"],["시작되다","sijakdoeda","to be started"],
+    ["시작하다","sijakhada","to start"],["식사하다","siksahada","to have a meal"],["신다","sinda","to put on (shoes)"],["실례하다","sillyehada","to excuse oneself"],
+    ["싫어하다","siheohada","to dislike"],["싸우다","ssauda","to fight"],["안다","anda","to hug"],["안되다","andoeda","to not work out"],
+    ["않다","anda","to not (do)"],["약속하다","yaksokhada","to promise"],["얘기하다","yaegihada","to talk · chat"],["여행하다","yeohaenghada","to travel"],
+    ["연습하다","yeonseuphada","to practise"],["열다","yeolda","to open"],["오르다","oreuda","to go up · rise"],["올라가다","ollagada","to go up · climb"],
+    ["운동하다","undonghada","to exercise"],["운전하다","unjeonhada","to drive"],["울다","ulda","to cry"],["이야기하다","iyagihada","to talk · tell"],
+    ["이해하다","ihaehada","to understand"],["인사하다","insahada","to greet"],["잃다","ilda","to lose"],["잃어버리다","iheobeorida","to lose completely"],
+    ["잊다","itda","to forget"],["잊어버리다","ijeobeorida","to forget completely"],["잘하다","jalhada","to do well"],["잠자다","jamjada","to sleep"],
+    ["잡다","japda","to catch · grab"],["잡수시다","japsusida","to eat (honorific)"],["전화하다","jeonhwahada","to phone"],["졸업하다","joreophada","to graduate"],
+    ["죽다","jukda","to die"],["준비하다","junbihada","to prepare"],["지내다","jinaeda","to spend time · get along"],["지우다","jiuda","to erase"],
+    ["질문하다","jilmunhada","to ask a question"],["찍다","jjikda","to take (a photo)"],["찾다","chatda","to find · look for"],["청소하다","cheongsohada","to clean"],
+    ["초대하다","chodaehada","to invite"],["추다","chuda","to dance"],["축하하다","chukhahada","to congratulate"],["출발하다","chulbalhada","to depart"],
+    ["춤추다","chumchuda","to dance"],["치다","chida","to hit · play (an instrument)"],["켜다","kyeoda","to turn on"],["태어나다","taeeonada","to be born"],
+    ["피우다","piuda","to smoke · light"],["감사하다","gamsahada","to thank"],["걱정하다","geokjeonghada","to worry"],["결혼하다","gyeolhonhada","to marry"],
+    ["깎다","kkakda","to peel · cut · discount"],["끄다","kkeuda","to turn off"],["노래하다","noraehada","to sing"],["사랑하다","saranghada","to love"],
+    ["선물하다","seonmulhada","to give a gift"],["버리다","beorida","to throw away · finish off"],["싶다","sipda","to want to"]
+  ]},
+  {id:"feelings",ko:"기분",en:"Describing people & things",words:[
+    ["가볍다","gabyeopda","to be light (weight)"],["건강하다","geonganghada","to be healthy"],["고맙다","gomapda","to be thankful"],["고프다","gopeuda","to be hungry"],
+    ["괜찮다","gwaenchanda","to be okay · fine"],["그렇다","geureotda","to be so · like that"],["깨끗하다","kkaekkeuthada","to be clean"],["넓다","neolda","to be wide · spacious"],
+    ["다르다","dareuda","to be different"],["달다","dalda","to be sweet"],["똑같다","ttokgatda","to be exactly the same"],["뜨겁다","tteugeopda","to be hot (touch)"],
+    ["맑다","makda","to be clear (weather)"],["맛없다","maseopda","to be not tasty"],["무겁다","mugeopda","to be heavy"],["미안하다","mianhada","to be sorry"],
+    ["반갑다","bangapda","to be glad (to meet)"],["밝다","bakda","to be bright"],["배고프다","baegopeuda","to be hungry"],["배부르다","baebureuda","to be full (stomach)"],
+    ["복잡하다","bokjaphada","to be complicated · crowded"],["비슷하다","biseuthada","to be similar"],["슬프다","seulpeuda","to be sad"],["싫다","silda","to be disliked · not want"],
+    ["아니다","anida","to not be"],["아름답다","areumdapda","to be beautiful"],["안녕하다","annyeonghada","to be well · at peace"],["어떠하다","eotteohada","to be how · what kind"],
+    ["어떻다","eotteotda","to be how · what"],["위험하다","wiheomhada","to be dangerous"],["유명하다","yumyeonghada","to be famous"],["이렇다","ireotda","to be like this"],
+    ["죄송하다","joesonghada","to be sorry (formal)"],["중요하다","juyohada","to be important"],["즐겁다","jeulgeopda","to be enjoyable"],["짜다","jjada","to be salty"],
+    ["친절하다","chinjeolhada","to be kind"],["필요하다","piryohada","to be necessary"],["힘들다","himdeulda","to be hard · tiring"]
+  ]},
+  {id:"connectors",ko:"연결어",en:"Connectors & fillers",words:[
+    ["가장","gajang","most"],["갑자기","gapjagi","suddenly"],["계속","gyesok","continuously"],["곧","got","soon"],
+    ["그러나","geureona","however"],["그러니까","geureonikka","so · therefore"],["그러면","geureomyeon","then · if so"],["그런데","geureonde","by the way · but"],
+    ["그럼","geureom","then · well"],["그렇지만","geureotjiman","but · however"],["꼭","kkok","definitely"],["너무","neomu","too · very"],
+    ["더","deo","more"],["또","tto","again · also"],["똑바로","ttokbaro","straight · properly"],["매우","maeu","very"],
+    ["먼저","meonjeo","first"],["못","mot","cannot"],["물론","mullon","of course"],["바로","baro","right away · exactly"],
+    ["벌써","beolsseo","already"],["빨리","ppalli","quickly"],["서로","seoro","each other"],["아니","ani","no (casual)"],
+    ["아마","ama","probably"],["아직","ajik","still · yet"],["안녕히","annyeonghi","peacefully (in farewells)"],["어서","eoseo","quickly · please (do)"],
+    ["언제나","eonjena","always"],["얼마나","eolmana","how much · how"],["열심히","yeolsimhi","diligently"],["오래","orae","for a long time"],
+    ["왜냐하면","waenyahamyeon","because"],["일찍","iljjik","early"],["자주","jaju","often"],["잘","jal","well"],
+    ["잠시","jamsi","for a moment"],["좀","jom","a little · please"],["참","cham","really · truly"],["천천히","cheoncheonhi","slowly"],
+    ["함께","hamkke","together"]
+  ]},
+  {id:"numbers2",ko:"숫자2",en:"Numbers & counters",words:[
+    ["하나","hana","one"],["둘","dul","two"],["넷","net","four"],["여섯","yeoseot","six"],
+    ["일곱","ilgop","seven"],["여덟","yeodeol","eight"],["아홉","ahop","nine"],["스물","seumul","twenty"],
+    ["서른","seoreun","thirty"],["마흔","maheun","forty"],["쉰","swin","fifty"],["예순","yesun","sixty"],
+    ["일흔","ilheun","seventy"],["여든","yeodeun","eighty"],["아흔","aheun","ninety"],["오","o","five"],
+    ["구","gu","nine"],["이십","isip","twenty"],["삼십","samsip","thirty"],["사십","sasip","forty"],
+    ["오십","osip","fifty"],["육십","yuksip","sixty"],["칠십","chilsip","seventy"],["팔십","palsip","eighty"],
+    ["구십","gusip","ninety"],["한","han","one (counting)"],["세","se","three (counting)"],["네","ne","four (counting)"],
+    ["스무","seumu","twenty (counting)"],["첫째","cheotjjae","first"],["둘째","duljjae","second"],["셋째","setjjae","third"],
+    ["넷째","netjjae","fourth"],["다섯째","daseotjjae","fifth"],["백","baek","hundred"],["천","cheon","thousand"],
+    ["만","man","ten thousand"],["개월","gaewol","month(s)"],["권","gwon","counter for books"],["마리","mari","counter for animals"],
+    ["명","myeong","counter for people"],["미터","miteo","metre"],["번","beon","counter for times"],["살","sal","years old"],
+    ["센티미터","sentimiteo","centimetre"],["월","wol","month"],["장","jang","counter for sheets"],["쪽","jjok","side · page"],
+    ["퍼센트","peosenteu","percent"],["호","ho","counter for issues/rooms"],["것","geot","thing"],["때문","ttaemun","because of"],
+    ["수","su","way · possibility"],["씨","ssi","Mr. · Ms."]
+  ]},
+  {id:"pronouns2",ko:"대명사",en:"This, that & who, what",words:[
+    ["거","geo","thing (casual)"],["그거","geugeo","that (thing)"],["그것","geugeot","that (thing)"],["그곳","geugot","that place"],
+    ["그쪽","geujjok","that side"],["이거","igeo","this (thing)"],["이것","igeot","this (thing)"],["이곳","igot","this place"],
+    ["이분","ibun","this person"],["이쪽","ijjok","this side"],["저거","jeogeo","that (thing, far)"],["저것","jeogeot","that (thing, far)"],
+    ["저곳","jeogot","that place (far)"],["저쪽","jeojjok","that side (far)"],["너","neo","you (casual)"],["무엇","mueot","what"],
+    ["여러분","yeoreobun","everyone"],["그","geu","that"],["이런","ireon","like this"],["다른","dareun","other · different"],
+    ["모든","modeun","all · every"],["아무","amu","any · whichever"],["어느","eoneu","which"],["어떤","eotteon","what kind of"],
+    ["여러","yeoreo","several · various"],["전","jeon","former · previous"]
+  ]},
+  {id:"expressions",ko:"표현2",en:"Reactions & greetings",words:[
+    ["그래","geurae","okay · right"],["아","a","oh · ah"],["아니요","aniyo","no"],["안녕","annyeong","hi · bye (casual)"],
+    ["어","eo","uh · oh"],["여보세요","yeoboseyo","hello (on the phone)"],["예","ye","yes (polite)"]
+  ]},
+  {id:"hobbies",ko:"취미",en:"Hobbies & entertainment",words:[
+    ["게임","geim","game"],["구경","gugyeong","sightseeing"],["극장","geukjang","theatre · cinema"],["노래","norae","song"],
+    ["등산","deungsan","hiking"],["산책","sanchaek","a walk · stroll"],["수영","suyeong","swimming"],["수영장","suyeongjang","swimming pool"],
+    ["스키","seuki","skiing"],["스포츠","seupocheu","sports"],["야구","yagu","baseball"],["축구","chukgu","soccer"],
+    ["춤","chum","dance"],["취미","chwimi","hobby"],["태권도","taegwondo","taekwondo"],["테니스","teniseu","tennis"],
+    ["파티","pati","party"],["피아노","piano","piano"],["크리스마스","keuriseumaseu","Christmas"],["뉴스","nyuseu","news"],
+    ["꿈","kkum","dream"]
+  ]},
+  {id:"townwork",ko:"동네",en:"Town, places & work",words:[
+    ["거리","geori","street · distance"],["건물","geonmul","building"],["경치","gyeongchi","scenery"],["고향","gohyang","hometown"],
+    ["공휴일","gonghyuil","public holiday"],["교회","gyohoe","church"],["근처","geuncheo","nearby"],["기숙사","gisuksa","dormitory"],
+    ["남쪽","namjjok","south"],["동쪽","dongjjok","east"],["서쪽","seojjok","west"],["북쪽","bukjjok","north"],
+    ["동물","dongmul","animal"],["도착","dochak","arrival"],["박물관","bakmulgwan","museum"],["서점","seojeom","bookstore"],
+    ["우체국","ucheguk","post office"],["운동장","undongjang","sports field"],["정류장","jeongryujang","(bus) stop"],["지도","jido","map"],
+    ["지하","jiha","basement"],["자동차","jadongcha","car"],["전화번호","jeonhwabeonho","phone number"],["주소","juso","address"],
+    ["휴일","hyuil","holiday"],["계획","gyehoek","plan"],["공원","gowon","park"]
+  ]},
+  {id:"body2",ko:"몸2",en:"Body & feelings",words:[
+    ["가슴","gaseum","chest"],["귀","gwi","ear"],["눈물","nunmul","tears"],["목","mok","neck · throat"],
+    ["밑","mit","under · bottom"],["손가락","songarak","finger"],["어깨","eokkae","shoulder"],["입","ip","mouth"],
+    ["잎","ip","leaf"],["코","ko","nose"],["키","ki","height"],["팔","pal","arm"],
+    ["허리","heori","waist"],["힘","him","strength"],["화","hwa","anger"],["기분","gibun","mood · feeling"],
+    ["재미","jaemi","fun"],["생각","saenggak","thought"]
+  ]},
+  {id:"misc",ko:"기타",en:"Everyday odds & ends",words:[
+    ["공","gong","ball"],["공중전화","gongjungjeonhwa","public phone"],["끝","kkeut","the end"],["대답","daedap","answer"],
+    ["대사관","daesagwan","embassy"],["말","mal","words · speech"],["말씀","malsseum","words (honorific)"],["목욕","mogyok","bath"],
+    ["반","ban","class · half"],["번호","beonho","number"],["별","byeol","star"],["보통","botong","usually"],
+    ["사이","sai","between · relationship"],["생일","saeil","birthday"],["생활","saenghwal","life · living"],["샤워","syawo","shower"],
+    ["설명","seolmyeong","explanation"],["세수","sesu","washing one's face"],["소풍","sopung","picnic"],["속","sok","inside"],
+    ["실례","sillye","excuse me"],["역사","yeoksa","history"],["연습","yeonseup","practice"],["요리","yori","cooking · dish"],
+    ["운동","undong","exercise"],["운전","unjeon","driving"],["위험","wiheom","danger"],["인사","insa","greeting"],
+    ["일","il","work · thing · day"],["장미","jangmi","rose"],["점심시간","jeomsimsigan","lunchtime"],["제일","jeil","the most"],
+    ["졸업","joreop","graduation"],["준비","junbi","preparation"],["청소","cheongso","cleaning"],["초대","chodae","invitation"],
+    ["필요","piryo","necessity"],["새","sae","bird"],["슈퍼마켓","syupeomaket","supermarket"],["스트레스","seuteureseu","stress"],
+    ["신문","sinmun","newspaper"],["아파트","apateu","apartment"],["여권","yeogwon","passport"],["약속","yaksok","promise · appointment"],
+    ["팀","tim","team"],["테이블","teibeul","table"],["이제","ije","now"]
+  ]},
+  {id:"leftovers",ko:"남은",en:"A few more essentials",words:[
+    ["가운데","gaunde","middle · centre"],["감사","gamsa","thanks · gratitude"],["강","gang","river"],["걱정","geokjeong","worry"],
+    ["결혼","gyeolhon","marriage"],["결혼식","gyeolhonsik","wedding"],["곳","got","place"],["그동안","geudoan","in the meantime"],
+    ["그릇","geureut","bowl"],["달러","dalleo","dollar"],["담배","dambae","cigarette"],["딸기","ttalgi","strawberry"],
+    ["말씀하다","malsseumhada","to speak (honorific)"],["모두","modu","all · everyone"],["사랑","sarang","love"],["사전","sajeon","dictionary"],
+    ["선물","seonmul","gift · present"],["수업","sueop","class · lesson"],["시작","sijak","beginning"],["식사","siksa","meal"],
+    ["아버지","abeoji","father"],["얘기","yaegi","talk · story"],["어머니","eomeoni","mother"],["여행","yeohaeng","travel · trip"],
+    ["잠","jam","sleep"],["칠","chil","seven"],["후","hu","after"]
+  ]},
 ];
 const VOCAB_ITEMS=[];
 VOCAB_THEMES.forEach(theme=>{
@@ -1801,7 +2009,15 @@ function route(){
   if(h==='#review')startReview();
 }
 window.addEventListener('hashchange',route);
-document.getElementById('backBtn').onclick=()=>go('#home');
+function parentOf(h){
+  if(h.startsWith('#drill-story-'))return '#story-'+h.slice('#drill-story-'.length);
+  if(h.startsWith('#story-'))return '#stories';
+  if(h.startsWith('#drill-vocab-'))return '#vocab-'+h.slice('#drill-vocab-'.length);
+  if(h.startsWith('#vocab-'))return '#vocab';
+  if(h.startsWith('#drill-'))return '#'+h.slice('#drill-'.length);
+  return '#home';
+}
+document.getElementById('backBtn').onclick=()=>go(parentOf(location.hash||'#home'));
 
 /* ===================== HOME ===================== */
 function markWordSeen(){
@@ -2195,7 +2411,7 @@ document.getElementById('againBtn').onclick=()=>{
 };
 
 /* ===================== INIT ===================== */
-(async function(){ await load(); if(speechSynthesis&&speechSynthesis.getVoices().length===0)speechSynthesis.onvoiceschanged=()=>{}; route(); })();
+(async function(){ await load(); bumpStreak(); save(); if(speechSynthesis&&speechSynthesis.getVoices().length===0)speechSynthesis.onvoiceschanged=()=>{}; route(); })();
 </script>
 </body>
 </html>
