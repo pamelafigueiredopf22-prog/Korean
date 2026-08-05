@@ -588,8 +588,8 @@
   <!-- MAKING SENTENCES LEARN -->
   <section class="screen lesson" id="s-build">
     <h1><span style="color:var(--jade)">문장 만들기</span> Making sentences</h1>
-    <p class="sub">Everything so far, working together — build a whole sentence from scratch.</p>
-    <p>The other units teach the pieces one at a time: word order here, particles there, verbs somewhere else. This is where they meet. You'll get an English sentence and build the Korean <b>slot by slot</b> — choosing not just each word, but the <b>right particle</b> for it.</p>
+    <p class="sub">Build a whole sentence from scratch, one piece at a time.</p>
+    <p>Every other unit teaches the pieces separately — word order here, particles there, verbs elsewhere. This is where they come together. You get an English sentence and build the Korean <b>slot by slot</b>, choosing not just each word but the <b>right particle</b> for it.</p>
     <div class="callout">
       That's the real skill: 커피 ends in a vowel, so its object particle is <b>를</b>; 책 ends in a consonant, so it's <b>을</b>. Recognising a finished sentence is easy — <i>choosing</i> each piece is what you're practising here.
     </div>
@@ -601,8 +601,8 @@
   <!-- PLACING PARTICLES LEARN -->
   <section class="screen lesson" id="s-place">
     <h1><span style="color:var(--jade)">조사 넣기</span> Placing particles</h1>
-    <p class="sub">The step up — longer sentences, and the real question: which block does each particle stick to?</p>
-    <p>In English, little words like <b>&ldquo;to&rdquo;</b> and <b>&ldquo;and&rdquo;</b> stand on their own in front of a word: <i>to school</i>, <i>bread and milk</i>. Korean doesn&rsquo;t work that way. A particle is a <b>suffix glued onto one specific block</b>, and putting it on the wrong one changes (or breaks) the meaning. This unit is pure placement practice: you get a bank of particles and decide which block each one belongs to.</p>
+    <p class="sub">The step up: longer sentences, and the real question — which block does each particle stick to?</p>
+    <p>In English, little words like <b>"to"</b> and <b>"and"</b> stand alone in front of a word: <i>to school</i>, <i>bread and milk</i>. Korean glues them on instead. A particle is a <b>suffix stuck onto one specific block</b>, and putting it on the wrong one changes or breaks the meaning. This unit is pure placement practice: you get a bank of particles and decide which block each belongs to.</p>
 
     <div class="rule">
       <div class="rule-head"><span class="rule-ko">에 · 에서</span><span class="rule-en">&ldquo;to&rdquo; / &ldquo;at&rdquo;</span></div>
@@ -759,8 +759,8 @@
       <div class="rule-head"><span class="rule-ko">저 · 나</span><span class="rule-en">I, we</span></div>
       <p>Two sets, split by politeness rather than grammar. <b>저</b> and <b>저희</b> are the humble forms for anyone you’d speak politely to; <b>나</b> and <b>우리</b> are for 반말. Korean shows respect by lowering yourself, not by raising the other person.</p>
       <div class="vocab" id="peopleTable"></div>
-      <p style="margin-top:12px">Two things to watch. The subject forms contract irregularly — 저 + 가 → <b>제가</b>, never 저가. And <b>우리나라</b> stays 우리 even in the politest speech: you can’t humble a country you share with your listener.</p>
-      <p>One quirk with no English parallel: 우리 often covers what English calls <i>my</i>. 우리 엄마 is “my mum”, 우리 집 is “my house”.</p>
+      <p style="margin-top:12px">Two things to watch. The subject form contracts: 저 + 가 becomes <b>제가</b>, never 저가. And <b>우리나라</b> ("our country") keeps 우리 even in polite speech — you don't humble a country you and your listener share.</p>
+      <p>One quirk with no English parallel: 우리 often means what English calls <i>my</i>. 우리 엄마 is "my mum"; 우리 집 is "my house".</p>
     </div>
 
     <div class="rule">
@@ -773,7 +773,7 @@
       <p><b>너</b> isn’t a neutral substitute either: it’s intimate and downward, 반말 only. (Its subject form is 네가, though almost everyone says 니가 aloud to keep it distinct from 내가, “I”.)</p>
       <p>So what do you actually say? In order of preference:</p>
       <div class="vocab" id="youTable"></div>
-      <p style="margin-top:12px">Two details on 씨: attach it to a <b>given name or full name</b>, never a family name on its own (김 씨 is for someone beneath you), and it’s for peers and juniors — calling your boss 민수 씨 would land badly. For seniors, use their title with 님.</p>
+      <p style="margin-top:12px">Two details on 씨. Attach it to a <b>given name or full name</b>, never a family name alone — 김 씨 sounds down on someone. And it's for peers and juniors only: calling your boss 민수 씨 would land badly. For seniors, use their title with 님.</p>
     </div>
 
     <div class="rule">
@@ -1159,7 +1159,14 @@ const SENTENCE_ITEMS=[
   {en:"I learn Korean.",chunks:[{ko:"저는",rom:"jeoneun"},{ko:"한국어를",rom:"hangugeoreul"},{ko:"배워요",rom:"baewoyo"}],why:"Object 한국어를 comes before the verb 배워요."},
   {en:"The cat drinks water.",chunks:[{ko:"고양이가",rom:"goyangiga"},{ko:"물을",rom:"mureul"},{ko:"마셔요",rom:"masyeoyo"}],why:"Subject 고양이가, object 물을, then verb 마셔요."},
   {en:"The weather is nice.",chunks:[{ko:"날씨가",rom:"nalssiga"},{ko:"좋아요",rom:"joayo"}],why:"No object here — just subject 날씨가 and the verb 좋아요 at the end."},
-  {en:"The cat is cute.",chunks:[{ko:"고양이가",rom:"goyangiga"},{ko:"귀여워요",rom:"gwiyeowoyo"}],why:"Even with no object, the verb still comes last."}
+  {en:"The cat is cute.",chunks:[{ko:"고양이가",rom:"goyangiga"},{ko:"귀여워요",rom:"gwiyeowoyo"}],why:"Even with no object, the verb still comes last."},
+  {en:"I meet a friend.",chunks:[{ko:"저는",rom:"jeoneun"},{ko:"친구를",rom:"chingureul"},{ko:"만나요",rom:"mannayo"}],why:"저는 (I) → 친구를 (friend) → 만나요 (meet). Verb last, as always."},
+  {en:"I watch a movie.",chunks:[{ko:"저는",rom:"jeoneun"},{ko:"영화를",rom:"yeonghwareul"},{ko:"봐요",rom:"bwayo"}],why:"Object 영화를 sits before the verb 봐요."},
+  {en:"I buy bread.",chunks:[{ko:"저는",rom:"jeoneun"},{ko:"빵을",rom:"ppangeul"},{ko:"사요",rom:"sayo"}],why:"빵 ends in a consonant, so the object marker is 을: 빵을 → 사요."},
+  {en:"I like kimchi.",chunks:[{ko:"저는",rom:"jeoneun"},{ko:"김치를",rom:"gimchireul"},{ko:"좋아해요",rom:"joahaeyo"}],why:"김치를 (kimchi) comes before 좋아해요 (like). The thing you like is the object."},
+  {en:"I write a letter.",chunks:[{ko:"저는",rom:"jeoneun"},{ko:"편지를",rom:"pyeonjireul"},{ko:"써요",rom:"sseoyo"}],why:"편지를 (letter) → 써요 (write). Verb at the end."},
+  {en:"My friend reads a book.",chunks:[{ko:"친구가",rom:"chinguga"},{ko:"책을",rom:"chaegeul"},{ko:"읽어요",rom:"ilgeoyo"}],why:"A different subject this time: 친구가 (friend) → 책을 (book) → 읽어요 (reads)."},
+  {en:"The child sleeps.",chunks:[{ko:"아이가",rom:"aiga"},{ko:"자요",rom:"jayo"}],why:"No object — subject 아이가, then the verb 자요 at the end."}
 ].map((it,i)=>({...it,id:"sentence-"+i,type:"order",unit:"sentence",tag:"word order"}));
 
 /* --- Guided sentence builder: fill each slot in order, choosing the right particle.
@@ -1211,6 +1218,42 @@ const BUILD_ITEMS=[
      {role:"yesterday (time)",options:[{ko:"어제",rom:"eoje"},{ko:"어제를",rom:"eojereul"}],ans:0,why:"Time words like 어제 take no object particle — they sit at the front on their own."},
      {role:"friend (object)",options:[{ko:"친구를",rom:"chingureul"},{ko:"친구을",rom:"chingueul"}],ans:0,why:"친구 ends in a vowel → 를."},
      {role:"met (past verb)",options:[{ko:"만났어요",rom:"mannasseoyo"},{ko:"만나요",rom:"mannayo"}],ans:0,why:"“Yesterday” needs the past tense 만났어요, not the present 만나요."}
+   ]},
+  {en:"I buy bread.",note:"빵 ends in a consonant → 을.",
+   slots:[
+     {role:"I (topic)",options:[{ko:"저는",rom:"jeoneun"},{ko:"저를",rom:"jeoreul"}],ans:0,why:"The doer as topic is 저는."},
+     {role:"bread (object)",options:[{ko:"빵을",rom:"ppangeul"},{ko:"빵를",rom:"ppangreul"}],ans:0,why:"빵 ends in a consonant → 을, not 를."},
+     {role:"buy (verb)",options:[{ko:"사요",rom:"sayo"},{ko:"사다",rom:"sada"}],ans:0,why:"Polite form 사요 goes last, not the dictionary form 사다."}
+   ]},
+  {en:"I watch a movie.",note:"영화 ends in a vowel → 를.",
+   slots:[
+     {role:"I (topic)",options:[{ko:"저는",rom:"jeoneun"},{ko:"제가",rom:"jega"}],ans:0,why:"Plain statement → topic 저는. 제가 would stress “it's I who…”."},
+     {role:"movie (object)",options:[{ko:"영화를",rom:"yeonghwareul"},{ko:"영화을",rom:"yeonghwaeul"}],ans:0,why:"영화 ends in a vowel → 를."},
+     {role:"watch (verb)",options:[{ko:"봐요",rom:"bwayo"},{ko:"보다",rom:"boda"}],ans:0,why:"Stem 보 + 아요 contracts to 봐요."}
+   ]},
+  {en:"The child drinks milk.",note:"아이 and 우유 both end in vowels → 가 and 를.",
+   slots:[
+     {role:"child (subject)",options:[{ko:"아이가",rom:"aiga"},{ko:"아이이",rom:"aii"}],ans:0,why:"아이 ends in a vowel → 가."},
+     {role:"milk (object)",options:[{ko:"우유를",rom:"uyureul"},{ko:"우유을",rom:"uyueul"}],ans:0,why:"우유 ends in a vowel → 를."},
+     {role:"drinks (verb)",options:[{ko:"마셔요",rom:"masyeoyo"},{ko:"마시다",rom:"masida"}],ans:0,why:"Polite 마셔요 at the end."}
+   ]},
+  {en:"I go to the market.",note:"시장 is a destination → 에.",
+   slots:[
+     {role:"I (topic)",options:[{ko:"저는",rom:"jeoneun"},{ko:"저에",rom:"jeoe"}],ans:0,why:"저는 marks the topic."},
+     {role:"market (destination)",options:[{ko:"시장에",rom:"sijange"},{ko:"시장을",rom:"sijangeul"}],ans:0,why:"시장 is where you're going → 에. 을 would wrongly mark it as an object."},
+     {role:"go (verb)",options:[{ko:"가요",rom:"gayo"},{ko:"가다",rom:"gada"}],ans:0,why:"Polite 가요 at the end."}
+   ]},
+  {en:"I read a book at the library.",note:"도서관 is where the action happens → 에서; 책 ends in a consonant → 을.",
+   slots:[
+     {role:"library (place of action)",options:[{ko:"도서관에서",rom:"doseogwaneseo"},{ko:"도서관에",rom:"doseogwane"}],ans:0,why:"An action happens at 도서관 → 에서. 에 would mean going to it."},
+     {role:"book (object)",options:[{ko:"책을",rom:"chaegeul"},{ko:"책를",rom:"chaekreul"}],ans:0,why:"책 ends in a consonant → 을."},
+     {role:"read (verb)",options:[{ko:"읽어요",rom:"ilgeoyo"},{ko:"읽다",rom:"ikda"}],ans:0,why:"Polite 읽어요 lands last."}
+   ]},
+  {en:"I ate rice yesterday.",note:"Time word first; 밥 ends in a consonant → 을; past tense.",
+   slots:[
+     {role:"yesterday (time)",options:[{ko:"어제",rom:"eoje"},{ko:"어제에",rom:"eojee"}],ans:0,why:"Time words like 어제 take no particle."},
+     {role:"rice (object)",options:[{ko:"밥을",rom:"babeul"},{ko:"밥를",rom:"bapreul"}],ans:0,why:"밥 ends in a consonant → 을."},
+     {role:"ate (past verb)",options:[{ko:"먹었어요",rom:"meogeosseoyo"},{ko:"먹어요",rom:"meogeoyo"}],ans:0,why:"“Yesterday” needs the past 먹었어요, not the present 먹어요."}
    ]}
 ].map((it,i)=>({...it,id:"build-"+i,type:"slotbuild",unit:"build",tag:"build it"}));
 
@@ -1253,7 +1296,31 @@ const PLACE_ITEMS=[
   {en:"I study at home and drink coffee.",
    blocks:[{ko:"집",need:"에서"},{ko:"공부하고",need:null},{ko:"커피",need:"를"},{ko:"마셔요",need:null}],
    bank:["에서","를","에"],
-   why:"집 is where you study → 에서. 커피 is the object → 를. The 고 joining the two verbs sits on 공부하고."}
+   why:"집 is where you study → 에서. 커피 is the object → 를. The 고 joining the two verbs sits on 공부하고."},
+  {en:"I go to the market and buy fruit.",
+   blocks:[{ko:"시장",need:"에"},{ko:"가고",need:null},{ko:"과일",need:"을"},{ko:"사요",need:null}],
+   bank:["에","을","에서","를"],
+   why:"시장 is a destination you go to → 에 (not 에서). 과일 ends in a consonant → 을."},
+  {en:"I read a book at school.",
+   blocks:[{ko:"저",need:"는"},{ko:"학교",need:"에서"},{ko:"책",need:"을"},{ko:"읽어요",need:null}],
+   bank:["는","에서","을","에"],
+   why:"Reading happens at 학교 → 에서. 책 ends in a consonant → 을."},
+  {en:"I met a teacher and a friend.",
+   blocks:[{ko:"선생님",need:"하고"},{ko:"친구",need:"를"},{ko:"만났어요",need:null}],
+   bank:["하고","를","을"],
+   why:"하고 joins the two people, glued to the first: 선생님하고. The pair is the object → 를 on 친구."},
+  {en:"Today I drink tea.",
+   blocks:[{ko:"오늘",need:null},{ko:"저",need:"는"},{ko:"차",need:"를"},{ko:"마셔요",need:null}],
+   bank:["는","를","은","에"],
+   why:"오늘 is a time word — no particle. 저 is the topic → 는. 차 ends in a vowel → 를."},
+  {en:"The weather is cold but nice.",
+   blocks:[{ko:"날씨",need:"가"},{ko:"춥지만",need:null},{ko:"좋아요",need:null}],
+   bank:["가","이","는"],
+   why:"날씨 ends in a vowel → 가. The 지만 (\u201cbut\u201d) is already on 춥지만 — you only place the subject particle."},
+  {en:"I eat bread and drink milk.",
+   blocks:[{ko:"빵",need:"을"},{ko:"먹고",need:null},{ko:"우유",need:"를"},{ko:"마셔요",need:null}],
+   bank:["을","를","은","는"],
+   why:"빵 ends in a consonant → 을; 우유 ends in a vowel → 를. The 고 joining the verbs is already on 먹고."}
 ].map((it,i)=>({...it,id:"place-"+i,type:"attach",unit:"place",tag:"add the particles"}));
 
 // --- Past tense: choose the ending 았/었/했어요 by vowel harmony ---
@@ -2169,12 +2236,12 @@ function stepHTML(u){
     :(doneAny?(u.id==='vocab'?`${doneAny} theme${doneAny>1?'s':''} started`
       :u.id==='stories'?`${doneAny} story${doneAny>1?' set':''} read`
       :`Best ${Math.round(bestShown*100)}% · ${done} round${done>1?'s':''}`)
-     :'Not started yet');
+     :'');
   const started=doneAny>0;
   return `<button class="step${u.status==='soon'?' soon':''}${started?' started':''}" data-go="${u.go}">
     <span class="rail"><span class="dot">${u.ko[0]}</span><span class="line"></span></span>
     <span class="step-body"><span class="step-title"><span class="ko">${u.ko}</span>${u.en}</span>
-    <span class="step-desc">${u.desc}</span><span class="step-meta">${meta}</span></span></button>`;
+    <span class="step-desc">${u.desc}</span>${meta?`<span class="step-meta">${meta}</span>`:''}</span></button>`;
 }
 function renderHome(){
   const path=document.getElementById('path'); path.innerHTML='';
