@@ -85,7 +85,42 @@
   .review-tile .rt-desc{font-size:13px;color:var(--muted);margin-top:1px}
   .review-tile .count{font-family:var(--serif);font-size:24px;font-weight:700;color:var(--persimmon)}
   .review-tile .count.zero{color:var(--jade)}
+  .hw-tile{margin-top:8px;background:var(--jade-soft);border:1.5px solid #CFE2DA;border-radius:16px;
+    padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;width:100%;font-family:inherit;text-align:left}
+  .hw-tile:hover{border-color:var(--jade)}
+  .hw-tile .rt-title{font-family:var(--serif);font-size:18px;font-weight:700}
+  .hw-tile .rt-title .ko{color:var(--jade);margin-right:7px}
+  .hw-tile .rt-desc{font-size:13px;color:var(--muted);margin-top:1px}
+  .hw-level-chip{font-family:var(--serif);font-size:15px;font-weight:700;color:#fff;background:var(--jade);
+    border-radius:999px;min-width:30px;height:30px;display:flex;align-items:center;justify-content:center;padding:0 8px}
   .streak{margin-top:18px;text-align:center;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+  /* homework: recap + level-up suggestion, shown after a mixed round */
+  .hw-recap{margin:8px 0 4px;border-radius:16px;padding:14px 16px;background:var(--card);border:1.5px solid var(--line)}
+  .hw-recap-head{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .hw-recap-group{margin-bottom:12px}
+  .hw-recap-group:last-child{margin-bottom:0}
+  .hw-recap-unit{font-family:var(--serif);font-size:16px;font-weight:700;color:var(--jade);margin-bottom:4px}
+  .hw-recap-rule{font-size:14px;color:var(--ink);margin:0 0 4px;padding-left:14px;position:relative}
+  .hw-recap-rule::before{content:"·";position:absolute;left:2px;color:var(--muted)}
+  .hw-suggest{margin:8px 0 4px;border-radius:16px;padding:16px 18px;background:var(--persimmon-soft);border:1.5px solid #EDD3C7}
+  .hw-sug-text{font-size:15px;margin-bottom:12px}
+  .hw-sug-btns{display:flex;gap:10px}
+  .hw-sug-btns .act{padding:10px 16px;font-size:14.5px}
+  .hw-sug-btns .primary{flex:none}
+
+  /* homework landing screen */
+  .hw-level-head{display:flex;align-items:center;gap:12px;margin:6px 0 4px}
+  .hw-level-num{font-family:var(--serif);font-size:22px;font-weight:700;color:#fff;background:var(--jade);
+    border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex:none}
+  .hw-level-name{font-family:var(--serif);font-size:20px;font-weight:700}
+  .hw-level-desc{font-size:14.5px;color:var(--muted);margin-top:2px}
+  .hw-acc{margin-top:14px;font-size:14px;color:var(--muted)}
+  .hw-picker{display:flex;gap:8px;margin:16px 0 4px;flex-wrap:wrap}
+  .hw-pick{font-family:var(--serif);font-size:16px;font-weight:700;width:42px;height:42px;border-radius:50%;
+    border:1.5px solid var(--line);background:#fff;color:var(--ink);cursor:pointer}
+  .hw-pick.active{background:var(--jade);color:#fff;border-color:var(--jade)}
+  .hw-pick:disabled{opacity:.35;cursor:default}
 
   /* ---------- LESSON (hangul learn) ---------- */
   .lesson h1{font-size:32px;margin-bottom:4px}
@@ -383,6 +418,13 @@
       <span class="wotd-en" id="wotdEn"></span>
     </button>
     <div class="path" id="path"></div>
+    <button class="hw-tile" id="homeworkTile">
+      <span>
+        <span class="rt-title"><span class="ko">숙제</span>Homework</span>
+        <span class="rt-desc" id="hwTileDesc">Mixed practice across everything you know</span>
+      </span>
+      <span class="hw-level-chip" id="hwTileLevel">1</span>
+    </button>
     <button class="review-tile" id="reviewTile">
       <span>
         <span class="rt-title"><span class="ko">복습</span>Review</span>
@@ -391,6 +433,29 @@
       <span class="count" id="reviewCount">0</span>
     </button>
     <div class="streak" id="streak"></div>
+  </section>
+
+  <!-- HOMEWORK LANDING -->
+  <section class="screen lesson" id="s-homework">
+    <h1><span style="color:var(--jade)">숙제</span> Homework</h1>
+    <p class="sub">Mixed practice, drawn from everything you've unlocked so far.</p>
+    <p>Every set mixes card types — Hangul, particles, sentence building, whatever's in your current level — so nothing sits in its own lane. Get something wrong and I'll tell you exactly what and why, then group the rules you slipped on at the end of the set so you see the pattern, not just the miss.</p>
+
+    <div class="hw-level-head">
+      <span class="hw-level-num" id="hwLevelNum">1</span>
+      <span>
+        <span class="hw-level-name" id="hwLevelName"></span>
+        <span class="hw-level-desc" id="hwLevelDesc"></span>
+      </span>
+    </div>
+    <div class="hw-acc" id="hwAcc"></div>
+
+    <div class="hw-suggest" id="hwSuggestLanding" style="display:none"></div>
+
+    <p style="margin-top:20px;font-size:14px;color:var(--muted)">Practise a level you've already unlocked, any time:</p>
+    <div class="hw-picker" id="hwPicker"></div>
+
+    <div class="cta"><button class="act primary" style="width:100%" onclick="go('#drill-homework')">Start homework set →</button></div>
   </section>
 
   <!-- HANGUL LEARN -->
@@ -1053,6 +1118,8 @@
     <div class="score" id="score" role="status" aria-live="polite">
       <div class="big" id="scoreBig"></div><div class="sub" id="scoreSub"></div>
     </div>
+    <div class="hw-suggest" id="hwSuggest" style="display:none"></div>
+    <div class="hw-recap" id="hwRecap" style="display:none"></div>
     <p class="sub" id="drillIntro" style="color:var(--muted);font-size:15px;margin:8px 0 0"></p>
     <div id="drillKey" style="display:none">
       <button class="keybtn" id="keyToggle" aria-expanded="false">Show particle key</button>
@@ -2038,6 +2105,45 @@ const ALL=[...HANGUL_ITEMS,...PRON_ITEMS,...PARTICLE_ITEMS,...COPULA_ITEMS,...SE
   ...VOCAB_ITEMS,...STORY_ITEMS,...DIARY_ITEMS];
 const BY_ID={}; ALL.forEach(it=>BY_ID[it.id]=it);
 
+/* --- Homework: five cumulative levels, mixed sessions drawn straight from the existing item pools --- */
+const HOMEWORK_SIZE=14;
+const HW_POOL_1=[...HANGUL_ITEMS,...PRON_ITEMS];
+const HW_POOL_2=[...HW_POOL_1,...PARTICLE_ITEMS,...COPULA_ITEMS,...SENTENCE_ITEMS];
+const HW_POOL_3=[...HW_POOL_2,...BUILD_ITEMS,...PLACE_ITEMS,...PAST_ITEMS,...TENSE_ITEMS];
+const HW_POOL_4=[...HW_POOL_3,...EVERYDAY_ITEMS,...NEGATION_ITEMS,...CONNECT_ITEMS,...NUMBER_ITEMS,...POLITE_ITEMS,...PEOPLE_ITEMS,...QUESTION_ITEMS,...DOING_ITEMS];
+const HW_POOL_5=[...HW_POOL_4,...VOCAB_ITEMS,...DIARY_ITEMS,...STORY_ITEMS];
+const HOMEWORK_LEVELS=[
+  {n:1,ko:"기초",en:"Foundations",desc:"Hangul & pronunciation"},
+  {n:2,ko:"기본 문법",en:"Core grammar",desc:"+ particles, \u201cA is B\u201d, word order"},
+  {n:3,ko:"문장 쌓기",en:"Building sentences",desc:"+ constructing sentences, particle placement, past / present / future"},
+  {n:4,ko:"대화 문법",en:"Talking & connecting",desc:"+ negation, joining clauses, numbers, politeness, pronouns, questions, requests"},
+  {n:5,ko:"전부 다",en:"Everything",desc:"+ vocabulary, diary lines, story comprehension"}
+];
+const HW_POOLS={1:HW_POOL_1,2:HW_POOL_2,3:HW_POOL_3,4:HW_POOL_4,5:HW_POOL_5};
+const HW_UNLOCK_MIN_ANSWERED=20, HW_UNLOCK_MIN_ACC=0.85;
+function buildHomeworkSet(levelN){
+  const pool=HW_POOLS[levelN]||HW_POOL_1;
+  const mistakeSet=new Set(STATE.mistakes);
+  const weak=pool.filter(it=>mistakeSet.has(it.id));
+  const rest=pool.filter(it=>!mistakeSet.has(it.id));
+  const size=Math.min(HOMEWORK_SIZE,pool.length);
+  const weakPick=shuffle(weak).slice(0,Math.min(weak.length,Math.ceil(size*0.5)));
+  const restPick=shuffle(rest).slice(0,size-weakPick.length);
+  return shuffle([...weakPick,...restPick]);
+}
+function hwStats(levelN){ return (STATE.homework&&STATE.homework.stats[levelN])||{correct:0,total:0}; }
+function hwEligibleToAdvance(levelN){
+  const st=hwStats(levelN);
+  return levelN<5 && levelN===STATE.homework.maxUnlocked && st.total>=HW_UNLOCK_MIN_ANSWERED && (st.correct/st.total)>=HW_UNLOCK_MIN_ACC;
+}
+function unitLabel(u){
+  const found=UNITS.find(x=>x.id===u);
+  if(found)return `${found.ko} ${found.en}`;
+  if(u&&u.startsWith('vocab-'))return '어휘 Vocabulary';
+  if(u&&u.startsWith('story-'))return '이야기 Short stories';
+  return u||'';
+}
+
 const UNITS=[
   {id:"hangul",ko:"한글",en:"Hangul",desc:"Read the Korean alphabet",status:"active",go:"#hangul",sec:"foundations"},
   {id:"pron",ko:"발음",en:"Pronunciation",desc:"Why words aren't said how they're spelled",status:"active",go:"#pron",sec:"foundations"},
@@ -2070,10 +2176,14 @@ const SECTIONS=[
 ];
 
 /* ===================== STORAGE ===================== */
-let STATE={mistakes:[],progress:{},streak:{count:0,last:""},words:{seen:[]},collapsed:[]};
+let STATE={mistakes:[],progress:{},streak:{count:0,last:""},words:{seen:[]},collapsed:[],homework:{maxUnlocked:1,currentLevel:1,stats:{}}};
 async function load(){
   try{const r=await window.storage.get('kr-app'); if(r&&r.value)STATE=Object.assign(STATE,JSON.parse(r.value));}catch(e){}
   if(!STATE.words||!Array.isArray(STATE.words.seen))STATE.words={seen:[]};
+  if(!STATE.homework||typeof STATE.homework!=='object')STATE.homework={maxUnlocked:1,currentLevel:1,stats:{}};
+  if(!STATE.homework.stats||typeof STATE.homework.stats!=='object')STATE.homework.stats={};
+  if(!STATE.homework.maxUnlocked)STATE.homework.maxUnlocked=1;
+  if(!STATE.homework.currentLevel)STATE.homework.currentLevel=1;
 }
 async function save(){ try{await window.storage.set('kr-app',JSON.stringify(STATE));}catch(e){} }
 function today(){return new Date().toISOString().slice(0,10)}
@@ -2103,7 +2213,7 @@ const screens={'#home':'s-home','#hangul':'s-hangul','#drill-hangul':'s-drill',
   '#doing':'s-doing','#drill-doing':'s-drill',
   '#numbers':'s-numbers','#drill-numbers':'s-drill','#connect':'s-connect','#drill-connect':'s-drill',
   '#verbs':'s-verbs','#vocab':'s-vocab','#stories':'s-stories',
-  '#word':'s-word','#review':'s-drill'};
+  '#word':'s-word','#review':'s-drill','#homework':'s-homework','#drill-homework':'s-drill'};
 function go(hash){ if(location.hash!==hash)location.hash=hash; else route(); }
 function route(){
   const h=location.hash||'#home';
@@ -2137,7 +2247,7 @@ function route(){
     '#numbers':'Numbers','#drill-numbers':'Numbers · practice',
     '#connect':'Joining sentences','#drill-connect':'Joining · practice',
     '#verbs':'Common verbs','#vocab':'Vocabulary','#stories':'Short stories',
-    '#word':'Word of the day','#review':'Review'};
+    '#word':'Word of the day','#review':'Review','#homework':'Homework','#drill-homework':'Homework · practice'};
   let crumbText=crumbs[h]||'';
   if(h.startsWith('#drill-vocab-')){const t=VOCAB_THEMES.find(x=>x.id===h.slice('#drill-vocab-'.length));crumbText=(t?t.en:'Vocabulary')+' · practice';}
   else if(h.startsWith('#vocab-')){const t=VOCAB_THEMES.find(x=>x.id===h.slice('#vocab-'.length));crumbText=t?t.en:'Vocabulary';}
@@ -2181,6 +2291,8 @@ function route(){
   if(h==='#drill-polite')startDrill(shuffle(POLITE_ITEMS).slice(0,12),{intro:"Two things mixed: build the formal ending, and judge which level fits the person you're speaking to."});
   if(h==='#drill-people')startDrill(shuffle(PEOPLE_ITEMS),{intro:"Pick what a Korean speaker would actually say. Often the right answer is the one that leaves the pronoun out."});
   if(h==='#word')renderWordScreen();
+  if(h==='#homework')renderHomeworkLanding();
+  if(h==='#drill-homework')startHomework();
   if(h==='#drill-tenses')startDrill(shuffle(TENSE_ITEMS).slice(0,12),{intro:"Pick the right ending. Present follows the same ㅏ/ㅗ rule as the past; future depends on whether the stem ends in a vowel or consonant."});
   if(h==='#drill-sentence')startDrill(shuffle(SENTENCE_ITEMS),{intro:"Tap the words to build each sentence in order. Korean is Subject–Object–Verb — the verb goes last."});
   if(h==='#drill-build')startDrill(shuffle(BUILD_ITEMS),{intro:"Build each sentence one slot at a time. Pick the right form — and the right particle — for each piece, then check."});
@@ -2276,10 +2388,50 @@ function renderHome(){
   const n=STATE.mistakes.length;
   const c=document.getElementById('reviewCount'); c.textContent=n; c.classList.toggle('zero',n===0);
   document.getElementById('streak').textContent = STATE.streak.count>0 ? `🔥 ${STATE.streak.count}-day streak · keep it going` : 'Do one round to start a streak';
+  renderHomeworkTile();
   renderWotd(); markWordSeen();
+}
+function renderHomeworkTile(){
+  const level=STATE.homework.currentLevel;
+  const lvl=HOMEWORK_LEVELS.find(l=>l.n===level)||HOMEWORK_LEVELS[0];
+  document.getElementById('hwTileLevel').textContent=level;
+  const st=hwStats(level);
+  document.getElementById('hwTileDesc').textContent = st.total>0
+    ? `Level ${level} · ${lvl.en} — ${Math.round(100*st.correct/st.total)}% so far`
+    : `Level ${level} · ${lvl.en} — mixed practice`;
+}
+function renderHomeworkLanding(){
+  const level=STATE.homework.currentLevel;
+  const lvl=HOMEWORK_LEVELS.find(l=>l.n===level)||HOMEWORK_LEVELS[0];
+  document.getElementById('hwLevelNum').textContent=level;
+  document.getElementById('hwLevelName').textContent=`${lvl.ko} · ${lvl.en}`;
+  document.getElementById('hwLevelDesc').textContent=lvl.desc;
+  const st=hwStats(level);
+  document.getElementById('hwAcc').textContent = st.total>0
+    ? `${st.correct} / ${st.total} correct so far at this level (${Math.round(100*st.correct/st.total)}%).`
+    : `No rounds yet at this level — start whenever you're ready.`;
+  const sug=document.getElementById('hwSuggestLanding');
+  if(hwEligibleToAdvance(level)){
+    const next=HOMEWORK_LEVELS.find(l=>l.n===level+1);
+    sug.innerHTML=`<div class="hw-sug-text">You're doing well at Level ${level}. Ready for <b>Level ${next.n} · ${next.en}</b>?</div>
+      <div class="hw-sug-btns"><button class="act primary" onclick="hwAdvance(${level+1});renderHomeworkLanding();" >Move up</button><button class="act ghost" onclick="document.getElementById('hwSuggestLanding').style.display='none'">Not yet</button></div>`;
+    sug.style.display='block';
+  } else { sug.style.display='none'; sug.innerHTML=''; }
+  const picker=document.getElementById('hwPicker');
+  picker.innerHTML=HOMEWORK_LEVELS.map(l=>{
+    const locked=l.n>STATE.homework.maxUnlocked;
+    const active=l.n===level;
+    return `<button class="hw-pick${active?' active':''}" ${locked?'disabled':''} onclick="hwSwitchLevel(${l.n})">${l.n}</button>`;
+  }).join('');
+}
+function hwSwitchLevel(n){
+  if(n>STATE.homework.maxUnlocked)return;
+  STATE.homework.currentLevel=n; save();
+  renderHomeworkLanding();
 }
 document.getElementById('wotdCard').onclick=()=>go('#word');
 document.getElementById('reviewTile').onclick=()=>go('#review');
+document.getElementById('homeworkTile').onclick=()=>go('#homework');
 
 /* ===================== HANGUL LESSON ===================== */
 function tileHTML(pair){return `<button class="tile" onclick="speak('${pair[0]}')"><div class="han">${pair[0]}</div><div class="snd">${pair[1]}</div></button>`}
@@ -2293,14 +2445,21 @@ function renderHangulLesson(){
 
 /* ===================== DRILL ENGINE ===================== */
 let current=[], mode='drill', SEL={}, checked=false;
+window.__debugCurrent=()=>current; // read-only test hook, no behavioural effect
 function startDrill(items,opts){
   mode='drill'; current=items;
   document.getElementById('drillEmpty').style.display='none';
   document.getElementById('actionBar').classList.remove('hidden');
   document.getElementById('drillIntro').textContent=opts.intro||'';
   document.getElementById('score').classList.remove('show','low');
+  hideHomeworkPanels();
   showDrillKey(!!opts.showKey);
   renderCards();
+}
+function hideHomeworkPanels(){
+  const rc=document.getElementById('hwRecap'), sg=document.getElementById('hwSuggest');
+  if(rc){rc.style.display='none';rc.innerHTML='';}
+  if(sg){sg.style.display='none';sg.innerHTML='';}
 }
 function showDrillKey(on){
   const box=document.getElementById('drillKey');
@@ -2310,6 +2469,7 @@ function showDrillKey(on){
 function startReview(){
   mode='review';
   showDrillKey(false);
+  hideHomeworkPanels();
   const ids=[...STATE.mistakes];
   document.getElementById('drillIntro').textContent='';
   document.getElementById('score').classList.remove('show','low');
@@ -2324,6 +2484,54 @@ function startReview(){
   document.getElementById('drillIntro').textContent='Get one right and it leaves your review list.';
   current=shuffle(ids.map(id=>BY_ID[id]).filter(Boolean));
   renderCards();
+}
+function startHomework(){
+  mode='homework';
+  showDrillKey(false);
+  const level=STATE.homework.currentLevel;
+  const lvl=HOMEWORK_LEVELS.find(l=>l.n===level)||HOMEWORK_LEVELS[0];
+  current=buildHomeworkSet(level);
+  document.getElementById('drillEmpty').style.display='none';
+  document.getElementById('actionBar').classList.remove('hidden');
+  document.getElementById('drillIntro').textContent=`Level ${level} · ${lvl.en} — ${current.length} mixed items. Get one wrong and I'll show you the rule again.`;
+  document.getElementById('score').classList.remove('show','low');
+  hideHomeworkPanels();
+  renderCards();
+}
+function renderHomeworkRecap(wrongItems){
+  const box=document.getElementById('hwRecap'); if(!box)return;
+  if(!wrongItems.length){ box.style.display='none'; box.innerHTML=''; return; }
+  const groups={};
+  wrongItems.forEach(it=>{
+    const key=it.unit||'other';
+    (groups[key]=groups[key]||{label:unitLabel(key),rules:new Set()});
+    const rule=(it.why||it.explain||'').trim();
+    if(rule)groups[key].rules.add(rule);
+  });
+  const html=Object.values(groups).map(g=>
+    `<div class="hw-recap-group"><div class="hw-recap-unit">${g.label}</div>${[...g.rules].map(r=>`<div class="hw-recap-rule">${r}</div>`).join('')}</div>`
+  ).join('');
+  box.innerHTML=`<div class="hw-recap-head">Rules to review</div>${html}`;
+  box.style.display='block';
+}
+function renderHomeworkSuggestion(levelN){
+  const box=document.getElementById('hwSuggest'); if(!box)return;
+  if(!hwEligibleToAdvance(levelN)){ box.style.display='none'; box.innerHTML=''; return; }
+  const next=HOMEWORK_LEVELS.find(l=>l.n===levelN+1);
+  box.innerHTML=`<div class="hw-sug-text">You're doing well at Level ${levelN}. Ready for <b>Level ${next.n} · ${next.en}</b>?</div>
+    <div class="hw-sug-btns"><button class="act primary" onclick="hwAdvance(${levelN+1})">Move up</button><button class="act ghost" onclick="hwDismissSuggestion()">Not yet</button></div>`;
+  box.style.display='block';
+}
+function hwAdvance(levelN){
+  STATE.homework.maxUnlocked=Math.max(STATE.homework.maxUnlocked,levelN);
+  STATE.homework.currentLevel=levelN;
+  save();
+  const box=document.getElementById('hwSuggest'); if(box){box.style.display='none';box.innerHTML='';}
+  const intro=document.getElementById('drillIntro');
+  if(intro)intro.textContent=`Moved up to Level ${levelN}. Tap “New round” to start a set here.`;
+}
+function hwDismissSuggestion(){
+  const box=document.getElementById('hwSuggest'); if(box){box.style.display='none';box.innerHTML='';}
 }
 function cardHTML(it,pos){
   const head=`<div class="top"><span class="chip">${it.type==='particle'
@@ -2616,6 +2824,7 @@ function renderDiaryKit(){
 function check(){
   checked=true;
   let correct=0;
+  const wrongThisRound=[];
   const cards=[...document.querySelectorAll('#cards .card')];
   current.forEach((it,pos)=>{
     const card=cards[pos], v=card.querySelector('.verdict');
@@ -2690,14 +2899,22 @@ function check(){
       if(it.note && !shown.includes(it.note)) tail=`<span class="note-tail">${it.note}</span>`;
     } else tail=it.why||it.explain||'';
     if(good){correct++;card.classList.add('correct');v.innerHTML=goodMsg+tail;if(mode==='review')clearMistake(it.id);}
-    else{card.classList.add('wrong');v.innerHTML=wrongMsg+tail;addMistake(it.id);}
+    else{card.classList.add('wrong');v.innerHTML=wrongMsg+tail;addMistake(it.id);wrongThisRound.push(it);}
   });
   // progress
-  const unit = mode==='review' ? null : current[0].unit;
+  const unit = (mode==='drill') ? current[0].unit : null;
   if(unit){
     const p=STATE.progress[unit]||{best:0,rounds:0};
     p.rounds=(p.rounds||0)+1; const pct=correct/current.length; if(pct>(p.best||0))p.best=pct;
     STATE.progress[unit]=p;
+  }
+  if(mode==='homework'){
+    const lvl=STATE.homework.currentLevel;
+    const st=STATE.homework.stats[lvl]||{correct:0,total:0};
+    st.correct+=correct; st.total+=current.length;
+    STATE.homework.stats[lvl]=st;
+    renderHomeworkRecap(wrongThisRound);
+    renderHomeworkSuggestion(lvl);
   }
   bumpStreak(); save();
   const s=document.getElementById('score'); s.classList.add('show'); s.classList.toggle('low',correct/current.length<0.6);
@@ -2713,6 +2930,7 @@ _kt.onclick=()=>{const open=_kp.classList.toggle('open');_kt.setAttribute('aria-
 document.getElementById('checkBtn').onclick=check;
 document.getElementById('againBtn').onclick=()=>{
   if(mode==='review')startReview();
+  else if(mode==='homework')startHomework();
   else{const h=location.hash; route();} // reshuffle same unit
 };
 
