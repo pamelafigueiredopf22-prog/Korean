@@ -147,6 +147,7 @@
   .card{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 16px 18px}
   .card .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
   .chip{display:inline-flex;gap:8px;align-items:baseline;border:1.5px solid var(--line);border-radius:8px;padding:4px 10px;background:#fff}
+  .chip-group{display:inline-flex;gap:6px;flex-wrap:wrap}
   .chip .role{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
   .chip .pair{font-family:var(--serif);font-size:15px}
   .num{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
@@ -267,6 +268,8 @@
   .wotd-ko{font-family:var(--serif);font-size:26px;font-weight:700}
   .wotd-rom{font-size:14px;color:var(--muted);font-style:italic}
   .wotd-en{display:block;font-size:14.5px;color:var(--muted);margin-top:2px}
+  .date-card{margin-top:10px;background:var(--persimmon-soft)}
+  .date-card .wotd-label{color:var(--persimmon)}
   .wordcard{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:22px 18px;text-align:center;margin:10px 0 4px}
   .wtype{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
     border:1.5px solid var(--line);border-radius:8px;padding:3px 10px;background:#fff;margin-bottom:12px}
@@ -347,7 +350,15 @@
   .sline-speak{flex:none;width:34px;height:34px;border-radius:50%;border:1.5px solid var(--jade);background:var(--jade-soft);
     color:var(--jade);font-size:12px;cursor:pointer;margin-top:2px}
   .sline-body{flex:1}
-  .sline-ko{font-family:var(--serif);font-size:20px;line-height:1.5;color:var(--ink)}
+  .sline-ko{font-family:var(--serif);font-size:20px;line-height:1.7;color:var(--ink)}
+  .word{cursor:pointer;border-radius:5px;padding:0 2px;transition:background-color .12s}
+  .word:hover{background:var(--jade-soft)}
+  .word.active{background:var(--jade);color:#fff}
+  .word-detail{display:none;margin-top:9px;padding:10px 12px;border-radius:11px;background:var(--jade-soft);border:1px solid #CFE2DA}
+  .word-detail.show{display:flex;flex-direction:column;gap:2px}
+  .wd-surface{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--jade)}
+  .wd-gloss{font-size:14.5px;color:var(--ink)}
+  .wd-note{font-size:13px;color:var(--muted);margin-top:3px;line-height:1.5}
   .sline-meaning{display:none;margin-top:7px;padding-top:7px;border-top:1px dashed var(--line)}
   .sline.open .sline-meaning,.storylines.revealed .sline-meaning{display:block}
   .sline-rom{display:block;font-size:13px;color:var(--muted);font-style:italic}
@@ -386,6 +397,28 @@
   .stripchip b{font-family:var(--serif);color:var(--jade)}
   .stripchip:hover{border-color:var(--jade)}
 
+  /* writing practice */
+  .write-prompt{display:flex;align-items:baseline;justify-content:center;gap:12px;margin:18px 0 10px}
+  .write-big{font-family:var(--serif);font-size:64px;color:var(--jade);line-height:1}
+  .write-rom{font-size:16px;color:var(--muted);font-style:italic}
+  .write-canvas-wrap{display:flex;justify-content:center}
+  #writeCanvas{width:min(320px,84vw);aspect-ratio:1/1;background:#fff;border:1.5px solid var(--line);
+    border-radius:18px;touch-action:none;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+  .write-controls{display:flex;gap:10px;margin-top:14px;align-items:stretch}
+  .wbtn{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:0 16px;
+    font-family:inherit;font-size:14.5px;color:var(--ink);cursor:pointer}
+  .wbtn:hover{border-color:var(--jade)}
+  .write-feedback{margin-top:14px;border-radius:14px;padding:14px 16px;border:1.5px solid var(--line);background:var(--card)}
+  .write-feedback.good{background:var(--jade-soft);border-color:#CFE2DA}
+  .write-feedback.close{background:#FBF3E3;border-color:#EADFC0}
+  .write-feedback.off{background:var(--persimmon-soft);border-color:#EDD3C7}
+  .wf-verdict{font-weight:700;font-size:15px;margin-bottom:8px}
+  .wf-ref{display:flex;align-items:center;gap:12px}
+  .wf-ref-ch{font-family:var(--serif);font-size:34px;color:var(--jade);line-height:1}
+  .wf-ref-hint{font-size:13.5px;color:var(--muted);line-height:1.5}
+  .write-foot{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+  .write-foot span{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+
   /* diary vocab reference */
   .vocab{display:flex;flex-direction:column;border:1.5px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card);margin:8px 0 4px}
   .vrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;
@@ -416,6 +449,12 @@
       <span class="wotd-label">Word of the day</span>
       <span class="wotd-main"><span class="wotd-ko" id="wotdKo"></span><span class="wotd-rom" id="wotdRom"></span></span>
       <span class="wotd-en" id="wotdEn"></span>
+    </button>
+    <button class="wotd date-card" id="dateCard">
+      <span class="wotd-label">Today's date</span>
+      <span class="wotd-main"><span class="wotd-ko" id="dateKo" style="font-size:20px"></span></span>
+      <span class="wotd-rom" id="dateRom" style="display:block;margin-top:3px"></span>
+      <span class="wotd-en" id="dateEn"></span>
     </button>
     <div class="path" id="path"></div>
     <button class="hw-tile" id="homeworkTile">
@@ -490,6 +529,29 @@
 
     <div class="cta">
       <button class="act primary" style="width:100%" onclick="go('#drill-hangul')">Practise these sounds →</button>
+      <button class="act" style="width:100%;margin-top:10px" onclick="go('#write')">✍️ Practise writing them →</button>
+    </div>
+  </section>
+
+  <!-- WRITING PRACTICE -->
+  <section class="screen lesson" id="s-write">
+    <h1><span style="color:var(--jade)">쓰기</span> Writing practice</h1>
+    <p class="sub">Draw each basic letter with your finger — 14 consonants, 10 vowels.</p>
+    <p style="font-size:13.5px;color:var(--muted)">This checks the overall shape and roughly the stroke order — it's a forgiving check, not an exact one. The correct shape always shows after you check, so use it either way.</p>
+    <div class="write-prompt">
+      <span class="write-big" id="writeBig"></span>
+      <span class="write-rom" id="writeRom"></span>
+    </div>
+    <div class="write-canvas-wrap"><canvas id="writeCanvas"></canvas></div>
+    <div class="write-controls">
+      <button class="wbtn" onclick="undoWriting()">Undo</button>
+      <button class="wbtn" onclick="clearWriting()">Clear</button>
+      <button class="act primary" style="flex:1" onclick="checkWriting()">Check</button>
+    </div>
+    <div class="write-feedback" id="writeFeedback" style="display:none"></div>
+    <div class="write-foot">
+      <span id="writeCounter"></span>
+      <button class="act" onclick="nextJamo()">Next →</button>
     </div>
   </section>
 
@@ -1086,6 +1148,7 @@
   <section class="screen lesson" id="s-story">
     <h1 id="storyTitle"></h1>
     <p class="sub" id="storySub"></p>
+    <p style="font-size:13px;color:var(--muted);margin:-8px 0 4px">Tap any word in a line for its meaning and what it's doing there.</p>
     <div class="reveal-bar"><button class="reveal-all" id="storyReveal" onclick="toggleStoryMeanings(this)">Show all meanings</button></div>
     <div class="storylines" id="storyLines"></div>
     <div class="newwords" id="storyNew" style="display:none"></div>
@@ -1160,6 +1223,37 @@ const DOUBLE_CONS=[
 const SYLL=[
   ["가","ga"],["나","na"],["다","da"],["마","ma"],["바","ba"],["사","sa"],
   ["자","ja"],["하","ha"],["고","go"],["노","no"],["두","du"],["미","mi"]
+];
+
+/* --- Writing practice: draw each basic jamo with a finger, checked against its stroke shape.
+   strokes: each entry is a direction-bucket sequence for one pen-stroke ('circle' for a loop).
+   Vowels are matched as an unordered set (see matchStrokes) since sources differ on tick-vs-line order;
+   consonants are matched in sequence, since their first stroke is unambiguous across every source checked. --- */
+const JAMO_WRITE=[
+  {ch:"ㄱ",rom:"g",kind:"consonant",strokes:[["right","down"]],hint:"One stroke: right, then turn down."},
+  {ch:"ㄴ",rom:"n",kind:"consonant",strokes:[["down","right"]],hint:"One stroke: down, then turn right — never start with the flat line."},
+  {ch:"ㄷ",rom:"d",kind:"consonant",strokes:[["right"],["down"],["right"]],hint:"Three strokes: top line right, then down the left side, then bottom line right."},
+  {ch:"ㄹ",rom:"r",kind:"consonant",strokes:[["right","down"],["right","down"],["right"]],hint:"Three strokes, each with a corner: right-down, right-down, then a line right along the bottom."},
+  {ch:"ㅁ",rom:"m",kind:"consonant",strokes:[["down"],["right","down"],["right"]],hint:"Three strokes: left side down, a corner across the top and down the right side, then the bottom line."},
+  {ch:"ㅂ",rom:"b",kind:"consonant",strokes:[["down"],["down"],["right"],["right"]],hint:"Four strokes: left side down, right side down, then two crossbars left to right."},
+  {ch:"ㅅ",rom:"s",kind:"consonant",strokes:[["down-left"],["down-right"]],hint:"Two strokes, like a small roof: down-left, then down-right from near the same top point."},
+  {ch:"ㅇ",rom:"(silent)",kind:"consonant",strokes:["circle"],hint:"One stroke: a full circle."},
+  {ch:"ㅈ",rom:"j",kind:"consonant",strokes:[["right"],["down-left"],["down-right"]],hint:"Three strokes: a short line right along the top, then ㅅ's roof shape underneath — down-left, down-right."},
+  {ch:"ㅊ",rom:"ch",kind:"consonant",strokes:[["down-right"],["right"],["down-left"],["down-right"]],hint:"Four strokes: a small tick, then ㅈ's three strokes underneath it."},
+  {ch:"ㅋ",rom:"k",kind:"consonant",strokes:[["right","down"],["right"]],hint:"Two strokes: ㄱ's corner (right, then down), then a short crossing line."},
+  {ch:"ㅌ",rom:"t",kind:"consonant",strokes:[["right"],["right"],["down"],["right"]],hint:"Four strokes: ㄷ's three lines, plus one extra line through the middle."},
+  {ch:"ㅍ",rom:"p",kind:"consonant",strokes:[["right"],["down"],["down"],["right"]],hint:"Four strokes: a top line, two legs down, and a bottom line — like a table."},
+  {ch:"ㅎ",rom:"h",kind:"consonant",strokes:[["down-right"],["right"],"circle"],hint:"Three strokes: a small tick, a line across, then a circle underneath."},
+  {ch:"ㅏ",rom:"a",kind:"vowel",strokes:[["down"],["right"]],hint:"A tall vertical line, with a short tick pointing right partway down."},
+  {ch:"ㅑ",rom:"ya",kind:"vowel",strokes:[["down"],["right"],["right"]],hint:"A tall vertical line, with two short ticks pointing right."},
+  {ch:"ㅓ",rom:"eo",kind:"vowel",strokes:[["down"],["left"]],hint:"A tall vertical line, with a short tick pointing left."},
+  {ch:"ㅕ",rom:"yeo",kind:"vowel",strokes:[["down"],["left"],["left"]],hint:"A tall vertical line, with two short ticks pointing left."},
+  {ch:"ㅗ",rom:"o",kind:"vowel",strokes:[["right"],["down"]],hint:"A wide horizontal line, with a short tick pointing down."},
+  {ch:"ㅛ",rom:"yo",kind:"vowel",strokes:[["right"],["down"],["down"]],hint:"A wide horizontal line, with two short ticks pointing down."},
+  {ch:"ㅜ",rom:"u",kind:"vowel",strokes:[["right"],["up"]],hint:"A wide horizontal line, with a short tick pointing up."},
+  {ch:"ㅠ",rom:"yu",kind:"vowel",strokes:[["right"],["up"],["up"]],hint:"A wide horizontal line, with two short ticks pointing up."},
+  {ch:"ㅡ",rom:"eu",kind:"vowel",strokes:[["right"]],hint:"One flat horizontal line."},
+  {ch:"ㅣ",rom:"i",kind:"vowel",strokes:[["down"]],hint:"One straight vertical line."}
 ];
 // accepted romanisation variants for the sound drill
 const ACCEPT={a:["a"],ya:["ya"],eo:["eo"],yeo:["yeo"],o:["o"],yo:["yo"],u:["u"],yu:["yu"],eu:["eu"],i:["i","ee"],
@@ -1524,15 +1618,15 @@ const PRON_ITEMS=[
    why:"Here ㅎ comes second: [ㄱ] + ㅎ → ㅋ, giving 추카."},
   {word:"백화점",mean:"department store",say:"배콰점",rom:["baekwajeom","paekwajeom"],tag:"aspirating",
    why:"[ㄱ] + ㅎ → ㅋ, giving 배·콰·점."},
-  {word:"많다",mean:"to be many",say:"만타",rom:["manta","mantha"],tag:"aspirating",
-   why:"The ㅎ of ㄶ aspirates the following ㄷ → ㅌ, giving 만타."},
+  {word:"많다",mean:"to be many",say:"만타",rom:["manta","mantha"],tag:["double batchim","aspirating"],
+   why:"많 has the double batchim ㄶ (ㄴ+ㅎ). The ㅎ half aspirates the following ㄷ → ㅌ, giving 만타."},
   // ㅎ 탈락 · ㅎ dropping
   {word:"좋아요",mean:"it's good",say:"조아요",rom:["joayo","choayo"],tag:"ㅎ dropping",
    why:"ㅎ before a vowel simply vanishes — not “조하요”, just 조아요."},
-  {word:"많이",mean:"a lot",say:"마니",rom:["mani","manhi"],tag:"ㅎ dropping",
-   why:"ㅎ drops, then ㄴ links across → 마니."},
-  {word:"싫어요",mean:"I dislike it",say:"시러요",rom:["sireoyo","shireoyo"],tag:"ㅎ dropping",
-   why:"ㅎ drops and ㄹ links across → 시러요."},
+  {word:"많이",mean:"a lot",say:"마니",rom:["mani","manhi"],tag:["double batchim","ㅎ dropping"],
+   why:"많 has the double batchim ㄶ. Before a vowel the ㅎ half drops, and the ㄴ links across → 마니."},
+  {word:"싫어요",mean:"I dislike it",say:"시러요",rom:["sireoyo","shireoyo"],tag:["double batchim","ㅎ dropping"],
+   why:"싫 has the double batchim ㅀ (ㄹ+ㅎ). Before a vowel the ㅎ half drops, and the ㄹ links across → 시러요."},
   {word:"놓아요",mean:"I put it down",say:"노아요",rom:["noayo"],tag:"ㅎ dropping",
    why:"ㅎ vanishes before the vowel → 노아요."},
   // 구개음화 · palatalising
@@ -1543,14 +1637,14 @@ const PRON_ITEMS=[
   {word:"해돋이",mean:"sunrise",say:"해도지",rom:["haedoji","haedodji"],tag:"palatalising",
    why:"ㄷ before 이 becomes ㅈ → 해도지."},
   // 겹받침 · double batchim
-  {word:"읽다",mean:"to read",say:"익따",rom:["ikda","ikta","iktta","ikdda"],tag:"double batchim",
-   why:"Of ㄺ only [ㄱ] sounds, and it then tenses the ㄷ → 익따. (But 읽어요 links: 일거요.)"},
-  {word:"없다",mean:"to not exist",say:"업따",rom:["eopda","eopta","eoptta"],tag:"double batchim",
-   why:"Of ㅄ only [ㅂ] sounds, which then tenses the ㄷ → 업따."},
+  {word:"읽다",mean:"to read",say:"익따",rom:["ikda","ikta","iktta","ikdda"],tag:["double batchim","tensing"],
+   why:"읽 has the double batchim ㄺ. Of the two, only [ㄱ] sounds, and that [ㄱ] then tenses the following ㄷ → 익따. (But 읽어요 links instead, since a vowel follows: 일거요.)"},
+  {word:"없다",mean:"to not exist",say:"업따",rom:["eopda","eopta","eoptta"],tag:["double batchim","tensing"],
+   why:"없 has the double batchim ㅄ. Of the two, only [ㅂ] sounds, and that [ㅂ] then tenses the following ㄷ → 업따."},
   {word:"값",mean:"price",say:"갑",rom:["gap","kap","gab"],tag:"double batchim",
-   why:"Of ㅄ only [ㅂ] survives at the end → 갑."},
-  {word:"앉다",mean:"to sit",say:"안따",rom:["anda","anta","antta"],tag:"double batchim",
-   why:"Of ㄵ only [ㄴ] sounds, and the ㄷ tenses after it → 안따."}
+   why:"값 has the double batchim ㅄ. Of the two, only [ㅂ] survives at the end of the word → 갑. There's no following consonant here to tense, so this is the simplification rule on its own."},
+  {word:"앉다",mean:"to sit",say:"안따",rom:["anda","anta","antta"],tag:["double batchim","tensing"],
+   why:"앉 has the double batchim ㄵ. Of the two, only [ㄴ] sounds, and the following ㄷ tenses after it → 안따."}
 ].map((it,i)=>({...it,id:"pron-"+i,type:"pron",unit:"pron",answer:it.say,
   accept:[...it.rom,it.say]}));
 
@@ -1681,6 +1775,43 @@ const SINO_BIG=[
   {val:"10,000",ko:"만",rom:"man",parts:"ten-thousand"},
   {val:"365",ko:"삼백육십오",rom:"sam-baek-yuk-sip-o",parts:"삼백 (300) + 육십 (60) + 오 (5)"}
 ];
+
+/* --- General Sino-Korean number builder (1-9999), used for today's date --- */
+function sinoDigits(n){
+  const D=['','일','이','삼','사','오','육','칠','팔','구'], P=['','십','백','천'];
+  if(n===0)return'영';
+  const str=String(n); let s='';
+  for(let i=0;i<str.length;i++){
+    const d=+str[i], place=str.length-1-i;
+    if(d===0)continue;
+    if(place===0)s+=D[d]; else{ if(d!==1)s+=D[d]; s+=P[place]; }
+  }
+  return s;
+}
+function sinoDigitsRom(n){
+  const D=['','il','i','sam','sa','o','yuk','chil','pal','gu'], P=['','sip','baek','cheon'];
+  if(n===0)return'yeong';
+  const str=String(n), toks=[];
+  for(let i=0;i<str.length;i++){
+    const d=+str[i], place=str.length-1-i;
+    if(d===0)continue;
+    if(place===0)toks.push(D[d]); else{ if(d!==1)toks.push(D[d]); toks.push(P[place]); }
+  }
+  return toks.join('-');
+}
+const WEEKDAY_KO=['일요일','월요일','화요일','수요일','목요일','금요일','토요일']; // JS getDay(): 0=Sun
+const WEEKDAY_ROM=['il-yoil','wol-yoil','hwa-yoil','su-yoil','mok-yoil','geum-yoil','to-yoil'];
+function koreanMonth(m){ if(m===6)return{ko:'유월',rom:'yu-wol'}; if(m===10)return{ko:'시월',rom:'si-wol'}; return{ko:sinoDigits(m)+'월',rom:sinoDigitsRom(m)+'-wol'}; }
+function koreanDate(d){
+  const y=d.getFullYear(), m=d.getMonth()+1, day=d.getDate(), wd=d.getDay();
+  const mo=koreanMonth(m);
+  return {
+    ko: `${sinoDigits(y)}년 ${mo.ko} ${sinoDigits(day)}일 ${WEEKDAY_KO[wd]}`,
+    rom: `${sinoDigitsRom(y)}-nyeon ${mo.rom} ${sinoDigitsRom(day)}-il ${WEEKDAY_ROM[wd]}`,
+    en: d.toLocaleDateString('en-GB',{weekday:'long',year:'numeric',month:'long',day:'numeric'})
+  };
+}
+
 const NATIVE_TENS=[
   {val:"20",ko:"스물",rom:"seumul"},{val:"30",ko:"서른",rom:"seoreun"},{val:"40",ko:"마흔",rom:"maheun"},
   {val:"50",ko:"쉰",rom:"swin"},{val:"60",ko:"예순",rom:"yesun"},{val:"70",ko:"일흔",rom:"ilheun"},
@@ -1790,12 +1921,31 @@ const STORIES=[
   {id:"day",ko:"나의 하루",en:"My day",intro:"A simple past-tense day — every word here you've already drilled.",
    new:[],
    lines:[
-     {ko:"오늘 아침에 일어났어요.",rom:"oneul achime ireonasseoyo",en:"This morning I got up."},
-     {ko:"커피를 마시고 빵을 먹었어요.",rom:"keopireul masigo ppangeul meogeosseoyo",en:"I drank coffee and ate bread."},
-     {ko:"그리고 친구를 만났어요.",rom:"geurigo chingureul mannasseoyo",en:"And I met a friend."},
-     {ko:"우리는 같이 시장에 갔어요.",rom:"urineun gachi sijange gasseoyo",en:"We went to the market together."},
-     {ko:"시장에서 과일을 샀어요.",rom:"sijangeseo gwaireul sasseoyo",en:"At the market we bought fruit."},
-     {ko:"오늘은 정말 재미있었어요.",rom:"oneureun jeongmal jaemiisseosseoyo",en:"Today was really fun."}
+     {ko:"오늘 아침에 일어났어요.",rom:"oneul achime ireonasseoyo",en:"This morning I got up.",
+      tokens:[{t:"오늘",g:"today"},{t:"아침에",g:"in the morning",n:"에 marks a point in time here — the same 에 you know from destinations, just used for 'when' instead of 'where to'."},
+        {t:"일어났어요.",g:"got up",n:"past tense of 일어나다 (to get up): stem 일어나 + 았어요 → 일어났어요."}]},
+     {ko:"커피를 마시고 빵을 먹었어요.",rom:"keopireul masigo ppangeul meogeosseoyo",en:"I drank coffee and ate bread.",
+      tokens:[{t:"커피를",g:"coffee (object)",n:"커피 ends in a vowel → object marker 를."},
+        {t:"마시고",g:"drink, and…",n:"stem 마시 + -고 ('and'), joining to the next clause. -고 attaches straight to the stem, no vowel harmony."},
+        {t:"빵을",g:"bread (object)",n:"빵 ends in a consonant → object marker 을."},
+        {t:"먹었어요.",g:"ate",n:"past tense of 먹다: stem 먹 + 었어요."}]},
+     {ko:"그리고 친구를 만났어요.",rom:"geurigo chingureul mannasseoyo",en:"And I met a friend.",
+      tokens:[{t:"그리고",g:"and (then)",n:"a sentence-starting connector, joining this whole sentence to the one before — different from the -고 that joins verbs mid-sentence."},
+        {t:"친구를",g:"friend (object)",n:"친구 ends in a vowel → 를."},
+        {t:"만났어요.",g:"met",n:"past tense of 만나다: stem 만나 + 았어요 → contracts to 만났어요."}]},
+     {ko:"우리는 같이 시장에 갔어요.",rom:"urineun gachi sijange gasseoyo",en:"We went to the market together.",
+      tokens:[{t:"우리는",g:"we (topic)",n:"우리 ends in a vowel → topic marker 는."},
+        {t:"같이",g:"together"},
+        {t:"시장에",g:"to the market",n:"시장 is a destination → 에 ('to')."},
+        {t:"갔어요.",g:"went",n:"past tense of 가다: stem 가 + 았어요 → contracts to 갔어요."}]},
+     {ko:"시장에서 과일을 샀어요.",rom:"sijangeseo gwaireul sasseoyo",en:"At the market we bought fruit.",
+      tokens:[{t:"시장에서",g:"at the market",n:"시장 is where the action happens → 에서 ('at'), not 에 — compare the line above, where 시장에 meant going there."},
+        {t:"과일을",g:"fruit (object)",n:"과일 ends in a consonant → 을."},
+        {t:"샀어요.",g:"bought",n:"past tense of 사다: stem 사 + 았어요 → contracts to 샀어요."}]},
+     {ko:"오늘은 정말 재미있었어요.",rom:"oneureun jeongmal jaemiisseosseoyo",en:"Today was really fun.",
+      tokens:[{t:"오늘은",g:"today (topic)",n:"오늘 ends in a consonant → topic marker 은."},
+        {t:"정말",g:"really"},
+        {t:"재미있었어요.",g:"was fun",n:"past tense of 재미있다 (to be fun): stem 재미있 + 었어요."}]}
    ],
    questions:[
      {en:"(My day) What did they buy at the market?",options:[{ko:"과일",rom:"fruit"},{ko:"빵",rom:"bread"}],ansIndex:0,full:"과일",
@@ -1806,12 +1956,32 @@ const STORIES=[
   {id:"weather",ko:"날씨",en:"The weather",intro:"Present, want-to, can't and future all in six lines.",
    new:[["하지만","hajiman","but (sentence start)"]],
    lines:[
-     {ko:"오늘은 날씨가 좋아요.",rom:"oneureun nalssiga joayo",en:"Today the weather is nice."},
-     {ko:"바람이 시원하고 하늘이 예뻐요.",rom:"barami siwonhago haneuri yeppeoyo",en:"The wind is cool and the sky is pretty."},
-     {ko:"산에 가고 싶어요.",rom:"sane gago sipeoyo",en:"I want to go to the mountain."},
-     {ko:"하지만 오늘은 일해야 해요.",rom:"hajiman oneureun ilhaeya haeyo",en:"But today I have to work."},
-     {ko:"그래서 못 가요.",rom:"geuraeseo mot gayo",en:"So I can't go."},
-     {ko:"내일은 갈 거예요.",rom:"naeireun gal geoyeyo",en:"Tomorrow I will go."}
+     {ko:"오늘은 날씨가 좋아요.",rom:"oneureun nalssiga joayo",en:"Today the weather is nice.",
+      tokens:[{t:"오늘은",g:"today (topic)",n:"오늘 ends in a consonant → topic 은."},
+        {t:"날씨가",g:"weather (subject)",n:"날씨 ends in a vowel → subject marker 가."},
+        {t:"좋아요.",g:"is nice",n:"present tense of 좋다: stem 좋 has ㅗ → 아요."}]},
+     {ko:"바람이 시원하고 하늘이 예뻐요.",rom:"barami siwonhago haneuri yeppeoyo",en:"The wind is cool and the sky is pretty.",
+      tokens:[{t:"바람이",g:"wind (subject)",n:"바람 ends in a consonant → 이."},
+        {t:"시원하고",g:"is cool, and…",n:"stem 시원하 (a 하다-adjective) + -고, joining to the next clause."},
+        {t:"하늘이",g:"sky (subject)",n:"하늘 ends in a consonant → 이."},
+        {t:"예뻐요.",g:"is pretty",n:"present tense of 예쁘다: stem 예쁘 has ㅡ, which drops before 어요 → 예뻐요 (a ㅡ-irregular)."}]},
+     {ko:"산에 가고 싶어요.",rom:"sane gago sipeoyo",en:"I want to go to the mountain.",
+      tokens:[{t:"산에",g:"to the mountain",n:"산 is the destination → 에."},
+        {t:"가고",g:"go, …",n:"stem 가 + -고, leading into 싶어요. Together 가고 싶어요 means 'want to go' — this -고 isn't 'and', it's part of the want-to pattern."},
+        {t:"싶어요.",g:"want to",n:"싶다 = 'to want to'. 가고 싶어요 = 'want to go'."}]},
+     {ko:"하지만 오늘은 일해야 해요.",rom:"hajiman oneureun ilhaeya haeyo",en:"But today I have to work.",
+      tokens:[{t:"하지만",g:"but",n:"a sentence-starting 'but', linking to the line before. New word for this story."},
+        {t:"오늘은",g:"today (topic)"},
+        {t:"일해야",g:"must work, …",n:"stem 일하 (하다-verb) + -아야, part of the -아야 해요 ('have to') pattern."},
+        {t:"해요.",g:"have to",n:"the second half of -아야 해요. Together 일해야 해요 = 'have to work'."}]},
+     {ko:"그래서 못 가요.",rom:"geuraeseo mot gayo",en:"So I can't go.",
+      tokens:[{t:"그래서",g:"so",n:"a sentence-starting connector meaning 'so, therefore'."},
+        {t:"못",g:"can't",n:"못 sits right before the verb to mean 'unable to'."},
+        {t:"가요.",g:"go",n:"present tense of 가다: stem 가 + 아요 → contracts to 가요."}]},
+     {ko:"내일은 갈 거예요.",rom:"naeireun gal geoyeyo",en:"Tomorrow I will go.",
+      tokens:[{t:"내일은",g:"tomorrow (topic)"},
+        {t:"갈",g:"will go, …",n:"future stem: 가다 → 갈 (the ㄹ future marker before 거예요)."},
+        {t:"거예요.",g:"will",n:"the future-tense ending — always a space before it, always spelled 거예요, never 거에요. 갈 거예요 = 'will go'."}]}
    ],
    questions:[
      {en:"(Weather) Why can't they go to the mountain today?",options:[{ko:"일해야 해서",rom:"has to work"},{ko:"비가 와서",rom:"it's raining"}],ansIndex:0,full:"일해야 해서",
@@ -1822,12 +1992,31 @@ const STORIES=[
   {id:"restaurant",ko:"식당에서",en:"At the restaurant",intro:"A meal out — with numbers, counters and a price.",
    new:[["비빔밥","bibimbap","bibimbap (a rice dish)"],["이었어요","ieosseoyo","it was (past of 예요)"]],
    lines:[
-     {ko:"어제 저녁에 친구하고 식당에 갔어요.",rom:"eoje jeonyeoge chinguhago sikdange gasseoyo",en:"Yesterday evening I went to a restaurant with a friend."},
-     {ko:"우리는 메뉴를 봤어요.",rom:"urineun menyureul bwasseoyo",en:"We looked at the menu."},
-     {ko:"저는 비빔밥을 먹었어요.",rom:"jeoneun bibimbabeul meogeosseoyo",en:"I ate bibimbap."},
-     {ko:"음식이 정말 맛있었어요.",rom:"eumsigi jeongmal masisseosseoyo",en:"The food was really delicious."},
-     {ko:"그리고 계산서를 받았어요.",rom:"geurigo gyesanseoreul badasseoyo",en:"And we got the bill."},
-     {ko:"삼만 원이었어요.",rom:"samman wonieosseoyo",en:"It was 30,000 won."}
+     {ko:"어제 저녁에 친구하고 식당에 갔어요.",rom:"eoje jeonyeoge chinguhago sikdange gasseoyo",en:"Yesterday evening I went to a restaurant with a friend.",
+      tokens:[{t:"어제",g:"yesterday",n:"time words like 어제 take no particle at all — unlike a place or object, they just sit bare."},
+        {t:"저녁에",g:"in the evening",n:"에 marking a point in time again, same as 아침에 earlier."},
+        {t:"친구하고",g:"with a friend",n:"하고 = 'with' (or 'and'), attached straight to 친구."},
+        {t:"식당에",g:"to a restaurant",n:"식당 is the destination → 에."},
+        {t:"갔어요.",g:"went",n:"past tense of 가다: 가 + 았어요 → 갔어요."}]},
+     {ko:"우리는 메뉴를 봤어요.",rom:"urineun menyureul bwasseoyo",en:"We looked at the menu.",
+      tokens:[{t:"우리는",g:"we (topic)"},
+        {t:"메뉴를",g:"menu (object)",n:"메뉴 ends in a vowel → 를."},
+        {t:"봤어요.",g:"looked at",n:"past tense of 보다: stem 보 has ㅗ → 았어요, and 보+았 contracts to 봤."}]},
+     {ko:"저는 비빔밥을 먹었어요.",rom:"jeoneun bibimbabeul meogeosseoyo",en:"I ate bibimbap.",
+      tokens:[{t:"저는",g:"I (topic)",n:"저 ends in a vowel → topic 는."},
+        {t:"비빔밥을",g:"bibimbap (object)",n:"비빔밥 ends in a consonant → 을. New word for this story."},
+        {t:"먹었어요.",g:"ate",n:"past tense of 먹다: 먹 + 었어요."}]},
+     {ko:"음식이 정말 맛있었어요.",rom:"eumsigi jeongmal masisseosseoyo",en:"The food was really delicious.",
+      tokens:[{t:"음식이",g:"food (subject)",n:"음식 ends in a consonant → 이."},
+        {t:"정말",g:"really"},
+        {t:"맛있었어요.",g:"was delicious",n:"past tense of 맛있다 (to be tasty): stem 맛있 + 었어요."}]},
+     {ko:"그리고 계산서를 받았어요.",rom:"geurigo gyesanseoreul badasseoyo",en:"And we got the bill.",
+      tokens:[{t:"그리고",g:"and",n:"sentence-starting connector, joining to the line before."},
+        {t:"계산서를",g:"the bill (object)",n:"계산서 ends in a vowel → 를."},
+        {t:"받았어요.",g:"received",n:"past tense of 받다: 받 + 았어요."}]},
+     {ko:"삼만 원이었어요.",rom:"samman wonieosseoyo",en:"It was 30,000 won.",
+      tokens:[{t:"삼만",g:"30,000",n:"Sino-Korean: 삼(3) + 만(10,000) = 30,000. Korean counts in units of 만, not thousands."},
+        {t:"원이었어요.",g:"was won (currency)",n:"past of the copula: 원 ends in a consonant → normally 이에요, and the past of that is 이었어요 ('it was'). New word for this story."}]}
    ],
    questions:[
      {en:"(Restaurant) What did they eat?",options:[{ko:"비빔밥",rom:"bibimbap"},{ko:"빵",rom:"bread"}],ansIndex:0,full:"비빔밥",
@@ -1838,12 +2027,33 @@ const STORIES=[
   {id:"korean",ko:"한국어",en:"Learning Korean",intro:"Why you're doing all this — want-to, but, and a plan.",
    new:[["내년","naenyeon","next year"]],
    lines:[
-     {ko:"저는 매일 한국어를 공부해요.",rom:"jeoneun maeil hangugeoreul gongbuhaeyo",en:"I study Korean every day."},
-     {ko:"한국어는 어렵지만 재미있어요.",rom:"hangugeoneun eoryeopjiman jaemiisseoyo",en:"Korean is difficult but fun."},
-     {ko:"저는 한국에 가고 싶어요.",rom:"jeoneun hanguge gago sipeoyo",en:"I want to go to Korea."},
-     {ko:"한국에서 김치를 먹고 싶어요.",rom:"hangugeseo gimchireul meokgo sipeoyo",en:"I want to eat kimchi in Korea."},
-     {ko:"그래서 매일 공부해야 해요.",rom:"geuraeseo maeil gongbuhaeya haeyo",en:"So I have to study every day."},
-     {ko:"내년에 한국에 갈 거예요!",rom:"naenyeone hanguge gal geoyeyo",en:"Next year I will go to Korea!"}
+     {ko:"저는 매일 한국어를 공부해요.",rom:"jeoneun maeil hangugeoreul gongbuhaeyo",en:"I study Korean every day.",
+      tokens:[{t:"저는",g:"I (topic)"},{t:"매일",g:"every day"},
+        {t:"한국어를",g:"Korean (object)",n:"한국어 ends in a vowel → 를."},
+        {t:"공부해요.",g:"study",n:"present tense of 공부하다 (a 하다-verb): stem 공부하 + 여요 → contracts to 공부해요."}]},
+     {ko:"한국어는 어렵지만 재미있어요.",rom:"hangugeoneun eoryeopjiman jaemiisseoyo",en:"Korean is difficult but fun.",
+      tokens:[{t:"한국어는",g:"Korean (topic)"},
+        {t:"어렵지만",g:"is difficult, but…",n:"stem 어렵 + -지만 ('but'), joining to the next clause. Tense goes on the final verb only."},
+        {t:"재미있어요.",g:"is fun",n:"present tense of 재미있다: stem 재미있 + 어요."}]},
+     {ko:"저는 한국에 가고 싶어요.",rom:"jeoneun hanguge gago sipeoyo",en:"I want to go to Korea.",
+      tokens:[{t:"저는",g:"I (topic)"},
+        {t:"한국에",g:"to Korea",n:"한국 is the destination → 에."},
+        {t:"가고",g:"go, …",n:"leads into 싶어요 → 'want to go'."},
+        {t:"싶어요.",g:"want to"}]},
+     {ko:"한국에서 김치를 먹고 싶어요.",rom:"hangugeseo gimchireul meokgo sipeoyo",en:"I want to eat kimchi in Korea.",
+      tokens:[{t:"한국에서",g:"in Korea",n:"한국 is where the action happens → 에서, not 에 — compare the line above, where 한국에 was the destination of 'go'."},
+        {t:"김치를",g:"kimchi (object)",n:"김치 ends in a vowel → 를."},
+        {t:"먹고",g:"eat, …",n:"stem 먹 + -고, leading into 싶어요 → 'want to eat'."},
+        {t:"싶어요.",g:"want to"}]},
+     {ko:"그래서 매일 공부해야 해요.",rom:"geuraeseo maeil gongbuhaeya haeyo",en:"So I have to study every day.",
+      tokens:[{t:"그래서",g:"so"},{t:"매일",g:"every day"},
+        {t:"공부해야",g:"must study, …",n:"stem 공부하 + -아야, part of -아야 해요."},
+        {t:"해요.",g:"have to",n:"공부해야 해요 = 'have to study'."}]},
+     {ko:"내년에 한국에 갈 거예요!",rom:"naenyeone hanguge gal geoyeyo",en:"Next year I will go to Korea!",
+      tokens:[{t:"내년에",g:"next year",n:"내년 (new word for this story) + 에, a point in time."},
+        {t:"한국에",g:"to Korea",n:"destination 에."},
+        {t:"갈",g:"will go, …",n:"future stem: 가다 → 갈."},
+        {t:"거예요!",g:"will",n:"future-tense ending. 갈 거예요 = 'will go'."}]}
    ],
    questions:[
      {en:"(Korean) Korean is difficult, but also…?",options:[{ko:"재미있어요",rom:"fun"},{ko:"쉬워요",rom:"easy"}],ansIndex:0,full:"재미있어요",
@@ -2202,7 +2412,7 @@ function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor
 function speak(t){try{const u=new SpeechSynthesisUtterance(t);u.lang='ko-KR';const v=speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang));if(v)u.voice=v;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){}}
 
 /* ===================== ROUTER ===================== */
-const screens={'#home':'s-home','#hangul':'s-hangul','#drill-hangul':'s-drill',
+const screens={'#home':'s-home','#hangul':'s-hangul','#drill-hangul':'s-drill','#write':'s-write',
   '#pron':'s-pron','#drill-pron':'s-drill','#particles':'s-particles','#drill-particles':'s-drill',
   '#copula':'s-copula','#drill-copula':'s-drill',
   '#sentence':'s-sentence','#drill-sentence':'s-drill','#build':'s-build','#drill-build':'s-drill','#place':'s-place','#drill-place':'s-drill','#past':'s-past','#drill-past':'s-drill',
@@ -2228,7 +2438,7 @@ function route(){
   const onHome=(h==='#home'||(!screens[h]&&!h.startsWith('#vocab-')&&!h.startsWith('#drill-vocab-')&&!h.startsWith('#story-')&&!h.startsWith('#drill-story-')));
   document.getElementById('backBtn').classList.toggle('show',!onHome);
   document.getElementById('actionBar').classList.toggle('hidden', id!=='s-drill');
-  const crumbs={'#hangul':'Hangul','#drill-hangul':'Hangul · practice',
+  const crumbs={'#hangul':'Hangul','#drill-hangul':'Hangul · practice','#write':'Writing practice',
     '#pron':'Pronunciation','#drill-pron':'Pronunciation · practice',
     '#particles':'Particles','#drill-particles':'Particles · practice',
     '#copula':'Saying \u201cA is B\u201d','#drill-copula':'A is B · practice',
@@ -2257,6 +2467,7 @@ function route(){
   window.scrollTo(0,0);
   if(id==='s-home')renderHome();
   if(h==='#hangul')renderHangulLesson();
+  if(h==='#write')startWriting();
   if(h==='#drill-hangul')startDrill(shuffle(HANGUL_ITEMS).slice(0,12),{intro:"Type each sound in romanised letters (e.g. a, g, ga). Tap ▶ to hear it."});
   if(h==='#pron')renderPronLesson();
   if(h==='#particles')renderParticleLesson();
@@ -2314,6 +2525,12 @@ function renderWotd(){
   document.getElementById('wotdKo').textContent=w.ko;
   document.getElementById('wotdRom').textContent=w.rom;
   document.getElementById('wotdEn').textContent=w.en;
+}
+function renderDateCard(){
+  const d=koreanDate(new Date());
+  document.getElementById('dateKo').textContent=d.ko;
+  document.getElementById('dateRom').textContent=d.rom;
+  document.getElementById('dateEn').textContent=d.en;
 }
 function renderWordScreen(){
   const w=wordOfDay();
@@ -2389,7 +2606,7 @@ function renderHome(){
   const c=document.getElementById('reviewCount'); c.textContent=n; c.classList.toggle('zero',n===0);
   document.getElementById('streak').textContent = STATE.streak.count>0 ? `🔥 ${STATE.streak.count}-day streak · keep it going` : 'Do one round to start a streak';
   renderHomeworkTile();
-  renderWotd(); markWordSeen();
+  renderWotd(); renderDateCard(); markWordSeen();
 }
 function renderHomeworkTile(){
   const level=STATE.homework.currentLevel;
@@ -2430,11 +2647,153 @@ function hwSwitchLevel(n){
   renderHomeworkLanding();
 }
 document.getElementById('wotdCard').onclick=()=>go('#word');
+document.getElementById('dateCard').onclick=()=>speak(document.getElementById('dateKo').textContent);
 document.getElementById('reviewTile').onclick=()=>go('#review');
 document.getElementById('homeworkTile').onclick=()=>go('#homework');
 
 /* ===================== HANGUL LESSON ===================== */
 function tileHTML(pair){return `<button class="tile" onclick="speak('${pair[0]}')"><div class="han">${pair[0]}</div><div class="snd">${pair[1]}</div></button>`}
+
+/* ===================== WRITING PRACTICE (draw a jamo, checked against its stroke shape) ===================== */
+const DIR8=['right','down-right','down','down-left','left','up-left','up','up-right'];
+function bucketDir(dx,dy){
+  if(Math.abs(dx)<1e-6&&Math.abs(dy)<1e-6)return null;
+  let deg=Math.atan2(dy,dx)*180/Math.PI; if(deg<0)deg+=360;
+  let best=DIR8[0],bestDiff=999;
+  DIR8.forEach((name,i)=>{ const c=i*45; let diff=Math.abs(deg-c); if(diff>180)diff=360-diff; if(diff<bestDiff){bestDiff=diff;best=name;} });
+  return best;
+}
+function pathLength(pts){ let L=0; for(let i=1;i<pts.length;i++)L+=Math.hypot(pts[i].x-pts[i-1].x,pts[i].y-pts[i-1].y); return L; }
+function classifyStroke(pts){
+  if(pts.length<2)return [];
+  const p0=pts[0],pN=pts[pts.length-1];
+  const straightDist=Math.hypot(pN.x-p0.x,pN.y-p0.y);
+  const L=pathLength(pts);
+  const xs=pts.map(p=>p.x),ys=pts.map(p=>p.y);
+  const w=Math.max(...xs)-Math.min(...xs), h=Math.max(...ys)-Math.min(...ys);
+  const diag=Math.hypot(w,h)||1;
+  const closure=straightDist/diag, elongation=L/diag, aspect=(w>0&&h>0)?Math.min(w,h)/Math.max(w,h):0;
+  if(closure<0.35&&elongation>2.2&&aspect>0.5)return['circle'];
+  const dx=pN.x-p0.x,dy=pN.y-p0.y,chordLen=Math.hypot(dx,dy)||1;
+  let maxDev=0,maxIdx=0;
+  for(let i=1;i<pts.length-1;i++){
+    const t=((pts[i].x-p0.x)*dx+(pts[i].y-p0.y)*dy)/(chordLen*chordLen);
+    const projX=p0.x+t*dx, projY=p0.y+t*dy;
+    const dev=Math.hypot(pts[i].x-projX,pts[i].y-projY);
+    if(dev>maxDev){maxDev=dev;maxIdx=i;}
+  }
+  const bend=maxDev/diag;
+  if(bend>0.18&&maxIdx>1&&maxIdx<pts.length-2){
+    const mid=pts[maxIdx];
+    const d1=bucketDir(mid.x-p0.x,mid.y-p0.y), d2=bucketDir(pN.x-mid.x,pN.y-mid.y);
+    const out=[]; if(d1)out.push(d1); if(d2&&d2!==d1)out.push(d2);
+    return out.length?out:[bucketDir(dx,dy)].filter(Boolean);
+  }
+  const d=bucketDir(dx,dy);
+  return d?[d]:[];
+}
+function tokenScore(a,b){
+  if(a===b)return 1;
+  if(a==='circle'||b==='circle')return 0;
+  const ia=DIR8.indexOf(a),ib=DIR8.indexOf(b);
+  if(ia<0||ib<0)return 0;
+  let diff=Math.abs(ia-ib); if(diff>4)diff=8-diff;
+  return diff===0?1:diff===1?0.5:0;
+}
+function strokeScore(userStroke,expStroke){
+  if(expStroke.length===1&&expStroke[0]==='circle')return(userStroke.length===1&&userStroke[0]==='circle')?1:0;
+  if(userStroke.length===1&&userStroke[0]==='circle')return 0;
+  const n=Math.max(userStroke.length,expStroke.length); let sum=0;
+  for(let i=0;i<n;i++)sum+=tokenScore(userStroke[i],expStroke[i]);
+  return sum/n;
+}
+function matchJamo(user,jamo){
+  const expected=jamo.strokes.map(s=>s==='circle'?['circle']:s);
+  const countDiff=Math.abs(user.length-expected.length);
+  const countScore=countDiff===0?1:countDiff===1?0.6:countDiff===2?0.3:0;
+  let shapeScore;
+  if(jamo.kind==='vowel'){
+    const uTok=user.flat(), eTok=expected.flat();
+    if(!eTok.length)shapeScore=0;
+    else{
+      let hits=0; const used=new Array(uTok.length).fill(false);
+      eTok.forEach(et=>{ let bestI=-1,bestS=0;
+        uTok.forEach((ut,i)=>{ if(!used[i]){const s=tokenScore(ut,et); if(s>bestS){bestS=s;bestI=i;}} });
+        if(bestI>=0){used[bestI]=true;hits+=bestS;} });
+      shapeScore=hits/eTok.length;
+    }
+  }else{
+    const n=Math.min(user.length,expected.length); let sum=0;
+    for(let i=0;i<n;i++)sum+=strokeScore(user[i],expected[i]);
+    shapeScore=n?sum/expected.length:0;
+  }
+  const total=0.35*countScore+0.65*shapeScore;
+  const verdict=total>=0.75?'good':total>=0.45?'close':'off';
+  return{score:total,verdict};
+}
+
+let writeQueue=[],writeIdx=0,writeStrokes=[],writeCtx=null;
+function drawGuides(ctx,size){
+  ctx.save(); ctx.strokeStyle='#E6DECC'; ctx.lineWidth=1; ctx.setLineDash([4,5]);
+  ctx.beginPath(); ctx.moveTo(size/2,size*0.08); ctx.lineTo(size/2,size*0.92); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(size*0.08,size/2); ctx.lineTo(size*0.92,size/2); ctx.stroke();
+  ctx.restore();
+}
+function redrawCanvas(){
+  const canvas=document.getElementById('writeCanvas'); if(!canvas)return;
+  const size=canvas.clientWidth||300, ctx=writeCtx; if(!ctx)return;
+  ctx.clearRect(0,0,size,size); drawGuides(ctx,size);
+  ctx.strokeStyle='#24282C'; ctx.lineWidth=10; ctx.lineCap='round'; ctx.lineJoin='round';
+  writeStrokes.forEach(stroke=>{
+    ctx.beginPath(); ctx.moveTo(stroke[0].x*size,stroke[0].y*size);
+    stroke.forEach(p=>ctx.lineTo(p.x*size,p.y*size)); ctx.stroke();
+  });
+}
+function initWriteCanvas(){
+  const canvas=document.getElementById('writeCanvas'); if(!canvas)return;
+  const dpr=window.devicePixelRatio||1, size=canvas.clientWidth||300;
+  canvas.width=size*dpr; canvas.height=size*dpr;
+  canvas.style.touchAction='none';
+  const ctx=canvas.getContext('2d'); ctx.scale(dpr,dpr);
+  writeCtx=ctx; drawGuides(ctx,size);
+  let drawing=false, cur=null;
+  const getPos=(e)=>{ const r=canvas.getBoundingClientRect(); return {x:(e.clientX-r.left)/r.width,y:(e.clientY-r.top)/r.height}; };
+  canvas.onpointerdown=(e)=>{ e.preventDefault(); drawing=true; cur=[]; const p=getPos(e); cur.push(p);
+    ctx.beginPath(); ctx.moveTo(p.x*size,p.y*size); ctx.lineCap='round'; ctx.lineJoin='round'; ctx.lineWidth=10; ctx.strokeStyle='#24282C'; };
+  canvas.onpointermove=(e)=>{ if(!drawing)return; e.preventDefault(); const p=getPos(e); cur.push(p); ctx.lineTo(p.x*size,p.y*size); ctx.stroke(); };
+  const end=(e)=>{ if(!drawing)return; drawing=false; if(cur&&cur.length>1)writeStrokes.push(cur); cur=null; };
+  canvas.onpointerup=end; canvas.onpointerleave=end; canvas.onpointercancel=end;
+}
+function undoWriting(){ writeStrokes.pop(); redrawCanvas(); document.getElementById('writeFeedback').style.display='none'; }
+function clearWriting(){ writeStrokes=[]; redrawCanvas(); document.getElementById('writeFeedback').style.display='none'; }
+function checkWriting(){
+  const jamo=writeQueue[writeIdx]; if(!jamo)return;
+  const box=document.getElementById('writeFeedback');
+  if(!writeStrokes.length){ box.className='write-feedback show off'; box.innerHTML=`<div class="wf-verdict">Draw the letter first.</div>`; box.style.display='block'; return; }
+  const classified=writeStrokes.map(classifyStroke).filter(s=>s.length);
+  const {verdict}=matchJamo(classified,jamo);
+  const label=verdict==='good'?'✓ Looks right!':verdict==='close'?'Close — compare below':"Let's look at the correct shape";
+  box.className='write-feedback show '+verdict;
+  box.innerHTML=`<div class="wf-verdict">${label}</div><div class="wf-ref"><span class="wf-ref-ch">${jamo.ch}</span><span class="wf-ref-hint">${jamo.hint}</span></div>`;
+  box.style.display='block';
+}
+function renderWriteScreen(){
+  const jamo=writeQueue[writeIdx]; if(!jamo)return;
+  document.getElementById('writeBig').textContent=jamo.ch;
+  document.getElementById('writeRom').textContent=jamo.kind==='consonant'?jamo.rom:jamo.rom;
+  document.getElementById('writeCounter').textContent=`${writeIdx+1} / ${writeQueue.length}`;
+  redrawCanvas();
+}
+function nextJamo(){
+  writeIdx=(writeIdx+1)%writeQueue.length; writeStrokes=[];
+  document.getElementById('writeFeedback').style.display='none';
+  renderWriteScreen();
+}
+function startWriting(){
+  writeQueue=shuffle([...JAMO_WRITE]); writeIdx=0; writeStrokes=[];
+  document.getElementById('writeFeedback').style.display='none';
+  initWriteCanvas(); renderWriteScreen();
+}
 function renderHangulLesson(){
   document.getElementById('gridVowels').innerHTML=VOWELS.map(tileHTML).join('');
   document.getElementById('gridComplexVowels').innerHTML=COMPLEX_VOWELS.map(tileHTML).join('');
@@ -2446,6 +2805,9 @@ function renderHangulLesson(){
 /* ===================== DRILL ENGINE ===================== */
 let current=[], mode='drill', SEL={}, checked=false;
 window.__debugCurrent=()=>current; // read-only test hook, no behavioural effect
+window.__debugJamoWrite=()=>JAMO_WRITE; // read-only test hook, no behavioural effect
+window.__debugPushStroke=(pts)=>{ writeStrokes.push(pts); }; // test hook: inject a synthetic stroke
+window.__debugGetWriteState=()=>({idx:writeIdx,queueLen:writeQueue.length,strokes:writeStrokes.length}); // test hook
 function startDrill(items,opts){
   mode='drill'; current=items;
   document.getElementById('drillEmpty').style.display='none';
@@ -2533,6 +2895,10 @@ function hwAdvance(levelN){
 function hwDismissSuggestion(){
   const box=document.getElementById('hwSuggest'); if(box){box.style.display='none';box.innerHTML='';}
 }
+function chipHTML(tag){
+  if(Array.isArray(tag))return `<span class="chip-group">${tag.map(t=>`<span class="chip"><span class="role">${t}</span></span>`).join('')}</span>`;
+  return `<span class="chip"><span class="role">${tag}</span></span>`;
+}
 function cardHTML(it,pos){
   const head=`<div class="top"><span class="chip">${it.type==='particle'
       ?`<span class="role">${it.role}</span><span class="pair">${it.pair}</span>`
@@ -2584,7 +2950,7 @@ function cardHTML(it,pos){
   }
   if(it.type==='pron'){
     return `<section class="card" data-i="${pos}">
-      <div class="top"><span class="chip"><span class="role">${it.tag}</span></span><span class="num">${pos+1} / ${current.length}</span></div>
+      <div class="top">${chipHTML(it.tag)}<span class="num">${pos+1} / ${current.length}</span></div>
       <div class="prompt-han" style="font-size:44px">${it.word}</div>
       <div class="prompt-sound-hint">${it.mean}</div>
       <div class="answer">
@@ -2703,7 +3069,7 @@ function tapBlock(pos,bi){
 
 /* ----- pronunciation + particle lesson renderers ----- */
 function pronExamples(tag){
-  return PRON_ITEMS.filter(i=>i.tag===tag).map(i=>
+  return PRON_ITEMS.filter(i=> Array.isArray(i.tag) ? i.tag.includes(tag) : i.tag===tag).map(i=>
     `<button class="ex" onclick="speak('${i.word}')"><span class="ex-from">${i.word}</span><span class="ex-arrow">→</span><span class="ex-to">${i.say}</span><span class="ex-rom">${i.rom[0]}</span><span class="ex-gloss">${i.mean}</span></button>`).join('');
 }
 function renderPronLesson(){
@@ -2758,18 +3124,24 @@ function toggleStoryMeanings(btn){
   const on=document.getElementById('storyLines').classList.toggle('revealed');
   btn.textContent=on?'Hide meanings':'Show all meanings';
 }
+function lineKoHTML(sid,li,ln){
+  if(!ln.tokens||!ln.tokens.length) return ln.ko;
+  return ln.tokens.map((tok,ti)=>
+    `<span class="word" onclick="tapWord('${sid}',${li},${ti})">${tok.t}</span>`).join(' ');
+}
 function renderStory(sid){
   const s=STORIES.find(x=>x.id===sid); if(!s)return;
   document.getElementById('storyTitle').innerHTML=`<span style="color:var(--jade)">${s.ko}</span> ${s.en}`;
   document.getElementById('storySub').textContent=s.intro;
   const box=document.getElementById('storyLines');
   box.classList.remove('revealed');
-  box.innerHTML=s.lines.map(ln=>
-    `<div class="sline">
+  box.innerHTML=s.lines.map((ln,li)=>
+    `<div class="sline" data-li="${li}">
        <button class="sline-speak" onclick="speak('${ln.ko}')" aria-label="Hear line">▶</button>
        <div class="sline-body">
-         <div class="sline-ko">${ln.ko}</div>
+         <div class="sline-ko">${lineKoHTML(sid,li,ln)}</div>
          <div class="sline-meaning"><span class="sline-rom">${ln.rom}</span><span class="sline-en">${ln.en}</span></div>
+         <div class="word-detail"></div>
        </div>
        <button class="sline-toggle" onclick="this.closest('.sline').classList.toggle('open')" aria-label="Show meaning">?</button>
      </div>`).join('');
@@ -2780,6 +3152,20 @@ function renderStory(sid){
   } else nw.style.display='none';
   const rb=document.getElementById('storyReveal'); rb.textContent='Show all meanings';
   document.getElementById('storyCheckBtn').setAttribute('onclick',`go('#drill-story-${sid}')`);
+}
+function tapWord(sid,li,ti){
+  const s=STORIES.find(x=>x.id===sid); if(!s)return;
+  const ln=s.lines[li]; const tok=ln.tokens&&ln.tokens[ti]; if(!tok)return;
+  const lineEl=document.querySelector(`#storyLines .sline[data-li="${li}"]`); if(!lineEl)return;
+  const panel=lineEl.querySelector('.word-detail');
+  const words=[...lineEl.querySelectorAll('.word')];
+  const already=panel.classList.contains('show')&&panel.dataset.ti===String(ti);
+  words.forEach(w=>w.classList.remove('active'));
+  if(already){ panel.classList.remove('show'); panel.innerHTML=''; panel.dataset.ti=''; return; }
+  if(words[ti])words[ti].classList.add('active');
+  panel.innerHTML=`<span class="wd-surface">${tok.t}</span><span class="wd-gloss">${tok.g}</span>`+(tok.n?`<span class="wd-note">${tok.n}</span>`:'');
+  panel.classList.add('show');
+  panel.dataset.ti=String(ti);
 }
 function renderPeopleLesson(){
   const people=[["저","jeo","I — polite"],["나","na","I — casual"],["제가","jega","I as subject — polite"],
