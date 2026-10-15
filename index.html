@@ -2331,15 +2331,26 @@ const HOMEWORK_LEVELS=[
 ];
 const HW_POOLS={1:HW_POOL_1,2:HW_POOL_2,3:HW_POOL_3,4:HW_POOL_4,5:HW_POOL_5};
 const HW_UNLOCK_MIN_ANSWERED=20, HW_UNLOCK_MIN_ACC=0.85;
+const HW_BRING_BACK_MAX=2; // at most this many repeats from the immediately preceding round at this level
 function buildHomeworkSet(levelN){
   const pool=HW_POOLS[levelN]||HW_POOL_1;
-  const mistakeSet=new Set(STATE.mistakes);
-  const weak=pool.filter(it=>mistakeSet.has(it.id));
-  const rest=pool.filter(it=>!mistakeSet.has(it.id));
+  const hw=STATE.homework;
+  const lastWrong=new Set((hw.lastWrongIds&&hw.lastWrongIds[levelN])||[]);
+  const lastSeen=new Set((hw.lastRoundIds&&hw.lastRoundIds[levelN])||[]);
   const size=Math.min(HOMEWORK_SIZE,pool.length);
-  const weakPick=shuffle(weak).slice(0,Math.min(weak.length,Math.ceil(size*0.5)));
-  const restPick=shuffle(rest).slice(0,size-weakPick.length);
-  return shuffle([...weakPick,...restPick]);
+
+  // bring back a small, capped number of items the user got wrong last round at this level
+  const bringBackPool=pool.filter(it=>lastWrong.has(it.id));
+  const bringBackPick=shuffle(bringBackPool).slice(0,Math.min(HW_BRING_BACK_MAX,bringBackPool.length));
+  const bringBackIds=new Set(bringBackPick.map(it=>it.id));
+
+  // fill the rest preferring items NOT seen last round at all, so a round doesn't echo the one before it
+  const fresh=pool.filter(it=>!lastSeen.has(it.id)&&!bringBackIds.has(it.id));
+  const seenButRight=pool.filter(it=>lastSeen.has(it.id)&&!lastWrong.has(it.id)&&!bringBackIds.has(it.id));
+  const remaining=size-bringBackPick.length;
+  let fillPick=shuffle(fresh).slice(0,remaining);
+  if(fillPick.length<remaining) fillPick=fillPick.concat(shuffle(seenButRight).slice(0,remaining-fillPick.length));
+  return shuffle([...bringBackPick,...fillPick]);
 }
 function hwStats(levelN){ return (STATE.homework&&STATE.homework.stats[levelN])||{correct:0,total:0}; }
 function hwEligibleToAdvance(levelN){
@@ -2386,7 +2397,7 @@ const SECTIONS=[
 ];
 
 /* ===================== STORAGE ===================== */
-let STATE={mistakes:[],progress:{},streak:{count:0,last:""},words:{seen:[]},collapsed:[],homework:{maxUnlocked:1,currentLevel:1,stats:{}}};
+let STATE={mistakes:[],progress:{},streak:{count:0,last:""},words:{seen:[]},collapsed:[],homework:{maxUnlocked:1,currentLevel:1,stats:{},lastRoundIds:{},lastWrongIds:{}}};
 async function load(){
   try{const r=await window.storage.get('kr-app'); if(r&&r.value)STATE=Object.assign(STATE,JSON.parse(r.value));}catch(e){}
   if(!STATE.words||!Array.isArray(STATE.words.seen))STATE.words={seen:[]};
@@ -2394,8 +2405,14 @@ async function load(){
   if(!STATE.homework.stats||typeof STATE.homework.stats!=='object')STATE.homework.stats={};
   if(!STATE.homework.maxUnlocked)STATE.homework.maxUnlocked=1;
   if(!STATE.homework.currentLevel)STATE.homework.currentLevel=1;
+  if(!STATE.homework.lastRoundIds||typeof STATE.homework.lastRoundIds!=='object')STATE.homework.lastRoundIds={};
+  if(!STATE.homework.lastWrongIds||typeof STATE.homework.lastWrongIds!=='object')STATE.homework.lastWrongIds={};
 }
-async function save(){ try{await window.storage.set('kr-app',JSON.stringify(STATE));}catch(e){} }
+async function save(){
+  const body=JSON.stringify(STATE);
+  try{ await window.storage.set('kr-app',body); return true; }
+  catch(e){ try{ await window.storage.set('kr-app',body); return true; }catch(e2){ return false; } }
+}
 function today(){return new Date().toISOString().slice(0,10)}
 function bumpStreak(){
   const t=today(), y=new Date(Date.now()-864e5).toISOString().slice(0,10);
@@ -2641,9 +2658,10 @@ function renderHomeworkLanding(){
     return `<button class="hw-pick${active?' active':''}" ${locked?'disabled':''} onclick="hwSwitchLevel(${l.n})">${l.n}</button>`;
   }).join('');
 }
-function hwSwitchLevel(n){
+async function hwSwitchLevel(n){
   if(n>STATE.homework.maxUnlocked)return;
-  STATE.homework.currentLevel=n; save();
+  STATE.homework.currentLevel=n;
+  await save();
   renderHomeworkLanding();
 }
 document.getElementById('wotdCard').onclick=()=>go('#word');
@@ -2806,6 +2824,8 @@ function renderHangulLesson(){
 let current=[], mode='drill', SEL={}, checked=false;
 window.__debugCurrent=()=>current; // read-only test hook, no behavioural effect
 window.__debugJamoWrite=()=>JAMO_WRITE; // read-only test hook, no behavioural effect
+window.__debugState=()=>STATE; // test hook: returns the live STATE object (by reference)
+window.__debugHwPools=()=>HW_POOLS; // read-only test hook, no behavioural effect
 window.__debugPushStroke=(pts)=>{ writeStrokes.push(pts); }; // test hook: inject a synthetic stroke
 window.__debugGetWriteState=()=>({idx:writeIdx,queueLen:writeQueue.length,strokes:writeStrokes.length}); // test hook
 function startDrill(items,opts){
@@ -2884,13 +2904,16 @@ function renderHomeworkSuggestion(levelN){
     <div class="hw-sug-btns"><button class="act primary" onclick="hwAdvance(${levelN+1})">Move up</button><button class="act ghost" onclick="hwDismissSuggestion()">Not yet</button></div>`;
   box.style.display='block';
 }
-function hwAdvance(levelN){
+async function hwAdvance(levelN){
   STATE.homework.maxUnlocked=Math.max(STATE.homework.maxUnlocked,levelN);
   STATE.homework.currentLevel=levelN;
-  save();
   const box=document.getElementById('hwSuggest'); if(box){box.style.display='none';box.innerHTML='';}
   const intro=document.getElementById('drillIntro');
-  if(intro)intro.textContent=`Moved up to Level ${levelN}. Tap “New round” to start a set here.`;
+  if(intro)intro.textContent=`Moved up to Level ${levelN}. Saving…`;
+  const ok=await save();
+  if(intro)intro.textContent = ok
+    ? `Moved up to Level ${levelN}. Tap “New round” to start a set here.`
+    : `Moved up to Level ${levelN}, but I couldn't save that — it may not stick if you close the app now. Try reopening and checking the level picker.`;
 }
 function hwDismissSuggestion(){
   const box=document.getElementById('hwSuggest'); if(box){box.style.display='none';box.innerHTML='';}
@@ -3299,6 +3322,10 @@ function check(){
     const st=STATE.homework.stats[lvl]||{correct:0,total:0};
     st.correct+=correct; st.total+=current.length;
     STATE.homework.stats[lvl]=st;
+    if(!STATE.homework.lastRoundIds)STATE.homework.lastRoundIds={};
+    if(!STATE.homework.lastWrongIds)STATE.homework.lastWrongIds={};
+    STATE.homework.lastRoundIds[lvl]=current.map(it=>it.id);
+    STATE.homework.lastWrongIds[lvl]=wrongThisRound.map(it=>it.id);
     renderHomeworkRecap(wrongThisRound);
     renderHomeworkSuggestion(lvl);
   }
