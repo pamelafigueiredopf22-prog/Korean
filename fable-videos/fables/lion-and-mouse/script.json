@@ -1,0 +1,46 @@
+{
+  "title": "The Lion and the Mouse",
+  "source": "Aesop's Fables (public domain), gently retold for bedtime",
+  "lines": [
+    {"id": "n01", "scene": "s1_evening", "speaker": "narrator", "pause": 1.6, "text": "Once upon a time, at the edge of a quiet forest, where the tall grass turned gold in the evening light..."},
+    {"id": "n02", "scene": "s1_evening", "speaker": "narrator", "pause": 1.4, "text": "there lived a great lion. He was big, and strong, and his mane was as warm as the setting sun."},
+    {"id": "n03", "scene": "s1_evening", "speaker": "narrator", "pause": 1.8, "text": "And on this soft, sleepy evening, the lion lay beneath his favourite old tree... fast asleep."},
+    {"id": "n04", "scene": "s1_evening", "speaker": "narrator", "pause": 1.2, "text": "Not far away, a tiny mouse was hurrying home. Pitter, patter, pitter, patter, went her little feet."},
+    {"id": "n05", "scene": "s1_evening", "speaker": "narrator", "pause": 1.0, "text": "She was in such a rush, that she did not look where she was going... and she ran right over the lion's nose!"},
+    {"id": "n06", "scene": "s2_caught", "speaker": "narrator", "pause": 0.9, "text": "The lion opened one big golden eye. And, very gently, he placed his paw on the end of her tail."},
+    {"id": "l01", "scene": "s2_caught", "speaker": "lion", "pause": 1.0, "text": "Well, well. Who is this, tickling my nose, and waking me from my lovely dream?"},
+    {"id": "m01", "scene": "s2_caught", "speaker": "mouse", "pause": 0.9, "text": "Oh! I'm so sorry, Mister Lion! I didn't mean to wake you. I was only hurrying home."},
+    {"id": "m02", "scene": "s2_caught", "speaker": "mouse", "pause": 1.0, "text": "Please, let me go. And maybe, one day, I can help you, too."},
+    {"id": "n07", "scene": "s2_caught", "speaker": "narrator", "pause": 0.8, "text": "The lion began to chuckle. A deep, rumbly chuckle, like far away thunder."},
+    {"id": "l02", "scene": "s2_caught", "speaker": "lion", "pause": 1.0, "text": "You? Help me? But you are so very small, little one."},
+    {"id": "l03", "scene": "s2_caught", "speaker": "lion", "pause": 1.4, "text": "Still... you made me smile. Off you go, then. Hurry home, and sleep well."},
+    {"id": "n08", "scene": "s2_caught", "speaker": "narrator", "pause": 1.0, "text": "And he lifted his paw, and let the little mouse go."},
+    {"id": "m03", "scene": "s2_caught", "speaker": "mouse", "pause": 2.2, "text": "Thank you! Thank you, kind lion! I will never forget it."},
+
+    {"id": "n09", "scene": "s3_night", "speaker": "narrator", "pause": 1.6, "text": "The mouse scampered away into the grass, and the stars came out, one by one, over the quiet forest."},
+    {"id": "n10", "scene": "s3_night", "speaker": "narrator", "pause": 2.2, "text": "Days went by. The moon grew round, and then thin, and then round again."},
+
+    {"id": "n11", "scene": "s4_net", "speaker": "narrator", "pause": 1.2, "text": "Then, one evening, the lion went walking through the forest, looking for a cool place to rest."},
+    {"id": "n12", "scene": "s4_net", "speaker": "narrator", "pause": 1.4, "text": "But hidden among the leaves, was a great net of ropes, that some hunters had left behind."},
+    {"id": "n13", "scene": "s4_net", "speaker": "narrator", "pause": 1.0, "text": "Swish! The net fell down around him. The lion pulled, and pushed, and wriggled... but the ropes held him tight."},
+    {"id": "l04", "scene": "s4_net", "speaker": "lion", "pause": 1.0, "text": "Oh dear. Oh dear me. I cannot get free."},
+    {"id": "n14", "scene": "s4_net", "speaker": "narrator", "pause": 1.8, "text": "So the lion lifted his head, and gave a long, low roar, that rolled across the whole forest."},
+
+    {"id": "n15", "scene": "s5_rescue", "speaker": "narrator", "pause": 1.0, "text": "Far away, in her cosy little home, the mouse heard the roar. And she knew that voice at once."},
+    {"id": "m04", "scene": "s5_rescue", "speaker": "mouse", "pause": 1.0, "text": "That's my friend, the lion! He needs me. I'm coming!"},
+    {"id": "n16", "scene": "s5_rescue", "speaker": "narrator", "pause": 1.4, "text": "Pitter, patter, pitter, patter. She ran through the grass, and over the roots, and under the ferns, as fast as her little feet could carry her."},
+    {"id": "m05", "scene": "s5_rescue", "speaker": "mouse", "pause": 1.0, "text": "Don't worry, Mister Lion. Stay very still. I know just what to do."},
+    {"id": "n17", "scene": "s5_rescue", "speaker": "narrator", "pause": 1.4, "text": "And with her tiny, sharp teeth, the mouse began to nibble at the ropes. Nibble, nibble, nibble."},
+    {"id": "n18", "scene": "s5_rescue", "speaker": "narrator", "pause": 1.6, "text": "One rope snapped. Then another. And another. Until, at last, the whole net fell away, and the lion was free."},
+
+    {"id": "l05", "scene": "s6_friends", "speaker": "lion", "pause": 1.0, "text": "Little mouse... you saved me. I laughed when you said you could help me. But you were right."},
+    {"id": "m06", "scene": "s6_friends", "speaker": "mouse", "pause": 1.2, "text": "You were kind to me, when I was small and scared. So now, I was kind to you."},
+    {"id": "n19", "scene": "s6_friends", "speaker": "narrator", "pause": 1.8, "text": "And from that day on, the great lion and the tiny mouse were the very best of friends."},
+
+    {"id": "n20", "scene": "s7_goodnight", "speaker": "narrator", "pause": 1.8, "text": "Sometimes, on warm summer nights, you could find them together, under the old tree, watching the fireflies glow."},
+    {"id": "n21", "scene": "s7_goodnight", "speaker": "narrator", "pause": 2.0, "text": "Because no act of kindness, no matter how small, is ever wasted. And even the littlest friend, can do the biggest things."},
+    {"id": "n22", "scene": "s7_goodnight", "speaker": "narrator", "pause": 2.0, "text": "Now the lion is yawning, and the mouse is curled up warm, right inside his soft, golden mane."},
+    {"id": "n23", "scene": "s7_goodnight", "speaker": "narrator", "pause": 3.0, "text": "The stars are twinkling. The forest is quiet. And it's time for you to close your eyes, too."},
+    {"id": "n24", "scene": "s7_goodnight", "speaker": "narrator", "pause": 6.0, "text": "Goodnight, little one. Sweet dreams."}
+  ]
+}
