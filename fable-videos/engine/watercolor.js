@@ -360,3 +360,51 @@ export const easeInOut = (t) => { t = clamp(t); return t < 0.5 ? 4 * t * t * t :
 export const lerp = (a, b, t) => a + (b - a) * t;
 // 0 -> 1 between t0 and t1
 export const span = (t, t0, t1) => ease((t - t0) / (t1 - t0));
+
+// ---------- form shading ----------
+// Soft shading inside a shape, like a second wet glaze dropped along one side.
+// The outline of `edge` (default: the shape itself) is stroked wide, blurred, and
+// shifted by (dx, dy) so only one side's band falls inside the clip.
+export function shadeEdge(ctx, shape, opts = {}) {
+  const { color = '#7a4a2a', alpha = 0.35, width = 30, dx = 0, dy = -10, edge = shape, blend = 'source-over' } = opts;
+  const m = ctx.getTransform(); const sc = Math.hypot(m.a, m.b) || 1;
+  ctx.save();
+  path(ctx, shape); ctx.clip();
+  ctx.globalCompositeOperation = blend;
+  ctx.filter = `blur(${(width * 0.45 * sc).toFixed(1)}px)`;
+  ctx.translate(dx, dy);
+  ctx.strokeStyle = rgba(color, alpha); ctx.lineWidth = width; ctx.lineJoin = 'round';
+  path(ctx, edge, edge === shape); ctx.stroke();
+  ctx.restore();
+}
+
+// a soft blurred glaze of colour clipped to a shape (wet-in-wet blooms, cheek warmth)
+export function glaze(ctx, shape, x, y, rx, ry, color, alpha = 0.3) {
+  ctx.save(); path(ctx, shape); ctx.clip(); pool(ctx, x, y, rx, ry, color, alpha); ctx.restore();
+}
+
+// a tapered lock of fur / a leaf-like petal growing outward at angle a from (cx, cy)
+export function lock(cx, cy, a, r0, r1, w, curl = 0) {
+  const ca = Math.cos(a), sa = Math.sin(a), px = -sa, py = ca;
+  const P = (d, o) => [cx + ca * d + px * o, cy + sa * d + py * o];
+  const L = r1 - r0;
+  return smooth([P(r0 - L * 0.08, -w * 0.42), P(r0 + L * 0.4, -w * 0.58 + curl * w * 0.15), P(r0 + L * 0.8, -w * 0.22 + curl * w * 0.55),
+    P(r1, curl * w * 0.95), P(r0 + L * 0.72, w * 0.3 + curl * w * 0.55), P(r0 + L * 0.32, w * 0.55), P(r0 - L * 0.08, w * 0.4)]);
+}
+
+// a clean graphite/sepia contour: one steady line plus a faint second pass
+export function pencil(ctx, pts, opts = {}) {
+  ink(ctx, pts, { width: 1.5, alpha: 0.62, wobble: 0.5, gaps: 0.25, ...opts });
+}
+
+// a soft, round-tipped tuft (fluffy manes, cheek ruffs): like lock() but with a curled, rounded end
+export function tuft(cx, cy, a, r0, r1, w, curl = 0) {
+  const ca = Math.cos(a), sa = Math.sin(a), px = -sa, py = ca;
+  const L = r1 - r0;
+  const P = (d, o) => { const c = curl * w * Math.pow(Math.max(0, (d - r0) / L), 1.6); return [cx + ca * d + px * (o + c), cy + sa * d + py * (o + c)]; };
+  const pts = [P(r0 - L * 0.1, -w * 0.45), P(r0 + L * 0.35, -w * 0.55), P(r0 + L * 0.7, -w * 0.5)];
+  const R = w * 0.5, tipD = r1 - R;
+  for (let k = 1; k < 8; k++) { const t = -Math.PI / 2 + (k / 8) * Math.PI; pts.push(P(tipD + Math.cos(t) * R, Math.sin(t) * R)); }
+  pts.push(P(r0 + L * 0.7, w * 0.5), P(r0 + L * 0.35, w * 0.55), P(r0 - L * 0.1, w * 0.45));
+  return smooth(pts);
+}

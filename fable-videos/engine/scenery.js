@@ -1,6 +1,6 @@
 // Reusable painted scenery: trees, foliage, grass, flowers, mushrooms, ferns, hills, clouds.
 // All painters draw in the current ctx coordinates with the watercolor engine.
-import { wash, ink, strokes, pool, ellipse, smooth, ribbon, fluffy, bbox, rng, rgba, shade, tint, mix, path, speckle } from './watercolor.js';
+import { wash, ink, strokes, pool, ellipse, smooth, ribbon, fluffy, bbox, rng, rgba, shade, tint, mix, path, speckle, shadeEdge } from './watercolor.js';
 
 export const PAL = {
   olive: '#8f9a5b', sage: '#9fae84', moss: '#6f7d4c', deep: '#4f5d3c', ochre: '#c9a24f', gold: '#e2b86a',
@@ -29,6 +29,27 @@ export function foliage(g, cx, cy, rx, ry, opts = {}) {
       : fluffy(x, y, rx * k, ry * k * 0.8, 5 + Math.floor(r() * 5), r.range(0.1, 0.3), seed + 10 + i);
     wash(g, shape, { color: col(c), opacity: opacity * r.range(0.5, 0.85), seed: seed + 30 + i, bleed: r.range(0.07, 0.13), layers: 24 });
   });
+  // individual painted leaves: darker underneath, sunlit on top, breaking the silhouette
+  if (opts.leaves !== false) {
+    const n = Math.round((rx * ry) / (opts.leafDensity || 95));
+    const ls = opts.leafSize || Math.max(6, Math.min(16, rx / 11));
+    const lit = (c) => col(tint(c, 0.25));
+    for (let i = 0; i < n; i++) {
+      const a = r() * Math.PI * 2, d = Math.pow(r(), 0.45);
+      const x = cx + Math.cos(a) * rx * d * 1.02, y = cy + Math.sin(a) * ry * d * 1.02;
+      const up = (cy - y) / ry; // -1 bottom .. 1 top
+      const base = colors[Math.floor(r() * colors.length)];
+      const c = up > 0.15 && r() < 0.6 ? lit(base) : up < -0.3 ? col(shade(base, 0.25)) : col(base);
+      const L = ls * r.range(0.7, 1.3), ang = a + r.gauss(0, 0.6) + Math.PI / 2 * (r() < 0.5 ? 1 : -1) * 0.3;
+      g.save(); g.translate(x, y); g.rotate(ang);
+      g.fillStyle = rgba(c, opacity * r.range(0.55, 0.9));
+      g.beginPath(); g.moveTo(-L, 0); g.quadraticCurveTo(0, -L * 0.48, L, 0); g.quadraticCurveTo(0, L * 0.48, -L, 0); g.fill();
+      if (r() < 0.25 && !haze) { g.strokeStyle = rgba(PAL.deep, 0.3); g.lineWidth = 0.7; g.beginPath(); g.moveTo(-L * 0.8, 0); g.lineTo(L * 0.8, 0); g.stroke(); }
+      g.restore();
+    }
+    const outline = fluffy(cx, cy, rx * 0.95, ry * 0.95, 10, 0.2, seed + 7);
+    shadeEdge(g, outline, { color: col(PAL.deep), alpha: 0.28 * opacity, width: ry * 0.35, dy: -ry * 0.18 });
+  }
   if (detail) {
     strokes(g, fluffy(cx, cy, rx, ry, 9, 0.2, seed + 3), { color: col(PAL.deep), count: Math.round(rx * ry / 300), len: 7, width: 1.6, alpha: 0.35 * opacity, seed: seed + 4, dir: () => 1.2, curve: 0.6 });
     speckle(g, { x0: cx - rx * 0.7, x1: cx + rx * 0.7, y0: cy - ry * 0.7, y1: cy + ry * 0.4 }, { color: tint(colors[2] || PAL.ochre, 0.3), count: Math.round(rx / 3), size: 3, alpha: 0.5 * opacity, seed: seed + 5 });

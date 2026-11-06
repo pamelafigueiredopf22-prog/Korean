@@ -59,14 +59,16 @@ function paintScene1() {
     hills(g, 650, 40, '#b7b38e', { seed: 5, opacity: 0.55, bumps: 5 });
   });
   const mid = layer((g) => {
-    // slender background trees, softened by evening haze
-    for (const [x, h, sd, w] of [[90, 640, 1, 26], [260, 600, 2, 20], [430, 560, 3, 16], [1640, 600, 4, 22], [1820, 650, 5, 28], [1980, 600, 6, 20]]) {
-      const base = 700;
-      trunk(g, [[x, base], [x + 6, base - h * 0.5], [x - 4, base - h]], w, w * 0.4, { seed: sd * 7, haze: 0.45, hazeColor: '#ecd2b4' });
-      for (let k = 0; k < 4; k++) {
-        const fy = base - h * (0.45 + k * 0.17), fx = x + (k % 2 ? 50 : -45);
-        foliage(g, fx, fy, 95 - k * 12, 70 - k * 8, { seed: sd * 50 + k, haze: 0.42, hazeColor: '#ecd2b4', blobs: 6, opacity: 0.75 });
-      }
+    // slender background trees with branching crowns, softened by evening haze
+    const hz = { haze: 0.42, hazeColor: '#ecd2b4' };
+    for (const [x, h, sd, w] of [[110, 600, 1, 28], [400, 520, 3, 18], [1660, 560, 4, 22], [1880, 640, 5, 30]]) {
+      const base = 700, top = base - h;
+      trunk(g, [[x, base], [x + 6, base - h * 0.5], [x - 4, top + 60]], w, w * 0.45, { seed: sd * 7, ...hz });
+      trunk(g, [[x, base - h * 0.55], [x - 50, top + 90], [x - 90, top + 50]], w * 0.4, w * 0.15, { seed: sd * 7 + 1, ...hz });
+      trunk(g, [[x + 2, base - h * 0.62], [x + 55, top + 80], [x + 95, top + 60]], w * 0.4, w * 0.15, { seed: sd * 7 + 2, ...hz });
+      foliage(g, x - 80, top + 50, 120, 85, { seed: sd * 50, ...hz, blobs: 6, opacity: 0.8 });
+      foliage(g, x + 85, top + 60, 115, 80, { seed: sd * 50 + 1, ...hz, blobs: 6, opacity: 0.8 });
+      foliage(g, x, top - 10, 150, 105, { seed: sd * 50 + 2, ...hz, blobs: 7, opacity: 0.85 });
     }
     // soft bushes along the meadow edge
     for (let i = 0; i < 9; i++) foliage(g, -40 + i * 250 + noise1(i, 9) * 80, 690, 120, 50, { seed: 400 + i, haze: 0.25, hazeColor: '#e9d2b0', blobs: 6, opacity: 0.75 });
@@ -280,13 +282,19 @@ function drawScene2(g, t) {
   const n06 = line('n06'), n07 = line('n07'), n08 = line('n08'), m03 = line('m03'), l01 = line('l01');
   // lion acting
   const eyeR = span(t, n06.start + 1.0, n06.start + 2.2);
-  const eyeL = span(t, n06.start + 4.6, n06.start + 5.6);
+  const eyeL = span(t, n06.start + 6.0, n06.start + 6.8);
   const awake = Math.min(eyeR, 1);
   const bl = t > l01.start ? blink(t, 7) : 0;
   const chuckling = t > n07.start + 0.5 && t < n07.end + 0.3;
   const smile = clamp(span(t, n07.start, n07.start + 1) * 1 - span(t, n07.end + 0.3, l01.start + 30) * 0.4 + span(t, line('l03').start, line('l03').start + 1) * 0.6);
-  const pawDown = span(t, n06.start + 3.0, n06.start + 4.4);
-  const pawLift = 0.75 * (1 - pawDown) * (t > n06.start + 1.5 ? 1 : 0) * span(t, n06.start + 1.5, n06.start + 2.5) + span(t, n08.start + 0.8, n08.start + 2.2) * 1.0;
+  // the paw: tucked back, then up, forward, and gently down onto the tail tip...
+  const T = n06.start, press = T + 5.2;
+  const up1 = span(t, T + 3.4, T + 4.5), down1 = span(t, T + 4.6, press);
+  // ...and later lifted away again so the tail springs free
+  const R = n08.start, up2 = span(t, R + 0.6, R + 1.6), down2 = span(t, R + 1.8, R + 2.8);
+  const pinned = t >= press && t < R + 1.0;
+  const pawLift = up1 * (1 - down1) + up2 * (1 - down2);
+  const pawReach = 85 * (1 - up1) + 85 * up2;
   const lst = {
     breath: Math.sin(t * 2 * Math.PI / 5.5) * (1 - awake * 0.5),
     eyes: chuckling ? [0, 0] : [Math.min(eyeL, 1 - bl), Math.min(eyeR, 1 - bl)],
@@ -296,7 +304,7 @@ function drawScene2(g, t) {
     headTilt: (chuckling ? Math.sin(t * 9) * 0.015 : 0) - 0.035 * awake + noise1(t * 0.4, 9) * 0.02,
     headDY: chuckling ? Math.abs(Math.sin(t * 9)) * -5 : 0,
     tail: Math.sin(t * 0.8) * 0.7,
-    pawLift,
+    pawLift, pawReach,
     leg: false,
   };
   cam(g, c, 1);
@@ -306,23 +314,36 @@ function drawScene2(g, t) {
 
   // the mouse: frozen, then pleading, then joyful, then away home
   const leave = m03.end + 0.4;
-  const jumpy = span(t, n06.start + 4.2, n06.start + 4.5) - span(t, n06.start + 4.6, n06.start + 5.2);
+  const jumpy = span(t, press, press + 0.18) - span(t, press + 0.25, press + 0.7);
+  const lookBack = span(t, press + 0.1, press + 0.4) - span(t, press + 1.4, press + 2.0);
   const joy = t > n08.end - 0.4 && t < leave ? 1 : 0;
-  let mx = 600, flip = 1, run = null, hop = jumpy * 22;
+  let mx = 600, flip = 1, run = null, hop = jumpy * 26;
   if (joy) hop = Math.abs(Math.sin((t - n08.end) * 6)) * 26;
   if (t > leave) { flip = -1; run = t * 2.6; mx = 600 - (t - leave) * 260; }
   const mst = {
-    t, run, hop, flip, tailForward: t < n08.start + 1.2,
-    talk: mouseTalk, look: run ? 0 : -0.2 - mouseTalk * 0.05, blink: blink(t, 3),
-    happy: joy && !mouseTalk, joy: joy ? 0.6 + 0.4 * Math.sin(t * 8) : 0, flutter: run ? 1 : 0.3,
+    t, run, hop, flip, tailForward: t < R + 2.0,
+    talk: mouseTalk, look: run ? 0 : (-0.2 - mouseTalk * 0.05) * (1 - lookBack) + 0.32 * lookBack,
+    blink: t > press - 0.3 && t < press + 1.5 ? 0 : blink(t, 3),
+    happy: joy && !mouseTalk, joy: joy ? 0.6 + 0.4 * Math.sin(t * 8) : 0, flutter: run ? 1 : 0.3 + jumpy,
   };
   if (mx > -200) {
-    g.save(); g.translate(mx, 962); g.scale(1.55 * flip, 1.55);
+    g.save(); g.translate(mx, 918); g.scale(1.55 * flip, 1.55);
     mouseC.draw(g, mst);
     g.restore();
   }
   g.save(); g.translate(1650, 954); g.scale(2.3, 2.3);
-  lionC.drawLeg(g, lst);
+  const leg = lionC.drawLeg(g, lst);
+  // a soft little puff where the paw meets the tail
+  const puff = span(t, press - 0.05, press + 0.1) * (1 - span(t, press + 0.2, press + 0.9));
+  if (puff > 0.01) {
+    g.save(); g.strokeStyle = rgba(INK, 0.55 * puff); g.lineWidth = 1.6; g.lineCap = 'round';
+    const [px, py] = [leg.tip[0] + 6, leg.tip[1] + 22], grow = span(t, press, press + 0.6) * 10;
+    for (const [a, l] of [[-2.6, 14], [-2.1, 12], [-1.6, 10], [-0.55, 10]]) {
+      g.beginPath(); g.moveTo(px + Math.cos(a) * (12 + grow), py + Math.sin(a) * (12 + grow));
+      g.lineTo(px + Math.cos(a) * (12 + grow + l), py + Math.sin(a) * (12 + grow + l)); g.stroke();
+    }
+    g.restore();
+  }
   g.restore();
 
   fireflies(g, t, 10, { x0: 0, x1: W, y0: 100, y1: 800 }, 21, 0.6);

@@ -1,60 +1,71 @@
 // A tiny mouse with a rust-red scarf, facing right.
 // Local units: body about 100 long, ground at y = 0.
-import { wash, ink, strokes, pool, ellipse, smooth, ribbon, bbox, sprite, drawSprite, rgba, shade, tint, clamp } from '../watercolor.js';
+import { wash, ink, strokes, pool, ellipse, smooth, ribbon, bbox, sprite, drawSprite, rgba, shade, tint, clamp, shadeEdge, glaze, pencil } from '../watercolor.js';
 
-const C = { fur: '#a99a8c', furDark: '#7d6d62', belly: '#efe0cb', pink: '#e2a39b', ear: '#d98f88', scarf: '#b4503a', ink: '#45302a' };
+const C = { fur: '#ab9b8d', furDark: '#6f5f55', furLight: '#d8cbbd', belly: '#f1e3cf', pink: '#e2a39b', ear: '#e09790', scarf: '#b4503a', ink: '#45302a' };
 
 const TAIL = ribbon([[-40, -14], [-80, -4], [-112, -22], [-142, -16], [-160, -26]], 6, 2);
-const TAIL_FWD = ribbon([[-38, -10], [-36, 3], [-6, 7], [40, 7], [90, 6], [132, 10]], 6, 3);
-const BODY = smooth([[-46, -6], [-50, -34], [-28, -60], [8, -64], [34, -48], [40, -16], [26, 0], [-20, 2]]);
-const BELLY = ellipse(8, -20, 24, 15, 18);
-const HEAD = smooth([[8, -86], [34, -94], [58, -82], [80, -64], [72, -54], [44, -48], [14, -54]]);
-const EAR_B = ellipse(14, -98, 19, 21, 20), EAR_F = ellipse(38, -103, 22, 24, 20), EAR_IN = ellipse(38, -101, 13, 15, 16);
+const TAIL_FWD = ribbon([[-38, -10], [-36, 4], [-6, 8], [40, 8], [100, 7], [168, 9]], 9, 5);
+const BODY = smooth([[-44, -4], [-54, -30], [-40, -56], [-10, -68], [18, -64], [36, -46], [42, -18], [28, 0], [-14, 3]]);
+const BELLY = smooth([[6, -42], [26, -36], [32, -14], [18, -2], [0, -6], [-4, -24]]);
+const HEAD = smooth([[6, -84], [30, -95], [56, -86], [78, -68], [80, -60], [70, -53], [44, -46], [16, -50], [4, -64]]);
+const EAR_B = ellipse(14, -98, 19, 21, 22), EAR_F = ellipse(38, -103, 23, 25, 22), EAR_IN = ellipse(39, -101, 14, 16, 18);
 const SCARF = ribbon([[6, -60], [24, -50], [42, -52]], 13, 12);
 const SCARF_TAIL = ribbon([[10, -56], [-4, -46], [-20, -36], [-30, -30]], 10, 7);
-const FOOT = ellipse(0, 0, 11, 5, 14);
-const ARM = ellipse(0, 0, 6, 9, 14);
+const FOOT = ellipse(0, 0, 11, 5, 16);
+const ARM = ellipse(0, 0, 6, 9, 16);
 export const MOUSE_EYE = [54, -74];
 
 export function makeMouse(res = 1, seed = 2) {
   const s = (n) => seed * 100 + n;
-  const tail = sprite(bbox(TAIL), res, (g) => {
-    wash(g, TAIL, { under: true, color: C.pink, opacity: 0.85, seed: s(1), bleed: 0.02 });
-    ink(g, smooth([[-40, -18], [-80, -8], [-112, -26], [-160, -28]], false), { alpha: 0.4, seed: s(2), width: 1 });
-  }, { seed: s(3) });
-  const tailFwd = sprite(bbox(TAIL_FWD), res, (g) => {
-    wash(g, TAIL_FWD, { under: true, color: C.pink, opacity: 0.85, seed: s(29), bleed: 0.02 });
-    ink(g, smooth([[-40, -12], [-36, 6], [40, 11], [132, 13]], false), { alpha: 0.4, seed: s(30), width: 1 });
-  }, { seed: s(31) });
+  const tailSprite = (shape, line, sd) => sprite(bbox(shape), res, (g) => {
+    wash(g, shape, { under: true, color: '#d98b84', opacity: 0.92, seed: s(sd), bleed: 0.02 });
+    shadeEdge(g, shape, { color: '#a0645e', alpha: 0.35, width: 3, dy: -1.2 });
+    pencil(g, smooth(line, false), { seed: s(sd + 1), width: 1, alpha: 0.45 });
+  }, { seed: s(sd + 2) });
+  const tail = tailSprite(TAIL, [[-40, -18], [-80, -8], [-112, -26], [-160, -28]], 1);
+  const tailFwd = tailSprite(TAIL_FWD, [[-42, -12], [-38, 8], [40, 12], [168, 12]], 29);
   const body = sprite(bbox(BODY), res, (g) => {
-    wash(g, BODY, { under: true, color: C.fur, opacity: 0.92, seed: s(4) });
-    wash(g, ellipse(-18, -44, 26, 14, 16), { color: C.furDark, opacity: 0.3, seed: s(5), edge: 0 });
-    wash(g, BELLY, { color: C.belly, opacity: 0.85, seed: s(6) });
-    strokes(g, BODY, { color: C.furDark, count: 60, len: 6, alpha: 0.3, seed: s(7), dir: () => Math.PI + 0.3 });
-    ink(g, BODY, { alpha: 0.55, seed: s(8), gaps: 1, closed: true, width: 1.3 });
-  }, { seed: s(9) });
+    wash(g, BODY, { under: true, color: C.fur, opacity: 0.93, seed: s(4) });
+    shadeEdge(g, BODY, { color: C.furDark, alpha: 0.45, width: 14, dx: 3, dy: -6 });
+    shadeEdge(g, BODY, { color: C.furLight, alpha: 0.6, width: 12, dx: 2, dy: 6 });
+    wash(g, BELLY, { color: C.belly, opacity: 0.85, seed: s(6), edge: 0.1 });
+    glaze(g, BELLY, 16, -30, 14, 10, '#ffffff', 0.4);
+    strokes(g, BODY, { color: C.furDark, count: 110, len: 5, width: 0.8, alpha: 0.3, seed: s(7), dir: () => Math.PI + 0.35, curve: 0.3 });
+    strokes(g, BODY, { color: '#f4ece2', count: 40, len: 5, width: 0.8, alpha: 0.35, seed: s(8), dir: () => Math.PI + 0.35, curve: 0.3 });
+    pencil(g, BODY, { closed: true, seed: s(9), width: 1.2 });
+  }, { seed: s(5) });
   const head = sprite(bbox(HEAD.concat(EAR_B, EAR_F)), res, (g) => {
-    wash(g, EAR_B, { under: true, color: shade(C.fur, 0.1), opacity: 0.9, seed: s(10) });
-    wash(g, ellipse(14, -97, 11, 13, 14), { color: C.ear, opacity: 0.5, seed: s(11), edge: 0 });
-    wash(g, HEAD, { under: true, color: tint(C.fur, 0.1), opacity: 0.94, seed: s(12) });
-    wash(g, EAR_F, { under: true, color: tint(C.fur, 0.1), opacity: 0.94, seed: s(13) });
-    wash(g, EAR_IN, { color: C.ear, opacity: 0.8, seed: s(14) });
-    pool(g, 56, -58, 9, 6, C.pink, 0.55);
-    strokes(g, HEAD, { color: C.furDark, count: 30, len: 5, alpha: 0.25, seed: s(15), dir: () => Math.PI });
-    ink(g, HEAD, { alpha: 0.55, seed: s(16), gaps: 1, closed: true, width: 1.3 });
-    ink(g, EAR_F, { alpha: 0.45, seed: s(17), gaps: 1, closed: true, width: 1.1 });
+    wash(g, EAR_B, { under: true, color: shade(C.fur, 0.15), opacity: 0.92, seed: s(10) });
+    wash(g, ellipse(14, -97, 11, 13, 16), { color: shade(C.ear, 0.1), opacity: 0.6, seed: s(11), edge: 0 });
+    wash(g, HEAD, { under: true, color: tint(C.fur, 0.12), opacity: 0.95, seed: s(12) });
+    shadeEdge(g, HEAD, { color: C.furDark, alpha: 0.35, width: 10, dy: -4 });
+    glaze(g, HEAD, 36, -82, 18, 10, C.furLight, 0.6);
+    wash(g, EAR_F, { under: true, color: tint(C.fur, 0.12), opacity: 0.95, seed: s(13) });
+    wash(g, EAR_IN, { color: C.ear, opacity: 0.85, seed: s(14), edge: 0.15 });
+    shadeEdge(g, EAR_IN, { color: '#a5544e', alpha: 0.35, width: 6, dx: -2, dy: 3 });
+    glaze(g, EAR_IN, 42, -106, 6, 5, '#ffe9e2', 0.6);
+    pool(g, 57, -58, 10, 6, C.pink, 0.6);
+    strokes(g, HEAD, { color: C.furDark, count: 50, len: 4, width: 0.8, alpha: 0.28, seed: s(15), dir: () => Math.PI + 0.2 });
+    pencil(g, HEAD, { closed: true, seed: s(16), width: 1.2 });
+    pencil(g, EAR_F, { closed: true, seed: s(17), width: 1.1, alpha: 0.5 });
+    pencil(g, EAR_B.slice(5, 18), { seed: s(18), width: 1, alpha: 0.4 });
     g.fillStyle = '#c96f6c'; g.beginPath(); g.arc(80, -63, 4.2, 0, 7); g.fill();
-    for (const [dy, dx] of [[-6, 26], [0, 28], [6, 24]]) ink(g, [[74, -60], [74 + dx * 0.5, -60 + dy * 0.6], [74 + dx, -60 + dy]], { alpha: 0.4, width: 0.8, seed: s(18 + dy), taper: false });
-  }, { seed: s(19) });
+    g.fillStyle = 'rgba(255,255,255,0.7)'; g.beginPath(); g.arc(79, -64.5, 1.3, 0, 7); g.fill();
+    for (const [dy, dx] of [[-6, 26], [0, 28], [6, 24]]) ink(g, [[74, -60], [74 + dx * 0.5, -60 + dy * 0.6], [74 + dx, -60 + dy]], { alpha: 0.4, width: 0.8, seed: s(19 + dy), taper: false });
+  }, { seed: s(20) });
   const scarf = sprite(bbox(SCARF), res, (g) => {
-    wash(g, SCARF, { under: true, color: C.scarf, opacity: 0.92, seed: s(20) });
-    strokes(g, SCARF, { color: '#f3d2b8', count: 8, len: 8, alpha: 0.5, seed: s(21), dir: () => 1.4, width: 1 });
-  }, { seed: s(22) });
-  const scarfTail = sprite(bbox(SCARF_TAIL), res, (g) => {
-    wash(g, SCARF_TAIL, { under: true, color: shade(C.scarf, 0.1), opacity: 0.92, seed: s(23) });
+    wash(g, SCARF, { under: true, color: C.scarf, opacity: 0.94, seed: s(21) });
+    shadeEdge(g, SCARF, { color: '#6e2a1c', alpha: 0.4, width: 6, dy: -3 });
+    strokes(g, SCARF, { color: '#f3d2b8', count: 10, len: 7, alpha: 0.45, seed: s(22), dir: () => 1.4, width: 0.9 });
+    pencil(g, SCARF, { closed: true, seed: s(23), width: 1, alpha: 0.45 });
   }, { seed: s(24) });
-  const foot = sprite(bbox(FOOT), res, (g) => wash(g, FOOT, { under: true, color: C.pink, opacity: 0.9, seed: s(25) }), { seed: s(26) });
-  const arm = sprite(bbox(ARM), res, (g) => wash(g, ARM, { under: true, color: tint(C.fur, 0.05), opacity: 0.95, seed: s(27) }), { seed: s(28) });
+  const scarfTail = sprite(bbox(SCARF_TAIL), res, (g) => {
+    wash(g, SCARF_TAIL, { under: true, color: shade(C.scarf, 0.12), opacity: 0.94, seed: s(25) });
+    pencil(g, SCARF_TAIL, { closed: true, seed: s(26), width: 1, alpha: 0.4 });
+  }, { seed: s(27) });
+  const foot = sprite(bbox(FOOT), res, (g) => { wash(g, FOOT, { under: true, color: C.pink, opacity: 0.92, seed: s(28) }); pencil(g, FOOT.slice(0, 10), { seed: s(29), width: 0.9, alpha: 0.45 }); }, { seed: s(30) });
+  const arm = sprite(bbox(ARM), res, (g) => { wash(g, ARM, { under: true, color: tint(C.fur, 0.05), opacity: 0.95, seed: s(31) }); pencil(g, ARM, { closed: true, seed: s(32), width: 0.9, alpha: 0.4 }); }, { seed: s(33) });
 
   // st: run (phase in cycles, or null when standing), blink (0..1), talk (0..1),
   //     look (head tilt rad), hop (px up), flutter, joy
