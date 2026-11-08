@@ -16,7 +16,7 @@ Revision pack for **Edexcel Chemistry Paper 2 (Foundation)** and **Edexcel Maths
 | `video-source/`, `flashcard-source/` | Scripts and code that make the videos and flashcards. | Edit `chemistry.txt` or `maths.txt` and rebuild to change a video. |
 
 **Suggested plan for tonight (about 3 hours):**
-1. Chemistry guide, sections A1–A6 (60 min). Or watch the chemistry video (14 min) first, then the Chemistry flashcards (20 min).
+1. Chemistry video (14 min), then guide sections A1–A7 (60 min), then the Chemistry flashcards (20 min).
 2. Break (10 min).
 3. Maths video (21 min), then the maths guide: work through the examples with a pen and paper, without a calculator (75 min), then the Maths flashcards (20 min).
 4. Quick look at the "Final checklist" at the end of the guide, then sleep.
