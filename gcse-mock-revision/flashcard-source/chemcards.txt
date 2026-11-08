@@ -1,0 +1,98 @@
+Key concepts|Relative charge and mass of a proton, neutron, electron?|Proton +1, mass 1. Neutron 0, mass 1. Electron −1, mass tiny (about 1/1836).
+Key concepts|Where are protons, neutrons and electrons?|Protons and neutrons in the nucleus; electrons in shells around it.
+Key concepts|What does the atomic number tell you?|The number of protons (= number of electrons in an atom).
+Key concepts|How do you work out the number of neutrons?|Mass number − atomic number.
+Key concepts|Sodium: mass number 23, atomic number 11. Protons, neutrons, electrons?|11 protons, 12 neutrons, 11 electrons.
+Key concepts|What are isotopes?|Atoms of the same element (same protons) with different numbers of neutrons.
+Key concepts|Electron arrangement of sodium (11) and chlorine (17)?|Sodium 2.8.1. Chlorine 2.8.7.
+Key concepts|What does the group number tell you? The period number?|Group = number of outer electrons. Period = number of shells.
+Key concepts|What did Mendeleev do?|Arranged elements in a periodic table, left gaps for undiscovered elements and predicted their properties.
+Key concepts|How do metals and non-metals form ions?|Metals lose electrons → positive ions. Non-metals gain electrons → negative ions.
+Key concepts|What is ionic bonding?|Metal + non-metal: electrons transferred; oppositely charged ions held by strong electrostatic attraction.
+Key concepts|When do ionic compounds conduct electricity?|When molten or dissolved (ions free to move).
+Key concepts|What is covalent bonding?|Non-metal atoms sharing pairs of electrons.
+Key concepts|Why do simple molecular substances have low melting points?|Weak forces between the molecules are easy to overcome.
+Key concepts|Formulas of hydroxide, nitrate, carbonate, sulfate, ammonium ions?|OH⁻, NO₃⁻, CO₃²⁻, SO₄²⁻, NH₄⁺
+Key concepts|Formula of magnesium chloride (Mg²⁺, Cl⁻)?|MgCl₂ (charges must cancel).
+Key concepts|Balance: Mg + O₂ → MgO|2Mg + O₂ → 2MgO
+Key concepts|Relative formula mass of CO₂? (C = 12, O = 16)|12 + 16 + 16 = 44
+Key concepts|Relative formula mass of CaCO₃? (Ca = 40, C = 12, O = 16)|40 + 12 + 48 = 100
+Key concepts|A reaction seems to lose mass. Why?|A gas was produced and escaped.
+Key concepts|What is an empirical formula? Empirical formula of C₂H₆?|Simplest whole-number ratio of atoms. CH₃.
+Key concepts|Formula for concentration in g/dm³?|Mass (g) ÷ volume (dm³). 1 dm³ = 1000 cm³.
+Key concepts|10 g dissolved in 250 cm³. Concentration?|250 cm³ = 0.25 dm³. 10 ÷ 0.25 = 40 g/dm³.
+Group 1|Properties of the alkali metals?|1 outer electron, soft, low melting points, stored under oil, very reactive.
+Group 1|Alkali metal + water → ?|Metal hydroxide + hydrogen. e.g. 2Na + 2H₂O → 2NaOH + H₂
+Group 1|What do you see when sodium reacts with water?|Fizzes, melts into a ball, moves around on the surface.
+Group 1|What do you see when potassium reacts with water?|Very fast, melts, lilac flame, may spark.
+Group 1|Trend in reactivity down Group 1, and why?|Increases. Outer electron further from nucleus → less attraction → lost more easily.
+Group 7|Colour and state of chlorine, bromine, iodine?|Chlorine: yellow-green gas. Bromine: red-brown liquid. Iodine: dark grey solid (purple vapour).
+Group 7|What does diatomic mean?|Two atoms joined together, e.g. Cl₂.
+Group 7|Trend in reactivity down Group 7, and why?|Decreases. Outer shell further from nucleus → harder to attract (gain) an electron.
+Group 7|Trend in melting and boiling points down Group 7?|Increase.
+Group 7|Test for chlorine?|Damp blue litmus paper → red then bleached white.
+Group 7|What is a displacement reaction?|A more reactive halogen displaces a less reactive one from a solution of its salt.
+Group 7|Chlorine + potassium bromide → ?|Potassium chloride + bromine (solution turns orange).
+Group 7|Will iodine react with potassium chloride? Why?|No: iodine is less reactive than chlorine.
+Group 7|Halogen + metal → ?   Hydrogen halide + water → ?|Metal halide (a salt).   An acid (e.g. hydrochloric acid).
+Group 0|Why are the noble gases unreactive?|They have a full outer shell, so they don't need to lose or gain electrons.
+Group 0|Uses of helium and argon, and why?|Helium: balloons (less dense than air, not flammable). Argon: light bulbs and welding (inert).
+Group 0|Trend in boiling point and density down Group 0?|Both increase.
+Rates|What is the rate of reaction?|How fast reactants are used up or products are formed.
+Rates|60 cm³ of gas in 30 s. Mean rate?|60 ÷ 30 = 2 cm³/s
+Rates|What is activation energy?|The minimum energy particles need to react when they collide.
+Rates|Why does increasing temperature increase rate?|Particles move faster → more frequent collisions AND more collisions with enough energy.
+Rates|Why does increasing concentration increase rate?|More particles in the same volume → more frequent collisions.
+Rates|Why does increasing gas pressure increase rate?|Same particles in a smaller space → more frequent collisions.
+Rates|Why does powder react faster than lumps?|Bigger surface area → more particles exposed → more frequent collisions.
+Rates|What is a catalyst? What are enzymes?|Speeds up a reaction without being used up, by lowering activation energy. Enzymes = biological catalysts.
+Rates|Core practical: marble chips + hydrochloric acid. What do you measure?|Volume of CO₂ gas (gas syringe) or mass lost (balance) over time.
+Rates|Core practical: sodium thiosulfate + hydrochloric acid. What do you measure?|Time for the cross to disappear (the solution goes cloudy).
+Rates|What does a flat line on a rate graph mean?|The reaction has finished (a reactant has run out).
+Energy|Exothermic vs endothermic?|Exothermic gives out heat (temperature rises). Endothermic takes in heat (temperature falls).
+Energy|Two examples of exothermic reactions?|Combustion and neutralisation.
+Energy|Two examples of endothermic reactions?|Thermal decomposition; dissolving ammonium nitrate (also citric acid + sodium hydrogencarbonate).
+Energy|Why use a polystyrene cup in energy practicals?|It is an insulator, so less heat is lost.
+Energy|Is bond breaking exothermic or endothermic? Bond making?|Breaking: endothermic (takes energy). Making: exothermic (releases energy).
+Energy|Formula for energy change using bond energies?|Energy to break bonds − energy released making bonds. Negative = exothermic.
+Energy|H₂ + Cl₂ → 2HCl. H–H 436, Cl–Cl 242, H–Cl 431. Energy change?|678 − 862 = −184 kJ/mol (exothermic)
+Energy|On a reaction profile, how do you spot an exothermic reaction?|Products are lower in energy than reactants.
+Energy|On a reaction profile, what is the activation energy?|The rise from the reactants to the top of the curve.
+Fuels|What is a hydrocarbon?|A compound of hydrogen and carbon only.
+Fuels|What is crude oil?|A finite, complex mixture of hydrocarbons (mostly alkanes); source of fuels and feedstock for plastics.
+Fuels|How does fractional distillation work?|Oil evaporated; column hot at bottom, cool at top; fractions condense at their boiling points.
+Fuels|Fractions in order from top to bottom?|Gases, petrol, kerosene, diesel oil, fuel oil, bitumen.
+Fuels|Uses: petrol, kerosene, diesel oil, fuel oil, bitumen?|Cars; aircraft; cars and trains; ships and power stations; roads and roofs.
+Fuels|As chain length increases: boiling point, viscosity, ease of ignition?|Boiling point ↑, viscosity ↑, harder to ignite.
+Fuels|What is a homologous series?|Same general formula, differ by CH₂, similar chemical properties, gradual change in physical properties.
+Fuels|General formula of alkanes? First four alkanes?|CₙH₂ₙ₊₂. Methane CH₄, ethane C₂H₆, propane C₃H₈, butane C₄H₁₀.
+Fuels|Products of complete combustion?|Carbon dioxide + water.
+Fuels|Products of incomplete combustion?|Carbon monoxide and soot (carbon) (+ water).
+Fuels|Why is carbon monoxide dangerous?|Toxic: binds to haemoglobin so blood can't carry oxygen. Colourless and odourless.
+Fuels|Where does sulfur dioxide come from? Effect?|Sulfur impurities in fuels. Causes acid rain.
+Fuels|Where do nitrogen oxides come from?|Nitrogen and oxygen from air reacting at high temperatures in engines. Acid rain.
+Fuels|Advantages and disadvantages of hydrogen as a fuel?|Only product is water; but hard to store (gas), explosive, often made using fossil fuel energy.
+Fuels|What is cracking and why is it needed?|Breaking large alkanes into smaller, more useful molecules (incl. alkenes) to match supply with demand.
+Fuels|Conditions for cracking?|Heat the vapour and pass over a hot catalyst.
+Fuels|Complete: C₁₀H₂₂ → C₈H₁₈ + ?|C₂H₄ (ethene)
+Atmosphere|What was the early atmosphere like?|Mostly CO₂ (from volcanoes), water vapour, little or no oxygen.
+Atmosphere|How did the oceans form?|Earth cooled; water vapour condensed.
+Atmosphere|How did CO₂ decrease?|Dissolved in oceans, locked in sedimentary rocks and fossil fuels, used in photosynthesis.
+Atmosphere|How did oxygen increase?|Photosynthesis by algae and plants.
+Atmosphere|Test for oxygen?|Glowing splint relights.
+Atmosphere|Composition of air today?|About 78% nitrogen, 21% oxygen, 1% argon, 0.04% CO₂.
+Atmosphere|Three greenhouse gases?|Carbon dioxide, methane, water vapour.
+Atmosphere|Explain the greenhouse effect.|Short-wavelength radiation passes through; Earth emits infrared; greenhouse gases absorb and re-emit it, warming Earth.
+Atmosphere|Human activities that add greenhouse gases?|Burning fossil fuels, deforestation (CO₂); cattle, rice, landfill (methane).
+Atmosphere|Why is historical climate data less reliable?|Fewer measurements, fewer places, and old values estimated (e.g. ice cores).
+Atmosphere|Effects of climate change?|Rising sea levels and flooding, extreme weather, rainfall changes, food problems, habitat changes.
+Triple only|Flame test colours: lithium, sodium, potassium, calcium, copper?|Red, yellow, lilac, orange-red, blue-green.
+Triple only|NaOH test: copper(II), iron(II), iron(III)?|Blue, green, brown precipitates.
+Triple only|Test for sulfate ions?|Dilute HCl, then barium chloride → white precipitate.
+Triple only|Test for halide ions?|Dilute nitric acid, then silver nitrate → chloride white, bromide cream, iodide yellow.
+Triple only|Test for carbonate ions?|Add acid → fizzes; gas turns limewater milky.
+Triple only|Test for alkenes?|Bromine water: orange → colourless.
+Triple only|Functional groups of alcohols and carboxylic acids?|Alcohol: –OH. Carboxylic acid: –COOH.
+Triple only|How is ethanol made by fermentation?|Sugar + yeast, about 30 °C, no oxygen.
+Triple only|How does addition polymerisation work?|Alkene monomers' double bonds open and join into a long chain, e.g. poly(ethene).
+Triple only|Size of nanoparticles and why they're useful?|1–100 nm; huge surface area to volume ratio (good catalysts, sun creams).

@@ -29,12 +29,12 @@ SR = 22050
 
 # How the voice should say symbols. Subtitles keep the written form.
 SAY = [
-    ("CO₂", "C O two"), ("H₂O", "H two O"), ("CH₄", "C H four"), ("SO₂", "S O two"),
+    ("MgCl₂", "M g C L two"), ("MgO", "M g O"), ("Mg", "M g"), ("HCl", "H C L"), ("CH₂", "C H two"), ("CO₂", "C O two"), ("H₂O", "H two O"), ("CH₄", "C H four"), ("SO₂", "S O two"),
     ("NOₓ", "N O X"), ("NH₃", "N H three"), ("N₂", "N two"), ("H₂", "H two"), ("O₂", "O two"),
     ("Cl₂", "C L two"), ("C₂H₄", "C two H four"), ("C₂H₆", "C two H six"), ("C₃H₈", "C three H eight"),
     ("C₄H₁₀", "C four H ten"), ("C₁₀H₂₂", "C ten H twenty-two"), ("C₈H₁₈", "C eight H eighteen"),
     ("CₙH₂ₙ₊₂", "C n H two n plus two"), ("CₙH₂ₙ", "C n H two n"),
-    ("Rf", "R F"), ("HCF", "H C F"), ("LCM", "L C M"), ("BIDMAS", "bid mass"), ("SOH CAH TOA", "soh cah toa"),
+    ("Le Chatelier", "Le Shatt-el-yay"), ("Rf", "R F"), ("HCF", "H C F"), ("LCM", "L C M"), ("BIDMAS", "bid mass"), ("SOH CAH TOA", "soh cah toa"),
     ("LCA", "L C A"), ("IQR", "I Q R"), ("UV", "U V"), ("KFC", "K F C"),
     ("cm³", "centimetres cubed"), ("cm²", "centimetres squared"), ("m²", "metres squared"), ("m³", "metres cubed"),
     ("x²", "x squared"), ("x³", "x cubed"), ("n²", "n squared"), ("r²", "r squared"),
@@ -49,11 +49,13 @@ def to_speech(t):
     for a, b in SAY:
         t = t.replace(a, b)
     t = re.sub(r"\*\*(.+?)\*\*", r"\1", t)
+    t = re.sub(r"\b([Cc])os\b", r"\1oz", t)
     return re.sub(r"\s+", " ", t).strip()
 
 
 def md(t):
     t = html.escape(t)
+    t = re.sub(r"\^\(([^)]+)\)", r"<sup>\1</sup>", t)
     return re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", t)
 
 

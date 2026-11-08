@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GCSE Mock Flashcards</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--ink:#1d2433;--muted:#5d6678;--chem:#0f8a6a;--maths:#3a5bd9;--line:#dfe3ec;--good:#1a9b54;--bad:#d64545}
+@media (prefers-color-scheme:dark){:root{--bg:#141821;--card:#1f2532;--ink:#eef1f7;--muted:#9aa4b8;--line:#323a4b;--chem:#3cc79f;--maths:#7d98ff}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:720px;margin:0 auto;padding:16px}
+h1{font-size:1.35rem;margin:4px 0 12px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+select,button{font:inherit;padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+button.primary{background:var(--maths);color:#fff;border-color:transparent}
+.stats{color:var(--muted);font-size:.9rem;margin-bottom:10px}
+.card{perspective:1200px;height:300px;cursor:pointer;user-select:none}
+.inner{position:relative;width:100%;height:100%;transition:transform .45s;transform-style:preserve-3d}
+.card.flipped .inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,.07);overflow:auto}
+.back{transform:rotateY(180deg)}
+.tag{position:absolute;top:12px;left:14px;font-size:.78rem;font-weight:600;padding:3px 9px;border-radius:99px;color:#fff}
+.hint{position:absolute;bottom:10px;font-size:.78rem;color:var(--muted)}
+.txt{font-size:1.25rem}
+.back .txt{font-size:1.12rem}
+.rate{display:flex;gap:10px;margin-top:14px}
+.rate button{flex:1;padding:12px}
+.rate .no{border-color:var(--bad);color:var(--bad)}
+.rate .yes{border-color:var(--good);color:var(--good)}
+.nav{display:flex;justify-content:space-between;margin-top:10px}
+.done{text-align:center;padding:40px 10px}
+</style>
+</head>
+<body>
+<main>
+<h1>GCSE Mock Flashcards</h1>
+<div class="bar">
+  <select id="subj"><option value="all">Both subjects</option><option>Chemistry</option><option>Maths</option></select>
+  <select id="topic"><option value="all">All topics</option></select>
+  <button id="shuffle">Shuffle</button>
+  <button id="reset">Restart</button>
+</div>
+<div class="stats" id="stats"></div>
+<div id="area"></div>
+</main>
+<script>
+const CARDS=/*CARDS*/[];
+let deck=[],i=0,known=0,again=[];
+const $=id=>document.getElementById(id);
+function topics(){const s=$('subj').value;const t=[...new Set(CARDS.filter(c=>s==='all'||c.s===s).map(c=>c.t))];
+ $('topic').innerHTML='<option value="all">All topics</option>'+t.map(x=>`<option>${x}</option>`).join('');}
+function build(shuffle){const s=$('subj').value,t=$('topic').value;
+ deck=CARDS.filter(c=>(s==='all'||c.s===s)&&(t==='all'||c.t===t));
+ if(shuffle)for(let k=deck.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[deck[k],deck[j]]=[deck[j],deck[k]];}
+ i=0;known=0;again=[];render();}
+function esc(x){return x.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function render(){
+ $('stats').textContent=deck.length?`Card ${Math.min(i+1,deck.length)} of ${deck.length} · Got it: ${known} · To practise again: ${again.length}`:'';
+ if(i>=deck.length){$('area').innerHTML=`<div class="done"><h2>Round finished!</h2><p>You knew ${known} of ${deck.length}.</p>${again.length?'<button class="primary" id="redo">Practise the '+again.length+' I missed</button>':'<p>Perfect round. 🎉</p>'}</div>`;
+  if(again.length)$('redo').onclick=()=>{deck=again;i=0;known=0;again=[];render();};return;}
+ const c=deck[i],col=c.s==='Chemistry'?'var(--chem)':'var(--maths)';
+ $('area').innerHTML=`<div class="card" id="card"><div class="inner">
+  <div class="face"><span class="tag" style="background:${col}">${c.s} · ${c.t}</span><div class="txt">${esc(c.q)}</div><span class="hint">Tap to see the answer</span></div>
+  <div class="face back"><span class="tag" style="background:${col}">Answer</span><div class="txt">${esc(c.a)}</div></div></div></div>
+  <div class="rate"><button class="no" id="no">✗ Need practice</button><button class="yes" id="yes">✓ Got it</button></div>
+  <div class="nav"><button id="prev">← Back</button><span class="stats">Keys: space = flip, ← →</span><button id="skip">Skip →</button></div>`;
+ $('card').onclick=()=>$('card').classList.toggle('flipped');
+ $('yes').onclick=()=>{known++;i++;render();};
+ $('no').onclick=()=>{again.push(c);i++;render();};
+ $('prev').onclick=()=>{if(i>0){i--;render();}};
+ $('skip').onclick=()=>{i++;render();};}
+document.addEventListener('keydown',e=>{const c=$('card');if(!c)return;
+ if(e.key===' '){e.preventDefault();c.classList.toggle('flipped');}
+ if(e.key==='ArrowRight'){i++;render();} if(e.key==='ArrowLeft'&&i>0){i--;render();}});
+$('subj').onchange=()=>{topics();build(false);};$('topic').onchange=()=>build(false);
+$('shuffle').onclick=()=>build(true);$('reset').onclick=()=>build(false);
+topics();build(false);
+</script>
+</body>
+</html>

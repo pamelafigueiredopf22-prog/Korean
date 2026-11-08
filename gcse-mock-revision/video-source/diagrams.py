@@ -37,7 +37,7 @@ DIAGRAMS["greenhouse"] = svg(f'''
 <rect x="0" y="200" width="600" height="60" fill="#3a5bd9" opacity=".25"/>
 <text x="590" y="240" text-anchor="end" font-size="22">greenhouse gases</text>
 <line x1="120" y1="120" x2="260" y2="430" stroke="{Y}" stroke-width="5"/>
-<text x="120" y="330" fill="{Y}" font-size="22">short wave in</text>
+<text x="20" y="330" fill="{Y}" font-size="24">short wave in</text>
 <path d="M300 430 L360 230" stroke="{R}" stroke-width="5" fill="none"/>
 <path d="M360 230 L420 430" stroke="{R}" stroke-width="5" stroke-dasharray="10 8" fill="none"/>
 <path d="M360 230 L380 120" stroke="{R}" stroke-width="3" fill="none" opacity=".6"/>
@@ -52,7 +52,7 @@ DIAGRAMS["chromatography"] = svg(f'''
 <text x="410" y="88" font-size="22" fill="{B}">solvent front</text>
 <circle cx="290" cy="240" r="16" fill="{Y}"/>
 <line x1="140" y1="400" x2="140" y2="240" stroke="{Y}" stroke-width="4"/><text x="132" y="330" text-anchor="end" fill="{Y}">3 cm</text>
-<line x1="80" y1="400" x2="80" y2="80" stroke="{B}" stroke-width="4"/><text x="72" y="200" text-anchor="end" fill="{B}">6</text>
+<line x1="80" y1="400" x2="80" y2="80" stroke="{B}" stroke-width="4"/><text x="72" y="200" text-anchor="end" fill="{B}">6 cm</text>
 <text x="290" y="470" text-anchor="middle" font-size="22">solvent</text>''')
 
 DIAGRAMS["ethane"] = svg(f'''
@@ -145,3 +145,22 @@ DIAGRAMS["collision"] = svg(f'''
 <text x="300" y="380" text-anchor="middle">1. They must collide</text>
 <text x="300" y="430" text-anchor="middle">2. with enough energy</text>
 <text x="300" y="470" text-anchor="middle" fill="{Y}" font-size="22">(the activation energy)</text>''')
+
+DIAGRAMS["atom"] = svg(f'''
+<circle cx="300" cy="250" r="45" fill="{R}" fill-opacity=".85"/><text x="300" y="260" text-anchor="middle" font-size="24">11p 12n</text>
+<circle cx="300" cy="250" r="100" stroke="#9aa4b8" stroke-width="3" fill="none"/>
+<circle cx="300" cy="250" r="160" stroke="#9aa4b8" stroke-width="3" fill="none"/>
+<circle cx="300" cy="250" r="220" stroke="#9aa4b8" stroke-width="3" fill="none"/>
+''' + "".join(f'<circle cx="{x}" cy="{y}" r="11" fill="{B}"/>' for x, y in
+              [(300,150),(300,350),(140,250),(460,250),(187,137),(413,137),(187,363),(413,363),(300,90),(300,410),(520,250)]) + f'''
+<text x="300" y="505" text-anchor="middle" fill="{Y}">sodium 2.8.1</text>''')
+
+DIAGRAMS["profile"] = svg(f'''
+<line x1="70" y1="450" x2="570" y2="450" {S}/><line x1="70" y1="450" x2="70" y2="30" {S}/>
+<text x="320" y="495" text-anchor="middle" font-size="24">Progress of reaction</text>
+<text x="35" y="250" text-anchor="middle" font-size="24" transform="rotate(-90 35 250)">Energy</text>
+<path d="M90 250 L180 250 C 240 250, 250 90, 300 90 C 350 90, 360 370, 420 370 L 550 370" stroke="{Y}" stroke-width="6" fill="none"/>
+<text x="95" y="235" font-size="24">reactants</text><text x="440" y="355" font-size="24">products</text>
+<line x1="210" y1="250" x2="210" y2="95" stroke="{B}" stroke-width="4"/><text x="200" y="170" text-anchor="end" fill="{B}" font-size="22">activation</text><text x="200" y="196" text-anchor="end" fill="{B}" font-size="22">energy</text>
+<line x1="530" y1="250" x2="530" y2="370" stroke="{G}" stroke-width="4" stroke-dasharray="8 6"/><text x="520" y="300" text-anchor="end" fill="{G}" font-size="22">energy given out</text>
+<text x="320" y="40" text-anchor="middle" fill="{Y}">Exothermic</text>''')

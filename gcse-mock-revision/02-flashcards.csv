@@ -1,74 +1,102 @@
 Front,Back,Subject,Topic
-What is the rate of reaction?,How fast a reaction happens: how quickly reactants are used up or products are made.,Chemistry,Rates
-Formula for mean rate of reaction?,Mean rate = quantity of reactant used (or product formed) ÷ time taken. Units e.g. g/s or cm³/s.,Chemistry,Rates
-60 cm³ of gas is made in 30 s. Mean rate?,60 ÷ 30 = 2 cm³/s,Chemistry,Rates
-What two things must happen for particles to react (collision theory)?,"They must collide, and with enough energy (at least the activation energy).",Chemistry,Rates
-What is activation energy?,The minimum amount of energy particles need to react when they collide.,Chemistry,Rates
-Why does increasing temperature increase rate?,Particles move faster → more frequent collisions AND more collisions have energy ≥ activation energy.,Chemistry,Rates
+"Relative charge and mass of a proton, neutron, electron?","Proton +1, mass 1. Neutron 0, mass 1. Electron −1, mass tiny (about 1/1836).",Chemistry,Key concepts
+"Where are protons, neutrons and electrons?",Protons and neutrons in the nucleus; electrons in shells around it.,Chemistry,Key concepts
+What does the atomic number tell you?,The number of protons (= number of electrons in an atom).,Chemistry,Key concepts
+How do you work out the number of neutrons?,Mass number − atomic number.,Chemistry,Key concepts
+"Sodium: mass number 23, atomic number 11. Protons, neutrons, electrons?","11 protons, 12 neutrons, 11 electrons.",Chemistry,Key concepts
+What are isotopes?,Atoms of the same element (same protons) with different numbers of neutrons.,Chemistry,Key concepts
+Electron arrangement of sodium (11) and chlorine (17)?,Sodium 2.8.1. Chlorine 2.8.7.,Chemistry,Key concepts
+What does the group number tell you? The period number?,Group = number of outer electrons. Period = number of shells.,Chemistry,Key concepts
+What did Mendeleev do?,"Arranged elements in a periodic table, left gaps for undiscovered elements and predicted their properties.",Chemistry,Key concepts
+How do metals and non-metals form ions?,Metals lose electrons → positive ions. Non-metals gain electrons → negative ions.,Chemistry,Key concepts
+What is ionic bonding?,Metal + non-metal: electrons transferred; oppositely charged ions held by strong electrostatic attraction.,Chemistry,Key concepts
+When do ionic compounds conduct electricity?,When molten or dissolved (ions free to move).,Chemistry,Key concepts
+What is covalent bonding?,Non-metal atoms sharing pairs of electrons.,Chemistry,Key concepts
+Why do simple molecular substances have low melting points?,Weak forces between the molecules are easy to overcome.,Chemistry,Key concepts
+"Formulas of hydroxide, nitrate, carbonate, sulfate, ammonium ions?","OH⁻, NO₃⁻, CO₃²⁻, SO₄²⁻, NH₄⁺",Chemistry,Key concepts
+"Formula of magnesium chloride (Mg²⁺, Cl⁻)?",MgCl₂ (charges must cancel).,Chemistry,Key concepts
+Balance: Mg + O₂ → MgO,2Mg + O₂ → 2MgO,Chemistry,Key concepts
+"Relative formula mass of CO₂? (C = 12, O = 16)",12 + 16 + 16 = 44,Chemistry,Key concepts
+"Relative formula mass of CaCO₃? (Ca = 40, C = 12, O = 16)",40 + 12 + 48 = 100,Chemistry,Key concepts
+A reaction seems to lose mass. Why?,A gas was produced and escaped.,Chemistry,Key concepts
+What is an empirical formula? Empirical formula of C₂H₆?,Simplest whole-number ratio of atoms. CH₃.,Chemistry,Key concepts
+Formula for concentration in g/dm³?,Mass (g) ÷ volume (dm³). 1 dm³ = 1000 cm³.,Chemistry,Key concepts
+10 g dissolved in 250 cm³. Concentration?,250 cm³ = 0.25 dm³. 10 ÷ 0.25 = 40 g/dm³.,Chemistry,Key concepts
+Properties of the alkali metals?,"1 outer electron, soft, low melting points, stored under oil, very reactive.",Chemistry,Group 1
+Alkali metal + water → ?,Metal hydroxide + hydrogen. e.g. 2Na + 2H₂O → 2NaOH + H₂,Chemistry,Group 1
+What do you see when sodium reacts with water?,"Fizzes, melts into a ball, moves around on the surface.",Chemistry,Group 1
+What do you see when potassium reacts with water?,"Very fast, melts, lilac flame, may spark.",Chemistry,Group 1
+"Trend in reactivity down Group 1, and why?",Increases. Outer electron further from nucleus → less attraction → lost more easily.,Chemistry,Group 1
+"Colour and state of chlorine, bromine, iodine?",Chlorine: yellow-green gas. Bromine: red-brown liquid. Iodine: dark grey solid (purple vapour).,Chemistry,Group 7
+What does diatomic mean?,"Two atoms joined together, e.g. Cl₂.",Chemistry,Group 7
+"Trend in reactivity down Group 7, and why?",Decreases. Outer shell further from nucleus → harder to attract (gain) an electron.,Chemistry,Group 7
+Trend in melting and boiling points down Group 7?,Increase.,Chemistry,Group 7
+Test for chlorine?,Damp blue litmus paper → red then bleached white.,Chemistry,Group 7
+What is a displacement reaction?,A more reactive halogen displaces a less reactive one from a solution of its salt.,Chemistry,Group 7
+Chlorine + potassium bromide → ?,Potassium chloride + bromine (solution turns orange).,Chemistry,Group 7
+Will iodine react with potassium chloride? Why?,No: iodine is less reactive than chlorine.,Chemistry,Group 7
+Halogen + metal → ?   Hydrogen halide + water → ?,Metal halide (a salt).   An acid (e.g. hydrochloric acid).,Chemistry,Group 7
+Why are the noble gases unreactive?,"They have a full outer shell, so they don't need to lose or gain electrons.",Chemistry,Group 0
+"Uses of helium and argon, and why?","Helium: balloons (less dense than air, not flammable). Argon: light bulbs and welding (inert).",Chemistry,Group 0
+Trend in boiling point and density down Group 0?,Both increase.,Chemistry,Group 0
+What is the rate of reaction?,How fast reactants are used up or products are formed.,Chemistry,Rates
+60 cm³ of gas in 30 s. Mean rate?,60 ÷ 30 = 2 cm³/s,Chemistry,Rates
+What is activation energy?,The minimum energy particles need to react when they collide.,Chemistry,Rates
+Why does increasing temperature increase rate?,Particles move faster → more frequent collisions AND more collisions with enough energy.,Chemistry,Rates
 Why does increasing concentration increase rate?,More particles in the same volume → more frequent collisions.,Chemistry,Rates
-Why does increasing gas pressure increase rate?,Same number of particles in a smaller space → more frequent collisions.,Chemistry,Rates
+Why does increasing gas pressure increase rate?,Same particles in a smaller space → more frequent collisions.,Chemistry,Rates
 Why does powder react faster than lumps?,Bigger surface area → more particles exposed → more frequent collisions.,Chemistry,Rates
-What is a catalyst?,A substance that speeds up a reaction without being used up. It gives a route with lower activation energy.,Chemistry,Rates
-What are enzymes?,Biological catalysts.,Chemistry,Rates
-Name 3 ways to measure rate.,"Gas syringe (volume of gas), mass loss on a balance, disappearing cross (time to go cloudy).",Chemistry,Rates
-"On a rate graph, what does a flat line mean?",The reaction has stopped: a reactant has run out.,Chemistry,Rates
-What does the ⇌ symbol mean?,A reversible reaction: it can go forwards and backwards.,Chemistry,Equilibrium
-Heating blue hydrated copper sulfate gives…?,White anhydrous copper sulfate + water. Adding water turns it blue again (test for water).,Chemistry,Equilibrium
-"If a reversible reaction is exothermic one way, what is it the other way?","Endothermic, and the same amount of energy is transferred.",Chemistry,Equilibrium
-What is equilibrium?,"In a closed system, forward and backward reactions go at the same rate, so amounts stay constant.",Chemistry,Equilibrium
-State Le Chatelier's principle.,"If conditions change, the equilibrium shifts to oppose (counteract) the change.",Chemistry,Equilibrium
-Raising temperature shifts equilibrium which way?,In the endothermic direction.,Chemistry,Equilibrium
-Raising pressure shifts equilibrium which way?,Towards the side with fewer gas molecules.,Chemistry,Equilibrium
-Does a catalyst change the position of equilibrium?,No. It only makes equilibrium be reached faster.,Chemistry,Equilibrium
-What is a hydrocarbon?,A compound made of hydrogen and carbon atoms only.,Chemistry,Organic
-What is crude oil?,"A finite mixture of hydrocarbons, formed from ancient plankton buried in mud over millions of years.",Chemistry,Organic
-General formula of alkanes?,CₙH₂ₙ₊₂,Chemistry,Organic
-First four alkanes?,"Methane CH₄, Ethane C₂H₆, Propane C₃H₈, Butane C₄H₁₀ (Monkeys Eat Peanut Butter).",Chemistry,Organic
-What does 'saturated' mean?,Only single C–C bonds (no double bonds).,Chemistry,Organic
-How does fractional distillation work?,"Oil is heated to a gas; it rises up a column (hot at bottom, cool at top); each fraction condenses at its boiling point.",Chemistry,Organic
-Where do small molecules collect in the column?,At the top (low boiling points).,Chemistry,Organic
-"As chain length increases, what happens to boiling point, viscosity, flammability?","Boiling point ↑, viscosity ↑, flammability ↓",Chemistry,Organic
-Products of complete combustion of a hydrocarbon?,Carbon dioxide + water (and energy released).,Chemistry,Organic
-What is cracking?,"Breaking long-chain hydrocarbons into shorter, more useful ones (alkane + alkene).",Chemistry,Organic
-Two methods of cracking?,"Catalytic cracking (hot catalyst) and steam cracking (steam, very high temperature).",Chemistry,Organic
-Complete: C₁₀H₂₂ → C₈H₁₈ + ?,C₂H₄ (ethene),Chemistry,Organic
-General formula of alkenes?,"CₙH₂ₙ, with a C=C double bond (unsaturated).",Chemistry,Organic
-Test for an alkene?,Bromine water: orange → colourless. (Alkane: stays orange.),Chemistry,Organic
-What is a pure substance in chemistry?,"A single element or compound, not mixed with anything else.",Chemistry,Analysis
-How can you tell if a substance is pure?,It melts/boils at one exact temperature. Impure: over a range.,Chemistry,Analysis
-What is a formulation? Give examples.,"A mixture designed for a use, with measured amounts. E.g. paint, medicine, fuel, cleaning products, alloys, fertiliser, food.",Chemistry,Analysis
-Why is the chromatography start line drawn in pencil?,"Pencil doesn't dissolve in the solvent, so it won't run.",Chemistry,Analysis
-"In paper chromatography, stationary and mobile phase?",Stationary = paper. Mobile = solvent.,Chemistry,Analysis
-Formula for Rf value?,"Rf = distance moved by substance ÷ distance moved by solvent (between 0 and 1, no units).",Chemistry,Analysis
-"Spot moves 3 cm, solvent 6 cm. Rf?",3 ÷ 6 = 0.5,Chemistry,Analysis
-Test for hydrogen?,Burning splint → squeaky pop.,Chemistry,Analysis
-Test for oxygen?,Glowing splint → relights.,Chemistry,Analysis
-Test for carbon dioxide?,Bubble through limewater → turns milky/cloudy.,Chemistry,Analysis
-Test for chlorine?,Damp blue litmus paper → bleached white.,Chemistry,Analysis
-Composition of air today?,"About 80% nitrogen, 20% oxygen, small amounts of CO₂, water vapour, argon.",Chemistry,Atmosphere
-What was the early atmosphere like?,"Mostly carbon dioxide (from volcanoes), water vapour, little or no oxygen, like Mars/Venus.",Chemistry,Atmosphere
+What is a catalyst? What are enzymes?,"Speeds up a reaction without being used up, by lowering activation energy. Enzymes = biological catalysts.",Chemistry,Rates
+Core practical: marble chips + hydrochloric acid. What do you measure?,Volume of CO₂ gas (gas syringe) or mass lost (balance) over time.,Chemistry,Rates
+Core practical: sodium thiosulfate + hydrochloric acid. What do you measure?,Time for the cross to disappear (the solution goes cloudy).,Chemistry,Rates
+What does a flat line on a rate graph mean?,The reaction has finished (a reactant has run out).,Chemistry,Rates
+Exothermic vs endothermic?,Exothermic gives out heat (temperature rises). Endothermic takes in heat (temperature falls).,Chemistry,Energy
+Two examples of exothermic reactions?,Combustion and neutralisation.,Chemistry,Energy
+Two examples of endothermic reactions?,Thermal decomposition; dissolving ammonium nitrate (also citric acid + sodium hydrogencarbonate).,Chemistry,Energy
+Why use a polystyrene cup in energy practicals?,"It is an insulator, so less heat is lost.",Chemistry,Energy
+Is bond breaking exothermic or endothermic? Bond making?,Breaking: endothermic (takes energy). Making: exothermic (releases energy).,Chemistry,Energy
+Formula for energy change using bond energies?,Energy to break bonds − energy released making bonds. Negative = exothermic.,Chemistry,Energy
+"H₂ + Cl₂ → 2HCl. H–H 436, Cl–Cl 242, H–Cl 431. Energy change?",678 − 862 = −184 kJ/mol (exothermic),Chemistry,Energy
+"On a reaction profile, how do you spot an exothermic reaction?",Products are lower in energy than reactants.,Chemistry,Energy
+"On a reaction profile, what is the activation energy?",The rise from the reactants to the top of the curve.,Chemistry,Energy
+What is a hydrocarbon?,A compound of hydrogen and carbon only.,Chemistry,Fuels
+What is crude oil?,"A finite, complex mixture of hydrocarbons (mostly alkanes); source of fuels and feedstock for plastics.",Chemistry,Fuels
+How does fractional distillation work?,"Oil evaporated; column hot at bottom, cool at top; fractions condense at their boiling points.",Chemistry,Fuels
+Fractions in order from top to bottom?,"Gases, petrol, kerosene, diesel oil, fuel oil, bitumen.",Chemistry,Fuels
+"Uses: petrol, kerosene, diesel oil, fuel oil, bitumen?",Cars; aircraft; cars and trains; ships and power stations; roads and roofs.,Chemistry,Fuels
+"As chain length increases: boiling point, viscosity, ease of ignition?","Boiling point ↑, viscosity ↑, harder to ignite.",Chemistry,Fuels
+What is a homologous series?,"Same general formula, differ by CH₂, similar chemical properties, gradual change in physical properties.",Chemistry,Fuels
+General formula of alkanes? First four alkanes?,"CₙH₂ₙ₊₂. Methane CH₄, ethane C₂H₆, propane C₃H₈, butane C₄H₁₀.",Chemistry,Fuels
+Products of complete combustion?,Carbon dioxide + water.,Chemistry,Fuels
+Products of incomplete combustion?,Carbon monoxide and soot (carbon) (+ water).,Chemistry,Fuels
+Why is carbon monoxide dangerous?,Toxic: binds to haemoglobin so blood can't carry oxygen. Colourless and odourless.,Chemistry,Fuels
+Where does sulfur dioxide come from? Effect?,Sulfur impurities in fuels. Causes acid rain.,Chemistry,Fuels
+Where do nitrogen oxides come from?,Nitrogen and oxygen from air reacting at high temperatures in engines. Acid rain.,Chemistry,Fuels
+Advantages and disadvantages of hydrogen as a fuel?,"Only product is water; but hard to store (gas), explosive, often made using fossil fuel energy.",Chemistry,Fuels
+What is cracking and why is it needed?,"Breaking large alkanes into smaller, more useful molecules (incl. alkenes) to match supply with demand.",Chemistry,Fuels
+Conditions for cracking?,Heat the vapour and pass over a hot catalyst.,Chemistry,Fuels
+Complete: C₁₀H₂₂ → C₈H₁₈ + ?,C₂H₄ (ethene),Chemistry,Fuels
+What was the early atmosphere like?,"Mostly CO₂ (from volcanoes), water vapour, little or no oxygen.",Chemistry,Atmosphere
 How did the oceans form?,Earth cooled; water vapour condensed.,Chemistry,Atmosphere
-How did CO₂ levels decrease?,"Dissolved in oceans, formed carbonates/sedimentary rocks (limestone), fossil fuels, and absorbed by algae/plants (photosynthesis).",Chemistry,Atmosphere
-How did oxygen levels increase?,Algae (from ~2.7 billion years ago) and then plants photosynthesised.,Chemistry,Atmosphere
-Word equation for photosynthesis?,Carbon dioxide + water → glucose + oxygen,Chemistry,Atmosphere
+How did CO₂ decrease?,"Dissolved in oceans, locked in sedimentary rocks and fossil fuels, used in photosynthesis.",Chemistry,Atmosphere
+How did oxygen increase?,Photosynthesis by algae and plants.,Chemistry,Atmosphere
+Test for oxygen?,Glowing splint relights.,Chemistry,Atmosphere
+Composition of air today?,"About 78% nitrogen, 21% oxygen, 1% argon, 0.04% CO₂.",Chemistry,Atmosphere
 Three greenhouse gases?,"Carbon dioxide, methane, water vapour.",Chemistry,Atmosphere
-Explain the greenhouse effect.,"Short-wavelength sunlight reaches Earth; Earth emits long-wavelength (infrared); greenhouse gases absorb and re-emit it, keeping heat in.",Chemistry,Atmosphere
-Human activities that increase CO₂ and methane?,"CO₂: burning fossil fuels, deforestation. Methane: cattle farming, rice fields, landfill.",Chemistry,Atmosphere
-Effects of climate change?,"Rising sea levels/flooding, extreme weather, droughts, food production problems, wildlife changes.",Chemistry,Atmosphere
-What is a carbon footprint?,"Total CO₂ and other greenhouse gases emitted over the full life cycle of a product, service or event.",Chemistry,Atmosphere
-Why is carbon monoxide dangerous?,"Toxic (stops blood carrying oxygen), colourless and odourless. Made by incomplete combustion.",Chemistry,Atmosphere
-Problems caused by soot/particulates?,Global dimming and lung damage.,Chemistry,Atmosphere
-Where does sulfur dioxide come from and what does it cause?,Sulfur impurities in fuels; acid rain and breathing problems.,Chemistry,Atmosphere
-Where do nitrogen oxides come from?,Nitrogen and oxygen from the air reacting at high temperatures in engines. Cause acid rain.,Chemistry,Atmosphere
-What is sustainable development?,Meeting today's needs without stopping future generations from meeting theirs.,Chemistry,Resources
-What is potable water? Is it pure?,"Water safe to drink. Not pure: it contains some dissolved substances, but low salts and no harmful microbes.",Chemistry,Resources
-UK steps to make potable water?,"Choose fresh water source → filter (filter beds) → sterilise (chlorine, ozone or UV).",Chemistry,Resources
-What is desalination? Two methods?,Removing salt from sea water: distillation or reverse osmosis (membranes). Uses lots of energy.,Chemistry,Resources
-Steps in waste water (sewage) treatment?,Screening & grit removal → sedimentation (sludge + effluent) → sludge: anaerobic digestion; effluent: aerobic biological treatment.,Chemistry,Resources
-What does anaerobic digestion of sludge produce?,Biogas (methane) and fertiliser.,Chemistry,Resources
-Four stages of a Life Cycle Assessment?,"1 Extracting raw materials, 2 Manufacturing & packaging, 3 Use, 4 Disposal.",Chemistry,Resources
-Why can LCAs be biased?,"Some effects (e.g. pollution) are hard to measure, so value judgements are made; companies may show only good parts.",Chemistry,Resources
-Why recycle metals and glass?,"Saves finite resources and energy, less landfill, less mining damage.",Chemistry,Resources
+Explain the greenhouse effect.,"Short-wavelength radiation passes through; Earth emits infrared; greenhouse gases absorb and re-emit it, warming Earth.",Chemistry,Atmosphere
+Human activities that add greenhouse gases?,"Burning fossil fuels, deforestation (CO₂); cattle, rice, landfill (methane).",Chemistry,Atmosphere
+Why is historical climate data less reliable?,"Fewer measurements, fewer places, and old values estimated (e.g. ice cores).",Chemistry,Atmosphere
+Effects of climate change?,"Rising sea levels and flooding, extreme weather, rainfall changes, food problems, habitat changes.",Chemistry,Atmosphere
+"Flame test colours: lithium, sodium, potassium, calcium, copper?","Red, yellow, lilac, orange-red, blue-green.",Chemistry,Triple only
+"NaOH test: copper(II), iron(II), iron(III)?","Blue, green, brown precipitates.",Chemistry,Triple only
+Test for sulfate ions?,"Dilute HCl, then barium chloride → white precipitate.",Chemistry,Triple only
+Test for halide ions?,"Dilute nitric acid, then silver nitrate → chloride white, bromide cream, iodide yellow.",Chemistry,Triple only
+Test for carbonate ions?,Add acid → fizzes; gas turns limewater milky.,Chemistry,Triple only
+Test for alkenes?,Bromine water: orange → colourless.,Chemistry,Triple only
+Functional groups of alcohols and carboxylic acids?,Alcohol: –OH. Carboxylic acid: –COOH.,Chemistry,Triple only
+How is ethanol made by fermentation?,"Sugar + yeast, about 30 °C, no oxygen.",Chemistry,Triple only
+How does addition polymerisation work?,"Alkene monomers' double bonds open and join into a long chain, e.g. poly(ethene).",Chemistry,Triple only
+Size of nanoparticles and why they're useful?,"1–100 nm; huge surface area to volume ratio (good catalysts, sun creams).",Chemistry,Triple only
 (−4) × (−3) = ?,12 (same signs → positive),Maths,Number
 What does BIDMAS stand for?,"Brackets, Indices, Division/Multiplication, Addition/Subtraction.",Maths,Number
 3 + 4 × 2² = ?,3 + 4 × 4 = 3 + 16 = 19,Maths,Number

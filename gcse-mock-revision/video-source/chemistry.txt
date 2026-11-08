@@ -1,238 +1,250 @@
-# Chemistry Paper 2 (Foundation, AQA) video lesson script
+# Chemistry Paper 2 (Foundation, Edexcel) video lesson script
+# Topics 1, 6, 7, 8 (+ a short Topic 9 section for separate Chemistry)
 
 @chapter Introduction
-@title Chemistry Paper 2 | GCSE Foundation · Mock revision
-- >> Hello, and welcome to your chemistry paper two revision lesson.
-- Rates · Equilibrium · Crude oil >> We will cover rates of reaction, reversible reactions, and crude oil and fuels.
-- Analysis · Atmosphere · Resources >> Then chemical analysis, the Earth's atmosphere, and using resources.
-- Pause any time and have a go yourself >> Pause the video whenever you want, and try each question yourself before I give the answer.
+@title Chemistry Paper 2 | Edexcel GCSE Foundation · Mock revision
+- >> Hello, and welcome to your Edexcel chemistry paper two revision lesson.
+- Key concepts · Groups · Rates · Energy · Fuels · Atmosphere >> We'll cover key concepts, groups in the periodic table, rates and energy changes, then fuels and the atmosphere.
+- Combined Science exam: 1 hour 10 min · Separate Chemistry: 1 hour 45 min >> If your exam is one hour ten minutes, you take combined science. If it's one hour forty-five, you take separate chemistry, and there's an extra section at the end for you.
+- Pause any time and have a go yourself >> Pause the video whenever you want, and try each question before I give the answer.
 
-@chapter 1. Rates of reaction
-@scene CHEMISTRY | Rates | What is the rate of reaction?
-@box Mean rate | quantity ÷ time | units: g/s or cm³/s
-- Rate = **how fast** a reaction happens >> The rate of reaction is simply how fast a reaction happens.
-- Fast: burning, explosions >> Burning and explosions are fast reactions.
-- Slow: rusting >> Rusting is a slow reaction.
-- Mean rate = quantity ÷ time taken >> To calculate the mean rate, divide the quantity of reactant used, or product made, by the time taken.
-- Example: 60 cm³ of gas in 30 s >> For example, a reaction makes sixty centimetres cubed of gas in thirty seconds.
-- 60 ÷ 30 = **2 cm³/s** >> Sixty divided by thirty is two. So the mean rate is two centimetres cubed per second.
+@chapter 1. Key concepts: atoms
+@scene CHEMISTRY | Key concepts | Inside an atom
+@diagram atom
+- Nucleus: **protons** (+1) and **neutrons** (0) >> Every atom has a tiny nucleus in the middle. It contains protons, with a charge of plus one, and neutrons, with no charge.
+- Shells: **electrons** (−1) >> Electrons, with a charge of minus one, move around the nucleus in shells.
+- Protons and neutrons: mass 1 · electrons: tiny >> Protons and neutrons both have a mass of one. Electrons are so light, their mass is almost nothing.
+- Atoms have no overall charge >> An atom has no overall charge, because it has the same number of protons and electrons.
 
-@scene CHEMISTRY | Rates | Collision theory
+@scene CHEMISTRY | Key concepts | Atomic number and mass number
+@box Sodium | mass number 23 | atomic number 11
+- Atomic number = number of **protons** >> The atomic number, the smaller number, is the number of protons.
+- Mass number = protons + neutrons >> The mass number, the bigger number, is protons plus neutrons.
+- Sodium: 11 protons, 11 electrons >> Sodium has atomic number eleven. So it has eleven protons and eleven electrons.
+- Neutrons = 23 − 11 = **12** >> Neutrons are mass number minus atomic number: twenty-three minus eleven is twelve.
+- Isotopes: same protons, **different neutrons** >> Isotopes are atoms of the same element with different numbers of neutrons.
+
+@scene CHEMISTRY | Key concepts | Electron shells and the periodic table
+@box Fill shells | 2, then 8, then 8
+- Sodium (11): **2.8.1** >> Fill the shells two, then eight, then eight. Sodium has eleven electrons: two, eight, one.
+- Chlorine (17): **2.8.7** >> Chlorine has seventeen: two, eight, seven.
+- Group = number of **outer electrons** >> The group number is the number of electrons in the outer shell. Sodium is in group one.
+- Period = number of **shells** >> The period, or row, is the number of shells.
+- Metals on the left, non-metals on the right >> Metals are on the left of the periodic table. Non-metals are on the right.
+- Mendeleev left **gaps** and predicted properties >> Mendeleev left gaps for elements not yet discovered, and predicted their properties. He was later proved right.
+
+@scene CHEMISTRY | Key concepts | Ions and bonding
+@box Ions | metals LOSE electrons → + | non-metals GAIN electrons → −
+- Metals **lose** electrons → positive ions (Na⁺) >> An ion is a charged atom. Metals lose electrons to make positive ions.
+- Non-metals **gain** electrons → negative ions (Cl⁻) >> Non-metals gain electrons to make negative ions. Both do this to get a full outer shell.
+- Ionic: metal + non-metal, electrons **transferred** >> Ionic bonding is between a metal and a non-metal. Electrons are transferred, and the opposite charges attract strongly.
+- High melting point · conducts when **molten or dissolved** >> Ionic compounds have high melting points. They conduct electricity when molten or dissolved, because the ions can move.
+- Covalent: non-metals **share** pairs of electrons >> Covalent bonding is between non-metals. They share pairs of electrons.
+- Simple molecules: **low** melting point >> Small covalent molecules have low melting points, because the forces between molecules are weak.
+
+@scene CHEMISTRY | Key concepts | Formulas and balancing equations
+@box Common ions | OH⁻ hydroxide | NO₃⁻ nitrate | CO₃²⁻ carbonate | SO₄²⁻ sulfate
+- Charges must cancel: Mg²⁺ + Cl⁻ → **MgCl₂** >> In a formula, the charges must cancel out. Magnesium is two plus and chloride is one minus, so we need two chlorides: MgCl₂.
+- Mg + O₂ → MgO ✗ >> Equations must balance: the same number of each atom on both sides.
+- Mg + O₂ → **2**MgO >> There are two oxygens on the left, so put a two in front of MgO.
+- **2**Mg + O₂ → 2MgO ✔ >> Now there are two magnesiums on the right, so put a two in front of Mg. Balanced.
+- Only change the **big numbers** in front >> Only ever change the big numbers in front, never the small ones.
+
+@scene CHEMISTRY | Key concepts | Relative formula mass and concentration
+@box Concentration | g/dm³ = mass ÷ volume | 1 dm³ = 1000 cm³
+- CO₂ = 12 + 16 + 16 = **44** >> To find the relative formula mass, add up the atomic masses. Carbon dioxide is twelve plus sixteen plus sixteen: forty-four.
+- CaCO₃ = 40 + 12 + 48 = **100** >> Calcium carbonate is forty plus twelve plus three sixteens: one hundred.
+- Mass seems to drop → a **gas escaped** >> Mass is always conserved. If the mass seems to go down, a gas escaped.
+- 10 g in 250 cm³: 250 cm³ = 0.25 dm³ >> Concentration: ten grams dissolved in two hundred and fifty centimetres cubed. First, change to decimetres cubed: zero point two five.
+- 10 ÷ 0.25 = **40 g/dm³** >> Ten divided by zero point two five is forty grams per decimetre cubed.
+
+@chapter 2. Group 1: alkali metals
+@scene CHEMISTRY | Groups | Group 1: the alkali metals
+@box Word equation | metal + water → | metal hydroxide | + hydrogen
+- **1** outer electron · soft · stored under oil >> Group one metals have one outer electron. They are soft, and stored under oil because they react with air and water.
+- metal + water → metal hydroxide + hydrogen >> With water, they make a metal hydroxide and hydrogen gas.
+- Lithium: fizzes steadily >> Lithium fizzes steadily.
+- Sodium: fizzes, **melts into a ball**, moves around >> Sodium fizzes faster, melts into a ball, and whizzes around.
+- Potassium: very fast, **lilac flame** >> Potassium reacts very fast, with a lilac flame.
+
+@scene CHEMISTRY | Groups | Why reactivity increases down Group 1
+- Reactivity **increases** going down >> Reactivity increases going down group one. Here's why.
+- Atoms get bigger (more shells) >> Going down, the atoms get bigger, with more shells.
+- Outer electron **further from the nucleus** >> So the outer electron is further from the nucleus,
+- → **less attraction** → lost more easily >> which means less attraction, so it is lost more easily.
+@pause 1
+
+@chapter 3. Group 7 and Group 0
+@scene CHEMISTRY | Groups | Group 7: the halogens
+@box Colours | chlorine: yellow-green gas | bromine: red-brown liquid | iodine: grey solid, purple vapour
+- **7** outer electrons · diatomic: Cl₂, Br₂, I₂ >> The halogens have seven outer electrons. They exist as pairs of atoms, called diatomic molecules.
+- Chlorine: pale **yellow-green** gas >> Chlorine is a pale yellow-green gas.
+- Bromine: **red-brown** liquid >> Bromine is a red-brown liquid.
+- Iodine: **dark grey** solid, **purple** vapour >> Iodine is a dark grey solid, which gives a purple vapour.
+- Melting and boiling points **increase** going down >> Going down, the melting and boiling points increase.
+- Test for chlorine: damp litmus → **bleached** >> The test for chlorine: damp blue litmus paper turns red, then is bleached white.
+
+@scene CHEMISTRY | Groups | Why reactivity decreases down Group 7
+- Halogens react by **gaining** an electron >> Halogens react by gaining one electron.
+- Going down: outer shell **further** from the nucleus >> Going down the group, the outer shell is further from the nucleus.
+- → **harder** to attract an electron >> So it is harder to attract an extra electron.
+- Reactivity **decreases** going down >> That's why reactivity decreases going down group seven. The opposite of group one!
+
+@scene CHEMISTRY | Groups | Displacement reactions
+@box Rule | more reactive halogen | pushes out | less reactive one
+- A **more reactive** halogen displaces a less reactive one >> In a displacement reaction, a more reactive halogen pushes a less reactive one out of its salt solution.
+- chlorine + potassium bromide → potassium chloride + bromine >> Chlorine plus potassium bromide gives potassium chloride plus bromine.
+- Cl₂ + 2KBr → 2KCl + Br₂ >> Here is the balanced symbol equation.
+- Solution turns **orange** (bromine) >> You see the solution turn orange, because bromine is made.
+- Iodine + potassium chloride → **no reaction** >> Iodine plus potassium chloride: no reaction, because iodine is less reactive than chlorine.
+- Halogen + metal → **metal halide** (a salt) >> Halogens also react with metals to make salts called metal halides, like sodium chloride.
+
+@scene CHEMISTRY | Groups | Group 0: the noble gases
+- **Full outer shell** → very unreactive (inert) >> The noble gases have a full outer shell, so they are very unreactive.
+- Helium: balloons (low density, not flammable) >> Helium is used in balloons, because it is less dense than air and does not burn.
+- Argon: light bulbs and welding (inert) >> Argon is used in light bulbs and welding, because it is inert, so it stops metal reacting with oxygen.
+- Boiling point and density **increase** going down >> Going down the group, boiling point and density increase.
+
+@scene CHEMISTRY | Groups | Pause and try
+- Why is potassium more reactive than sodium? >> Pause and try. Why is potassium more reactive than sodium?
+@pause 6
+- Outer electron further from nucleus >> Answer: potassium's outer electron is further from the nucleus,
+- → less attraction → lost more easily >> so there is less attraction, and it is lost more easily.
+
+@chapter 4. Rates of reaction
+@scene CHEMISTRY | Rates | Rate and collision theory
 @diagram collision
-- Particles must **collide** >> Why do reactions happen at all? First, the particles must collide. They have to bump into each other.
-- …with **enough energy** >> Second, they must collide with enough energy.
-- Minimum energy = **activation energy** >> The smallest amount of energy they need to react is called the activation energy.
-- Faster reaction = **more frequent** collisions >> So, to speed up a reaction, we need more frequent collisions, meaning more collisions every second.
-- …or more collisions with enough energy >> Or we need more of the collisions to have enough energy.
+- Rate = **how fast** a reaction happens >> The rate of reaction is how fast a reaction happens.
+- Mean rate = amount of product ÷ time >> Mean rate is the amount of product made, divided by the time. Sixty centimetres cubed of gas in thirty seconds is two centimetres cubed per second.
+- Particles must **collide**… >> For a reaction to happen, particles must collide,
+- …with **enough energy** (activation energy) >> with enough energy. The minimum energy needed is the activation energy.
+- Faster = **more frequent** collisions >> To speed up a reaction, we need more frequent collisions, or more collisions with enough energy.
 
-@scene CHEMISTRY | Rates | The 5 factors that change rate
-@box Exam phrase | "more frequent | collisions" | = more collisions | per second
-- **Temperature** ↑: particles move faster >> Number one, temperature. When it is hotter, particles move faster.
-- → more frequent collisions AND more with enough energy >> So they collide more often, and more of the collisions have enough energy to react.
-- **Concentration** ↑: more particles in the same volume >> Two, concentration. A stronger solution has more particles in the same volume, so they collide more often.
-- **Pressure** ↑ (gases): same particles, smaller space >> Three, pressure, for gases. The same number of particles are squashed into a smaller space, so they collide more often.
-- **Surface area** ↑: powder, not lumps >> Four, surface area. A powder has more particles exposed than a lump, so there are more collisions.
-- **Catalyst**: lowers the activation energy >> Five, a catalyst. It gives the reaction a different route with a lower activation energy.
+@scene CHEMISTRY | Rates | Factors that change the rate
+@box Exam phrase | "more frequent | collisions" | = more per second
+- **Temperature** ↑: faster particles >> Higher temperature: particles move faster, so there are more frequent collisions, and more of them have enough energy.
+- **Concentration** ↑: more particles in the same volume >> Higher concentration: more particles in the same volume, so more frequent collisions.
+- **Pressure** ↑ (gases): same particles, smaller space >> Higher pressure, for gases: the same particles in a smaller space, so more frequent collisions.
+- **Surface area** ↑: powder, not lumps >> Bigger surface area: a powder has more particles exposed than a lump, so more frequent collisions.
+- **Catalyst**: lower activation energy, not used up >> A catalyst gives a route with a lower activation energy, and is not used up. Enzymes are biological catalysts.
 
-@scene CHEMISTRY | Rates | Catalysts
-@box Catalyst | speeds up reaction | NOT used up | lowers activation energy
-- Speeds up a reaction >> A catalyst speeds up a reaction,
-- Is **not used up** >> but it is not used up. You get it all back at the end.
-- Not written as a reactant >> So it is not written as a reactant in the equation.
-- Enzymes = **biological catalysts** >> Enzymes are catalysts found in living things. We call them biological catalysts.
-
-@scene CHEMISTRY | Rates | Measuring the rate
+@scene CHEMISTRY | Rates | Core practicals and graphs
 @diagram rate_graph
-- Gas syringe: volume of gas over time >> There are three common ways to measure rate. One: collect the gas in a gas syringe and measure its volume over time.
-- Balance: mass goes **down** as gas escapes >> Two: put the flask on a balance. The mass goes down as gas escapes.
-- Disappearing cross: time until it goes cloudy >> Three: the disappearing cross. Time how long it takes until the solution is too cloudy to see the cross.
-- Steep line = fast >> On a graph, a steep line means a fast reaction.
-- Flat line = **finished** (a reactant ran out) >> When the line goes flat, the reaction has stopped, because one reactant has run out.
-- Faster reaction: steeper, flattens sooner >> A faster reaction gives a steeper curve that goes flat sooner.
+- Marble chips + acid → measure **gas** or **mass lost** >> Edexcel uses two reactions. Marble chips with hydrochloric acid make carbon dioxide. Measure the volume of gas, or the mass lost.
+- Change: **chip size** or acid concentration >> You can change the size of the chips, or the concentration of the acid.
+- Sodium thiosulfate + acid → goes **cloudy** >> Sodium thiosulfate with hydrochloric acid goes cloudy. Time how long until the cross disappears.
+- Change: **temperature** or concentration >> Here, you can change the temperature or the concentration.
+- Steep = fast · flat = **finished** >> On the graph, steep means fast, and flat means the reaction has finished.
 
-@scene CHEMISTRY | Rates | Required practical: concentration
-- Change: **concentration** (independent variable) >> In the required practical, you change the concentration. That is the independent variable.
-- Measure: time for the cross to disappear (dependent) >> You measure the time for the cross to disappear, or the volume of gas. That is the dependent variable.
-- Keep the same: temperature, volumes, same person >> You keep everything else the same: the temperature, the volumes, and the same person judging the cross. These are control variables.
-- Higher concentration → shorter time → faster rate >> A higher concentration gives a shorter time, which means a faster rate.
+@chapter 5. Energy changes
+@scene CHEMISTRY | Energy | Exothermic and endothermic
+@box Remember | EXothermic = heat EXits | ENdothermic = heat ENters
+- Exothermic: **gives out** heat → temperature rises >> An exothermic reaction gives out heat, so the temperature rises.
+- Examples: **combustion**, **neutralisation** >> Examples are burning, and neutralisation, which is an acid plus an alkali.
+- Endothermic: **takes in** heat → temperature falls >> An endothermic reaction takes in heat, so the temperature falls.
+- Examples: thermal decomposition, dissolving **ammonium nitrate** >> Examples are thermal decomposition, and dissolving ammonium nitrate in water.
+- Practical: **polystyrene cup** (insulator) >> In the practical, use a polystyrene cup with a lid. It is an insulator, so less heat is lost.
 
-@scene CHEMISTRY | Rates | Pause and try
-- Why does powder react faster than a lump? >> Pause and try. Why does a powder react faster than a lump of the same substance?
-@pause 5
-- Bigger surface area → more particles exposed >> Answer: a powder has a bigger surface area, so more particles are exposed,
-- → **more frequent collisions** >> which means more frequent collisions, so a faster rate.
+@scene CHEMISTRY | Energy | Bond energies
+@box Energy change = | break − make | negative = exothermic
+- **Breaking** bonds takes in energy (endothermic) >> Breaking bonds needs energy. That's endothermic.
+- **Making** bonds gives out energy (exothermic) >> Making bonds releases energy. That's exothermic.
+- H₂ + Cl₂ → 2HCl >> Let's calculate the energy change for hydrogen plus chlorine.
+- Break: 436 + 242 = 678 >> Breaking: four hundred and thirty-six, plus two hundred and forty-two, is six hundred and seventy-eight.
+- Make: 2 × 431 = 862 >> Making two HCl bonds: two times four hundred and thirty-one is eight hundred and sixty-two.
+- 678 − 862 = **−184 kJ/mol** → exothermic >> Break minus make is minus one hundred and eighty-four kilojoules per mole. It's negative, so it's exothermic.
 
-@chapter 2. Reversible reactions
-@scene CHEMISTRY | Equilibrium | Reversible reactions
-@box Symbol | ⇌ | means it can go | both ways
-- Some reactions can go **both ways** >> Some reactions can go both ways. The products can turn back into the reactants.
-- A + B ⇌ C + D >> We show this with a special arrow made of two half arrows.
-- Blue hydrated copper sulfate → white + water >> For example, if you heat blue copper sulfate, the water is driven off and it turns white.
-- Add water → blue again (test for water) >> Add water and it turns blue again. This is a test for water.
-- One way exothermic, other way endothermic >> If one direction gives out heat, the other direction takes in the same amount of heat.
+@scene CHEMISTRY | Energy | Reaction profiles
+@diagram profile
+- Exothermic: products **lower** than reactants >> On a reaction profile, an exothermic reaction has the products lower than the reactants. Energy was given out.
+- Endothermic: products **higher** than reactants >> In an endothermic reaction, the products are higher.
+- The "hump" = **activation energy** >> The hump, from the reactants up to the top, is the activation energy.
+- A catalyst makes the hump **lower** >> A catalyst makes the hump lower.
 
-@scene CHEMISTRY | Equilibrium | Equilibrium
-@box Equilibrium | closed system | forward rate = backward rate | amounts stay the same
-- Needs a **closed system** >> In a closed system, where nothing can get in or out, a reversible reaction reaches equilibrium.
-- Forward rate = backward rate >> At equilibrium, the forward and backward reactions happen at exactly the same rate.
-- Amounts **stay the same** >> So the amounts of reactants and products stay the same.
-- The reactions have NOT stopped >> But the reactions have not stopped. Both are still happening, at the same speed.
+@chapter 6. Fuels
+@scene CHEMISTRY | Fuels | Crude oil
+- Hydrocarbon = hydrogen + carbon **only** >> A hydrocarbon is a compound of hydrogen and carbon only.
+- Crude oil: a complex **mixture** of hydrocarbons >> Crude oil is a complex mixture of hydrocarbons, mostly alkanes.
+- **Finite**: non-renewable >> It is finite. It is being used up much faster than it forms.
+- Source of fuels and **feedstock** for plastics >> It gives us fuels, and feedstock, which means raw materials for making plastics and other chemicals.
 
-@scene CHEMISTRY | Equilibrium | Le Chatelier's principle
-@box Le Chatelier | the equilibrium shifts | to OPPOSE | the change
-- Change a condition → equilibrium **opposes** it >> Le Chatelier's principle says: if you change the conditions, the equilibrium shifts to oppose the change.
-- Temperature ↑ → shifts the **endothermic** way >> Raise the temperature, and it shifts in the endothermic direction, to take in the extra heat.
-- Temperature ↓ → shifts the **exothermic** way >> Lower the temperature, and it shifts in the exothermic direction.
-- Pressure ↑ → side with **fewer gas molecules** >> Raise the pressure, and it shifts to the side with fewer gas molecules.
-- N₂ + 3H₂ ⇌ 2NH₃: 4 molecules → 2 >> In the Haber process, there are four gas molecules on the left and two on the right. Higher pressure makes more ammonia.
-- A catalyst does NOT move equilibrium >> A catalyst does not change the equilibrium. It just gets there faster.
-
-@chapter 3. Crude oil and fuels
-@scene CHEMISTRY | Organic | Hydrocarbons and crude oil
-- Hydrocarbon = hydrogen + carbon **only** >> A hydrocarbon is a compound made of hydrogen and carbon only. Nothing else.
-- Crude oil = a **mixture** of hydrocarbons >> Crude oil is a mixture of lots of different hydrocarbons.
-- Formed from **plankton** buried in mud >> It formed over millions of years from tiny sea creatures called plankton, buried in mud.
-- It is **finite**: it will run out >> It is a finite resource, which means it will run out.
-
-@scene CHEMISTRY | Organic | Alkanes
-@diagram ethane
-- General formula: CₙH₂ₙ₊₂ >> Most hydrocarbons in crude oil are alkanes. Their general formula is C n H two n plus two.
-- **Saturated**: single bonds only >> Alkanes are saturated. That means they only have single bonds.
-- Methane CH₄ · Ethane C₂H₆ >> The first four are methane, C H four, and ethane, C two H six,
-- Propane C₃H₈ · Butane C₄H₁₀ >> then propane, C three H eight, and butane, C four H ten.
-- "Monkeys Eat Peanut Butter" >> Remember them with: Monkeys Eat Peanut Butter.
-
-@scene CHEMISTRY | Organic | Fractional distillation
+@scene CHEMISTRY | Fuels | Fractional distillation
 @diagram column
-- 1. Heat crude oil until it **evaporates** >> To separate crude oil, first heat it until it turns into a gas.
-- 2. Column: **hot at the bottom, cool at the top** >> The gas goes into a fractionating column, which is hot at the bottom and cool at the top.
-- 3. Each fraction **condenses** at its boiling point >> As the gases rise, each fraction condenses back into a liquid at the level of its boiling point, and is collected.
-- Small molecules → top (low boiling point) >> Small molecules have low boiling points, so they rise to the top.
-- Big molecules → bottom (high boiling point) >> Big molecules have high boiling points, so they condense near the bottom.
+- Heat oil until it **evaporates** >> In fractional distillation, the oil is heated until it evaporates.
+- Column: hot at bottom, cool at top >> The gas rises up a column that is hot at the bottom and cool at the top.
+- Fractions **condense** at their boiling points >> Each fraction condenses when it reaches its boiling point, and is collected.
+- Petrol: cars · Kerosene: **aircraft** >> Petrol is used in cars. Kerosene is fuel for aircraft.
+- Diesel: cars, trains · Fuel oil: **ships**, power stations >> Diesel oil is for cars and trains. Fuel oil is for ships and power stations.
+- Gases: heating, cooking · Bitumen: **roads** >> Gases are for heating and cooking, and bitumen surfaces roads and roofs.
 
-@scene CHEMISTRY | Organic | Longer chains: what changes?
-@box Longer chain | boiling point ↑ | viscosity ↑ | flammability ↓
-- Boiling point: **higher** >> As the carbon chain gets longer, the boiling point gets higher.
-- Viscosity (thickness): **higher** >> The viscosity also goes up. That means it is thicker and flows more slowly.
-- Flammability: **lower** >> But the flammability goes down, so it is harder to set on fire.
-- Short chains make the best fuels >> That is why short chains make the best fuels.
-- Complete combustion: hydrocarbon + oxygen → CO₂ + H₂O >> When a hydrocarbon burns completely, it makes carbon dioxide and water, and releases energy.
+@scene CHEMISTRY | Fuels | Alkanes and the homologous series
+@diagram ethane
+- Bigger molecules: higher boiling point, thicker, harder to ignite >> Bigger molecules have higher boiling points, are thicker, and are harder to set alight.
+- Homologous series: same **general formula** >> The alkanes are a homologous series. They have the same general formula,
+- Each differs by **CH₂** >> each one differs from the next by CH₂,
+- Similar chemical properties >> and they have similar chemical properties.
+- Methane CH₄ · Ethane C₂H₆ · Propane C₃H₈ · Butane C₄H₁₀ >> The first four are methane, ethane, propane and butane.
 
-@scene CHEMISTRY | Organic | Cracking
-@box Cracking makes | a shorter alkane | + an alkene
-- Long chains: too many, not very useful >> Crude oil has too many long chains, and not enough short ones.
-- Cracking = breaking long chains into **shorter** ones >> Cracking breaks long hydrocarbons into shorter, more useful ones.
-- Catalytic cracking: hot **catalyst** >> In catalytic cracking, the vapour is passed over a hot catalyst.
-- Steam cracking: **steam** + very high temperature >> In steam cracking, it is mixed with steam at a very high temperature.
-- C₁₀H₂₂ → C₈H₁₈ + C₂H₄ >> For example, decane cracks into octane and ethene.
-- Check: 10 = 8 + 2 and 22 = 18 + 4 ✔ >> Always check it balances. Ten carbons equals eight plus two. Twenty-two hydrogens equals eighteen plus four.
+@scene CHEMISTRY | Fuels | Burning fuels and pollution
+- Complete: hydrocarbon + oxygen → CO₂ + H₂O >> Complete combustion, with plenty of oxygen, makes carbon dioxide and water.
+- Incomplete: **carbon monoxide** + **soot** >> Incomplete combustion, without enough oxygen, also makes carbon monoxide and soot.
+- CO: toxic, binds to **haemoglobin** >> Carbon monoxide is toxic. It stops your blood carrying oxygen. You can't see it or smell it.
+- SO₂: from **sulfur impurities** → acid rain >> Sulfur impurities in fuels burn to make sulfur dioxide, which causes acid rain.
+- NOₓ: N₂ + O₂ react in **hot engines** → acid rain >> In hot engines, nitrogen and oxygen from the air react to make nitrogen oxides. These cause acid rain too.
 
-@scene CHEMISTRY | Organic | Alkenes and bromine water
+@scene CHEMISTRY | Fuels | Hydrogen as a fuel
+@box Hydrogen | + only product: water | − hard to store | − explosive
+- Only product: **water** (clean) >> Hydrogen is a clean fuel. When it burns, the only product is water.
+- Hard to **store** (it's a gas) >> But it's a gas, so it's hard to store.
+- **Explosive** >> It's explosive,
+- Often made using fossil fuel energy >> and making it often uses energy from fossil fuels.
+
+@scene CHEMISTRY | Fuels | Cracking
 @diagram ethene
-- Alkenes have a **C=C double bond** >> Alkenes have a carbon to carbon double bond.
-- **Unsaturated** · formula CₙH₂ₙ >> They are unsaturated, and their general formula is C n H two n.
-- More reactive than alkanes >> They are more reactive than alkanes, and are used to make plastics.
-- Test: add **orange bromine water** >> To test for an alkene, add orange bromine water and shake.
-- Alkene → **colourless** · Alkane → stays orange >> An alkene turns it colourless. An alkane leaves it orange.
+- Too many **long** chains, not enough short ones >> Crude oil has too many long chains, and not enough short ones like petrol.
+- Cracking: break large alkanes into **smaller** molecules >> Cracking breaks large alkanes into smaller, more useful molecules.
+- Heat + **hot catalyst** >> The vapour is heated and passed over a hot catalyst.
+- C₁₀H₂₂ → C₈H₁₈ + C₂H₄ >> For example, decane cracks into octane and ethene.
+- Makes **alkenes** (C=C double bond) >> Cracking makes alkenes, which have a carbon to carbon double bond. They're used to make plastics.
 
-@chapter 4. Chemical analysis
-@scene CHEMISTRY | Analysis | Pure substances and formulations
-- Pure = **one** element or compound only >> In chemistry, a pure substance is a single element or compound, with nothing else mixed in.
-- Pure: melts at **one exact temperature** >> A pure substance melts and boils at one exact temperature.
-- Impure: melts over a **range** >> An impure substance melts over a range of temperatures.
-- Formulation = mixture **designed** for a use >> A formulation is a mixture designed to do a job, with carefully measured amounts of each ingredient.
-- Paint, medicine, fuel, cleaning products, food >> Examples are paints, medicines, fuels, cleaning products and foods.
-
-@scene CHEMISTRY | Analysis | Chromatography
-@diagram chromatography
-- Start line in **pencil** (it won't dissolve) >> In paper chromatography, draw the start line in pencil, because pencil does not dissolve.
-- Solvent level **below** the line >> The solvent must be below the line, or the ink would just wash into it.
-- Paper = stationary phase · Solvent = mobile phase >> The paper is the stationary phase. The solvent, which moves, is the mobile phase.
-- One spot = pure · several spots = mixture >> One spot means it is probably pure. Several spots means it is a mixture.
-- Rf = substance distance ÷ solvent distance >> The R F value equals the distance moved by the substance, divided by the distance moved by the solvent.
-- Rf = 3 ÷ 6 = **0.5** >> Here, the spot moved three centimetres and the solvent moved six. Three divided by six is nought point five.
-
-@scene CHEMISTRY | Analysis | The four gas tests
-@box Learn word for word | burning splint: H₂ | glowing splint: O₂ | limewater: CO₂ | litmus: Cl₂
-- Hydrogen: burning splint → **squeaky pop** >> These come up every year. Hydrogen: hold a burning splint at the mouth of the tube. It gives a squeaky pop.
-- Oxygen: glowing splint → **relights** >> Oxygen: put a glowing splint into the tube. It relights.
-- Carbon dioxide: limewater → **milky** >> Carbon dioxide: bubble it through limewater. The limewater turns milky.
-- Chlorine: damp litmus paper → **bleached white** >> Chlorine: hold damp blue litmus paper in the gas. It is bleached white.
-
-@scene CHEMISTRY | Analysis | Pause and try
-- Which gas relights a glowing splint? >> Pause and try. Which gas relights a glowing splint?
-@pause 4
-- **Oxygen** >> Answer: oxygen.
-- A spot moves 2 cm, the solvent 8 cm. Rf? >> One more. A spot moves two centimetres, and the solvent moves eight. What is the R F value?
-@pause 5
-- 2 ÷ 8 = **0.25** >> Two divided by eight is nought point two five.
-
-@chapter 5. The atmosphere
-@scene CHEMISTRY | Atmosphere | The air today
-@box Air today | ≈ 80% nitrogen | ≈ 20% oxygen | small amounts: CO₂, | water vapour, argon
-- About **80% nitrogen** (four fifths) >> Today, the air is about eighty percent nitrogen. That is about four fifths.
-- About **20% oxygen** (one fifth) >> About twenty percent is oxygen, around one fifth.
-- Small amounts of CO₂, water vapour and argon >> The rest is small amounts of other gases, like carbon dioxide, water vapour and argon.
-
+@chapter 7. The atmosphere
 @scene CHEMISTRY | Atmosphere | How the atmosphere changed
-- Early Earth: **volcanoes** released mostly CO₂ >> Early on, the Earth was covered in volcanoes. They released mainly carbon dioxide, plus water vapour and nitrogen.
-- Little or **no oxygen**, like Mars and Venus >> There was little or no oxygen. It was probably like Mars and Venus today.
-- Earth cooled → water vapour condensed → **oceans** >> As the Earth cooled, the water vapour condensed and formed the oceans.
-- CO₂ went down: dissolved in oceans, rocks, fossil fuels >> Carbon dioxide went down. It dissolved in the oceans, and got locked up in sedimentary rocks like limestone, and in fossil fuels.
-- **Algae and plants**: photosynthesis >> Most importantly, algae and then plants took in carbon dioxide for photosynthesis.
-- CO₂ + H₂O → glucose + O₂ >> Photosynthesis turns carbon dioxide and water into glucose and oxygen. That is how oxygen built up.
+- Volcanoes: mostly **CO₂**, little or no oxygen >> The early atmosphere came from volcanoes. It was mostly carbon dioxide, with water vapour, and little or no oxygen.
+- Earth cooled → water condensed → **oceans** >> As the Earth cooled, water vapour condensed to form the oceans.
+- CO₂ ↓: dissolved in oceans, rocks, fossil fuels >> Carbon dioxide went down. It dissolved in the oceans, and was locked in rocks and fossil fuels.
+- O₂ ↑: **photosynthesis** by algae and plants >> Oxygen went up because of photosynthesis by algae and plants.
+- Test for oxygen: glowing splint **relights** >> The test for oxygen: a glowing splint relights.
+- Today: 78% nitrogen, 21% oxygen >> Today, the air is about seventy-eight percent nitrogen and twenty-one percent oxygen.
 
 @scene CHEMISTRY | Atmosphere | The greenhouse effect
 @diagram greenhouse
 - Greenhouse gases: CO₂, methane, water vapour >> The greenhouse gases are carbon dioxide, methane and water vapour.
-- Short-wavelength sunlight reaches Earth >> Short wavelength radiation from the Sun passes through the atmosphere and warms the Earth.
-- Earth gives off **long-wavelength** infrared >> The Earth gives off long wavelength infrared radiation.
-- Greenhouse gases **absorb and re-emit** it >> Greenhouse gases absorb this, and send some of it back, keeping the Earth warm.
-- Humans: burning fossil fuels, deforestation >> Humans add carbon dioxide by burning fossil fuels and cutting down forests.
-- Methane: cattle, rice fields, landfill >> We add methane through cattle farming, rice fields and landfill sites.
+- Short-wavelength sunlight passes through >> Short wavelength radiation from the Sun passes through the atmosphere.
+- Earth gives off **infrared** >> The warm Earth gives off longer wavelength infrared radiation.
+- Gases **absorb** and **re-emit** it → Earth warms >> Greenhouse gases absorb this and send some back, keeping the Earth warm.
+- Humans: fossil fuels, deforestation, cattle >> Humans add more by burning fossil fuels, cutting down forests, and farming cattle.
 
-@scene CHEMISTRY | Atmosphere | Climate change and carbon footprint
-- Rising sea levels → flooding >> Climate change causes rising sea levels and flooding,
-- Extreme weather, droughts, food problems >> more extreme weather, droughts, and problems growing food.
-- Carbon footprint = total greenhouse gases over the **whole life** >> A carbon footprint is the total carbon dioxide and other greenhouse gases released over the whole life of a product, service or event.
-- Reduce: renewables, insulation, carbon capture >> We can reduce it with renewable energy, better insulation, carbon capture, and public transport.
+@scene CHEMISTRY | Atmosphere | Climate change
+- CO₂ and temperature have **both risen** >> Evidence shows carbon dioxide levels and global temperatures have both risen together.
+- Old data is **less accurate** >> But older data is less accurate. There were fewer measurements, from fewer places.
+- Effects: rising sea levels, **flooding** >> Effects of climate change include rising sea levels and flooding,
+- Extreme weather, food problems >> more extreme weather, and problems growing food.
+- Reduce: renewables, **carbon capture** >> We can reduce it with renewable energy, carbon capture, and using less energy.
 
-@scene CHEMISTRY | Atmosphere | Pollutants from burning fuels
-- Carbon monoxide: **toxic**, no colour or smell >> Incomplete combustion, when there isn't enough oxygen, makes carbon monoxide. It is toxic, with no colour or smell.
-- Soot (particulates): **global dimming**, lungs >> It also makes soot, which causes global dimming and damages lungs.
-- Sulfur dioxide: from **sulfur impurities** → acid rain >> Sulfur dioxide comes from sulfur impurities in fuels. It causes acid rain.
-- Nitrogen oxides: N₂ + O₂ in **hot engines** → acid rain >> Nitrogen oxides form when nitrogen and oxygen from the air react in hot engines. They also cause acid rain.
-
-@chapter 6. Using resources
-@scene CHEMISTRY | Resources | Potable water
-@box Potable water | safe to drink | NOT pure | low salts, no microbes
-- Potable = **safe to drink** (not pure!) >> Potable water means water that is safe to drink. It is not pure, because it still has some dissolved substances.
-- UK: choose fresh water source >> In the UK, we start with fresh water from lakes, rivers or underground.
-- 1. **Filter** through filter beds >> First, it is filtered through filter beds to remove solid bits.
-- 2. **Sterilise**: chlorine, ozone or UV >> Then it is sterilised to kill microbes, using chlorine, ozone or ultraviolet light.
-- Dry countries: **desalination** of sea water >> In dry countries, they remove salt from sea water. This is called desalination.
-- Distillation or reverse osmosis: lots of **energy** >> It is done by distillation or reverse osmosis. Both use a lot of energy, so they are expensive.
-
-@scene CHEMISTRY | Resources | Waste water treatment
-- 1. Screening: remove large objects and grit >> Waste water from homes and factories is treated in steps. First, screening removes large objects and grit.
-- 2. Sedimentation: **sludge** sinks, **effluent** on top >> Then, in sedimentation, solids sink to form sludge. The liquid on top is called effluent.
-- Sludge → **anaerobic** digestion (no oxygen) >> The sludge is broken down by bacteria without oxygen. This is anaerobic digestion. It makes biogas and fertiliser.
-- Effluent → **aerobic** treatment (air bubbled in) >> The effluent is treated by bacteria with oxygen, by bubbling air through it. Then it is safe to return to rivers.
-
-@scene CHEMISTRY | Resources | Life cycle assessment
-@box LCA stages | 1. raw materials | 2. manufacture | 3. use | 4. disposal
-- 1. Extracting raw materials >> A life cycle assessment looks at a product's effect on the environment over its whole life. Stage one: getting the raw materials.
-- 2. Manufacturing and packaging >> Stage two: making and packaging it.
-- 3. Using it >> Stage three: using it.
-- 4. Disposal at the end >> Stage four: getting rid of it at the end.
-- Hard to measure pollution → can be **biased** >> Some effects, like pollution, are hard to put a number on. So an L C A can be biased.
-- Reduce, reuse, recycle: saves resources and energy >> Remember: reducing, reusing and recycling save finite resources and energy, and reduce waste.
+@chapter 8. Separate Chemistry extras
+@scene CHEMISTRY | Triple only | Tests for ions (separate Chemistry only)
+@box Flame tests | lithium: red | sodium: yellow | potassium: lilac | calcium: orange-red | copper: blue-green
+- Flame tests identify metal ions >> This section is only for separate chemistry. Flame tests identify metal ions.
+- NaOH: copper **blue**, iron(II) **green**, iron(III) **brown** >> With sodium hydroxide, copper ions give a blue solid, iron two gives green, and iron three gives brown.
+- Sulfate: barium chloride → **white** >> Sulfate ions: add barium chloride, and a white solid forms.
+- Halides: silver nitrate → white, cream, yellow >> Halide ions: add silver nitrate. Chloride gives white, bromide cream, and iodide yellow.
+- Alkenes: bromine water orange → **colourless** >> The test for alkenes: bromine water turns from orange to colourless.
 
 @chapter Recap
 @title Chemistry: key facts | Quick recap
-- Rate: collisions, energy, activation energy >> Let's recap. Rates are all about frequent collisions, with enough energy.
-- Equilibrium: same rate both ways, opposes change >> At equilibrium, both reactions go at the same rate, and the system opposes any change.
-- Cracking → alkene · bromine water → colourless >> Cracking makes alkenes, and alkenes turn bromine water colourless.
-- Pop · relights · milky · bleached >> Gas tests: squeaky pop, relights, milky, bleached.
-- Volcanoes → oceans → photosynthesis → oxygen >> The atmosphere: volcanoes, then oceans, then photosynthesis made oxygen.
+- Protons + neutrons in nucleus · electrons in shells >> Let's recap. Protons and neutrons are in the nucleus. Electrons are in shells.
+- Group 1 reactivity ↑ · Group 7 reactivity ↓ >> Group one gets more reactive going down. Group seven gets less reactive.
+- Rates: frequent collisions with enough energy >> Rates depend on frequent collisions, with enough energy.
+- Exothermic: heat out · Endothermic: heat in >> Exothermic gives heat out. Endothermic takes heat in.
+- Cracking → alkenes · Volcanoes → oceans → oxygen >> Cracking makes alkenes. And the atmosphere went from volcanoes, to oceans, to oxygen.
 - Good luck in your mock! >> Well done for revising. Good luck in your mock!

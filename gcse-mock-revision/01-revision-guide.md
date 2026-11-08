@@ -1,25 +1,26 @@
 # GCSE Mock Revision Guide
 
-**Chemistry Paper 2 (Foundation) and Maths Paper 1 (Higher, non-calculator)**
+**Edexcel Chemistry Paper 2 (Foundation) and Edexcel Maths Paper 1 (Higher, non-calculator)**
 
 > **Read this first.**
-> - **Chemistry:** this guide follows the **AQA** course, which most UK schools use. Paper 2 covers topics 6 to 10: *Rates, Organic chemistry, Chemical analysis, The atmosphere, Using resources*. If you take **Combined Science (Trilogy)**, you can skip anything marked **[Triple only]**. If you take separate Chemistry, learn everything.
-> - **Maths:** Paper 1 is the **non-calculator** paper for both AQA and Edexcel. Any topic can come up, so this guide covers all of them. Each topic starts with the ideas you need *before* it.
+> - **Chemistry:** this guide follows **Edexcel**. Paper 2 covers **Topic 1 (Key concepts)**, **Topic 6 (Groups in the periodic table)**, **Topic 7 (Rates of reaction and energy changes)** and **Topic 8 (Fuels and Earth science)**. Separate Chemistry also adds **Topic 9**, marked **[Triple only]**. Section A starts by showing you how to tell if you take Combined Science.
+> - **Maths:** Edexcel Paper 1 is the **non-calculator** paper. Any topic can come up, so this guide covers all of them. Each topic starts with the ideas you need *before* it.
 > - Use the flashcards (`02-flashcards.html` and `02-flashcards.csv`) to test yourself after each section.
 
 ---
 
 ## Contents
 
-**Part A: Chemistry Paper 2 (Foundation)**
+**Part A: Chemistry Paper 2 (Foundation, Edexcel)**
 - [A0. Basic ideas you need first](#a0-basic-ideas-you-need-first)
-- [A1. Rates of reaction](#a1-rates-of-reaction)
-- [A2. Reversible reactions and equilibrium](#a2-reversible-reactions-and-equilibrium)
-- [A3. Organic chemistry: crude oil and fuels](#a3-organic-chemistry-crude-oil-and-fuels)
-- [A4. Chemical analysis](#a4-chemical-analysis)
-- [A5. The Earth's atmosphere](#a5-the-earths-atmosphere)
-- [A6. Using resources](#a6-using-resources)
-- [A7. Chemistry exam tips](#a7-chemistry-exam-tips)
+- [A1. Key concepts in chemistry](#a1-key-concepts-in-chemistry-topic-1-it-can-come-up-on-both-papers)
+- [A2. Groups in the periodic table](#a2-groups-in-the-periodic-table-topic-6)
+- [A3. Rates of reaction](#a3-rates-of-reaction-topic-7-part-1)
+- [A4. Energy changes](#a4-energy-changes-topic-7-part-2)
+- [A5. Fuels](#a5-fuels-topic-8-part-1)
+- [A6. The Earth's atmosphere and climate](#a6-the-earths-atmosphere-and-climate-topic-8-part-2)
+- [A7. [Triple only] Separate chemistry 2](#a7-triple-only-topic-9-separate-chemistry-2-only-if-you-take-separate-chemistry)
+- [A8. Chemistry exam tips](#a8-chemistry-exam-tips)
 
 **Part B: Maths Paper 1 (Higher, non-calculator)**
 - [B0. How to use this part](#b0-how-to-use-this-part)
@@ -33,484 +34,419 @@
 
 ---
 
-# PART A: CHEMISTRY PAPER 2 (FOUNDATION)
+# PART A: CHEMISTRY PAPER 2 (FOUNDATION, EDEXCEL)
+
+> **Combined Science or separate Chemistry? How to tell.**
+> - **Combined Science (Edexcel 1SC0):** your chemistry exam is **1 hour 10 minutes** long. Learn topics **1, 6, 7 and 8**. Skip anything marked **[Triple only]**.
+> - **Separate Chemistry (Edexcel 1CH0):** your exam is **1 hour 45 minutes** long. Learn **everything**, including the [Triple only] parts (Topic 9).
+> - Not sure? Check the time on your exam timetable. If you still don't know, learn the core first and do the [Triple only] parts last.
 
 ## A0. Basic ideas you need first
 
-The rest of the chemistry makes more sense once you know these.
-
-- **Atom:** the smallest piece of an element. Every element has its own kind of atom (carbon atoms, oxygen atoms and so on).
-- **Element:** a substance made of only one kind of atom, for example oxygen (O) or carbon (C).
-- **Compound:** two or more elements **chemically joined** together, for example water (H₂O) or carbon dioxide (CO₂).
-- **Molecule:** a group of atoms joined together, for example O₂ or CH₄.
-- **Mixture:** two or more substances mixed together but **not** chemically joined. You can separate a mixture with physical methods like filtering or distillation. Air and crude oil are both mixtures.
-- **Chemical reaction:** atoms get rearranged and new substances form.
-  - **Reactants** are the substances you start with.
-  - **Products** are the new substances you end up with.
-  - The arrow in an equation means "reacts to make": reactants → products.
-- **State symbols:** (s) solid, (l) liquid, (g) gas, (aq) dissolved in water ("aqueous").
-- **Exothermic reaction:** gives out heat energy, so the surroundings get **hotter**. Burning is an example.
-- **Endothermic reaction:** takes in heat energy, so the surroundings get **colder**.
-- **Particles:** a general word for atoms, molecules or ions. In a gas, particles move fast and far apart. In a liquid, they are close together but can move past each other. In a solid, they are packed tightly and only vibrate.
+- **Element:** a substance made of only one kind of atom, for example oxygen (O) or sodium (Na).
+- **Compound:** two or more elements **chemically joined**, for example water (H₂O) or sodium chloride (NaCl).
+- **Mixture:** substances mixed together but **not** chemically joined, for example air or crude oil.
+- **Chemical reaction:** atoms are **rearranged** to make new substances. **Reactants → products.**
+- **State symbols:** (s) solid, (l) liquid, (g) gas, (aq) dissolved in water.
+- **Particles:** a general word for atoms, molecules or ions.
 
 ---
 
-## A1. Rates of reaction
+## A1. Key concepts in chemistry (Topic 1: it can come up on BOTH papers)
+
+### Atoms
+Every atom has a tiny **nucleus** in the middle, with **electrons** moving around it in **shells**.
+
+| Particle | Where it is | Relative charge | Relative mass |
+|---|---|---|---|
+| **Proton** | Nucleus | **+1** | 1 |
+| **Neutron** | Nucleus | **0** | 1 |
+| **Electron** | Shells | **−1** | about 1/1836 (tiny) |
+
+- Atoms have **no overall charge**, because the number of protons = the number of electrons.
+- Almost all the mass is in the nucleus.
+
+### Reading the periodic table box
+```
+   23        ← mass number = protons + neutrons
+   Na
+   11        ← atomic number = number of protons
+```
+- **Protons** = atomic number = **11**
+- **Electrons** = same as protons = **11**
+- **Neutrons** = mass number − atomic number = 23 − 11 = **12**
+
+**Isotopes** = atoms of the **same element** (same number of protons) with **different numbers of neutrons**. For example, carbon-12 and carbon-14.
+
+### Electron shells
+Fill the shells in order: **2, then 8, then 8**.
+- Sodium (11 electrons) → **2.8.1**
+- Chlorine (17 electrons) → **2.8.7**
+- Argon (18 electrons) → **2.8.8**
+
+### The periodic table
+- Elements are in order of **atomic number**.
+- **Columns** are called **groups**. The group number = the number of **outer-shell electrons** (sodium 2.8.**1** is in group **1**).
+- **Rows** are called **periods**. The period number = the number of **shells**.
+- **Metals** are on the **left**, **non-metals** on the **right**.
+- **Mendeleev** made an early periodic table. He **left gaps** for elements that hadn't been discovered yet, and **predicted their properties**. When they were found, he was proved right.
+
+### Ions and bonding
+An **ion** is an atom that has **lost or gained electrons**, so it has a charge.
+- **Metals lose** electrons → **positive** ions. Na → Na⁺ (it loses 1 electron). Mg → Mg²⁺.
+- **Non-metals gain** electrons → **negative** ions. Cl → Cl⁻. O → O²⁻.
+- Atoms do this to get a **full outer shell**.
+
+| Type of bonding | Between | What happens | Properties |
+|---|---|---|---|
+| **Ionic** | Metal + non-metal | Electrons **transferred**. Opposite ions are held by strong **electrostatic attraction** in a giant lattice | **High** melting point. Conducts electricity **when molten or dissolved** (the ions can move) |
+| **Covalent (simple molecules)** | Non-metals | Atoms **share pairs** of electrons | **Low** melting point (weak forces **between** molecules). Doesn't conduct |
+| **Giant covalent** | Non-metals (e.g. diamond, graphite) | Millions of atoms joined by covalent bonds | **Very high** melting point. Graphite conducts, diamond doesn't |
+| **Metallic** | Metals | Positive ions in a "sea" of **delocalised electrons** | Conducts electricity, malleable (can be bent) |
+
+**Common ions to learn:** hydroxide **OH⁻**, nitrate **NO₃⁻**, carbonate **CO₃²⁻**, sulfate **SO₄²⁻**, ammonium **NH₄⁺**.
+
+**Writing formulas:** the charges must **cancel out** to zero.
+- Na⁺ and Cl⁻ → **NaCl**
+- Mg²⁺ and Cl⁻ → need two Cl⁻ → **MgCl₂**
+
+### Balancing equations
+Atoms are **not created or destroyed**, so there must be the **same number of each atom on both sides**. You can only change the **big numbers in front**, never the small ones.
+
+**Example:** Mg + O₂ → MgO
+- Left: 2 O atoms. Right: 1 O atom. ✗
+- Put 2 in front of MgO: Mg + O₂ → **2**MgO (now 2 O, but 2 Mg on the right)
+- Put 2 in front of Mg: **2Mg + O₂ → 2MgO** ✔
+
+### Relative formula mass (Mr)
+Add up the relative atomic masses (Ar) from the periodic table.
+- H₂O = 1 + 1 + 16 = **18**
+- CO₂ = 12 + 16 + 16 = **44**
+- CaCO₃ = 40 + 12 + (3 × 16) = **100**
+
+**Conservation of mass:** total mass of reactants = total mass of products.
+If a reaction seems to **lose mass**, a **gas escaped**. If it seems to **gain mass**, it took in a gas from the air (for example oxygen).
+
+**Empirical formula** = the **simplest whole-number ratio** of atoms. C₂H₆ → **CH₃** (divide by 2).
+
+**Concentration:**
+```
+concentration (g/dm³) = mass (g) ÷ volume (dm³)
+1 dm³ = 1000 cm³
+```
+**Example:** 10 g dissolved in 250 cm³. 250 cm³ = 0.25 dm³ → 10 ÷ 0.25 = **40 g/dm³**.
+
+---
+
+## A2. Groups in the periodic table (Topic 6)
+
+### Group 1: the alkali metals (lithium, sodium, potassium…)
+- **1 electron** in the outer shell.
+- **Soft** (you can cut them with a knife), **low melting points**, and shiny when freshly cut.
+- Stored **under oil**, because they react with air and water.
+
+**Reaction with water:**
+```
+metal + water → metal hydroxide + hydrogen
+2Na + 2H₂O → 2NaOH + H₂
+```
+The solution becomes **alkaline** (that is why they're called alkali metals).
+
+| Metal | What you see |
+|---|---|
+| **Lithium** | **Fizzes** steadily, floats, moves slowly |
+| **Sodium** | Fizzes quickly, **melts into a ball**, whizzes around |
+| **Potassium** | Very fast, melts, **lilac flame**, may spark |
+
+**Trend: reactivity INCREASES going DOWN the group.**
+**Why?** Going down, atoms get **bigger** (more shells). The outer electron is **further from the nucleus**, so there is **less attraction**, and it is **lost more easily**.
+
+### Group 7: the halogens (fluorine, chlorine, bromine, iodine)
+- **7 electrons** in the outer shell.
+- Exist as **diatomic molecules** (two atoms joined): Cl₂, Br₂, I₂.
+
+| Halogen | At room temperature | Colour |
+|---|---|---|
+| **Chlorine** | Gas | Pale **yellow-green** |
+| **Bromine** | Liquid | **Red-brown** (gives off orange vapour) |
+| **Iodine** | Solid | **Dark grey** (gives a **purple** vapour) |
+
+**Trends going down the group:**
+- Melting and boiling points **increase** (gas → liquid → solid).
+- Reactivity **DECREASES**.
+  **Why?** Halogens react by **gaining** an electron. Going down, the outer shell is **further from the nucleus**, so it is **harder to attract** an extra electron.
+
+**Test for chlorine:** put **damp blue litmus paper** in the gas. It turns red, then is **bleached white**.
+
+**Halogens + metals → metal halides (salts):**
+sodium + chlorine → sodium chloride. 2Na + Cl₂ → 2NaCl
+
+**Halogens + hydrogen → hydrogen halides.** These dissolve in water to make **acids**. For example, hydrogen chloride dissolves to make **hydrochloric acid**.
+
+**Displacement reactions:** a **more reactive** halogen **pushes out (displaces)** a less reactive one from a solution of its salt.
+```
+chlorine + potassium bromide → potassium chloride + bromine
+Cl₂ + 2KBr → 2KCl + Br₂
+```
+The solution turns **orange** (because bromine is made).
+- Bromine **can** displace iodine (the solution turns brown).
+- Iodine **can't** displace chlorine or bromine (no reaction), because iodine is **less** reactive.
+
+### Group 0: the noble gases (helium, neon, argon…)
+- **Full outer shell**, so they are **very unreactive (inert)**. They don't need to lose or gain electrons.
+- They exist as **single atoms**.
+- **Trends going down:** boiling point **increases**, density **increases**.
+
+**Uses:**
+- **Helium:** balloons and airships, because it is **less dense than air** and **not flammable**.
+- **Argon:** inside **light bulbs** and in **welding**. It is inert, so it stops the hot metal reacting with oxygen.
+- **Neon:** advertising signs (it glows when electricity passes through).
+
+---
+
+## A3. Rates of reaction (Topic 7, part 1)
 
 ### What "rate" means
-The **rate of reaction** is **how fast** a reaction happens. It tells you how quickly reactants get used up, or how quickly products are made.
-
-- Fast reactions: an explosion, or burning.
-- Slow reactions: rusting, or a cake going stale.
-
-### Calculating the mean rate
+**Rate of reaction** = **how fast** reactants are used up or products are made.
 ```
-mean rate of reaction = quantity of reactant used  ÷ time taken
-                     OR quantity of product formed ÷ time taken
+mean rate = amount of product formed ÷ time taken
 ```
-Units depend on what you measured:
-- mass in grams → **g/s**
-- volume of gas in cm³ → **cm³/s**
+**Example:** 60 cm³ of gas in 30 s → 60 ÷ 30 = **2 cm³/s**.
 
-**Worked example:** a reaction makes 60 cm³ of gas in 30 seconds.
-Mean rate = 60 ÷ 30 = **2 cm³/s**.
+### Collision theory
+To react, particles must **collide** with **enough energy**. The minimum energy needed is the **activation energy**.
+To make a reaction faster you need **more frequent collisions** (more per second) or more particles with enough energy.
 
-### Collision theory: why reactions happen
-For particles to react they must:
-1. **collide** (bump into each other), and
-2. collide with **enough energy**.
+### The 4 factors (+ catalysts)
 
-The smallest amount of energy particles need to react is called the **activation energy**.
+| Factor | Why the rate increases |
+|---|---|
+| **Higher temperature** | Particles move **faster** → **more frequent** collisions AND **more collisions have enough energy** |
+| **Higher concentration** (solutions) | **More particles in the same volume** → more frequent collisions |
+| **Higher pressure** (gases) | **Same particles in a smaller space** → more frequent collisions |
+| **Bigger surface area** (powder, not lumps) | **More particles exposed** → more frequent collisions |
+| **Catalyst** | Gives a different pathway with a **lower activation energy**. It is **not used up** |
 
-So to make a reaction **faster** you need **more frequent collisions** (more collisions every second) and/or **more particles with enough energy**.
+- **Enzymes** are **biological catalysts**. For example, they are used to make alcohol by fermentation.
 
-### The 5 factors that change the rate
+### Core practical: investigating rate
+Edexcel uses two reactions:
+1. **Marble chips (calcium carbonate) + hydrochloric acid** → carbon dioxide gas. Measure the **volume of gas** with a gas syringe, or the **mass lost** on a balance, every 30 seconds.
+   - Change the **size of the marble chips** (surface area) or the **acid concentration**.
+2. **Sodium thiosulfate + hydrochloric acid** → the solution goes **cloudy** (sulfur is made). Time how long it takes for a **cross** under the flask to **disappear**.
+   - Change the **temperature** or the **concentration**.
 
-| Factor | What you do | Why it speeds the reaction up |
+- **Independent variable** = what you **change**. **Dependent variable** = what you **measure**. **Control variables** = what you **keep the same**.
+
+### Rate graphs
+- **Steeper** line = **faster**.
+- The line gets less steep as reactants **get used up**.
+- **Flat** line = the reaction has **finished**.
+- A faster reaction has a steeper line and goes flat sooner. With the same amounts of reactants, it reaches the **same final amount** of product.
+
+---
+
+## A4. Energy changes (Topic 7, part 2)
+
+### Exothermic and endothermic
+| | **Exothermic** | **Endothermic** |
 |---|---|---|
-| **Temperature** | Heat it up | Particles move **faster**, so they collide **more often** AND **more collisions have enough energy** (at least the activation energy). |
-| **Concentration** (of a solution) | Use a stronger solution | **More particles in the same volume**, so they collide more often. |
-| **Pressure** (of a gas) | Squash the gas | **Same number of particles in a smaller space**, so they collide more often. |
-| **Surface area** (of a solid) | Use powder instead of lumps | **More particles exposed** on the surface, so there are more collisions. |
-| **Catalyst** | Add a catalyst | Gives a different route with a **lower activation energy**, so more collisions are successful. |
+| Energy | **Gives out** heat to the surroundings | **Takes in** heat from the surroundings |
+| Temperature | **Rises** (feels hot) | **Falls** (feels cold) |
+| Examples | **Combustion** (burning), **neutralisation** (acid + alkali), hand warmers | **Thermal decomposition**, dissolving **ammonium nitrate**, sherbet (citric acid + sodium hydrogencarbonate), cold packs |
 
-**Catalyst, explained:**
-- A catalyst **speeds up** a reaction but is **not used up**. It is the same at the end as at the start.
-- It is not written as a reactant in the equation. Sometimes it is written above the arrow.
-- **Enzymes** are biological catalysts. They are found in living things.
+**Core practical:** measure the temperature change when you **dissolve salts** in water, or **mix an acid and an alkali**, in a **polystyrene cup** with a lid. (Polystyrene is an **insulator**, so less heat is lost.)
 
-> **Exam trap:** "more frequent collisions" is the key phrase. Don't just write "more collisions". Write "more collisions **per second**" or "**more frequent** collisions".
+### Bonds and energy
+- **Breaking bonds** needs energy → **endothermic**.
+- **Making bonds** releases energy → **exothermic**.
+- If **more** energy is released making bonds than is used breaking them, the reaction is **exothermic** overall.
 
-> **Surface area example:** cut a cube 2 cm × 2 cm × 2 cm in half, and you create two new faces, so there is more surface area for the same mass.
+**Calculating the energy change from bond energies:**
+```
+energy change = energy to BREAK bonds − energy released MAKING bonds
+negative answer = exothermic
+positive answer = endothermic
+```
+**Example:** H₂ + Cl₂ → 2HCl. Bond energies: H–H = 436, Cl–Cl = 242, H–Cl = 431 (kJ/mol)
+- Break: 436 + 242 = **678**
+- Make: 2 × 431 = **862**
+- Change = 678 − 862 = **−184 kJ/mol** → **exothermic**
 
-### Measuring the rate (practical methods)
-1. **Gas syringe / upside-down measuring cylinder:** measure the **volume of gas** made over time.
-2. **Mass loss:** put the flask on a balance. As gas escapes, the **mass goes down**.
-3. **Disappearing cross:** used when a reaction makes the solution go **cloudy** (for example sodium thiosulfate + hydrochloric acid). Draw a cross on paper under the flask and time how long it takes until you **can't see the cross**. Shorter time = faster rate.
-
-**Required practical:** investigate how **concentration** affects rate, using the disappearing cross or by measuring gas volume.
-- **Independent variable** (what you change): concentration.
-- **Dependent variable** (what you measure): time for the cross to disappear, or volume of gas.
-- **Control variables** (keep the same): temperature, volume of solutions, the same person judging the cross, the same flask.
-
-### Reading rate graphs
-Usually the graph has **amount of product** on the y-axis and **time** on the x-axis.
-- **Steep line** = fast reaction.
-- **Line gets less steep** = reaction slowing down, because reactants are being used up.
-- **Line goes flat** = reaction has **stopped**, because one reactant has run out.
-- A faster reaction (hotter, more concentrated, or with a catalyst) gives a **steeper** curve that goes flat **sooner**. If the amounts of reactants are the same, it finishes at the **same height** (the same total amount of product).
+### Reaction profiles
+A reaction profile is a graph of **energy** (y-axis) against the **progress of the reaction** (x-axis).
+- **Exothermic:** the products are **lower** than the reactants (energy was given out).
+- **Endothermic:** the products are **higher** than the reactants.
+- The **"hump"** from the reactants up to the top of the curve is the **activation energy**.
+- A **catalyst** makes the hump **lower**.
 
 ```
- Volume of gas
-   |        _________  faster (steeper, flattens sooner)
-   |      /    ______  slower
-   |     /   /
-   |    /  /
-   |   / /
-   |  //
-   |_/__________________ Time
+Exothermic                     Endothermic
+Energy                         Energy
+ |      /\                      |        /\
+ |     /  \  ← activation       |       /  \___ products
+ |____/    \     energy         |      /
+ |reactants \____ products      |_____/ reactants
+ |____________________          |____________________
+     Progress of reaction            Progress of reaction
 ```
 
 ---
 
-## A2. Reversible reactions and equilibrium
+## A5. Fuels (Topic 8, part 1)
 
-### Reversible reactions
-Some reactions can go **both ways**. The products can turn back into the reactants.
-The symbol is **⇌** (two half-arrows).
+### Crude oil and hydrocarbons
+- **Hydrocarbon** = a compound of **hydrogen and carbon only**.
+- **Crude oil** = a **complex mixture of hydrocarbons**, mostly **alkanes**. Their carbon atoms are joined in **chains and rings**.
+- It formed over millions of years from ancient sea creatures (plankton). It is **finite (non-renewable)**: it is being used up much faster than it forms.
+- Crude oil is an important source of **fuels** and of **feedstock** (raw materials) for making **plastics** and other chemicals.
 
-```
-A + B ⇌ C + D
-```
+### Fractional distillation
+1. Crude oil is **heated** until it **evaporates** (turns to gas).
+2. The gas goes into a **fractionating column**, which is **hot at the bottom and cooler at the top**.
+3. Gases rise and **condense** (turn back to liquid) at the level where the temperature matches their **boiling point**.
+4. **Small molecules** (low boiling point) come out at the **top**. **Big molecules** (high boiling point) come out at the **bottom**.
 
-**Example: ammonium chloride**
-```
-ammonium chloride ⇌ ammonia + hydrogen chloride
-```
-Heating makes it go forwards (it breaks down). Cooling makes it go backwards.
-
-**Example: copper sulfate (a colour change)**
-```
-hydrated copper sulfate (blue) ⇌ anhydrous copper sulfate (white) + water
-```
-- Heating blue copper sulfate removes the water and it turns **white**.
-- Adding water to white copper sulfate turns it **blue** again. This is a **test for water**.
-
-### Energy in reversible reactions
-If one direction is **exothermic** (gives out heat), the other direction is **endothermic** (takes in heat). **The same amount of energy** is transferred both ways.
-For copper sulfate: going forwards (heating) is endothermic, and adding water back is exothermic. It gets hot!
-
-### Equilibrium
-If a reversible reaction happens in a **closed system** (nothing can get in or out), it eventually reaches **equilibrium**.
-
-At equilibrium:
-- the **forward and backward reactions happen at exactly the same rate**,
-- so the **amounts** of reactants and products **stay the same** (they don't change any more).
-
-The reactions have **not** stopped. They are both still going at the same speed. It's like walking up a down escalator at the same speed it moves: you are still moving, but you stay in the same place.
-
-### Changing conditions: Le Chatelier's principle
-**Le Chatelier's principle:** if you change the conditions of a system at equilibrium, the system **shifts to oppose (fight against) the change**.
-
-| Change | What the equilibrium does |
+| Fraction (top → bottom) | Use |
 |---|---|
-| Increase **concentration** of a reactant | Shifts **right** (makes more products) to use it up |
-| **Raise temperature** | Shifts in the **endothermic** direction (to absorb the extra heat) |
-| **Lower temperature** | Shifts in the **exothermic** direction (to release heat) |
-| **Raise pressure** (gases) | Shifts to the side with **fewer gas molecules** |
-| **Lower pressure** (gases) | Shifts to the side with **more gas molecules** |
+| **Gases** | Domestic heating and cooking |
+| **Petrol** | Fuel for **cars** |
+| **Kerosene** | Fuel for **aircraft** |
+| **Diesel oil** | Fuel for some cars and **trains** |
+| **Fuel oil** | Fuel for large **ships** and some **power stations** |
+| **Bitumen** | Surfacing **roads** and roofs |
 
-**Pressure example (Haber process):**
-```
-N₂(g) + 3H₂(g) ⇌ 2NH₃(g)
-```
-Left side: 1 + 3 = **4** molecules of gas. Right side: **2** molecules.
-Raising the pressure shifts it to the right (fewer molecules), so **more ammonia** is made.
+**As molecules get bigger (more carbon atoms):** boiling point **↑**, viscosity (thickness) **↑**, and they are **harder to ignite** (less flammable).
 
-> A catalyst does **not** change the position of equilibrium. It just helps the reaction reach equilibrium **faster**.
+### Homologous series
+The **alkanes** are a **homologous series** = a family of compounds that:
+- have the **same general formula** (alkanes: **CₙH₂ₙ₊₂**),
+- each differ from the next by **CH₂**,
+- have **similar chemical properties**,
+- show a **gradual change** in physical properties (for example boiling point).
 
----
+The first four alkanes: **methane CH₄, ethane C₂H₆, propane C₃H₈, butane C₄H₁₀**.
 
-## A3. Organic chemistry: crude oil and fuels
-
-### Key words first
-- **Organic chemistry** = the chemistry of carbon compounds.
-- **Hydrocarbon** = a compound made of **hydrogen and carbon ONLY**. (Remember: "hydro" + "carbon".)
-- **Crude oil** = a **finite** resource. It is a **mixture** of lots of hydrocarbons, formed over millions of years from the remains of tiny sea creatures (**plankton**) buried in mud.
-  - **Finite** means it will run out. It can't be made again fast enough.
-
-### Alkanes
-Most hydrocarbons in crude oil are **alkanes**.
-- General formula: **CₙH₂ₙ₊₂**. If there are *n* carbons, there are 2n + 2 hydrogens.
-- They are **saturated**. That means they have only **single bonds** (C–C) between the carbon atoms.
-
-Remember the first four with the phrase "**M**onkeys **E**at **P**eanut **B**utter":
-
-| Name | Formula | Carbons |
-|---|---|---|
-| **Meth**ane | CH₄ | 1 |
-| **Eth**ane | C₂H₆ | 2 |
-| **Prop**ane | C₃H₈ | 3 |
-| **But**ane | C₄H₁₀ | 4 |
-
-Check with the formula: for butane n = 4, so H = 2×4 + 2 = 10. ✔
-
-Displayed formula of ethane (every bond drawn):
-```
-    H   H
-    |   |
-H — C — C — H
-    |   |
-    H   H
-```
-
-### Fractional distillation: separating crude oil
-Crude oil is a mixture, so we separate it into **fractions**. A fraction is a group of hydrocarbons with **similar numbers of carbon atoms**, so they have similar boiling points.
-
-How it works:
-1. The crude oil is **heated** until it turns into a **gas** (it **evaporates**).
-2. The gas goes into a tall **fractionating column**, which is **hot at the bottom and cool at the top**.
-3. The gases rise up. Each fraction **condenses** (turns back into liquid) when it reaches the height where the temperature is just below its boiling point. It is then collected there.
-4. **Small** molecules have **low** boiling points, so they rise to the **top**. **Big** molecules have **high** boiling points, so they condense near the **bottom**.
-
-Fractions from top to bottom: "**R**eal **P**eople **K**eep **D**riving **F**ast **B**oats" (one common version):
-**R**efinery gases (bottled gas) → **P**etrol (cars) → **K**erosene (jet fuel) → **D**iesel oil (cars, lorries) → **F**uel oil (ships, power stations) → **B**itumen (roads and roofs).
-
-### How properties change with molecule size
-As the hydrocarbon chain gets **longer** (bigger molecules):
-
-| Property | Longer chain = |
-|---|---|
-| Boiling point | **Higher** |
-| Viscosity (how thick/gloopy it is, how slowly it flows) | **Higher** (thicker) |
-| Flammability (how easily it catches fire) | **Lower** (harder to light) |
-
-So **short chains** make the **best fuels**: they are runny, light easily and burn cleanly.
-
-### Combustion (burning)
-**Complete combustion** happens when there is **plenty of oxygen**:
+### Burning fuels
+**Complete combustion** (plenty of oxygen):
 ```
 hydrocarbon + oxygen → carbon dioxide + water
 CH₄ + 2O₂ → CO₂ + 2H₂O
 ```
-Burning hydrocarbons releases energy (it is **exothermic**).
+**Incomplete combustion** (not enough oxygen) produces:
+- **carbon monoxide (CO)**: **toxic**. It combines with **haemoglobin** in your blood, so the blood can't carry **oxygen**. It has **no colour and no smell**.
+- **soot** (carbon particles): makes things black, and causes breathing problems.
 
-(When there is **not enough** oxygen, you get **incomplete combustion**. This makes **carbon monoxide** (a toxic gas) and **soot** (carbon particles). See the atmosphere section.)
+**Other pollutants:**
+- **Sulfur dioxide (SO₂):** some fuels contain **sulfur impurities**. When they burn, they make SO₂, which causes **acid rain**.
+- **Nitrogen oxides (NOₓ):** at the **high temperatures inside engines**, nitrogen and oxygen **from the air** react. This also causes **acid rain**.
+- **Acid rain** damages buildings (especially limestone), kills trees and makes lakes acidic.
+
+### Hydrogen as a fuel
+| Advantages | Disadvantages |
+|---|---|
+| The only product is **water** (no CO₂, no pollution when burned) | It is a **gas**, so it is hard to **store** (it needs high pressure or very cold tanks) |
+| Releases a lot of energy | It is **explosive**/flammable |
+| Can be made from water | Making it usually uses **energy from fossil fuels** |
+| | Few filling stations |
+
+Petrol, kerosene, diesel and methane (natural gas) are all **non-renewable fossil fuels**.
 
 ### Cracking
-**Problem:** crude oil has too many **long** chains, which are not very useful, and not enough **short** chains, which are in high demand for petrol.
-**Solution: cracking** = **breaking long-chain hydrocarbons into shorter, more useful ones**.
-
-Two methods:
-1. **Catalytic cracking:** heat the long hydrocarbon to make it a vapour, then pass it over a **hot catalyst**.
-2. **Steam cracking:** mix the hydrocarbon vapour with **steam** at a **very high temperature**.
-
-Cracking makes a **shorter alkane** plus an **alkene**:
+- Crude oil contains **more long-chain** hydrocarbons than we need, and **not enough short-chain** ones (like petrol), which are in **high demand**.
+- **Cracking** = **breaking down larger, saturated hydrocarbons (alkanes)** into **smaller, more useful** ones. Some of these are **unsaturated (alkenes)**.
+- Conditions: **heat** the hydrocarbon vapour and pass it over a **hot catalyst**.
 ```
 decane → octane + ethene
 C₁₀H₂₂ → C₈H₁₈ + C₂H₄
 ```
-Check: carbons 10 = 8 + 2 ✔, hydrogens 22 = 18 + 4 ✔. (Cracking equations must **balance**, so always check the numbers on each side.)
-
-### Alkenes
-- Alkenes have a **C=C double bond**. They are **unsaturated**.
-- General formula **CₙH₂ₙ** (for example ethene C₂H₄, propene C₃H₆).
-- They are **more reactive** than alkanes.
-- Uses: making **polymers** (plastics) and other chemicals.
-
-**Test for alkenes: bromine water**
-- Add **orange** bromine water to the substance and shake.
-- **Alkene** → turns **colourless** (decolourises).
-- **Alkane** → stays **orange** (no change).
-
-### [Triple only] Extra organic chemistry
-- **Alcohols** contain **–OH**. Examples: methanol, ethanol, propanol, butanol. Ethanol is made by **fermentation** of sugar using **yeast**. Alcohols are used as fuels and solvents.
-- **Carboxylic acids** contain **–COOH**. Examples: methanoic, ethanoic, propanoic, butanoic acid. Vinegar contains **ethanoic acid**.
-- **Esters** form when an alcohol reacts with a carboxylic acid. Example: **ethyl ethanoate**. They smell sweet and fruity.
-- **Addition polymerisation:** many small alkene molecules (**monomers**) join to make a long chain (**polymer**). The double bond opens up. Ethene → poly(ethene).
-- **Condensation polymerisation:** two different monomers join, and a small molecule (usually **water**) is given off each time.
-- **Natural polymers:** proteins (made from **amino acids**), starch and cellulose (made from **sugars**), and **DNA** (made from **nucleotides**).
+Check: 10 = 8 + 2 carbons ✔. 22 = 18 + 4 hydrogens ✔.
+- **Alkenes** have a **C=C double bond** and are used to make **polymers** (plastics).
 
 ---
 
-## A4. Chemical analysis
+## A6. The Earth's atmosphere and climate (Topic 8, part 2)
 
-### Pure substances
-- In everyday life, "pure" means nothing has been added (for example "pure orange juice").
-- In **chemistry**, a pure substance is a **single element or compound** with nothing else mixed in.
-- **Test for purity:** a pure substance **melts and boils at one exact temperature**. An impure substance melts over a **range** of temperatures, and its boiling point is usually higher.
-  - Pure water boils at exactly 100 °C. Salty water boils above 100 °C.
-
-### Formulations
-A **formulation** is a mixture **designed** to be useful, with each ingredient in a carefully measured amount.
-Examples: **paints, medicines, fuels, cleaning products, alloys, fertilisers, food**.
-
-### Chromatography
-**What it does:** separates a mixture of **soluble** substances, such as the colours in ink, to see what is in it.
-
-**How (paper chromatography):**
-1. Draw a **pencil** line about 1 cm from the bottom of the paper. It must be pencil because **pencil doesn't dissolve**, so it won't run up the paper like ink would.
-2. Put a small dot of ink on the line.
-3. Stand the paper in a **solvent** (for example water). The solvent level must be **below** the line, or the ink would just dissolve into the solvent.
-4. The solvent moves up the paper and carries the substances with it. Different substances travel **different distances**.
-5. Take it out before the solvent reaches the top, and mark how far the solvent got (the **solvent front**).
-
-Two key words:
-- **Stationary phase** = the thing that **doesn't move** → the **paper**.
-- **Mobile phase** = the thing that **moves** → the **solvent**.
-
-**Reading the result:**
-- **One spot** → probably a **pure** substance.
-- **Two or more spots** → a **mixture**.
-- If two spots are at the **same height** with the same solvent, they are probably the **same substance**.
-
-**Rf value** (retention factor):
-```
-Rf = distance moved by the substance ÷ distance moved by the solvent
-```
-- Measure **both** distances from the **pencil start line**.
-- Rf is **always between 0 and 1**, and it has **no units**.
-
-**Worked example:** the spot moved 3 cm and the solvent front moved 6 cm.
-Rf = 3 ÷ 6 = **0.5**.
-
-### Tests for gases (learn these perfectly, they come up every year!)
-
-| Gas | Test | Positive result |
-|---|---|---|
-| **Hydrogen** (H₂) | Hold a **burning splint** at the mouth of the test tube | **Squeaky pop** |
-| **Oxygen** (O₂) | Put a **glowing splint** into the test tube | Splint **relights** |
-| **Carbon dioxide** (CO₂) | Bubble the gas through **limewater** | Limewater turns **milky / cloudy** |
-| **Chlorine** (Cl₂) | Put **damp blue litmus paper** in the gas | Litmus is **bleached white** (it may go red first) |
-
-> Don't mix up the splints: **burning** splint for **hydrogen**, **glowing** splint for **oxygen**.
-
-### [Triple only] Identifying ions
-- **Flame tests (metal ions):** lithium = **crimson** red, sodium = **yellow**, potassium = **lilac**, calcium = **orange-red**, copper = **green**.
-- **Sodium hydroxide test (metal ions):** add NaOH and look at the coloured solid that forms. Copper(II) gives **blue**, iron(II) gives **green**, iron(III) gives **brown**. Aluminium, calcium and magnesium give **white** (aluminium's dissolves if you add more NaOH).
-- **Carbonates:** add acid and it fizzes. The gas turns limewater milky (it is CO₂).
-- **Halides:** add nitric acid then silver nitrate. Chloride gives a **white** solid, bromide **cream**, iodide **yellow**.
-- **Sulfates:** add hydrochloric acid then barium chloride. A **white** solid forms.
-
----
-
-## A5. The Earth's atmosphere
-
-### The air today (roughly)
-- **Nitrogen ≈ 80%** (exactly about 78%)
-- **Oxygen ≈ 20%** (about 21%)
-- **Small amounts of other gases**: carbon dioxide, water vapour, argon (a noble gas).
-
-Memory tip: nitrogen is about **four-fifths**, oxygen about **one-fifth**.
-
-### How the atmosphere changed (the story)
-The Earth is about **4.6 billion years** old. Scientists don't have direct evidence from that long ago, so these are **theories**.
-
-**1. The early atmosphere (first billion years): volcanoes**
-- The Earth was covered in **erupting volcanoes**.
-- They released mainly **carbon dioxide**, plus **water vapour**, **nitrogen**, and small amounts of methane and ammonia.
-- There was **little or no oxygen**. It was probably like the atmospheres of **Mars and Venus** today (mostly CO₂).
-
-**2. The oceans formed**
-- As the Earth **cooled**, the water vapour **condensed** into liquid water and formed the **oceans**.
-
-**3. Carbon dioxide went down. How?**
-- CO₂ **dissolved in the oceans**.
-- Dissolved CO₂ formed **carbonates**, which settled as **sediments** (deposits on the sea bed).
-- Sea creatures used carbon to build **shells and skeletons**. When they died, these formed **sedimentary rocks** like **limestone**.
-- Over millions of years, the remains of plants and animals became **fossil fuels** (coal, crude oil, natural gas), which **lock carbon away** underground.
-- **Algae and plants** took in CO₂ for **photosynthesis**. This was the biggest effect.
-
-**4. Oxygen went up: photosynthesis**
-- About **2.7 billion years ago**, **algae** started photosynthesising. Later, plants did too.
+### How the atmosphere changed
+1. **Early atmosphere:** from **volcanic activity**. It was mostly **carbon dioxide** with **water vapour**, small amounts of other gases, and **little or no oxygen**.
+2. **Oceans formed:** as the Earth **cooled**, the **water vapour condensed** into the oceans.
+3. **Carbon dioxide decreased:** CO₂ **dissolved in the oceans**. Later it got locked up in **sedimentary rocks** (like limestone) and **fossil fuels**.
+4. **Oxygen increased:** **photosynthesis** by **algae** and then **plants**:
 ```
 carbon dioxide + water → glucose + oxygen
-6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂
 ```
-- Over the next billion years or so, oxygen built up until **animals could evolve**.
+- **Test for oxygen:** a **glowing splint relights**.
 
-### Greenhouse gases and climate change
-**Greenhouse gases** keep the Earth **warm enough for life**. The main ones are:
-- **carbon dioxide** (CO₂)
-- **methane** (CH₄)
-- **water vapour** (H₂O)
+**Today:** about **78% nitrogen**, **21% oxygen**, about **1% argon**, and about **0.04% carbon dioxide**.
 
-**The greenhouse effect, step by step:**
-1. **Short-wavelength** radiation from the **Sun** passes through the atmosphere and reaches the Earth's surface.
-2. The Earth warms up and gives off **long-wavelength (infrared)** radiation.
-3. Greenhouse gases **absorb** some of this long-wavelength radiation and **re-emit** it in all directions, including back towards the Earth.
-4. This **keeps heat in** and makes the Earth warmer.
+### The greenhouse effect
+**Greenhouse gases:** **carbon dioxide**, **methane** and **water vapour**.
+1. **Short-wavelength** radiation from the Sun passes through the atmosphere.
+2. The Earth's surface warms and gives off **longer-wavelength infrared (heat)** radiation.
+3. Greenhouse gases **absorb** this heat radiation and **re-emit** it in all directions, including back to the Earth.
+4. This keeps the Earth **warm**. Without it, the Earth would be too cold for life.
 
-**How humans increase greenhouse gases:**
-- **Carbon dioxide:** burning fossil fuels, and **deforestation** (fewer trees to absorb CO₂, and the trees are often burned).
-- **Methane:** **cattle farming** (cows burp methane), **rice fields**, and **landfill** sites.
+**Human activities that increase greenhouse gases:**
+- **Burning fossil fuels** → more CO₂
+- **Deforestation** → fewer trees absorb CO₂
+- **Farming cattle** and **rice**, and **landfill** sites → more methane
 
-**Effects of climate change:**
-- Sea levels rise (ice melts) → **flooding** and coastal erosion.
-- More **extreme weather** (storms, heavy rain).
-- **Droughts** and changes in rainfall → problems growing food.
-- Changes to where wildlife can live.
+**Evidence:** records show that **CO₂ levels and global temperatures have both risen** since the industrial revolution (they are **correlated**). But **historical data is less accurate**: older measurements came from fewer places, and very old values are estimated from ice cores.
 
-**Why it's hard to be certain:** the climate is very **complex**, so models are simplified. It's hard to separate human effects from natural changes, and the media can present things in a biased way. But most scientists agree that humans are causing climate change.
+**Possible effects of climate change:**
+- **Sea levels rise** (ice melts) → **flooding**
+- More **extreme weather** (storms, droughts)
+- Changes to **rainfall** → problems growing **food**
+- Changes to where **animals and plants** can live
 
-**Carbon footprint** = the **total amount of carbon dioxide (and other greenhouse gases)** released over the whole life cycle of a product, service or event.
-How to reduce it: use **renewable energy**, use energy more **efficiently** (better insulation), use **carbon capture** (storing CO₂ underground), use **public transport**, eat less meat, and plant trees.
-
-### Atmospheric pollutants from burning fuels
-
-| Pollutant | Where it comes from | Problem |
-|---|---|---|
-| **Carbon monoxide** (CO) | **Incomplete combustion** (not enough oxygen) | **Toxic**. It stops your blood carrying oxygen. It has **no colour and no smell**, so you can't detect it. |
-| **Soot** / **particulates** (tiny solid particles) | Incomplete combustion | **Global dimming** (blocks sunlight) and **damages lungs** |
-| **Sulfur dioxide** (SO₂) | **Sulfur impurities** in fuels burning | **Acid rain** and breathing problems |
-| **Nitrogen oxides** (NOₓ) | Nitrogen and oxygen from the **air** reacting at the **high temperature inside engines** | **Acid rain** and breathing problems |
-
-**Acid rain** damages buildings (especially limestone), kills trees and makes lakes acidic.
+**Ways to reduce it:** use **renewable energy**, **carbon capture and storage**, plant trees (reforestation), use less energy, and encourage public transport.
 
 ---
 
-## A6. Using resources
+## A7. [Triple only] Topic 9: Separate chemistry 2 (only if you take separate Chemistry)
 
-### Natural and synthetic resources
-- We use Earth's resources for **warmth, shelter, food and transport**.
-- **Natural** resources include cotton, wool, wood and rubber. **Synthetic** (man-made) resources replace or add to them, for example polyester instead of wool.
-- **Finite** resources will run out (crude oil, metal ores). **Renewable** resources can be replaced quickly (wood, crops).
-- **Sustainable development** = meeting the needs of people **today** without stopping **future generations** from meeting theirs.
+### Tests for ions
+- **Flame tests (metal ions):** lithium **red**, sodium **yellow**, potassium **lilac**, calcium **orange-red**, copper **blue-green**.
+- **Sodium hydroxide test (metal ions):** add NaOH solution and look at the coloured solid (precipitate).
+  - Copper(II) → **blue**. Iron(II) → **green**. Iron(III) → **brown**.
+  - Aluminium → **white**, which **dissolves** in excess NaOH. Calcium → **white**.
+  - Ammonium → gives **ammonia gas**, which turns damp red litmus **blue**.
+- **Carbonate:** add acid → it fizzes. The gas (CO₂) turns **limewater milky**.
+- **Sulfate:** add dilute HCl, then **barium chloride** → **white** precipitate.
+- **Halides:** add dilute nitric acid, then **silver nitrate** → chloride **white**, bromide **cream**, iodide **yellow**.
 
-### Potable water (safe to drink)
-**Potable water** = water that is **safe to drink**. It is **not** the same as **pure** water, because potable water still has some dissolved salts and minerals in it. It must have **low levels** of salts and **no harmful microbes**.
+### More organic chemistry
+- **Test for alkenes:** add **bromine water** → it goes from **orange to colourless**. (Alkanes: it stays orange.)
+- **Alcohols** contain **–OH** (methanol, ethanol, propanol, butanol). **Ethanol** is made by **fermentation** of sugar with **yeast** (about 30 °C, no oxygen).
+- **Carboxylic acids** contain **–COOH** (methanoic, ethanoic, propanoic, butanoic acid). **Vinegar** contains ethanoic acid.
+- **Addition polymers:** many **alkene monomers** join when their **double bond opens**. Ethene → **poly(ethene)**.
+- **Condensation polymers:** two kinds of monomer join, and a small molecule (water) is lost each time. Example: **polyesters**.
+- **Problems with polymers:** most are **not biodegradable**, so they stay in landfill for a long time. Burning them can give **toxic gases**. **Recycling** helps.
+- **Natural polymers:** DNA (from nucleotides), proteins (from amino acids), starch and cellulose (from glucose).
 
-**In the UK (where we get rain):**
-1. Choose a source of **fresh water** (lakes, rivers, reservoirs, or **groundwater** from rocks).
-2. **Filtration:** pass the water through **filter beds** (sand and gravel) to remove solid bits.
-3. **Sterilisation:** kill microbes using **chlorine**, **ozone** or **ultraviolet (UV) light**.
-
-**In dry countries (not much fresh water): desalination** = removing salt from **sea water**.
-- **Distillation:** boil the sea water. The water evaporates and is then condensed. The salt is left behind.
-- **Reverse osmosis:** push the salty water through a **membrane** that lets water through but not salt.
-- Both need **lots of energy**, so they are **expensive**.
-
-**Required practical: water purification.**
-- Test the **pH** of the sample (it should be 7, neutral).
-- Find the **mass of dissolved solids**: weigh an empty evaporating basin, add a known volume of water, evaporate the water off, then weigh again.
-- **Distil** the sample to purify it. Pure water boils at exactly 100 °C.
-
-### Waste water treatment (sewage)
-Sewage from homes, farms and factories must be treated before it goes back into rivers.
-1. **Screening and grit removal:** remove large objects (rags, plastic) and grit.
-2. **Sedimentation:** in a settlement tank, heavy solids sink to form **sludge**. The liquid on top is called **effluent**.
-3. **Sludge** → **anaerobic digestion** (bacteria break it down **without oxygen**). This produces **biogas** (methane, used for energy) and **fertiliser**.
-4. **Effluent** → **aerobic biological treatment** (air is bubbled in so bacteria break down the organic matter **with oxygen**). It is then safe to put back in rivers.
-
-Factory (industrial) waste water may need extra treatment to remove harmful chemicals.
-
-### Life Cycle Assessment (LCA)
-An LCA looks at the **environmental impact** of a product over its **whole life**, in 4 stages:
-1. **Extracting and processing raw materials** (for example mining or drilling for oil)
-2. **Manufacturing and packaging**
-3. **Use** of the product (for example fuel used by a car)
-4. **Disposal** at the end of its life (landfill, burning, recycling)
-
-At each stage, the LCA considers **energy, water and resources used**, and **waste and pollution produced**.
-
-**Problems with LCAs:** some impacts (like pollution) are hard to give a number to, so people have to make **judgements**. That means an LCA can be **biased**: a company might only include the good parts to advertise its product.
-
-**Classic exam question: plastic bags vs paper bags**
-- **Plastic bags:** made from crude oil (finite), but they use **less energy** to make, are **stronger** and **can be reused**. They **don't rot** (not biodegradable) and harm wildlife.
-- **Paper bags:** made from trees (renewable) and **biodegradable**, but making them uses **more energy and water**, and they usually can't be reused as many times.
-
-### Reduce, reuse, recycle
-- Using less (reduce), reusing things, and recycling all **save finite resources**, **save energy**, cut **waste in landfill** and reduce **mining damage**.
-- **Glass** can be **reused** (washed bottles) or crushed and melted to make new glass.
-- **Metals** are recycled by melting them and making new products. This takes **less energy** than mining and extracting new metal.
-
-### [Triple only] Extra topics
-- **Corrosion:** rusting needs **both water and oxygen**. Stop it with a **barrier** (paint, oil, grease, plastic coating) or **sacrificial protection** (attaching a **more reactive** metal like zinc, which corrodes instead). **Galvanising** = coating iron with zinc.
-- **Alloys:** mixtures of metals, which are **harder** than pure metals. **Bronze** = copper + tin. **Brass** = copper + zinc. **Steel** = iron + carbon. Gold is made into alloys with silver, copper or zinc. Purity is measured in **carats**, and **24 carat** = pure gold.
-- **Ceramics, polymers, composites:** glass is made from melting sand. Clay ceramics are made by heating clay. **Thermosoftening** polymers melt when heated, but **thermosetting** polymers don't. **Composites** combine a **reinforcement** with a **matrix (binder)**, for example concrete or fibreglass.
-- **Haber process:** N₂ + 3H₂ ⇌ 2NH₃, at about **450 °C**, **200 atmospheres**, with an **iron catalyst**. Ammonia is used to make fertilisers.
-- **NPK fertilisers** give plants **N**itrogen, **P**hosphorus and **K** (potassium).
+### Bulk and surface properties
+- **Nanoparticles** are **1–100 nm** in size (1 nm = 0.000 000 001 m). They have a **very large surface area to volume ratio**, so they make good **catalysts**. They are used in **sun creams**, but there are worries about possible **health risks**.
+- **Ceramics** (hard and brittle), **polymers** (flexible and light), **composites** (two materials combined, for example concrete or fibreglass), and **metals** (conduct electricity, malleable): choose a material by comparing its properties.
 
 ---
 
-## A7. Chemistry exam tips
+## A8. Chemistry exam tips
 
-1. **Read the command word.**
-   - *State / Give / Name* → a short answer is fine.
-   - *Describe* → say **what** happens.
-   - *Explain* → say what happens **and why** (use the word "because").
-   - *Compare* → talk about **both** things in the same sentence ("A is faster **than** B").
-2. **Count the marks.** A 3-mark question needs 3 separate points.
-3. **Show working** in calculations (mean rate, Rf). Write the formula first, then put the numbers in, then the answer **with units**.
-4. **Learn the gas tests word for word.** They are easy marks.
-5. **Rates "explain" questions:** always use the words **particles**, **collisions**, **frequency / per second**, **energy**, **activation energy**.
-6. If you're stuck, **write something sensible**. A blank answer can't get any marks.
+1. **Read the command word:** *state/give/name* = short answer. *Describe* = say what happens. *Explain* = say what happens **and why** (use "because"). *Compare* = talk about both things.
+2. **Count the marks.** 3 marks = 3 separate points.
+3. **Calculations:** write the formula, put in the numbers, and give the **unit**.
+4. **Trend questions (Groups 1 and 7):** always mention **outer electron**, **distance from the nucleus**, and **attraction**.
+5. **Rates questions:** always use the words **particles**, **frequent collisions**, **energy** and **activation energy**.
+6. **Balancing equations:** count every atom on each side at the end to check.
+7. **Never leave a blank.**
 
 ---
 
 # PART B: MATHS PAPER 1 (HIGHER, NON-CALCULATOR)
 
 ## B0. How to use this part
+
+(Edexcel Paper 1 = non-calculator. The content is the same for every exam board.)
 
 Maths is like building a tower: each idea sits on the ones underneath it. So every topic below starts with **"What you need first"**. If a topic feels hard, go back to the topic it depends on.
 
@@ -1366,12 +1302,13 @@ To read the frequency from a bar: frequency = frequency density × class width.
 ---
 
 ### Final checklist for tonight
-- [ ] Gas tests (hydrogen, oxygen, CO₂, chlorine)
-- [ ] The 5 factors that affect rate, with collision theory explanations
-- [ ] Alkanes vs alkenes, and the bromine water test
-- [ ] Fractional distillation and cracking
-- [ ] Atmosphere: early atmosphere → now, greenhouse gases, pollutants
-- [ ] Potable water, waste water, and LCAs
+- [ ] Protons, neutrons, electrons; electron shells (2, 8, 8)
+- [ ] Ionic vs covalent bonding; balancing equations; relative formula mass
+- [ ] Group 1 (reactions with water, trend), Group 7 (colours, displacement, trend), Group 0 (uses)
+- [ ] The factors that affect rate, with collision theory explanations
+- [ ] Exothermic vs endothermic, bond energy calculations, reaction profiles
+- [ ] Fractions of crude oil and their uses; combustion and pollutants; cracking; hydrogen as a fuel
+- [ ] Atmosphere: early atmosphere → now, greenhouse effect, climate change
 - [ ] Fractions (all four operations) and percentages (reverse and compound)
 - [ ] Laws of indices, including negative and fractional powers
 - [ ] Surds: simplify and rationalise

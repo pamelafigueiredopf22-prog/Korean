@@ -23,8 +23,8 @@
 - 1200 + 210 + 240 + 42 >> Multiply each part, like in the grid.
 - = **1692** >> Then add them up to get one thousand, six hundred and ninety-two.
 - 0.3 × 0.04: do 3 × 4 = 12 >> For decimals, ignore the decimal points first. Three times four is twelve.
-- 1 + 2 = 3 decimal places → **0.012** >> There are three decimal places in total in the question, so the answer is nought point nought one two.
-- 6 ÷ 0.2 = 60 ÷ 2 = **30** >> To divide by a decimal, multiply both numbers by ten. Six divided by nought point two becomes sixty divided by two, which is thirty.
+- 1 + 2 = 3 decimal places → **0.012** >> There are three decimal places in total in the question, so the answer is zero point zero one two.
+- 6 ÷ 0.2 = 60 ÷ 2 = **30** >> To divide by a decimal, multiply both numbers by ten. Six divided by zero point two becomes sixty divided by two, which is thirty.
 
 @scene MATHS | Number | Prime factors, HCF and LCM
 @need factors and multiples
@@ -59,13 +59,13 @@
 - 10% = 26 → 30% = 78 >> Ten percent is twenty-six. So thirty percent is seventy-eight.
 - 5% = 13 >> Five percent is half of ten percent: thirteen.
 - 35% = 78 + 13 = **91** >> Add them: ninety-one.
-- Increase 15%: × 1.15 · Decrease 15%: × 0.85 >> A multiplier does it in one step. To increase by fifteen percent, times by one point one five. To decrease, times by nought point eight five.
+- Increase 15%: × 1.15 · Decrease 15%: × 0.85 >> A multiplier does it in one step. To increase by fifteen percent, times by one point one five. To decrease, times by zero point eight five.
 
 @scene MATHS | Number | Reverse percentages and compound interest
 @need percentages · multipliers
 - After 15% off, a coat costs £68. Original? >> A coat costs sixty-eight pounds after fifteen percent off. What was the original price?
 - £68 = 85% of the original >> Sixty-eight pounds is eighty-five percent of the original, because fifteen percent was taken off.
-- 1% = 68 ÷ 85 = 0.8 >> So one percent is sixty-eight divided by eighty-five, which is nought point eight.
+- 1% = 68 ÷ 85 = 0.8 >> So one percent is sixty-eight divided by eighty-five, which is zero point eight.
 - 100% = **£80** >> And one hundred percent is eighty pounds.
 - £200 at 10% compound for 2 years >> Compound interest is added on to the new total each year.
 - 200 × 1.1 = 220 → 220 × 1.1 = **£242** >> Two hundred times one point one is two hundred and twenty. Times one point one again: two hundred and forty-two pounds.
@@ -92,7 +92,7 @@
 @scene MATHS | Number | Standard form
 @box A × 10ⁿ | 1 ≤ A < 10 | big → positive n | small → negative n
 - 45 000 = **4.5 × 10⁴** >> Standard form is a short way to write big and small numbers. Forty-five thousand is four point five times ten to the four.
-- 0.0036 = **3.6 × 10⁻³** >> Small numbers have a negative power. Nought point nought nought three six is three point six times ten to the minus three.
+- 0.0036 = **3.6 × 10⁻³** >> Small numbers have a negative power. Zero point zero zero three six is three point six times ten to the minus three.
 - (3 × 10⁴) × (4 × 10⁵) = 12 × 10⁹ >> To multiply, multiply the numbers and add the powers: twelve times ten to the nine.
 - 12 is too big → **1.2 × 10¹⁰** >> But twelve is not between one and ten. So it becomes one point two times ten to the ten.
 
@@ -107,7 +107,7 @@
 - bottom = 4 − 3 = 1 → **2 − √3** >> The bottom becomes four minus three, which is one. So the answer is two minus root three.
 
 @scene MATHS | Number | Recurring decimals to fractions
-- x = 0.272727… >> Let x equal nought point two seven recurring.
+- x = 0.272727… >> Let x equal zero point two seven recurring.
 - Two digits repeat → 100x = 27.2727… >> Two digits repeat, so multiply by one hundred.
 - 100x − x: 99x = 27 >> Subtract the first line from the second. The recurring parts cancel out, leaving ninety-nine x equals twenty-seven.
 - x = 27/99 = **3/11** >> So x is twenty-seven over ninety-nine, which simplifies to three elevenths.
@@ -115,7 +115,7 @@
 @scene MATHS | Number | Estimating and error intervals
 @box Rounding | next digit 5 or more | → round up
 - Estimate: round to **1 significant figure** >> To estimate, round every number to one significant figure.
-- (48.7 × 3.12) ÷ 0.51 ≈ (50 × 3) ÷ 0.5 >> Forty-eight point seven becomes fifty. Three point one two becomes three. Nought point five one becomes nought point five.
+- (48.7 × 3.12) ÷ 0.51 ≈ (50 × 3) ÷ 0.5 >> Forty-eight point seven becomes fifty. Three point one two becomes three. Zero point five one becomes zero point five.
 - = 150 ÷ 0.5 = **300** >> One hundred and fifty divided by a half is three hundred.
 - 7.4 to 1 d.p.: 7.35 ≤ length < 7.45 >> A length is seven point four, to one decimal place. It could be as low as seven point three five, and up to, but not including, seven point four five.
 
@@ -302,7 +302,7 @@
 - sin 30° = ½ · cos 30° = √3/2 · tan 30° = √3/3 >> No calculator means you must know these. Sine thirty is a half. Cos thirty is root three over two. Tan thirty is root three over three.
 - sin 45° = √2/2 · cos 45° = √2/2 · tan 45° = 1 >> Sine and cos of forty-five are both root two over two. Tan forty-five is one.
 - sin 60° = √3/2 · cos 60° = ½ · tan 60° = √3 >> Sine sixty is root three over two. Cos sixty is a half. Tan sixty is root three.
-- sin 0° = 0 · sin 90° = 1 · cos 0° = 1 · cos 90° = 0 >> And sine nought is nought, sine ninety is one, cos nought is one, and cos ninety is nought.
+- sin 0° = 0 · sin 90° = 1 · cos 0° = 1 · cos 90° = 0 >> And sine zero is zero, sine ninety is one, cos zero is one, and cos ninety is zero.
 - Area of any triangle = ½ab sin C >> For any triangle, the area is a half a b sine C.
 
 @scene MATHS | Geometry | Circle theorems
@@ -325,9 +325,9 @@
 @chapter 5. Probability
 @scene MATHS | Probability | Probability basics
 @box Remember | P(not A) = 1 − P(A) | AND → multiply | OR → add
-- 0 = impossible · 1 = certain >> Probability goes from nought, impossible, to one, certain.
+- 0 = impossible · 1 = certain >> Probability goes from zero, impossible, to one, certain.
 - 3 red, 5 blue: P(red) = **3/8** >> A bag has three red and five blue balls. The probability of red is three out of eight.
-- P(rain) = 0.3 → P(no rain) = **0.7** >> Probabilities add to one. If the chance of rain is nought point three, no rain is nought point seven.
+- P(rain) = 0.3 → P(no rain) = **0.7** >> Probabilities add to one. If the chance of rain is zero point three, no rain is zero point seven.
 - Expected: 3/8 × 40 = **15** >> If you pick forty times, you'd expect three eighths of forty: fifteen reds.
 - P(heads AND six) = ½ × 1/6 = **1/12** >> For AND, multiply. For OR, add.
 
