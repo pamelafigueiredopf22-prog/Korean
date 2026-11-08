@@ -1,0 +1,911 @@
+1
+00:00:00,400 --> 00:00:06,412
+Hello, and welcome to your maths paper one revision lesson. This is the non-calculator paper.
+
+2
+00:00:06,762 --> 00:00:10,185
+We'll go through number, algebra, and ratio,
+
+3
+00:00:10,535 --> 00:00:13,958
+then geometry, probability and statistics.
+
+4
+00:00:14,308 --> 00:00:19,960
+For every topic, I'll show you what you need to know first, so that each rule makes sense.
+
+5
+00:00:20,310 --> 00:00:25,289
+Get a pen and paper, and pause the video to try each example yourself.
+
+6
+00:00:26,039 --> 00:00:32,760
+Let's start with negative numbers. Subtracting a negative is the same as adding. Five minus negative three is eight.
+
+7
+00:00:33,110 --> 00:00:41,571
+When you multiply or divide, if the signs are the same, the answer is positive. Negative four times negative three is twelve.
+
+8
+00:00:41,921 --> 00:00:48,305
+If the signs are different, the answer is negative. Negative four times three is negative twelve.
+
+9
+00:00:48,655 --> 00:00:58,197
+The order of operations is BIDMAS: brackets, then indices, which means powers, then divide and multiply, then add and subtract.
+
+10
+00:00:58,547 --> 00:01:06,033
+So, three plus four times two squared. Square first: four. Then multiply: sixteen. Then add: nineteen.
+
+11
+00:01:06,783 --> 00:01:14,467
+No calculator, so we need written methods. For forty-seven times thirty-six, split each number into tens and ones.
+
+12
+00:01:14,817 --> 00:01:17,787
+Multiply each part, like in the grid.
+
+13
+00:01:18,137 --> 00:01:22,269
+Then add them up to get one thousand, six hundred and ninety-two.
+
+14
+00:01:22,619 --> 00:01:27,400
+For decimals, ignore the decimal points first. Three times four is twelve.
+
+15
+00:01:27,750 --> 00:01:34,296
+There are three decimal places in total in the question, so the answer is zero point zero one two.
+
+16
+00:01:34,646 --> 00:01:43,851
+To divide by a decimal, multiply both numbers by ten. Six divided by zero point two becomes sixty divided by two, which is thirty.
+
+17
+00:01:44,601 --> 00:01:49,615
+A prime number has exactly two factors: one and itself. One is not prime.
+
+18
+00:01:49,965 --> 00:01:54,421
+Using a factor tree, sixty is two times two times three times five.
+
+19
+00:01:54,771 --> 00:01:58,659
+And seventy-two is two times two times two times three times three.
+
+20
+00:01:59,009 --> 00:02:03,639
+Put the shared primes, two, two and three, in the middle of a Venn diagram.
+
+21
+00:02:03,989 --> 00:02:07,459
+The highest common factor is the product of the middle: twelve.
+
+22
+00:02:07,809 --> 00:02:12,404
+The lowest common multiple is the product of everything: three hundred and sixty.
+
+23
+00:02:13,154 --> 00:02:19,457
+The bottom of a fraction is the denominator. It says how many equal parts. The top is the numerator.
+
+24
+00:02:19,807 --> 00:02:25,064
+To add two thirds and one quarter, the bottoms must be the same. Twelve works for both.
+
+25
+00:02:25,414 --> 00:02:30,672
+Two thirds is eight twelfths. One quarter is three twelfths. Add the tops: eleven twelfths.
+
+26
+00:02:31,022 --> 00:02:38,984
+With mixed numbers, change them to top-heavy fractions first. Two and a half is five halves. One and two thirds is five thirds.
+
+27
+00:02:39,334 --> 00:02:45,184
+Make the bottoms six: fifteen sixths minus ten sixths is five sixths.
+
+28
+00:02:45,934 --> 00:02:53,467
+To multiply, just multiply the tops and multiply the bottoms. Then simplify: six twentieths is three tenths.
+
+29
+00:02:53,817 --> 00:02:56,033
+To divide, use KFC.
+
+30
+00:02:56,383 --> 00:02:59,864
+Keep the first fraction. Flip the second one upside down.
+
+31
+00:03:00,214 --> 00:03:04,798
+Change divide into times. Two times five is ten. Three times four is twelve.
+
+32
+00:03:05,148 --> 00:03:09,325
+Simplify by dividing top and bottom by two: five sixths.
+
+33
+00:03:10,075 --> 00:03:13,452
+Let's find thirty-five percent of two hundred and sixty.
+
+34
+00:03:13,802 --> 00:03:17,748
+Ten percent is twenty-six. So thirty percent is seventy-eight.
+
+35
+00:03:18,098 --> 00:03:20,905
+Five percent is half of ten percent: thirteen.
+
+36
+00:03:21,255 --> 00:03:22,763
+Add them: ninety-one.
+
+37
+00:03:23,113 --> 00:03:32,341
+A multiplier does it in one step. To increase by fifteen percent, times by one point one five. To decrease, times by zero point eight five.
+
+38
+00:03:33,091 --> 00:03:38,441
+A coat costs sixty-eight pounds after fifteen percent off. What was the original price?
+
+39
+00:03:38,791 --> 00:03:44,571
+Sixty-eight pounds is eighty-five percent of the original, because fifteen percent was taken off.
+
+40
+00:03:44,921 --> 00:03:50,260
+So one percent is sixty-eight divided by eighty-five, which is zero point eight.
+
+41
+00:03:50,610 --> 00:03:53,336
+And one hundred percent is eighty pounds.
+
+42
+00:03:53,686 --> 00:03:57,214
+Compound interest is added on to the new total each year.
+
+43
+00:03:57,564 --> 00:04:04,099
+Two hundred times one point one is two hundred and twenty. Times one point one again: two hundred and forty-two pounds.
+
+44
+00:04:04,849 --> 00:04:11,128
+A power means repeated multiplication. Two to the power five is five twos multiplied together: thirty-two.
+
+45
+00:04:11,478 --> 00:04:16,898
+When you multiply, add the powers. Three to the four times three squared is three to the six.
+
+46
+00:04:17,248 --> 00:04:19,579
+When you divide, subtract the powers.
+
+47
+00:04:19,929 --> 00:04:22,308
+A power of a power: multiply them.
+
+48
+00:04:22,658 --> 00:04:25,059
+Anything to the power zero is one.
+
+49
+00:04:25,809 --> 00:04:31,937
+A negative power means flip it. Two to the minus three is one over two cubed, which is one eighth.
+
+50
+00:04:32,287 --> 00:04:39,704
+A fraction power means a root. Twenty-five to the power of a half is the square root of twenty-five, which is five.
+
+51
+00:04:40,054 --> 00:04:45,776
+For eight to the power two thirds, the bottom, three, means cube root. The top, two, means square.
+
+52
+00:04:46,126 --> 00:04:49,526
+The cube root of eight is two. Two squared is four.
+
+53
+00:04:49,876 --> 00:04:55,203
+Now a hard one. Twenty-seven eighths to the power minus two thirds. The minus means flip it.
+
+54
+00:04:55,553 --> 00:04:59,278
+Cube root both: two thirds. Then square: four ninths.
+
+55
+00:05:00,028 --> 00:05:08,025
+Standard form is a short way to write big and small numbers. Forty-five thousand is four point five times ten to the four.
+
+56
+00:05:08,375 --> 00:05:16,408
+Small numbers have a negative power. Zero point zero zero three six is three point six times ten to the minus three.
+
+57
+00:05:16,758 --> 00:05:21,748
+To multiply, multiply the numbers and add the powers: twelve times ten to the nine.
+
+58
+00:05:22,098 --> 00:05:27,228
+But twelve is not between one and ten. So it becomes one point two times ten to the ten.
+
+59
+00:05:27,978 --> 00:05:33,189
+A surd is a square root that is not a whole number, like root two. We leave it as a root.
+
+60
+00:05:33,539 --> 00:05:42,012
+To simplify, find the biggest square number factor. Root seventy-two is root thirty-six times root two, which is six root two.
+
+61
+00:05:42,362 --> 00:05:49,965
+You can only add like surds. Root fifty is five root two. Root eighteen is three root two. Together, eight root two.
+
+62
+00:05:50,315 --> 00:05:57,430
+To rationalise, remove the root from the bottom. Multiply top and bottom by root three. You get two root three.
+
+63
+00:05:57,780 --> 00:06:03,653
+If the bottom is two plus root three, multiply top and bottom by two minus root three.
+
+64
+00:06:04,003 --> 00:06:09,423
+The bottom becomes four minus three, which is one. So the answer is two minus root three.
+
+65
+00:06:10,173 --> 00:06:13,689
+Let x equal zero point two seven recurring.
+
+66
+00:06:14,039 --> 00:06:17,439
+Two digits repeat, so multiply by one hundred.
+
+67
+00:06:17,789 --> 00:06:24,880
+Subtract the first line from the second. The recurring parts cancel out, leaving ninety-nine x equals twenty-seven.
+
+68
+00:06:25,230 --> 00:06:30,465
+So x is twenty-seven over ninety-nine, which simplifies to three elevenths.
+
+69
+00:06:31,215 --> 00:06:35,114
+To estimate, round every number to one significant figure.
+
+70
+00:06:35,464 --> 00:06:43,415
+Forty-eight point seven becomes fifty. Three point one two becomes three. Zero point five one becomes zero point five.
+
+71
+00:06:43,765 --> 00:06:47,176
+One hundred and fifty divided by a half is three hundred.
+
+72
+00:06:47,526 --> 00:06:58,078
+A length is seven point four, to one decimal place. It could be as low as seven point three five, and up to, but not including, seven point four five.
+
+73
+00:06:58,828 --> 00:07:03,551
+To expand a bracket, multiply everything inside by the term outside.
+
+74
+00:07:03,901 --> 00:07:08,729
+For double brackets, multiply every term in the first by every term in the second.
+
+75
+00:07:09,079 --> 00:07:18,551
+x times x is x squared. x times minus five is minus five x. Three times x is three x. Three times minus five is minus fifteen.
+
+76
+00:07:18,901 --> 00:07:23,172
+Collect the x terms: x squared minus two x minus fifteen.
+
+77
+00:07:23,522 --> 00:07:28,675
+Careful with squared brackets. Write it out twice. It is NOT x squared plus sixteen.
+
+78
+00:07:29,425 --> 00:07:34,020
+Factorising is the opposite of expanding. First, take out common factors.
+
+79
+00:07:34,370 --> 00:07:39,500
+For a quadratic, find two numbers that multiply to twelve and add to seven.
+
+80
+00:07:39,850 --> 00:07:44,121
+Three and four. So it's x plus three, times x plus four.
+
+81
+00:07:44,471 --> 00:07:50,889
+The difference of two squares: x squared minus forty-nine is x plus seven, times x minus seven.
+
+82
+00:07:51,239 --> 00:08:00,630
+When there's a number in front of x squared, multiply a by c: six. Find two numbers that multiply to six and add to seven: six and one.
+
+83
+00:08:00,980 --> 00:08:07,375
+Split the middle term and factorise in pairs. The answer is two x plus one, times x plus three.
+
+84
+00:08:08,125 --> 00:08:12,721
+An equation is like a balance. Whatever you do to one side, do to the other.
+
+85
+00:08:13,071 --> 00:08:18,026
+Take three x from both sides: four x plus three equals nineteen.
+
+86
+00:08:18,376 --> 00:08:22,171
+Take three from both sides: four x equals sixteen.
+
+87
+00:08:22,521 --> 00:08:25,410
+Divide by four: x equals four.
+
+88
+00:08:25,760 --> 00:08:31,482
+With brackets, expand first. Then x minus six equals eight, so x equals fourteen.
+
+89
+00:08:32,232 --> 00:08:39,881
+Rearranging works just like solving. Make x the subject of y equals three x minus two, all over five.
+
+90
+00:08:40,231 --> 00:08:42,690
+Multiply both sides by five.
+
+91
+00:08:43,040 --> 00:08:44,710
+Add two to both sides.
+
+92
+00:08:45,060 --> 00:08:46,568
+Divide by three.
+
+93
+00:08:46,918 --> 00:08:52,419
+If the letter appears twice, get both terms on one side, then factorise it out.
+
+94
+00:08:53,169 --> 00:08:58,508
+The open sign means less than. With a line underneath, it means less than or equal to.
+
+95
+00:08:58,858 --> 00:09:05,566
+On a number line, use an open circle for less than, and a filled circle for less than or equal to.
+
+96
+00:09:05,916 --> 00:09:12,126
+Solve them like equations. Three x plus two is greater than fourteen, so x is greater than four.
+
+97
+00:09:12,476 --> 00:09:20,311
+Five minus two x is less than or equal to eleven. Take five: minus two x is less than or equal to six.
+
+98
+00:09:20,661 --> 00:09:28,066
+Divide by minus two, and flip the sign, because we divided by a negative. x is greater than or equal to minus three.
+
+99
+00:09:28,816 --> 00:09:31,693
+The gap between terms is plus three every time.
+
+100
+00:09:32,043 --> 00:09:36,558
+So the rule starts with three n. That gives three, six, nine, twelve.
+
+101
+00:09:36,908 --> 00:09:42,955
+Our sequence is two more each time. So the nth term is three n plus two.
+
+102
+00:09:43,305 --> 00:09:47,993
+Check: when n is one, three plus two is five. Correct.
+
+103
+00:09:48,343 --> 00:09:55,017
+Is one hundred in the sequence? Solve three n plus two equals one hundred. n is not a whole number, so no.
+
+104
+00:09:55,367 --> 00:10:03,376
+For a quadratic sequence, the second differences are the same. Halve that number to get the n squared term, then find the linear part.
+
+105
+00:10:04,126 --> 00:10:07,932
+The equation of a straight line is y equals m x plus c.
+
+106
+00:10:08,282 --> 00:10:11,787
+m is the gradient. It tells you how steep the line is.
+
+107
+00:10:12,137 --> 00:10:16,210
+c is the y-intercept, where the line crosses the y-axis.
+
+108
+00:10:16,560 --> 00:10:22,317
+The gradient is the change in y divided by the change in x. Up, divided by across.
+
+109
+00:10:22,667 --> 00:10:29,364
+A line goes through one, five and three, eleven. Up six, across two, so the gradient is three.
+
+110
+00:10:29,714 --> 00:10:37,375
+Put the point one, five into y equals three x plus c. Five equals three plus c, so c is two.
+
+111
+00:10:38,125 --> 00:10:40,491
+Parallel lines have the same gradient.
+
+112
+00:10:40,841 --> 00:10:45,901
+Perpendicular lines meet at a right angle. Their gradients multiply to minus one.
+
+113
+00:10:46,251 --> 00:10:51,218
+To find it, flip the gradient and change the sign. Two becomes minus a half.
+
+114
+00:10:51,568 --> 00:10:54,132
+Minus three quarters becomes four thirds.
+
+115
+00:10:54,482 --> 00:10:58,753
+Always get y on its own first, so you can read the gradient.
+
+116
+00:10:59,503 --> 00:11:03,100
+To solve a quadratic, first make it equal zero.
+
+117
+00:11:03,450 --> 00:11:08,255
+Factorise it: x plus four, times x minus three.
+
+118
+00:11:08,605 --> 00:11:15,720
+If two things multiply to zero, one of them must be zero. So x is minus four, or x is three.
+
+119
+00:11:16,070 --> 00:11:26,761
+If it won't factorise, use the quadratic formula. x equals minus b, plus or minus the square root of b squared minus four a c, all over two a.
+
+120
+00:11:27,111 --> 00:11:34,168
+For x squared plus four x plus one, that gives minus four, plus or minus root twelve, all over two.
+
+121
+00:11:34,518 --> 00:11:40,309
+Root twelve is two root three. Divide by two: minus two, plus or minus root three.
+
+122
+00:11:41,059 --> 00:11:45,481
+Completing the square. Take x squared plus six x plus two.
+
+123
+00:11:45,831 --> 00:11:50,090
+Halve the six to get three. Write x plus three, squared.
+
+124
+00:11:50,440 --> 00:11:55,593
+But that bracket makes an extra nine, so subtract nine. Then add the two.
+
+125
+00:11:55,943 --> 00:11:59,343
+That gives x plus three, squared, minus seven.
+
+126
+00:11:59,693 --> 00:12:06,158
+The turning point is minus three, minus seven. Change the sign inside the bracket, and keep the sign outside.
+
+127
+00:12:06,508 --> 00:12:12,021
+On a graph, the roots, or solutions, are where the curve crosses the x-axis.
+
+128
+00:12:12,771 --> 00:12:17,053
+Two equations, two unknowns. We want values that make both true.
+
+129
+00:12:17,403 --> 00:12:22,800
+Both have plus two y. Same signs, so subtract the equations. Two x equals eight.
+
+130
+00:12:23,150 --> 00:12:24,727
+So x equals four.
+
+131
+00:12:25,077 --> 00:12:30,230
+Put that back in: four plus two y equals eight, so y equals two.
+
+132
+00:12:30,580 --> 00:12:34,850
+Always check in the other equation. Twelve plus four is sixteen. Correct.
+
+133
+00:12:35,200 --> 00:12:41,967
+If one equation is a quadratic, substitute the straight line equation into it, then solve the quadratic.
+
+134
+00:12:42,717 --> 00:12:48,764
+A function is a rule. If f of x is three x minus one, then f of four is eleven.
+
+135
+00:12:49,114 --> 00:12:53,013
+For f g of x, do g first, then f. Work from the right.
+
+136
+00:12:53,363 --> 00:12:56,856
+For the inverse, rearrange to make x the subject.
+
+137
+00:12:57,206 --> 00:13:00,908
+So f inverse of x is x plus one, all over three.
+
+138
+00:13:01,258 --> 00:13:09,092
+Proof: three consecutive numbers add to three n plus three, which is three times something. So it's always a multiple of three.
+
+139
+00:13:09,842 --> 00:13:12,859
+Share sixty pounds in the ratio three to two.
+
+140
+00:13:13,209 --> 00:13:15,425
+First, add the parts: five.
+
+141
+00:13:15,775 --> 00:13:19,477
+One part is sixty divided by five: twelve pounds.
+
+142
+00:13:19,827 --> 00:13:24,562
+Three parts is thirty-six pounds, and two parts is twenty-four pounds.
+
+143
+00:13:24,912 --> 00:13:27,336
+Check they add up to sixty. They do.
+
+144
+00:13:28,086 --> 00:13:34,969
+y is directly proportional to x squared. y is thirty-six when x is three. Find y when x is five.
+
+145
+00:13:35,319 --> 00:13:39,741
+Step one: write the equation with k. y equals k x squared.
+
+146
+00:13:40,091 --> 00:13:45,766
+Step two: put in the numbers. Thirty-six equals nine k, so k is four.
+
+147
+00:13:46,116 --> 00:13:52,883
+Step three: use it. When x is five, y is four times twenty-five, which is one hundred.
+
+148
+00:13:53,633 --> 00:13:58,286
+A car travels one hundred and fifty kilometres in two and a half hours.
+
+149
+00:13:58,636 --> 00:14:03,499
+Careful: two hours thirty minutes is two point five hours, not two point three.
+
+150
+00:14:03,849 --> 00:14:07,969
+Speed is distance divided by time: sixty kilometres per hour.
+
+151
+00:14:08,319 --> 00:14:12,473
+For area units, square the conversion. For volume units, cube it.
+
+152
+00:14:13,223 --> 00:14:19,444
+Angles on a straight line add to one hundred and eighty degrees. Around a point, three hundred and sixty.
+
+153
+00:14:19,794 --> 00:14:24,367
+Angles in a triangle add to one eighty. In a four-sided shape, three sixty.
+
+154
+00:14:24,717 --> 00:14:27,850
+Vertically opposite angles, in an X shape, are equal.
+
+155
+00:14:28,200 --> 00:14:33,597
+When you give reasons, write the full rule, like: alternate angles are equal.
+
+156
+00:14:34,347 --> 00:14:43,052
+The interior angles of a polygon add to n minus two, times one eighty. That's because you can split it into n minus two triangles.
+
+157
+00:14:43,402 --> 00:14:49,147
+A pentagon has five sides, so three triangles: five hundred and forty degrees.
+
+158
+00:14:49,497 --> 00:14:53,768
+The exterior angles of any polygon add to three hundred and sixty.
+
+159
+00:14:54,118 --> 00:15:00,095
+In a regular polygon, each exterior angle is three sixty divided by the number of sides.
+
+160
+00:15:00,445 --> 00:15:04,925
+If the exterior angle is twenty degrees, there are eighteen sides.
+
+161
+00:15:05,675 --> 00:15:10,212
+The area of a triangle is half times base times perpendicular height.
+
+162
+00:15:10,562 --> 00:15:15,193
+A trapezium: add the parallel sides, halve it, times the height.
+
+163
+00:15:15,543 --> 00:15:22,786
+A circle's area is pi r squared. Its circumference is two pi r, or pi times the diameter.
+
+164
+00:15:23,136 --> 00:15:30,936
+With radius five, the area is twenty-five pi and the circumference is ten pi. On this paper, leave pi in.
+
+165
+00:15:31,286 --> 00:15:36,694
+A sector is a fraction of a circle. Multiply the area by the angle over three sixty.
+
+166
+00:15:37,444 --> 00:15:43,503
+A prism has the same shape all the way through. Its volume is the area of the cross-section times the length.
+
+167
+00:15:43,853 --> 00:15:47,554
+A cylinder's volume is pi r squared h.
+
+168
+00:15:47,904 --> 00:15:51,629
+A cone or pyramid is one third of the matching prism.
+
+169
+00:15:51,979 --> 00:15:55,553
+A sphere's volume is four thirds pi r cubed.
+
+170
+00:15:56,303 --> 00:15:59,494
+Pythagoras only works on right-angled triangles.
+
+171
+00:15:59,844 --> 00:16:03,848
+The hypotenuse is the longest side, opposite the right angle.
+
+172
+00:16:04,198 --> 00:16:07,412
+a squared plus b squared equals c squared.
+
+173
+00:16:07,762 --> 00:16:12,880
+To find the longest side, add the squares. Six squared plus eight squared is one hundred.
+
+174
+00:16:13,230 --> 00:16:15,399
+The square root of one hundred is ten.
+
+175
+00:16:15,749 --> 00:16:19,172
+To find a shorter side, subtract instead.
+
+176
+00:16:19,522 --> 00:16:23,619
+Learn these triples. They come up a lot on the non-calculator paper.
+
+177
+00:16:24,369 --> 00:16:32,923
+Label the sides from the angle you're using. The hypotenuse is the longest. The opposite is across from the angle. The adjacent is next to it.
+
+178
+00:16:33,273 --> 00:16:35,988
+Sine is opposite over hypotenuse.
+
+179
+00:16:36,338 --> 00:16:39,204
+Cosine is adjacent over hypotenuse.
+
+180
+00:16:39,554 --> 00:16:42,072
+Tangent is opposite over adjacent.
+
+181
+00:16:42,422 --> 00:16:47,993
+The hypotenuse is ten, and the angle is thirty degrees. Find the opposite side.
+
+182
+00:16:48,343 --> 00:16:52,021
+Sine of thirty is a half, so the opposite side is five.
+
+183
+00:16:52,771 --> 00:17:01,128
+No calculator means you must know these. Sine thirty is a half. Cos thirty is root three over two. Tan thirty is root three over three.
+
+184
+00:17:01,478 --> 00:17:06,353
+Sine and cos of forty-five are both root two over two. Tan forty-five is one.
+
+185
+00:17:06,703 --> 00:17:11,902
+Sine sixty is root three over two. Cos sixty is a half. Tan sixty is root three.
+
+186
+00:17:12,252 --> 00:17:18,717
+And sine zero is zero, sine ninety is one, cos zero is one, and cos ninety is zero.
+
+187
+00:17:19,067 --> 00:17:22,629
+For any triangle, the area is a half a b sine C.
+
+188
+00:17:23,379 --> 00:17:27,093
+The angle at the centre is twice the angle at the circumference.
+
+189
+00:17:27,443 --> 00:17:30,332
+The angle in a semicircle is ninety degrees.
+
+190
+00:17:30,682 --> 00:17:33,095
+Angles in the same segment are equal.
+
+191
+00:17:33,445 --> 00:17:37,379
+Opposite angles in a cyclic quadrilateral add to one eighty.
+
+192
+00:17:37,729 --> 00:17:40,862
+A tangent meets a radius at ninety degrees.
+
+193
+00:17:41,212 --> 00:17:45,006
+Always write the theorem in your answer. That's where the marks are.
+
+194
+00:17:45,756 --> 00:17:50,619
+To describe a rotation fully, give the angle, the direction, and the centre.
+
+195
+00:17:50,969 --> 00:17:54,705
+For an enlargement, give the scale factor and the centre.
+
+196
+00:17:55,055 --> 00:17:58,281
+Similar shapes are the same shape, different size.
+
+197
+00:17:58,631 --> 00:18:07,441
+Two similar cylinders have heights four and twelve. The scale factor is three, so the volume scale factor is three cubed: twenty-seven.
+
+198
+00:18:07,791 --> 00:18:13,153
+In vectors, to get from A to B, go back along a, then along b. That's b minus a.
+
+199
+00:18:13,903 --> 00:18:17,895
+Probability goes from zero, impossible, to one, certain.
+
+200
+00:18:18,245 --> 00:18:23,468
+A bag has three red and five blue balls. The probability of red is three out of eight.
+
+201
+00:18:23,818 --> 00:18:30,469
+Probabilities add to one. If the chance of rain is zero point three, no rain is zero point seven.
+
+202
+00:18:30,819 --> 00:18:35,797
+If you pick forty times, you'd expect three eighths of forty: fifteen reds.
+
+203
+00:18:36,147 --> 00:18:38,816
+For AND, multiply. For OR, add.
+
+204
+00:18:39,566 --> 00:18:44,788
+A bag has four red and three blue. Pick two, without putting the first one back.
+
+205
+00:18:45,138 --> 00:18:49,537
+On the second pick, there's one ball fewer, so the bottoms become six.
+
+206
+00:18:49,887 --> 00:18:57,106
+Multiply along the branches. Red then red is four sevenths times three sixths: twelve forty-seconds.
+
+207
+00:18:57,456 --> 00:19:02,238
+Blue then blue is three sevenths times two sixths: six forty-seconds.
+
+208
+00:19:02,588 --> 00:19:07,265
+Add the ends together: eighteen forty-seconds, which simplifies to three sevenths.
+
+209
+00:19:08,015 --> 00:19:12,692
+In a Venn diagram, the symbol like an n means "and". It's the overlap.
+
+210
+00:19:13,042 --> 00:19:16,976
+The symbol like a u means "or". It's everything in either circle.
+
+211
+00:19:17,326 --> 00:19:20,958
+A with a dash means not A. Everything outside circle A.
+
+212
+00:19:21,308 --> 00:19:24,510
+When you fill one in, always start with the middle.
+
+213
+00:19:24,860 --> 00:19:30,210
+For A given B, only look inside circle B. Divide the overlap by the total in B.
+
+214
+00:19:30,960 --> 00:19:34,140
+The mean is the total, divided by how many there are.
+
+215
+00:19:34,490 --> 00:19:37,959
+The median is the middle value, once they're in order.
+
+216
+00:19:38,309 --> 00:19:42,266
+The mode is the most common. The range is the biggest minus the smallest.
+
+217
+00:19:42,616 --> 00:19:50,266
+From a frequency table, multiply each value by its frequency, add them up, and divide by the total frequency.
+
+218
+00:19:50,616 --> 00:19:57,649
+When comparing two sets of data, compare an average and a spread, and say what it means in context.
+
+219
+00:19:58,399 --> 00:20:02,554
+Scatter graphs show correlation: positive, negative or none.
+
+220
+00:20:02,904 --> 00:20:06,466
+But correlation does not prove that one thing causes the other.
+
+221
+00:20:06,816 --> 00:20:11,098
+On a cumulative frequency graph, read the median at half the total,
+
+222
+00:20:11,448 --> 00:20:18,134
+and the quartiles at a quarter and three quarters. The interquartile range is upper quartile minus lower quartile.
+
+223
+00:20:18,484 --> 00:20:25,053
+In a histogram, the height is frequency density. A group of width twenty with frequency forty has density two.
+
+224
+00:20:25,803 --> 00:20:32,756
+Let's finish with exam tips. Always show your working. You get marks for method, even if the answer is wrong.
+
+225
+00:20:33,106 --> 00:20:39,443
+Read every question twice. Look for words like exact, simplest form, and in terms of pi.
+
+226
+00:20:39,793 --> 00:20:41,579
+Check your answer makes sense.
+
+227
+00:20:41,929 --> 00:20:45,050
+And never leave a question blank. Write a first step.
+
+228
+00:20:45,400 --> 00:20:48,417
+Well done for revising. Good luck in your mock!

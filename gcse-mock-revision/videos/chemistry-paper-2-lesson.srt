@@ -1,0 +1,611 @@
+1
+00:00:00,400 --> 00:00:04,949
+Hello, and welcome to your Edexcel chemistry paper two revision lesson.
+
+2
+00:00:05,299 --> 00:00:13,157
+We'll cover key concepts, groups in the periodic table, rates and energy changes, then fuels and the atmosphere.
+
+3
+00:00:13,507 --> 00:00:23,873
+If your exam is one hour ten minutes, you take combined science. If it's one hour forty-five, you take separate chemistry, and there's an extra section at the end for you.
+
+4
+00:00:24,223 --> 00:00:29,469
+Pause the video whenever you want, and try each question before I give the answer.
+
+5
+00:00:30,219 --> 00:00:38,542
+Every atom has a tiny nucleus in the middle. It contains protons, with a charge of plus one, and neutrons, with no charge.
+
+6
+00:00:38,892 --> 00:00:43,917
+Electrons, with a charge of minus one, move around the nucleus in shells.
+
+7
+00:00:44,267 --> 00:00:51,022
+Protons and neutrons both have a mass of one. Electrons are so light, their mass is almost nothing.
+
+8
+00:00:51,372 --> 00:00:57,465
+An atom has no overall charge, because it has the same number of protons and electrons.
+
+9
+00:00:58,215 --> 00:01:02,753
+The atomic number, the smaller number, is the number of protons.
+
+10
+00:01:03,103 --> 00:01:07,675
+The mass number, the bigger number, is protons plus neutrons.
+
+11
+00:01:08,025 --> 00:01:13,213
+Sodium has atomic number eleven. So it has eleven protons and eleven electrons.
+
+12
+00:01:13,563 --> 00:01:18,867
+Neutrons are mass number minus atomic number: twenty-three minus eleven is twelve.
+
+13
+00:01:19,217 --> 00:01:24,324
+Isotopes are atoms of the same element with different numbers of neutrons.
+
+14
+00:01:25,074 --> 00:01:30,796
+Fill the shells two, then eight, then eight. Sodium has eleven electrons: two, eight, one.
+
+15
+00:01:31,146 --> 00:01:33,582
+Chlorine has seventeen: two, eight, seven.
+
+16
+00:01:33,932 --> 00:01:39,062
+The group number is the number of electrons in the outer shell. Sodium is in group one.
+
+17
+00:01:39,412 --> 00:01:42,707
+The period, or row, is the number of shells.
+
+18
+00:01:43,057 --> 00:01:47,943
+Metals are on the left of the periodic table. Non-metals are on the right.
+
+19
+00:01:48,293 --> 00:01:54,967
+Mendeleev left gaps for elements not yet discovered, and predicted their properties. He was later proved right.
+
+20
+00:01:55,717 --> 00:02:00,870
+An ion is a charged atom. Metals lose electrons to make positive ions.
+
+21
+00:02:01,220 --> 00:02:07,034
+Non-metals gain electrons to make negative ions. Both do this to get a full outer shell.
+
+22
+00:02:07,384 --> 00:02:15,057
+Ionic bonding is between a metal and a non-metal. Electrons are transferred, and the opposite charges attract strongly.
+
+23
+00:02:15,407 --> 00:02:22,882
+Ionic compounds have high melting points. They conduct electricity when molten or dissolved, because the ions can move.
+
+24
+00:02:23,232 --> 00:02:27,572
+Covalent bonding is between non-metals. They share pairs of electrons.
+
+25
+00:02:27,922 --> 00:02:33,899
+Small covalent molecules have low melting points, because the forces between molecules are weak.
+
+26
+00:02:34,649 --> 00:02:44,435
+In a formula, the charges must cancel out. Magnesium is two plus and chloride is one minus, so we need two chlorides: MgCl₂.
+
+27
+00:02:44,785 --> 00:02:49,601
+Equations must balance: the same number of each atom on both sides.
+
+28
+00:02:49,951 --> 00:02:54,674
+There are two oxygens on the left, so put a two in front of MgO.
+
+29
+00:02:55,024 --> 00:03:00,131
+Now there are two magnesiums on the right, so put a two in front of Mg. Balanced.
+
+30
+00:03:00,481 --> 00:03:04,113
+Only ever change the big numbers in front, never the small ones.
+
+31
+00:03:04,863 --> 00:03:13,650
+To find the relative formula mass, add up the atomic masses. Carbon dioxide is twelve plus sixteen plus sixteen: forty-four.
+
+32
+00:03:14,000 --> 00:03:19,222
+Calcium carbonate is forty plus twelve plus three sixteens: one hundred.
+
+33
+00:03:19,572 --> 00:03:24,412
+Mass is always conserved. If the mass seems to go down, a gas escaped.
+
+34
+00:03:24,762 --> 00:03:34,048
+Concentration: ten grams dissolved in two hundred and fifty centimetres cubed. First, change to decimetres cubed: zero point two five.
+
+35
+00:03:34,398 --> 00:03:39,400
+Ten divided by zero point two five is forty grams per decimetre cubed.
+
+36
+00:03:40,150 --> 00:03:47,555
+Group one metals have one outer electron. They are soft, and stored under oil because they react with air and water.
+
+37
+00:03:47,905 --> 00:03:51,944
+With water, they make a metal hydroxide and hydrogen gas.
+
+38
+00:03:52,294 --> 00:03:54,138
+Lithium fizzes steadily.
+
+39
+00:03:54,488 --> 00:03:59,072
+Sodium fizzes faster, melts into a ball, and whizzes around.
+
+40
+00:03:59,422 --> 00:04:02,984
+Potassium reacts very fast, with a lilac flame.
+
+41
+00:04:03,734 --> 00:04:07,378
+Reactivity increases going down group one. Here's why.
+
+42
+00:04:07,728 --> 00:04:11,372
+Going down, the atoms get bigger, with more shells.
+
+43
+00:04:11,722 --> 00:04:15,029
+So the outer electron is further from the nucleus,
+
+44
+00:04:15,379 --> 00:04:19,336
+which means less attraction, so it is lost more easily.
+
+45
+00:04:21,086 --> 00:04:27,853
+The halogens have seven outer electrons. They exist as pairs of atoms, called diatomic molecules.
+
+46
+00:04:28,203 --> 00:04:30,674
+Chlorine is a pale yellow-green gas.
+
+47
+00:04:31,024 --> 00:04:33,506
+Bromine is a red-brown liquid.
+
+48
+00:04:33,856 --> 00:04:37,999
+Iodine is a dark grey solid, which gives a purple vapour.
+
+49
+00:04:38,349 --> 00:04:41,726
+Going down, the melting and boiling points increase.
+
+50
+00:04:42,076 --> 00:04:47,403
+The test for chlorine: damp blue litmus paper turns red, then is bleached white.
+
+51
+00:04:48,153 --> 00:04:50,949
+Halogens react by gaining one electron.
+
+52
+00:04:51,299 --> 00:04:55,303
+Going down the group, the outer shell is further from the nucleus.
+
+53
+00:04:55,653 --> 00:04:58,611
+So it is harder to attract an extra electron.
+
+54
+00:04:58,961 --> 00:05:03,824
+That's why reactivity decreases going down group seven. The opposite of group one!
+
+55
+00:05:04,574 --> 00:05:11,573
+In a displacement reaction, a more reactive halogen pushes a less reactive one out of its salt solution.
+
+56
+00:05:11,923 --> 00:05:16,728
+Chlorine plus potassium bromide gives potassium chloride plus bromine.
+
+57
+00:05:17,078 --> 00:05:19,421
+Here is the balanced symbol equation.
+
+58
+00:05:19,771 --> 00:05:23,740
+You see the solution turn orange, because bromine is made.
+
+59
+00:05:24,090 --> 00:05:30,926
+Iodine plus potassium chloride: no reaction, because iodine is less reactive than chlorine.
+
+60
+00:05:31,276 --> 00:05:37,776
+Halogens also react with metals to make salts called metal halides, like sodium chloride.
+
+61
+00:05:38,526 --> 00:05:43,040
+The noble gases have a full outer shell, so they are very unreactive.
+
+62
+00:05:43,390 --> 00:05:48,416
+Helium is used in balloons, because it is less dense than air and does not burn.
+
+63
+00:05:48,766 --> 00:05:55,892
+Argon is used in light bulbs and welding, because it is inert, so it stops metal reacting with oxygen.
+
+64
+00:05:56,242 --> 00:05:59,944
+Going down the group, boiling point and density increase.
+
+65
+00:06:00,694 --> 00:06:04,640
+Pause and try. Why is potassium more reactive than sodium?
+
+66
+00:06:10,990 --> 00:06:15,225
+Answer: potassium's outer electron is further from the nucleus,
+
+67
+00:06:15,575 --> 00:06:19,370
+so there is less attraction, and it is lost more easily.
+
+68
+00:06:20,120 --> 00:06:23,694
+The rate of reaction is how fast a reaction happens.
+
+69
+00:06:24,044 --> 00:06:32,773
+Mean rate is the amount of product made, divided by the time. Sixty centimetres cubed of gas in thirty seconds is two centimetres cubed per second.
+
+70
+00:06:33,123 --> 00:06:36,453
+For a reaction to happen, particles must collide,
+
+71
+00:06:36,803 --> 00:06:41,515
+with enough energy. The minimum energy needed is the activation energy.
+
+72
+00:06:41,865 --> 00:06:48,132
+To speed up a reaction, we need more frequent collisions, or more collisions with enough energy.
+
+73
+00:06:48,882 --> 00:06:56,230
+Higher temperature: particles move faster, so there are more frequent collisions, and more of them have enough energy.
+
+74
+00:06:56,580 --> 00:07:02,406
+Higher concentration: more particles in the same volume, so more frequent collisions.
+
+75
+00:07:02,756 --> 00:07:09,140
+Higher pressure, for gases: the same particles in a smaller space, so more frequent collisions.
+
+76
+00:07:09,490 --> 00:07:16,152
+Bigger surface area: a powder has more particles exposed than a lump, so more frequent collisions.
+
+77
+00:07:16,502 --> 00:07:23,652
+A catalyst gives a route with a lower activation energy, and is not used up. Enzymes are biological catalysts.
+
+78
+00:07:24,402 --> 00:07:33,769
+Edexcel uses two reactions. Marble chips with hydrochloric acid make carbon dioxide. Measure the volume of gas, or the mass lost.
+
+79
+00:07:34,119 --> 00:07:38,158
+You can change the size of the chips, or the concentration of the acid.
+
+80
+00:07:38,508 --> 00:07:45,182
+Sodium thiosulfate with hydrochloric acid goes cloudy. Time how long until the cross disappears.
+
+81
+00:07:45,532 --> 00:07:49,106
+Here, you can change the temperature or the concentration.
+
+82
+00:07:49,456 --> 00:07:54,504
+On the graph, steep means fast, and flat means the reaction has finished.
+
+83
+00:07:55,254 --> 00:07:59,676
+An exothermic reaction gives out heat, so the temperature rises.
+
+84
+00:08:00,026 --> 00:08:05,631
+Examples are burning, and neutralisation, which is an acid plus an alkali.
+
+85
+00:08:05,981 --> 00:08:10,519
+An endothermic reaction takes in heat, so the temperature falls.
+
+86
+00:08:10,869 --> 00:08:16,173
+Examples are thermal decomposition, and dissolving ammonium nitrate in water.
+
+87
+00:08:16,523 --> 00:08:23,324
+In the practical, use a polystyrene cup with a lid. It is an insulator, so less heat is lost.
+
+88
+00:08:24,074 --> 00:08:27,091
+Breaking bonds needs energy. That's endothermic.
+
+89
+00:08:27,441 --> 00:08:30,667
+Making bonds releases energy. That's exothermic.
+
+90
+00:08:31,017 --> 00:08:34,951
+Let's calculate the energy change for hydrogen plus chlorine.
+
+91
+00:08:35,301 --> 00:08:41,673
+Breaking: four hundred and thirty-six, plus two hundred and forty-two, is six hundred and seventy-eight.
+
+92
+00:08:42,023 --> 00:08:48,163
+Making two HCl bonds: two times four hundred and thirty-one is eight hundred and sixty-two.
+
+93
+00:08:48,513 --> 00:08:55,198
+Break minus make is minus one hundred and eighty-four kilojoules per mole. It's negative, so it's exothermic.
+
+94
+00:08:55,948 --> 00:09:03,342
+On a reaction profile, an exothermic reaction has the products lower than the reactants. Energy was given out.
+
+95
+00:09:03,692 --> 00:09:07,080
+In an endothermic reaction, the products are higher.
+
+96
+00:09:07,430 --> 00:09:12,246
+The hump, from the reactants up to the top, is the activation energy.
+
+97
+00:09:12,596 --> 00:09:15,009
+A catalyst makes the hump lower.
+
+98
+00:09:15,759 --> 00:09:20,123
+A hydrocarbon is a compound of hydrogen and carbon only.
+
+99
+00:09:20,473 --> 00:09:25,556
+Crude oil is a complex mixture of hydrocarbons, mostly alkanes.
+
+100
+00:09:25,906 --> 00:09:30,072
+It is finite. It is being used up much faster than it forms.
+
+101
+00:09:30,422 --> 00:09:37,027
+It gives us fuels, and feedstock, which means raw materials for making plastics and other chemicals.
+
+102
+00:09:37,777 --> 00:09:42,570
+In fractional distillation, the oil is heated until it evaporates.
+
+103
+00:09:42,920 --> 00:09:47,840
+The gas rises up a column that is hot at the bottom and cool at the top.
+
+104
+00:09:48,190 --> 00:09:53,239
+Each fraction condenses when it reaches its boiling point, and is collected.
+
+105
+00:09:53,589 --> 00:09:57,662
+Petrol is used in cars. Kerosene is fuel for aircraft.
+
+106
+00:09:58,012 --> 00:10:03,061
+Diesel oil is for cars and trains. Fuel oil is for ships and power stations.
+
+107
+00:10:03,411 --> 00:10:08,238
+Gases are for heating and cooking, and bitumen surfaces roads and roofs.
+
+108
+00:10:08,988 --> 00:10:14,246
+Bigger molecules have higher boiling points, are thicker, and are harder to set alight.
+
+109
+00:10:14,596 --> 00:10:19,134
+The alkanes are a homologous series. They have the same general formula,
+
+110
+00:10:19,484 --> 00:10:22,628
+each one differs from the next by CH₂,
+
+111
+00:10:22,978 --> 00:10:25,530
+and they have similar chemical properties.
+
+112
+00:10:25,880 --> 00:10:30,093
+The first four are methane, ethane, propane and butane.
+
+113
+00:10:30,843 --> 00:10:36,518
+Complete combustion, with plenty of oxygen, makes carbon dioxide and water.
+
+114
+00:10:36,868 --> 00:10:42,671
+Incomplete combustion, without enough oxygen, also makes carbon monoxide and soot.
+
+115
+00:10:43,021 --> 00:10:49,080
+Carbon monoxide is toxic. It stops your blood carrying oxygen. You can't see it or smell it.
+
+116
+00:10:49,430 --> 00:10:55,872
+Sulfur impurities in fuels burn to make sulfur dioxide, which causes acid rain.
+
+117
+00:10:56,222 --> 00:11:03,882
+In hot engines, nitrogen and oxygen from the air react to make nitrogen oxides. These cause acid rain too.
+
+118
+00:11:04,632 --> 00:11:09,031
+Hydrogen is a clean fuel. When it burns, the only product is water.
+
+119
+00:11:09,381 --> 00:11:12,235
+But it's a gas, so it's hard to store.
+
+120
+00:11:12,585 --> 00:11:14,046
+It's explosive,
+
+121
+00:11:14,396 --> 00:11:18,144
+and making it often uses energy from fossil fuels.
+
+122
+00:11:18,894 --> 00:11:23,989
+Crude oil has too many long chains, and not enough short ones like petrol.
+
+123
+00:11:24,339 --> 00:11:29,062
+Cracking breaks large alkanes into smaller, more useful molecules.
+
+124
+00:11:29,412 --> 00:11:32,615
+The vapour is heated and passed over a hot catalyst.
+
+125
+00:11:32,965 --> 00:11:37,061
+For example, decane cracks into octane and ethene.
+
+126
+00:11:37,411 --> 00:11:42,843
+Cracking makes alkenes, which have a carbon to carbon double bond. They're used to make plastics.
+
+127
+00:11:43,593 --> 00:11:51,799
+The early atmosphere came from volcanoes. It was mostly carbon dioxide, with water vapour, and little or no oxygen.
+
+128
+00:11:52,149 --> 00:11:56,095
+As the Earth cooled, water vapour condensed to form the oceans.
+
+129
+00:11:56,445 --> 00:12:03,061
+Carbon dioxide went down. It dissolved in the oceans, and was locked in rocks and fossil fuels.
+
+130
+00:12:03,411 --> 00:12:08,285
+Oxygen went up because of photosynthesis by algae and plants.
+
+131
+00:12:08,635 --> 00:12:11,524
+The test for oxygen: a glowing splint relights.
+
+132
+00:12:11,874 --> 00:12:17,538
+Today, the air is about seventy-eight percent nitrogen and twenty-one percent oxygen.
+
+133
+00:12:18,288 --> 00:12:22,988
+The greenhouse gases are carbon dioxide, methane and water vapour.
+
+134
+00:12:23,338 --> 00:12:27,226
+Short wavelength radiation from the Sun passes through the atmosphere.
+
+135
+00:12:27,576 --> 00:12:31,324
+The warm Earth gives off longer wavelength infrared radiation.
+
+136
+00:12:31,674 --> 00:12:36,687
+Greenhouse gases absorb this and send some back, keeping the Earth warm.
+
+137
+00:12:37,037 --> 00:12:42,817
+Humans add more by burning fossil fuels, cutting down forests, and farming cattle.
+
+138
+00:12:43,567 --> 00:12:49,196
+Evidence shows carbon dioxide levels and global temperatures have both risen together.
+
+139
+00:12:49,546 --> 00:12:54,630
+But older data is less accurate. There were fewer measurements, from fewer places.
+
+140
+00:12:54,980 --> 00:12:59,076
+Effects of climate change include rising sea levels and flooding,
+
+141
+00:12:59,426 --> 00:13:02,605
+more extreme weather, and problems growing food.
+
+142
+00:13:02,955 --> 00:13:08,015
+We can reduce it with renewable energy, carbon capture, and using less energy.
+
+143
+00:13:08,765 --> 00:13:13,802
+This section is only for separate chemistry. Flame tests identify metal ions.
+
+144
+00:13:14,152 --> 00:13:21,929
+With sodium hydroxide, copper ions give a blue solid, iron two gives green, and iron three gives brown.
+
+145
+00:13:22,279 --> 00:13:27,351
+Sulfate ions: add barium chloride, and a white solid forms.
+
+146
+00:13:27,701 --> 00:13:34,572
+Halide ions: add silver nitrate. Chloride gives white, bromide cream, and iodide yellow.
+
+147
+00:13:34,922 --> 00:13:39,007
+The test for alkenes: bromine water turns from orange to colourless.
+
+148
+00:13:39,757 --> 00:13:44,654
+Let's recap. Protons and neutrons are in the nucleus. Electrons are in shells.
+
+149
+00:13:45,004 --> 00:13:49,821
+Group one gets more reactive going down. Group seven gets less reactive.
+
+150
+00:13:50,171 --> 00:13:53,989
+Rates depend on frequent collisions, with enough energy.
+
+151
+00:13:54,339 --> 00:13:58,365
+Exothermic gives heat out. Endothermic takes heat in.
+
+152
+00:13:58,715 --> 00:14:04,751
+Cracking makes alkenes. And the atmosphere went from volcanoes, to oceans, to oxygen.
+
+153
+00:14:05,101 --> 00:14:08,013
+Well done for revising. Good luck in your mock!

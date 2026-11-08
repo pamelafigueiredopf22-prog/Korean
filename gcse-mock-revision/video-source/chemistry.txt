@@ -34,7 +34,7 @@
 - Mendeleev left **gaps** and predicted properties >> Mendeleev left gaps for elements not yet discovered, and predicted their properties. He was later proved right.
 
 @scene CHEMISTRY | Key concepts | Ions and bonding
-@box Ions | metals LOSE electrons → + | non-metals GAIN electrons → −
+@box Ions | metals LOSE electrons: + ions | non-metals GAIN: − ions
 - Metals **lose** electrons → positive ions (Na⁺) >> An ion is a charged atom. Metals lose electrons to make positive ions.
 - Non-metals **gain** electrons → negative ions (Cl⁻) >> Non-metals gain electrons to make negative ions. Both do this to get a full outer shell.
 - Ionic: metal + non-metal, electrons **transferred** >> Ionic bonding is between a metal and a non-metal. Electrons are transferred, and the opposite charges attract strongly.

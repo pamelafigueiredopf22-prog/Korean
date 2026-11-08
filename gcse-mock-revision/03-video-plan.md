@@ -8,8 +8,8 @@
 
 | Video | Length (approx.) | Chapters |
 |---|---|---|
-| **Chemistry Paper 2** | 15–18 min | Rates · Equilibrium · Crude oil & fuels · Chemical analysis · Atmosphere · Using resources · 2-minute recap |
-| **Maths Paper 1** | 25–30 min | Number · Algebra · Ratio · Geometry · Probability · Statistics · 2-minute recap |
+| **Chemistry Paper 2 (Edexcel)** | 14 min | Key concepts · Group 1 · Groups 7 & 0 · Rates · Energy changes · Fuels · Atmosphere · Triple-only extras · Recap |
+| **Maths Paper 1** | 21 min | Number · Algebra · Ratio · Geometry · Probability · Statistics · 2-minute recap |
 
 They are split into two videos so you can watch the one you need, when you need it. Each video has **chapter markers**, so you can jump straight to a topic.
 

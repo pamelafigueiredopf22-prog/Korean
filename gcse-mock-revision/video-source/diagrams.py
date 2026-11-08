@@ -160,7 +160,7 @@ DIAGRAMS["profile"] = svg(f'''
 <text x="320" y="495" text-anchor="middle" font-size="24">Progress of reaction</text>
 <text x="35" y="250" text-anchor="middle" font-size="24" transform="rotate(-90 35 250)">Energy</text>
 <path d="M90 250 L180 250 C 240 250, 250 90, 300 90 C 350 90, 360 370, 420 370 L 550 370" stroke="{Y}" stroke-width="6" fill="none"/>
-<text x="95" y="235" font-size="24">reactants</text><text x="440" y="355" font-size="24">products</text>
+<text x="95" y="235" font-size="24">reactants</text><text x="440" y="405" font-size="24">products</text>
 <line x1="210" y1="250" x2="210" y2="95" stroke="{B}" stroke-width="4"/><text x="200" y="170" text-anchor="end" fill="{B}" font-size="22">activation</text><text x="200" y="196" text-anchor="end" fill="{B}" font-size="22">energy</text>
-<line x1="530" y1="250" x2="530" y2="370" stroke="{G}" stroke-width="4" stroke-dasharray="8 6"/><text x="520" y="300" text-anchor="end" fill="{G}" font-size="22">energy given out</text>
+<line x1="565" y1="250" x2="565" y2="370" stroke="{G}" stroke-width="4" stroke-dasharray="8 6"/><text x="560" y="440" text-anchor="end" fill="{G}" font-size="22">energy given out</text>
 <text x="320" y="40" text-anchor="middle" fill="{Y}">Exothermic</text>''')
