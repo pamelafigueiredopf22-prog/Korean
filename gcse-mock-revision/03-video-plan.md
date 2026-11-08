@@ -1,6 +1,6 @@
 # Video Lesson Plan (for approval)
 
-> **Status: waiting for your approval.** Nothing has been recorded yet. Read this, look at the sample frame, and reply "approved" or tell me what to change.
+> **Status: approved, with Option A (natural voice).** The videos are in `videos/`. The voice is Piper "Jenny" (British English).
 
 ## 1. What you will get
 

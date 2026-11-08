@@ -1,0 +1,372 @@
+# Maths Paper 1 (Higher, non-calculator) video lesson script
+
+@chapter Introduction
+@title Maths Paper 1 | GCSE Higher · Non-calculator
+- >> Hello, and welcome to your maths paper one revision lesson. This is the non-calculator paper.
+- Number · Algebra · Ratio >> We'll go through number, algebra, and ratio,
+- Geometry · Probability · Statistics >> then geometry, probability and statistics.
+- Every topic: what you need first >> For every topic, I'll show you what you need to know first, so that each rule makes sense.
+- Pause and try each example yourself >> Get a pen and paper, and pause the video to try each example yourself.
+
+@chapter 1. Number
+@scene MATHS | Number | Negative numbers and BIDMAS
+@box Signs | same signs → + | different signs → − | (−3)² = 9
+- 5 − (−3) = 5 + 3 = **8** >> Let's start with negative numbers. Subtracting a negative is the same as adding. Five minus negative three is eight.
+- (−4) × (−3) = **12** >> When you multiply or divide, if the signs are the same, the answer is positive. Negative four times negative three is twelve.
+- (−4) × 3 = **−12** >> If the signs are different, the answer is negative. Negative four times three is negative twelve.
+- BIDMAS: Brackets, Indices, ÷ ×, + − >> The order of operations is BIDMAS: brackets, then indices, which means powers, then divide and multiply, then add and subtract.
+- 3 + 4 × 2² = 3 + 4 × 4 = 3 + 16 = **19** >> So, three plus four times two squared. Square first: four. Then multiply: sixteen. Then add: nineteen.
+
+@scene MATHS | Number | Written multiplication and decimals
+@box Grid: 47 × 36 | 40×30 = 1200 | 7×30 = 210 | 40×6 = 240 | 7×6 = 42
+- 47 × 36: split into tens and ones >> No calculator, so we need written methods. For forty-seven times thirty-six, split each number into tens and ones.
+- 1200 + 210 + 240 + 42 >> Multiply each part, like in the grid.
+- = **1692** >> Then add them up to get one thousand, six hundred and ninety-two.
+- 0.3 × 0.04: do 3 × 4 = 12 >> For decimals, ignore the decimal points first. Three times four is twelve.
+- 1 + 2 = 3 decimal places → **0.012** >> There are three decimal places in total in the question, so the answer is nought point nought one two.
+- 6 ÷ 0.2 = 60 ÷ 2 = **30** >> To divide by a decimal, multiply both numbers by ten. Six divided by nought point two becomes sixty divided by two, which is thirty.
+
+@scene MATHS | Number | Prime factors, HCF and LCM
+@need factors and multiples
+@diagram venn_hcf
+- Prime: exactly **two** factors (1 is not prime) >> A prime number has exactly two factors: one and itself. One is not prime.
+- 60 = 2 × 2 × 3 × 5 >> Using a factor tree, sixty is two times two times three times five.
+- 72 = 2 × 2 × 2 × 3 × 3 >> And seventy-two is two times two times two times three times three.
+- Shared primes go in the **middle** >> Put the shared primes, two, two and three, in the middle of a Venn diagram.
+- HCF = 2 × 2 × 3 = **12** >> The highest common factor is the product of the middle: twelve.
+- LCM = 5 × 12 × 6 = **360** >> The lowest common multiple is the product of everything: three hundred and sixty.
+
+@scene MATHS | Number | Fractions: add and subtract
+@need times tables · LCM
+@box Rule | make the bottoms | the same first
+- Bottom = denominator, top = numerator >> The bottom of a fraction is the denominator. It says how many equal parts. The top is the numerator.
+- 2/3 + 1/4: common denominator 12 >> To add two thirds and one quarter, the bottoms must be the same. Twelve works for both.
+- = 8/12 + 3/12 = **11/12** >> Two thirds is eight twelfths. One quarter is three twelfths. Add the tops: eleven twelfths.
+- 2½ − 1⅔ = 5/2 − 5/3 >> With mixed numbers, change them to top-heavy fractions first. Two and a half is five halves. One and two thirds is five thirds.
+- = 15/6 − 10/6 = **5/6** >> Make the bottoms six: fifteen sixths minus ten sixths is five sixths.
+
+@scene MATHS | Number | Fractions: multiply and divide
+@box KFC | Keep the first | Flip the second | Change ÷ to ×
+- 3/4 × 2/5 = 6/20 = **3/10** >> To multiply, just multiply the tops and multiply the bottoms. Then simplify: six twentieths is three tenths.
+- 2/3 ÷ 4/5 >> To divide, use KFC.
+- Keep 2/3 · Flip 4/5 → 5/4 >> Keep the first fraction. Flip the second one upside down.
+- Change ÷ to ×: 2/3 × 5/4 = 10/12 >> Change divide into times. Two times five is ten. Three times four is twelve.
+- = **5/6** >> Simplify by dividing top and bottom by two: five sixths.
+
+@scene MATHS | Number | Percentages without a calculator
+@box Build from | 10% = ÷ 10 | 1% = ÷ 100 | 5% = half of 10%
+- 35% of 260 >> Let's find thirty-five percent of two hundred and sixty.
+- 10% = 26 → 30% = 78 >> Ten percent is twenty-six. So thirty percent is seventy-eight.
+- 5% = 13 >> Five percent is half of ten percent: thirteen.
+- 35% = 78 + 13 = **91** >> Add them: ninety-one.
+- Increase 15%: × 1.15 · Decrease 15%: × 0.85 >> A multiplier does it in one step. To increase by fifteen percent, times by one point one five. To decrease, times by nought point eight five.
+
+@scene MATHS | Number | Reverse percentages and compound interest
+@need percentages · multipliers
+- After 15% off, a coat costs £68. Original? >> A coat costs sixty-eight pounds after fifteen percent off. What was the original price?
+- £68 = 85% of the original >> Sixty-eight pounds is eighty-five percent of the original, because fifteen percent was taken off.
+- 1% = 68 ÷ 85 = 0.8 >> So one percent is sixty-eight divided by eighty-five, which is nought point eight.
+- 100% = **£80** >> And one hundred percent is eighty pounds.
+- £200 at 10% compound for 2 years >> Compound interest is added on to the new total each year.
+- 200 × 1.1 = 220 → 220 × 1.1 = **£242** >> Two hundred times one point one is two hundred and twenty. Times one point one again: two hundred and forty-two pounds.
+
+@scene MATHS | Number | Laws of indices
+@need a power means repeated multiplication
+@box Laws | × → add powers | ÷ → subtract powers | ( )ⁿ → multiply powers | a⁰ = 1
+- 2⁵ = 2 × 2 × 2 × 2 × 2 = 32 >> A power means repeated multiplication. Two to the power five is five twos multiplied together: thirty-two.
+- 3⁴ × 3² = 3⁶ >> When you multiply, add the powers. Three to the four times three squared is three to the six.
+- 5⁷ ÷ 5³ = 5⁴ >> When you divide, subtract the powers.
+- (2³)² = 2⁶ >> A power of a power: multiply them.
+- 7⁰ = 1 >> Anything to the power zero is one.
+
+@scene MATHS | Number | Negative and fractional powers
+@need laws of indices
+@box Meaning | negative → flip | bottom of fraction → root | top of fraction → power
+- 2⁻³ = 1/2³ = **1/8** >> A negative power means flip it. Two to the minus three is one over two cubed, which is one eighth.
+- 25^(1/2) = √25 = **5** >> A fraction power means a root. Twenty-five to the power of a half is the square root of twenty-five, which is five.
+- 8^(2/3): cube root first, then square >> For eight to the power two thirds, the bottom, three, means cube root. The top, two, means square.
+- ∛8 = 2 → 2² = **4** >> The cube root of eight is two. Two squared is four.
+- (27/8)^(−2/3) → (8/27)^(2/3) >> Now a hard one. Twenty-seven eighths to the power minus two thirds. The minus means flip it.
+- ∛ → 2/3 → square → **4/9** >> Cube root both: two thirds. Then square: four ninths.
+
+@scene MATHS | Number | Standard form
+@box A × 10ⁿ | 1 ≤ A < 10 | big → positive n | small → negative n
+- 45 000 = **4.5 × 10⁴** >> Standard form is a short way to write big and small numbers. Forty-five thousand is four point five times ten to the four.
+- 0.0036 = **3.6 × 10⁻³** >> Small numbers have a negative power. Nought point nought nought three six is three point six times ten to the minus three.
+- (3 × 10⁴) × (4 × 10⁵) = 12 × 10⁹ >> To multiply, multiply the numbers and add the powers: twelve times ten to the nine.
+- 12 is too big → **1.2 × 10¹⁰** >> But twelve is not between one and ten. So it becomes one point two times ten to the ten.
+
+@scene MATHS | Number | Surds
+@need square numbers · factors
+@box Surd rules | √a × √b = √(ab) | √a × √a = a
+- Surd = a root that is not a whole number >> A surd is a square root that is not a whole number, like root two. We leave it as a root.
+- √72 = √(36 × 2) = **6√2** >> To simplify, find the biggest square number factor. Root seventy-two is root thirty-six times root two, which is six root two.
+- √50 + √18 = 5√2 + 3√2 = **8√2** >> You can only add like surds. Root fifty is five root two. Root eighteen is three root two. Together, eight root two.
+- 6/√3 × √3/√3 = 6√3/3 = **2√3** >> To rationalise, remove the root from the bottom. Multiply top and bottom by root three. You get two root three.
+- 1/(2 + √3): multiply by (2 − √3) >> If the bottom is two plus root three, multiply top and bottom by two minus root three.
+- bottom = 4 − 3 = 1 → **2 − √3** >> The bottom becomes four minus three, which is one. So the answer is two minus root three.
+
+@scene MATHS | Number | Recurring decimals to fractions
+- x = 0.272727… >> Let x equal nought point two seven recurring.
+- Two digits repeat → 100x = 27.2727… >> Two digits repeat, so multiply by one hundred.
+- 100x − x: 99x = 27 >> Subtract the first line from the second. The recurring parts cancel out, leaving ninety-nine x equals twenty-seven.
+- x = 27/99 = **3/11** >> So x is twenty-seven over ninety-nine, which simplifies to three elevenths.
+
+@scene MATHS | Number | Estimating and error intervals
+@box Rounding | next digit 5 or more | → round up
+- Estimate: round to **1 significant figure** >> To estimate, round every number to one significant figure.
+- (48.7 × 3.12) ÷ 0.51 ≈ (50 × 3) ÷ 0.5 >> Forty-eight point seven becomes fifty. Three point one two becomes three. Nought point five one becomes nought point five.
+- = 150 ÷ 0.5 = **300** >> One hundred and fifty divided by a half is three hundred.
+- 7.4 to 1 d.p.: 7.35 ≤ length < 7.45 >> A length is seven point four, to one decimal place. It could be as low as seven point three five, and up to, but not including, seven point four five.
+
+@chapter 2. Algebra
+@scene MATHS | Algebra | Expanding brackets
+@need a letter stands for an unknown number
+- 3(2x − 5) = **6x − 15** >> To expand a bracket, multiply everything inside by the term outside.
+- (x + 3)(x − 5) >> For double brackets, multiply every term in the first by every term in the second.
+- x² − 5x + 3x − 15 >> x times x is x squared. x times minus five is minus five x. Three times x is three x. Three times minus five is minus fifteen.
+- = **x² − 2x − 15** >> Collect the x terms: x squared minus two x minus fifteen.
+- (x + 4)² = (x + 4)(x + 4) = **x² + 8x + 16** >> Careful with squared brackets. Write it out twice. It is NOT x squared plus sixteen.
+
+@scene MATHS | Algebra | Factorising
+@need expanding brackets
+@box Find two numbers | that MULTIPLY to c | and ADD to b
+- 6x² + 9x = **3x(2x + 3)** >> Factorising is the opposite of expanding. First, take out common factors.
+- x² + 7x + 12: multiply to 12, add to 7 >> For a quadratic, find two numbers that multiply to twelve and add to seven.
+- 3 and 4 → **(x + 3)(x + 4)** >> Three and four. So it's x plus three, times x plus four.
+- x² − 49 = **(x + 7)(x − 7)** >> The difference of two squares: x squared minus forty-nine is x plus seven, times x minus seven.
+- 2x² + 7x + 3: a × c = 6 → 6 and 1 >> When there's a number in front of x squared, multiply a by c: six. Find two numbers that multiply to six and add to seven: six and one.
+- 2x(x + 3) + 1(x + 3) = **(2x + 1)(x + 3)** >> Split the middle term and factorise in pairs. The answer is two x plus one, times x plus three.
+
+@scene MATHS | Algebra | Solving equations
+@need an equation is a balance
+@box Balance | do the same | to BOTH sides
+- 7x + 3 = 3x + 19 >> An equation is like a balance. Whatever you do to one side, do to the other.
+- −3x: 4x + 3 = 19 >> Take three x from both sides: four x plus three equals nineteen.
+- −3: 4x = 16 >> Take three from both sides: four x equals sixteen.
+- ÷4: **x = 4** >> Divide by four: x equals four.
+- 3(x − 2) = 2(x + 4) → 3x − 6 = 2x + 8 → **x = 14** >> With brackets, expand first. Then x minus six equals eight, so x equals fourteen.
+
+@scene MATHS | Algebra | Rearranging formulae
+@need solving equations
+- Make x the subject: y = (3x − 2)/5 >> Rearranging works just like solving. Make x the subject of y equals three x minus two, all over five.
+- × 5: 5y = 3x − 2 >> Multiply both sides by five.
+- + 2: 5y + 2 = 3x >> Add two to both sides.
+- ÷ 3: **x = (5y + 2)/3** >> Divide by three.
+- Subject appears twice? Collect, then **factorise** >> If the letter appears twice, get both terms on one side, then factorise it out.
+
+@scene MATHS | Algebra | Inequalities
+@box Golden rule | × or ÷ by a negative | → FLIP the sign
+- < less than · ≤ less than or equal to >> The open sign means less than. With a line underneath, it means less than or equal to.
+- Number line: open circle for <, filled circle for ≤ >> On a number line, use an open circle for less than, and a filled circle for less than or equal to.
+- 3x + 2 > 14 → 3x > 12 → **x > 4** >> Solve them like equations. Three x plus two is greater than fourteen, so x is greater than four.
+- 5 − 2x ≤ 11 → −2x ≤ 6 >> Five minus two x is less than or equal to eleven. Take five: minus two x is less than or equal to six.
+- ÷ −2 and FLIP: **x ≥ −3** >> Divide by minus two, and flip the sign, because we divided by a negative. x is greater than or equal to minus three.
+
+@scene MATHS | Algebra | Sequences: the nth term
+- 5, 8, 11, 14, … difference = +3 >> The gap between terms is plus three every time.
+- So start with **3n**: 3, 6, 9, 12 >> So the rule starts with three n. That gives three, six, nine, twelve.
+- Each term is 2 more → **3n + 2** >> Our sequence is two more each time. So the nth term is three n plus two.
+- Check n = 1: 3 + 2 = 5 ✔ >> Check: when n is one, three plus two is five. Correct.
+- Is 100 in it? 3n + 2 = 100 → n = 32.67 → **No** >> Is one hundred in the sequence? Solve three n plus two equals one hundred. n is not a whole number, so no.
+- Quadratic sequence: halve the 2nd difference → an² >> For a quadratic sequence, the second differences are the same. Halve that number to get the n squared term, then find the linear part.
+
+@scene MATHS | Algebra | Straight-line graphs
+@need coordinates: along, then up
+@diagram line_graph
+- y = mx + c >> The equation of a straight line is y equals m x plus c.
+- m = gradient (steepness) >> m is the gradient. It tells you how steep the line is.
+- c = where it crosses the y-axis >> c is the y-intercept, where the line crosses the y-axis.
+- Gradient = up ÷ across >> The gradient is the change in y divided by the change in x. Up, divided by across.
+- (1, 5) and (3, 11): m = 6 ÷ 2 = 3 >> A line goes through one, five and three, eleven. Up six, across two, so the gradient is three.
+- 5 = 3(1) + c → c = 2 → **y = 3x + 2** >> Put the point one, five into y equals three x plus c. Five equals three plus c, so c is two.
+
+@scene MATHS | Algebra | Parallel and perpendicular lines
+@box Perpendicular | flip it | change the sign | 2 → −1/2
+- Parallel lines: **same gradient** >> Parallel lines have the same gradient.
+- Perpendicular: gradients multiply to −1 >> Perpendicular lines meet at a right angle. Their gradients multiply to minus one.
+- Gradient 2 → **−1/2** >> To find it, flip the gradient and change the sign. Two becomes minus a half.
+- Gradient −3/4 → **4/3** >> Minus three quarters becomes four thirds.
+- Rearrange first! 2y = 6x + 4 → y = 3x + 2 >> Always get y on its own first, so you can read the gradient.
+
+@scene MATHS | Algebra | Solving quadratics
+@need factorising
+- x² + x − 12 = 0 >> To solve a quadratic, first make it equal zero.
+- (x + 4)(x − 3) = 0 >> Factorise it: x plus four, times x minus three.
+- **x = −4** or **x = 3** >> If two things multiply to zero, one of them must be zero. So x is minus four, or x is three.
+- Formula: x = (−b ± √(b² − 4ac)) ÷ 2a >> If it won't factorise, use the quadratic formula. x equals minus b, plus or minus the square root of b squared minus four a c, all over two a.
+- x² + 4x + 1 = 0 → (−4 ± √12) ÷ 2 >> For x squared plus four x plus one, that gives minus four, plus or minus root twelve, all over two.
+- √12 = 2√3 → **x = −2 ± √3** >> Root twelve is two root three. Divide by two: minus two, plus or minus root three.
+
+@scene MATHS | Algebra | Completing the square
+@diagram parabola
+- x² + 6x + 2 >> Completing the square. Take x squared plus six x plus two.
+- Halve 6 → (x + 3)² >> Halve the six to get three. Write x plus three, squared.
+- (x + 3)² − 9 + 2 >> But that bracket makes an extra nine, so subtract nine. Then add the two.
+- = **(x + 3)² − 7** >> That gives x plus three, squared, minus seven.
+- Turning point: **(−3, −7)** >> The turning point is minus three, minus seven. Change the sign inside the bracket, and keep the sign outside.
+- Roots = where the graph crosses the x-axis >> On a graph, the roots, or solutions, are where the curve crosses the x-axis.
+
+@scene MATHS | Algebra | Simultaneous equations
+@box Elimination | same signs → subtract | different signs → add
+- 3x + 2y = 16 and x + 2y = 8 >> Two equations, two unknowns. We want values that make both true.
+- Same +2y → subtract: 2x = 8 >> Both have plus two y. Same signs, so subtract the equations. Two x equals eight.
+- **x = 4** >> So x equals four.
+- 4 + 2y = 8 → **y = 2** >> Put that back in: four plus two y equals eight, so y equals two.
+- Check: 3(4) + 2(2) = 16 ✔ >> Always check in the other equation. Twelve plus four is sixteen. Correct.
+- With a quadratic: **substitute** the linear one in >> If one equation is a quadratic, substitute the straight line equation into it, then solve the quadratic.
+
+@scene MATHS | Algebra | Functions and proof
+@box Proof facts | even: 2n | odd: 2n + 1 | consecutive: n, n + 1
+- f(x) = 3x − 1 → f(4) = **11** >> A function is a rule. If f of x is three x minus one, then f of four is eleven.
+- fg(x): do **g first**, then f >> For f g of x, do g first, then f. Work from the right.
+- Inverse: y = 3x − 1 → x = (y + 1)/3 >> For the inverse, rearrange to make x the subject.
+- f⁻¹(x) = (x + 1)/3 >> So f inverse of x is x plus one, all over three.
+- n + (n + 1) + (n + 2) = 3n + 3 = **3(n + 1)** >> Proof: three consecutive numbers add to three n plus three, which is three times something. So it's always a multiple of three.
+
+@chapter 3. Ratio and proportion
+@scene MATHS | Ratio | Sharing in a ratio
+- Share £60 in the ratio 3 : 2 >> Share sixty pounds in the ratio three to two.
+- Total parts: 3 + 2 = 5 >> First, add the parts: five.
+- One part: 60 ÷ 5 = £12 >> One part is sixty divided by five: twelve pounds.
+- 3 parts = **£36** · 2 parts = **£24** >> Three parts is thirty-six pounds, and two parts is twenty-four pounds.
+- Check: 36 + 24 = 60 ✔ >> Check they add up to sixty. They do.
+
+@scene MATHS | Ratio | Direct and inverse proportion
+@box Proportion | direct: y = kx | inverse: y = k/x
+- y ∝ x²: y = 36 when x = 3 >> y is directly proportional to x squared. y is thirty-six when x is three. Find y when x is five.
+- y = kx² >> Step one: write the equation with k. y equals k x squared.
+- 36 = k × 9 → **k = 4** >> Step two: put in the numbers. Thirty-six equals nine k, so k is four.
+- y = 4x² → y = 4 × 25 = **100** >> Step three: use it. When x is five, y is four times twenty-five, which is one hundred.
+
+@scene MATHS | Ratio | Speed, density, pressure
+@box Formulas | speed = distance ÷ time | density = mass ÷ volume | pressure = force ÷ area
+- 150 km in 2 hours 30 minutes >> A car travels one hundred and fifty kilometres in two and a half hours.
+- 2 h 30 min = **2.5 hours** (not 2.3!) >> Careful: two hours thirty minutes is two point five hours, not two point three.
+- 150 ÷ 2.5 = **60 km/h** >> Speed is distance divided by time: sixty kilometres per hour.
+- 1 m² = 10 000 cm² · 1 m³ = 1 000 000 cm³ >> For area units, square the conversion. For volume units, cube it.
+
+@chapter 4. Geometry
+@scene MATHS | Geometry | Angle facts
+@box Parallel lines | alternate: equal (Z) | corresponding: equal (F) | co-interior: 180° (C)
+- Straight line: 180° · Around a point: 360° >> Angles on a straight line add to one hundred and eighty degrees. Around a point, three hundred and sixty.
+- Triangle: 180° · Quadrilateral: 360° >> Angles in a triangle add to one eighty. In a four-sided shape, three sixty.
+- Vertically opposite angles are **equal** >> Vertically opposite angles, in an X shape, are equal.
+- Give reasons in full: "alternate angles are equal" >> When you give reasons, write the full rule, like: alternate angles are equal.
+
+@scene MATHS | Geometry | Angles in polygons
+@need angles in a triangle = 180°
+- Interior sum = (n − 2) × 180° >> The interior angles of a polygon add to n minus two, times one eighty. That's because you can split it into n minus two triangles.
+- Pentagon: 3 × 180 = **540°** >> A pentagon has five sides, so three triangles: five hundred and forty degrees.
+- Exterior angles always add to **360°** >> The exterior angles of any polygon add to three hundred and sixty.
+- Regular: exterior = 360 ÷ n >> In a regular polygon, each exterior angle is three sixty divided by the number of sides.
+- Exterior 20° → 360 ÷ 20 = **18 sides** >> If the exterior angle is twenty degrees, there are eighteen sides.
+
+@scene MATHS | Geometry | Area and circles
+@box Leave answers | "in terms of π" | e.g. 25π
+- Triangle: ½ × base × height >> The area of a triangle is half times base times perpendicular height.
+- Trapezium: ½(a + b)h >> A trapezium: add the parallel sides, halve it, times the height.
+- Circle: area πr² · circumference 2πr >> A circle's area is pi r squared. Its circumference is two pi r, or pi times the diameter.
+- r = 5 → area **25π**, circumference **10π** >> With radius five, the area is twenty-five pi and the circumference is ten pi. On this paper, leave pi in.
+- Sector: (θ/360) × πr² >> A sector is a fraction of a circle. Multiply the area by the angle over three sixty.
+
+@scene MATHS | Geometry | Volume
+- Prism: area of cross-section × length >> A prism has the same shape all the way through. Its volume is the area of the cross-section times the length.
+- Cylinder: πr²h >> A cylinder's volume is pi r squared h.
+- Cone: ⅓πr²h · Pyramid: ⅓ × base × height >> A cone or pyramid is one third of the matching prism.
+- Sphere: (4/3)πr³ >> A sphere's volume is four thirds pi r cubed.
+
+@scene MATHS | Geometry | Pythagoras' theorem
+@need squares and square roots
+@diagram pythag
+- Right-angled triangles only >> Pythagoras only works on right-angled triangles.
+- Hypotenuse c = longest side >> The hypotenuse is the longest side, opposite the right angle.
+- a² + b² = c² >> a squared plus b squared equals c squared.
+- Longest side: **add** → 36 + 64 = 100 >> To find the longest side, add the squares. Six squared plus eight squared is one hundred.
+- c = √100 = **10** >> The square root of one hundred is ten.
+- Shorter side: **subtract** >> To find a shorter side, subtract instead.
+- Triples: 3, 4, 5 · 5, 12, 13 · 8, 15, 17 >> Learn these triples. They come up a lot on the non-calculator paper.
+
+@scene MATHS | Geometry | Trigonometry: SOH CAH TOA
+@need right-angled triangles
+@diagram right_triangle
+- Label from the angle θ: H, O, A >> Label the sides from the angle you're using. The hypotenuse is the longest. The opposite is across from the angle. The adjacent is next to it.
+- sin θ = O/H >> Sine is opposite over hypotenuse.
+- cos θ = A/H >> Cosine is adjacent over hypotenuse.
+- tan θ = O/A >> Tangent is opposite over adjacent.
+- H = 10, angle 30°: O = 10 × sin 30° >> The hypotenuse is ten, and the angle is thirty degrees. Find the opposite side.
+- = 10 × ½ = **5** >> Sine of thirty is a half, so the opposite side is five.
+
+@scene MATHS | Geometry | Exact trig values (learn these!)
+@box Trick | sin: √0/2, √1/2, √2/2, √3/2, √4/2 | cos: same list backwards
+- sin 30° = ½ · cos 30° = √3/2 · tan 30° = √3/3 >> No calculator means you must know these. Sine thirty is a half. Cos thirty is root three over two. Tan thirty is root three over three.
+- sin 45° = √2/2 · cos 45° = √2/2 · tan 45° = 1 >> Sine and cos of forty-five are both root two over two. Tan forty-five is one.
+- sin 60° = √3/2 · cos 60° = ½ · tan 60° = √3 >> Sine sixty is root three over two. Cos sixty is a half. Tan sixty is root three.
+- sin 0° = 0 · sin 90° = 1 · cos 0° = 1 · cos 90° = 0 >> And sine nought is nought, sine ninety is one, cos nought is one, and cos ninety is nought.
+- Area of any triangle = ½ab sin C >> For any triangle, the area is a half a b sine C.
+
+@scene MATHS | Geometry | Circle theorems
+@diagram circle_centre
+- Angle at centre = **2 ×** angle at circumference >> The angle at the centre is twice the angle at the circumference.
+- Angle in a semicircle = **90°** >> The angle in a semicircle is ninety degrees.
+- Same segment: angles **equal** >> Angles in the same segment are equal.
+- Cyclic quadrilateral: opposites add to **180°** >> Opposite angles in a cyclic quadrilateral add to one eighty.
+- Tangent meets radius at **90°** >> A tangent meets a radius at ninety degrees.
+- Always **state the theorem** you used >> Always write the theorem in your answer. That's where the marks are.
+
+@scene MATHS | Geometry | Transformations, similarity, vectors
+@box Scale factor k | area → k² | volume → k³
+- Rotation: angle, direction, **centre** >> To describe a rotation fully, give the angle, the direction, and the centre.
+- Enlargement: scale factor, **centre** >> For an enlargement, give the scale factor and the centre.
+- Similar shapes: lengths × k >> Similar shapes are the same shape, different size.
+- Heights 4 and 12 → k = 3 → volume × 27 >> Two similar cylinders have heights four and twelve. The scale factor is three, so the volume scale factor is three cubed: twenty-seven.
+- OA = a, OB = b → AB = **b − a** >> In vectors, to get from A to B, go back along a, then along b. That's b minus a.
+
+@chapter 5. Probability
+@scene MATHS | Probability | Probability basics
+@box Remember | P(not A) = 1 − P(A) | AND → multiply | OR → add
+- 0 = impossible · 1 = certain >> Probability goes from nought, impossible, to one, certain.
+- 3 red, 5 blue: P(red) = **3/8** >> A bag has three red and five blue balls. The probability of red is three out of eight.
+- P(rain) = 0.3 → P(no rain) = **0.7** >> Probabilities add to one. If the chance of rain is nought point three, no rain is nought point seven.
+- Expected: 3/8 × 40 = **15** >> If you pick forty times, you'd expect three eighths of forty: fifteen reds.
+- P(heads AND six) = ½ × 1/6 = **1/12** >> For AND, multiply. For OR, add.
+
+@scene MATHS | Probability | Tree diagrams (without replacement)
+@diagram tree
+- 4 red, 3 blue · pick 2, don't put back >> A bag has four red and three blue. Pick two, without putting the first one back.
+- Second pick: one fewer ball (out of 6) >> On the second pick, there's one ball fewer, so the bottoms become six.
+- P(R, R) = 4/7 × 3/6 = 12/42 >> Multiply along the branches. Red then red is four sevenths times three sixths: twelve forty-seconds.
+- P(B, B) = 3/7 × 2/6 = 6/42 >> Blue then blue is three sevenths times two sixths: six forty-seconds.
+- P(same colour) = 18/42 = **3/7** >> Add the ends together: eighteen forty-seconds, which simplifies to three sevenths.
+
+@scene MATHS | Probability | Venn diagrams and set notation
+@diagram venn_sets
+- A ∩ B = A **and** B (the overlap) >> In a Venn diagram, the symbol like an n means "and". It's the overlap.
+- A ∪ B = A **or** B (or both) >> The symbol like a u means "or". It's everything in either circle.
+- A′ = **not** A >> A with a dash means not A. Everything outside circle A.
+- Fill in the **middle first** >> When you fill one in, always start with the middle.
+- P(A given B): only look **inside B** >> For A given B, only look inside circle B. Divide the overlap by the total in B.
+
+@chapter 6. Statistics
+@scene MATHS | Statistics | Averages and spread
+- Mean: total ÷ how many >> The mean is the total, divided by how many there are.
+- Median: the **middle** (in order) >> The median is the middle value, once they're in order.
+- Mode: most common · Range: biggest − smallest >> The mode is the most common. The range is the biggest minus the smallest.
+- Frequency table: mean = Σ(x × f) ÷ Σf >> From a frequency table, multiply each value by its frequency, add them up, and divide by the total frequency.
+- Compare: an **average** AND a **spread** >> When comparing two sets of data, compare an average and a spread, and say what it means in context.
+
+@scene MATHS | Statistics | Charts: scatter, cumulative frequency, histograms
+@box Histogram | frequency density = | frequency ÷ class width
+- Scatter: positive, negative or no correlation >> Scatter graphs show correlation: positive, negative or none.
+- Correlation does **not** prove causation >> But correlation does not prove that one thing causes the other.
+- Cumulative frequency: median at n/2 >> On a cumulative frequency graph, read the median at half the total,
+- LQ at n/4 · UQ at 3n/4 · IQR = UQ − LQ >> and the quartiles at a quarter and three quarters. The interquartile range is upper quartile minus lower quartile.
+- 10 < t ≤ 30, frequency 40 → 40 ÷ 20 = **2** >> In a histogram, the height is frequency density. A group of width twenty with frequency forty has density two.
+
+@chapter Recap
+@title Maths: exam tips | Quick recap
+- Show ALL working: method marks >> Let's finish with exam tips. Always show your working. You get marks for method, even if the answer is wrong.
+- Read the question twice >> Read every question twice. Look for words like exact, simplest form, and in terms of pi.
+- Check your answer makes sense >> Check your answer makes sense.
+- Never leave a blank >> And never leave a question blank. Write a first step.
+- Good luck in your mock! >> Well done for revising. Good luck in your mock!

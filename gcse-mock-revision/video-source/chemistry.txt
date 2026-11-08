@@ -1,0 +1,238 @@
+# Chemistry Paper 2 (Foundation, AQA) video lesson script
+
+@chapter Introduction
+@title Chemistry Paper 2 | GCSE Foundation · Mock revision
+- >> Hello, and welcome to your chemistry paper two revision lesson.
+- Rates · Equilibrium · Crude oil >> We will cover rates of reaction, reversible reactions, and crude oil and fuels.
+- Analysis · Atmosphere · Resources >> Then chemical analysis, the Earth's atmosphere, and using resources.
+- Pause any time and have a go yourself >> Pause the video whenever you want, and try each question yourself before I give the answer.
+
+@chapter 1. Rates of reaction
+@scene CHEMISTRY | Rates | What is the rate of reaction?
+@box Mean rate | quantity ÷ time | units: g/s or cm³/s
+- Rate = **how fast** a reaction happens >> The rate of reaction is simply how fast a reaction happens.
+- Fast: burning, explosions >> Burning and explosions are fast reactions.
+- Slow: rusting >> Rusting is a slow reaction.
+- Mean rate = quantity ÷ time taken >> To calculate the mean rate, divide the quantity of reactant used, or product made, by the time taken.
+- Example: 60 cm³ of gas in 30 s >> For example, a reaction makes sixty centimetres cubed of gas in thirty seconds.
+- 60 ÷ 30 = **2 cm³/s** >> Sixty divided by thirty is two. So the mean rate is two centimetres cubed per second.
+
+@scene CHEMISTRY | Rates | Collision theory
+@diagram collision
+- Particles must **collide** >> Why do reactions happen at all? First, the particles must collide. They have to bump into each other.
+- …with **enough energy** >> Second, they must collide with enough energy.
+- Minimum energy = **activation energy** >> The smallest amount of energy they need to react is called the activation energy.
+- Faster reaction = **more frequent** collisions >> So, to speed up a reaction, we need more frequent collisions, meaning more collisions every second.
+- …or more collisions with enough energy >> Or we need more of the collisions to have enough energy.
+
+@scene CHEMISTRY | Rates | The 5 factors that change rate
+@box Exam phrase | "more frequent | collisions" | = more collisions | per second
+- **Temperature** ↑: particles move faster >> Number one, temperature. When it is hotter, particles move faster.
+- → more frequent collisions AND more with enough energy >> So they collide more often, and more of the collisions have enough energy to react.
+- **Concentration** ↑: more particles in the same volume >> Two, concentration. A stronger solution has more particles in the same volume, so they collide more often.
+- **Pressure** ↑ (gases): same particles, smaller space >> Three, pressure, for gases. The same number of particles are squashed into a smaller space, so they collide more often.
+- **Surface area** ↑: powder, not lumps >> Four, surface area. A powder has more particles exposed than a lump, so there are more collisions.
+- **Catalyst**: lowers the activation energy >> Five, a catalyst. It gives the reaction a different route with a lower activation energy.
+
+@scene CHEMISTRY | Rates | Catalysts
+@box Catalyst | speeds up reaction | NOT used up | lowers activation energy
+- Speeds up a reaction >> A catalyst speeds up a reaction,
+- Is **not used up** >> but it is not used up. You get it all back at the end.
+- Not written as a reactant >> So it is not written as a reactant in the equation.
+- Enzymes = **biological catalysts** >> Enzymes are catalysts found in living things. We call them biological catalysts.
+
+@scene CHEMISTRY | Rates | Measuring the rate
+@diagram rate_graph
+- Gas syringe: volume of gas over time >> There are three common ways to measure rate. One: collect the gas in a gas syringe and measure its volume over time.
+- Balance: mass goes **down** as gas escapes >> Two: put the flask on a balance. The mass goes down as gas escapes.
+- Disappearing cross: time until it goes cloudy >> Three: the disappearing cross. Time how long it takes until the solution is too cloudy to see the cross.
+- Steep line = fast >> On a graph, a steep line means a fast reaction.
+- Flat line = **finished** (a reactant ran out) >> When the line goes flat, the reaction has stopped, because one reactant has run out.
+- Faster reaction: steeper, flattens sooner >> A faster reaction gives a steeper curve that goes flat sooner.
+
+@scene CHEMISTRY | Rates | Required practical: concentration
+- Change: **concentration** (independent variable) >> In the required practical, you change the concentration. That is the independent variable.
+- Measure: time for the cross to disappear (dependent) >> You measure the time for the cross to disappear, or the volume of gas. That is the dependent variable.
+- Keep the same: temperature, volumes, same person >> You keep everything else the same: the temperature, the volumes, and the same person judging the cross. These are control variables.
+- Higher concentration → shorter time → faster rate >> A higher concentration gives a shorter time, which means a faster rate.
+
+@scene CHEMISTRY | Rates | Pause and try
+- Why does powder react faster than a lump? >> Pause and try. Why does a powder react faster than a lump of the same substance?
+@pause 5
+- Bigger surface area → more particles exposed >> Answer: a powder has a bigger surface area, so more particles are exposed,
+- → **more frequent collisions** >> which means more frequent collisions, so a faster rate.
+
+@chapter 2. Reversible reactions
+@scene CHEMISTRY | Equilibrium | Reversible reactions
+@box Symbol | ⇌ | means it can go | both ways
+- Some reactions can go **both ways** >> Some reactions can go both ways. The products can turn back into the reactants.
+- A + B ⇌ C + D >> We show this with a special arrow made of two half arrows.
+- Blue hydrated copper sulfate → white + water >> For example, if you heat blue copper sulfate, the water is driven off and it turns white.
+- Add water → blue again (test for water) >> Add water and it turns blue again. This is a test for water.
+- One way exothermic, other way endothermic >> If one direction gives out heat, the other direction takes in the same amount of heat.
+
+@scene CHEMISTRY | Equilibrium | Equilibrium
+@box Equilibrium | closed system | forward rate = backward rate | amounts stay the same
+- Needs a **closed system** >> In a closed system, where nothing can get in or out, a reversible reaction reaches equilibrium.
+- Forward rate = backward rate >> At equilibrium, the forward and backward reactions happen at exactly the same rate.
+- Amounts **stay the same** >> So the amounts of reactants and products stay the same.
+- The reactions have NOT stopped >> But the reactions have not stopped. Both are still happening, at the same speed.
+
+@scene CHEMISTRY | Equilibrium | Le Chatelier's principle
+@box Le Chatelier | the equilibrium shifts | to OPPOSE | the change
+- Change a condition → equilibrium **opposes** it >> Le Chatelier's principle says: if you change the conditions, the equilibrium shifts to oppose the change.
+- Temperature ↑ → shifts the **endothermic** way >> Raise the temperature, and it shifts in the endothermic direction, to take in the extra heat.
+- Temperature ↓ → shifts the **exothermic** way >> Lower the temperature, and it shifts in the exothermic direction.
+- Pressure ↑ → side with **fewer gas molecules** >> Raise the pressure, and it shifts to the side with fewer gas molecules.
+- N₂ + 3H₂ ⇌ 2NH₃: 4 molecules → 2 >> In the Haber process, there are four gas molecules on the left and two on the right. Higher pressure makes more ammonia.
+- A catalyst does NOT move equilibrium >> A catalyst does not change the equilibrium. It just gets there faster.
+
+@chapter 3. Crude oil and fuels
+@scene CHEMISTRY | Organic | Hydrocarbons and crude oil
+- Hydrocarbon = hydrogen + carbon **only** >> A hydrocarbon is a compound made of hydrogen and carbon only. Nothing else.
+- Crude oil = a **mixture** of hydrocarbons >> Crude oil is a mixture of lots of different hydrocarbons.
+- Formed from **plankton** buried in mud >> It formed over millions of years from tiny sea creatures called plankton, buried in mud.
+- It is **finite**: it will run out >> It is a finite resource, which means it will run out.
+
+@scene CHEMISTRY | Organic | Alkanes
+@diagram ethane
+- General formula: CₙH₂ₙ₊₂ >> Most hydrocarbons in crude oil are alkanes. Their general formula is C n H two n plus two.
+- **Saturated**: single bonds only >> Alkanes are saturated. That means they only have single bonds.
+- Methane CH₄ · Ethane C₂H₆ >> The first four are methane, C H four, and ethane, C two H six,
+- Propane C₃H₈ · Butane C₄H₁₀ >> then propane, C three H eight, and butane, C four H ten.
+- "Monkeys Eat Peanut Butter" >> Remember them with: Monkeys Eat Peanut Butter.
+
+@scene CHEMISTRY | Organic | Fractional distillation
+@diagram column
+- 1. Heat crude oil until it **evaporates** >> To separate crude oil, first heat it until it turns into a gas.
+- 2. Column: **hot at the bottom, cool at the top** >> The gas goes into a fractionating column, which is hot at the bottom and cool at the top.
+- 3. Each fraction **condenses** at its boiling point >> As the gases rise, each fraction condenses back into a liquid at the level of its boiling point, and is collected.
+- Small molecules → top (low boiling point) >> Small molecules have low boiling points, so they rise to the top.
+- Big molecules → bottom (high boiling point) >> Big molecules have high boiling points, so they condense near the bottom.
+
+@scene CHEMISTRY | Organic | Longer chains: what changes?
+@box Longer chain | boiling point ↑ | viscosity ↑ | flammability ↓
+- Boiling point: **higher** >> As the carbon chain gets longer, the boiling point gets higher.
+- Viscosity (thickness): **higher** >> The viscosity also goes up. That means it is thicker and flows more slowly.
+- Flammability: **lower** >> But the flammability goes down, so it is harder to set on fire.
+- Short chains make the best fuels >> That is why short chains make the best fuels.
+- Complete combustion: hydrocarbon + oxygen → CO₂ + H₂O >> When a hydrocarbon burns completely, it makes carbon dioxide and water, and releases energy.
+
+@scene CHEMISTRY | Organic | Cracking
+@box Cracking makes | a shorter alkane | + an alkene
+- Long chains: too many, not very useful >> Crude oil has too many long chains, and not enough short ones.
+- Cracking = breaking long chains into **shorter** ones >> Cracking breaks long hydrocarbons into shorter, more useful ones.
+- Catalytic cracking: hot **catalyst** >> In catalytic cracking, the vapour is passed over a hot catalyst.
+- Steam cracking: **steam** + very high temperature >> In steam cracking, it is mixed with steam at a very high temperature.
+- C₁₀H₂₂ → C₈H₁₈ + C₂H₄ >> For example, decane cracks into octane and ethene.
+- Check: 10 = 8 + 2 and 22 = 18 + 4 ✔ >> Always check it balances. Ten carbons equals eight plus two. Twenty-two hydrogens equals eighteen plus four.
+
+@scene CHEMISTRY | Organic | Alkenes and bromine water
+@diagram ethene
+- Alkenes have a **C=C double bond** >> Alkenes have a carbon to carbon double bond.
+- **Unsaturated** · formula CₙH₂ₙ >> They are unsaturated, and their general formula is C n H two n.
+- More reactive than alkanes >> They are more reactive than alkanes, and are used to make plastics.
+- Test: add **orange bromine water** >> To test for an alkene, add orange bromine water and shake.
+- Alkene → **colourless** · Alkane → stays orange >> An alkene turns it colourless. An alkane leaves it orange.
+
+@chapter 4. Chemical analysis
+@scene CHEMISTRY | Analysis | Pure substances and formulations
+- Pure = **one** element or compound only >> In chemistry, a pure substance is a single element or compound, with nothing else mixed in.
+- Pure: melts at **one exact temperature** >> A pure substance melts and boils at one exact temperature.
+- Impure: melts over a **range** >> An impure substance melts over a range of temperatures.
+- Formulation = mixture **designed** for a use >> A formulation is a mixture designed to do a job, with carefully measured amounts of each ingredient.
+- Paint, medicine, fuel, cleaning products, food >> Examples are paints, medicines, fuels, cleaning products and foods.
+
+@scene CHEMISTRY | Analysis | Chromatography
+@diagram chromatography
+- Start line in **pencil** (it won't dissolve) >> In paper chromatography, draw the start line in pencil, because pencil does not dissolve.
+- Solvent level **below** the line >> The solvent must be below the line, or the ink would just wash into it.
+- Paper = stationary phase · Solvent = mobile phase >> The paper is the stationary phase. The solvent, which moves, is the mobile phase.
+- One spot = pure · several spots = mixture >> One spot means it is probably pure. Several spots means it is a mixture.
+- Rf = substance distance ÷ solvent distance >> The R F value equals the distance moved by the substance, divided by the distance moved by the solvent.
+- Rf = 3 ÷ 6 = **0.5** >> Here, the spot moved three centimetres and the solvent moved six. Three divided by six is nought point five.
+
+@scene CHEMISTRY | Analysis | The four gas tests
+@box Learn word for word | burning splint: H₂ | glowing splint: O₂ | limewater: CO₂ | litmus: Cl₂
+- Hydrogen: burning splint → **squeaky pop** >> These come up every year. Hydrogen: hold a burning splint at the mouth of the tube. It gives a squeaky pop.
+- Oxygen: glowing splint → **relights** >> Oxygen: put a glowing splint into the tube. It relights.
+- Carbon dioxide: limewater → **milky** >> Carbon dioxide: bubble it through limewater. The limewater turns milky.
+- Chlorine: damp litmus paper → **bleached white** >> Chlorine: hold damp blue litmus paper in the gas. It is bleached white.
+
+@scene CHEMISTRY | Analysis | Pause and try
+- Which gas relights a glowing splint? >> Pause and try. Which gas relights a glowing splint?
+@pause 4
+- **Oxygen** >> Answer: oxygen.
+- A spot moves 2 cm, the solvent 8 cm. Rf? >> One more. A spot moves two centimetres, and the solvent moves eight. What is the R F value?
+@pause 5
+- 2 ÷ 8 = **0.25** >> Two divided by eight is nought point two five.
+
+@chapter 5. The atmosphere
+@scene CHEMISTRY | Atmosphere | The air today
+@box Air today | ≈ 80% nitrogen | ≈ 20% oxygen | small amounts: CO₂, | water vapour, argon
+- About **80% nitrogen** (four fifths) >> Today, the air is about eighty percent nitrogen. That is about four fifths.
+- About **20% oxygen** (one fifth) >> About twenty percent is oxygen, around one fifth.
+- Small amounts of CO₂, water vapour and argon >> The rest is small amounts of other gases, like carbon dioxide, water vapour and argon.
+
+@scene CHEMISTRY | Atmosphere | How the atmosphere changed
+- Early Earth: **volcanoes** released mostly CO₂ >> Early on, the Earth was covered in volcanoes. They released mainly carbon dioxide, plus water vapour and nitrogen.
+- Little or **no oxygen**, like Mars and Venus >> There was little or no oxygen. It was probably like Mars and Venus today.
+- Earth cooled → water vapour condensed → **oceans** >> As the Earth cooled, the water vapour condensed and formed the oceans.
+- CO₂ went down: dissolved in oceans, rocks, fossil fuels >> Carbon dioxide went down. It dissolved in the oceans, and got locked up in sedimentary rocks like limestone, and in fossil fuels.
+- **Algae and plants**: photosynthesis >> Most importantly, algae and then plants took in carbon dioxide for photosynthesis.
+- CO₂ + H₂O → glucose + O₂ >> Photosynthesis turns carbon dioxide and water into glucose and oxygen. That is how oxygen built up.
+
+@scene CHEMISTRY | Atmosphere | The greenhouse effect
+@diagram greenhouse
+- Greenhouse gases: CO₂, methane, water vapour >> The greenhouse gases are carbon dioxide, methane and water vapour.
+- Short-wavelength sunlight reaches Earth >> Short wavelength radiation from the Sun passes through the atmosphere and warms the Earth.
+- Earth gives off **long-wavelength** infrared >> The Earth gives off long wavelength infrared radiation.
+- Greenhouse gases **absorb and re-emit** it >> Greenhouse gases absorb this, and send some of it back, keeping the Earth warm.
+- Humans: burning fossil fuels, deforestation >> Humans add carbon dioxide by burning fossil fuels and cutting down forests.
+- Methane: cattle, rice fields, landfill >> We add methane through cattle farming, rice fields and landfill sites.
+
+@scene CHEMISTRY | Atmosphere | Climate change and carbon footprint
+- Rising sea levels → flooding >> Climate change causes rising sea levels and flooding,
+- Extreme weather, droughts, food problems >> more extreme weather, droughts, and problems growing food.
+- Carbon footprint = total greenhouse gases over the **whole life** >> A carbon footprint is the total carbon dioxide and other greenhouse gases released over the whole life of a product, service or event.
+- Reduce: renewables, insulation, carbon capture >> We can reduce it with renewable energy, better insulation, carbon capture, and public transport.
+
+@scene CHEMISTRY | Atmosphere | Pollutants from burning fuels
+- Carbon monoxide: **toxic**, no colour or smell >> Incomplete combustion, when there isn't enough oxygen, makes carbon monoxide. It is toxic, with no colour or smell.
+- Soot (particulates): **global dimming**, lungs >> It also makes soot, which causes global dimming and damages lungs.
+- Sulfur dioxide: from **sulfur impurities** → acid rain >> Sulfur dioxide comes from sulfur impurities in fuels. It causes acid rain.
+- Nitrogen oxides: N₂ + O₂ in **hot engines** → acid rain >> Nitrogen oxides form when nitrogen and oxygen from the air react in hot engines. They also cause acid rain.
+
+@chapter 6. Using resources
+@scene CHEMISTRY | Resources | Potable water
+@box Potable water | safe to drink | NOT pure | low salts, no microbes
+- Potable = **safe to drink** (not pure!) >> Potable water means water that is safe to drink. It is not pure, because it still has some dissolved substances.
+- UK: choose fresh water source >> In the UK, we start with fresh water from lakes, rivers or underground.
+- 1. **Filter** through filter beds >> First, it is filtered through filter beds to remove solid bits.
+- 2. **Sterilise**: chlorine, ozone or UV >> Then it is sterilised to kill microbes, using chlorine, ozone or ultraviolet light.
+- Dry countries: **desalination** of sea water >> In dry countries, they remove salt from sea water. This is called desalination.
+- Distillation or reverse osmosis: lots of **energy** >> It is done by distillation or reverse osmosis. Both use a lot of energy, so they are expensive.
+
+@scene CHEMISTRY | Resources | Waste water treatment
+- 1. Screening: remove large objects and grit >> Waste water from homes and factories is treated in steps. First, screening removes large objects and grit.
+- 2. Sedimentation: **sludge** sinks, **effluent** on top >> Then, in sedimentation, solids sink to form sludge. The liquid on top is called effluent.
+- Sludge → **anaerobic** digestion (no oxygen) >> The sludge is broken down by bacteria without oxygen. This is anaerobic digestion. It makes biogas and fertiliser.
+- Effluent → **aerobic** treatment (air bubbled in) >> The effluent is treated by bacteria with oxygen, by bubbling air through it. Then it is safe to return to rivers.
+
+@scene CHEMISTRY | Resources | Life cycle assessment
+@box LCA stages | 1. raw materials | 2. manufacture | 3. use | 4. disposal
+- 1. Extracting raw materials >> A life cycle assessment looks at a product's effect on the environment over its whole life. Stage one: getting the raw materials.
+- 2. Manufacturing and packaging >> Stage two: making and packaging it.
+- 3. Using it >> Stage three: using it.
+- 4. Disposal at the end >> Stage four: getting rid of it at the end.
+- Hard to measure pollution → can be **biased** >> Some effects, like pollution, are hard to put a number on. So an L C A can be biased.
+- Reduce, reuse, recycle: saves resources and energy >> Remember: reducing, reusing and recycling save finite resources and energy, and reduce waste.
+
+@chapter Recap
+@title Chemistry: key facts | Quick recap
+- Rate: collisions, energy, activation energy >> Let's recap. Rates are all about frequent collisions, with enough energy.
+- Equilibrium: same rate both ways, opposes change >> At equilibrium, both reactions go at the same rate, and the system opposes any change.
+- Cracking → alkene · bromine water → colourless >> Cracking makes alkenes, and alkenes turn bromine water colourless.
+- Pop · relights · milky · bleached >> Gas tests: squeaky pop, relights, milky, bleached.
+- Volcanoes → oceans → photosynthesis → oxygen >> The atmosphere: volcanoes, then oceans, then photosynthesis made oxygen.
+- Good luck in your mock! >> Well done for revising. Good luck in your mock!
