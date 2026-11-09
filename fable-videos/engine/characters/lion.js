@@ -41,6 +41,7 @@ const EARIN_L = ellipse(-308, -276, 15, 14, 16), EARIN_R = ellipse(-162, -276, 1
 const MUZ_L = ellipse(-257, -148, 35, 26, 24), MUZ_R = ellipse(-213, -148, 35, 26, 24);
 const CHIN = ellipse(-235, -124, 24, 14, 18);
 const NOSE = smooth([[-258, -181], [-235, -184], [-212, -181], [-224, -165], [-235, -158], [-246, -165]]);
+export { C as LION_COLORS, pawShape, toeLines, HC as LION_HC };
 export const LION_EYES = [[-276, -204], [-194, -204]];
 const NECK = [-215, -125]; // head pivot
 const LEG_PIVOT = [-60, -80];
@@ -221,6 +222,14 @@ export function makeLion(res = 1, seed = 1) {
     g.restore();
     g.save(); // head + mane
     g.translate(0, -b * 3 + (st.headDY || 0));
+    drawHead(g, st);
+    g.restore();
+    if (st.leg !== false) drawLeg(g, st);
+    g.restore();
+  }
+  // mane, face and expression, in lying-pose coordinates (face centre at HC)
+  function drawHead(g, st = {}) {
+    g.save();
     g.translate(NECK[0], NECK[1]); g.rotate(st.headTilt || 0); g.translate(-NECK[0], -NECK[1]);
     drawSprite(g, mane);
     drawSprite(g, head);
@@ -250,8 +259,6 @@ export function makeLion(res = 1, seed = 1) {
       g.beginPath(); upper(); g.stroke();
     }
     g.restore();
-    if (st.leg !== false) drawLeg(g, st);
-    g.restore();
   }
   // the near front leg: lifts up from the shoulder and can be drawn back toward the chest
   function drawLeg(g, st = {}) {
@@ -263,5 +270,5 @@ export function makeLion(res = 1, seed = 1) {
     g.restore();
     return { tip: [-386 + reach - lift * 10, -24 - lift * 24] };
   }
-  return { draw, drawLeg, parts: { tail, body, nearLeg, mane, head } };
+  return { draw, drawLeg, drawHead, parts: { tail, body, nearLeg, mane, head } };
 }

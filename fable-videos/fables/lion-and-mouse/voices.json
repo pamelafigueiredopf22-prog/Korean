@@ -1,5 +1,5 @@
 {
-  "pause_scale": 1.0,
+  "pause_scale": 1.2,
   "lead_in": 7.0,
   "narrator": {
     "voice": {
@@ -14,14 +14,16 @@
     ]
   },
   "lion": {
-    "voice": "bm_george",
+    "voice": {
+      "am_michael": 0.6,
+      "am_fenrir": 0.4
+    },
     "speed": 0.86,
-    "pitch": 0.95,
-    "lang": "en-gb",
+    "lang": "en-us",
     "gain": 1.05,
     "filters": [
-      "lowpass=f=8500",
-      "aecho=0.8:0.5:45:0.08"
+      "lowpass=f=9000",
+      "aecho=0.8:0.5:45:0.07"
     ]
   },
   "mouse": {

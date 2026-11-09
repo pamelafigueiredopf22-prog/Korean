@@ -1,9 +1,11 @@
 // The Lion and the Mouse: scenes, staging and timing.
 import { W, H, rng, paper, canvas, wash, ink, pool, strokes, ellipse, smooth, fluffy, sprite, drawSprite, bbox,
-  noise1, rgba, mix, tint, shade, clamp, lerp, ease, span, noiseTexture } from '../../engine/watercolor.js';
+  noise1, rgba, mix, tint, shade, clamp, lerp, ease, span, noiseTexture, glaze, shadeEdge, pencil } from '../../engine/watercolor.js';
 import { PAL, foliage, trunk, grass, flower, berries, mushroom, fern, hills, cloud, leaf, plant } from '../../engine/scenery.js';
 import { makeLion } from '../../engine/characters/lion.js';
 import { makeMouse } from '../../engine/characters/mouse.js';
+import { makeLionWalk } from '../../engine/characters/lion-walk.js';
+import { drawNet, drawNetBundle } from '../../engine/props.js';
 
 const M = 96, MY = 54;              // layer margin for camera moves
 const LW = W + 2 * M, LH = H + 2 * MY;
@@ -210,34 +212,55 @@ function mousePath1(t) {
   const k = (t - tLand); return { x: 965 + k * 70, y: 765 + Math.min(1, k) * 60, run: t * 2.4 };
 }
 
-function drawScene1(g, t) {
-  const t0 = 4, sceneEnd = line('n06').start + 1;
-  const k = clamp((t - t0) / (sceneEnd - t0));
-  const c = { z: 1.0 + 0.07 * ease(k), x: lerp(0, 60, ease(k)), y: lerp(0, 25, ease(k)) };
+// ---------- night helpers ----------
+let STARS, NIGHT_SKY;
+function nightGrade(g, k) {
+  if (k <= 0) return;
+  g.save(); g.setTransform(1, 0, 0, 1, 0, 0);
+  g.globalCompositeOperation = 'multiply'; g.fillStyle = `rgba(52,66,124,${0.68 * k})`; g.fillRect(0, 0, W, H);
+  g.globalCompositeOperation = 'soft-light'; g.fillStyle = `rgba(30,40,100,${0.3 * k})`; g.fillRect(0, 0, W, H);
+  g.restore();
+}
+function stars(g, t, k, appear = 0, area = { x0: 560, x1: 1290, y0: 245, y1: 540 }) {
+  if (k <= 0) return;
+  g.save(); g.globalCompositeOperation = 'lighter';
+  STARS.forEach(([u, v, sz, ph], i) => {
+    const a = k * clamp((t - appear - i * 0.12) / 0.8) * (0.55 + 0.45 * Math.sin(t * (0.6 + ph) + i * 1.7));
+    if (a <= 0.02) return;
+    const x = area.x0 + u * (area.x1 - area.x0), y = area.y0 + v * (area.y1 - area.y0);
+    const grd = g.createRadialGradient(x, y, 0, x, y, 6 * sz);
+    grd.addColorStop(0, `rgba(255,248,220,${a})`); grd.addColorStop(0.3, `rgba(220,225,255,${a * 0.35})`); grd.addColorStop(1, 'rgba(200,210,255,0)');
+    g.fillStyle = grd; g.fillRect(x - 6 * sz, y - 6 * sz, 12 * sz, 12 * sz);
+  });
+  g.restore();
+}
+// phase: 0 = full, 1 = thin crescent
+function moon(g, x, y, r, k, phase = 0, skyCol = '#2a3360') {
+  if (k <= 0) return;
+  g.save();
+  g.globalAlpha = k;
+  pool(g, x, y, r * 4, r * 4, '#f4e6c0', 0.18, 'lighter');
+  g.fillStyle = '#f7eed6'; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill();
+  g.fillStyle = 'rgba(214,200,170,0.5)';
+  for (const [dx, dy, rr] of [[-0.3, -0.2, 0.22], [0.25, 0.3, 0.15], [0.1, -0.4, 0.1]]) { g.beginPath(); g.arc(x + dx * r, y + dy * r, rr * r, 0, 7); g.fill(); }
+  if (phase > 0.01) { g.fillStyle = skyCol; g.beginPath(); g.arc(x - r * 2 * (1 - phase * 0.78), y - r * 0.08, r * 1.02, 0, 7); g.fill(); }
+  g.restore();
+}
+
+// The glade under the old tree, by day or night. `actors(g)` draws the characters in world space.
+function drawGlade(g, t, o) {
+  const c = o.cam, night = o.night || 0;
   g.setTransform(1, 0, 0, 1, 0, 0);
   g.drawImage(PAPER, 0, 0);
   drawLayer(g, c, S1.sky, 0.15);
-  for (const cl of S1.clouds) { cam(g, c, 0.2); g.translate(t * 3.5, 0); drawSprite(g, cl.s, 0.9); }
+  if (night > 0) { cam(g, c, 0.15); g.globalAlpha = night; g.drawImage(NIGHT_SKY, -M, -MY); g.globalAlpha = 1; }
+  for (const cl of S1.clouds) { cam(g, c, 0.2); g.translate(t * 3.5, 0); drawSprite(g, cl.s, 0.9 * (1 - night)); }
   drawLayer(g, c, S1.far, 0.35);
   drawLayer(g, c, S1.mid, 0.6);
   drawLayer(g, c, S1.ground, 1);
   drawLayer(g, c, S1.bigTree, 1);
-
-  // the lion
-  const mp = mousePath1(t);
-  const tJump = line('n05').end - 2.4;
-  const twitch = t > tJump + 0.4 && t < tJump + 1.4 ? Math.sin((t - tJump - 0.4) * Math.PI) : 0;
   cam(g, c, 1);
-  g.save(); g.translate(1060, 815); g.scale(0.82, 0.82);
-  lionW.draw(g, { breath: Math.sin(t * 2 * Math.PI / 5.2), eyes: [0, 0], headDY: -twitch * 4, headTilt: twitch * 0.02, tail: Math.sin(t * 0.7) * 0.6 + (noise1(t * 0.3, 4) - 0.5) });
-  g.restore();
-  zzz(g, t, 930, 560, line('n02').start, tJump);
-  if (mp) {
-    g.save(); g.translate(mp.x, mp.y); g.scale(0.55, 0.55);
-    mouseW.draw(g, { t, run: mp.run, hop: 0, flutter: mp.run != null || mp.air ? 1 : 0.3, look: mp.air ? -0.25 : 0, blink: blink(t, 2) });
-    g.restore();
-  }
-  // canopy, drifting leaves, fireflies, foreground
+  o.actors(g);
   for (const [i, cn] of S1.canopy.entries()) {
     cam(g, c, 1.05);
     const a = Math.sin(t * 0.5 + i) * 0.012;
@@ -253,21 +276,76 @@ function drawScene1(g, t) {
     g.restore();
   }
   cam(g, c, 1);
-  g.save(); g.globalCompositeOperation = 'screen'; g.globalAlpha = 0.75 + 0.25 * Math.sin(t * 0.25);
-  g.drawImage(S1.beams, 0, 0); g.restore();
-  motes(g, t, 40, 11);
-  fireflies(g, t, 22, { x0: 0, x1: W, y0: 380, y1: 980 }, 11, 0.8);
+  if (night < 1) {
+    g.save(); g.globalCompositeOperation = 'screen'; g.globalAlpha = (0.75 + 0.25 * Math.sin(t * 0.25)) * (1 - night);
+    g.drawImage(S1.beams, 0, 0); g.restore();
+    g.save(); g.globalAlpha = 1 - night; motes(g, t, 40, 11); g.restore();
+  }
+  if (night < 0.5) fireflies(g, t, 22, { x0: 0, x1: W, y0: 380, y1: 980 }, 11, 0.8 * (1 - night));
   for (const tuft of S1.fg) {
     cam(g, c, 1.2);
     g.translate(tuft.x, tuft.y); g.rotate(Math.sin(t * 0.6 + tuft.ph) * 0.02); g.translate(-tuft.x, -tuft.y);
     drawSprite(g, tuft.s);
   }
   g.setTransform(1, 0, 0, 1, 0, 0);
-  // warm low sunlight
-  g.save(); g.globalCompositeOperation = 'soft-light';
+  g.save(); g.globalCompositeOperation = 'soft-light'; g.globalAlpha = 1 - night;
   const lg = g.createLinearGradient(0, 0, W, H);
   lg.addColorStop(0, 'rgba(255,200,120,0.55)'); lg.addColorStop(1, 'rgba(120,70,40,0.25)');
   g.fillStyle = lg; g.fillRect(0, 0, W, H); g.restore();
+  nightGrade(g, night);
+  if (night > 0) {
+    cam(g, c, 0.15);
+    stars(g, t, night, o.starsFrom ?? -99);
+    moon(g, 1160, 320, 30, night * (o.moonK ?? 1), o.moonPhase || 0);
+    cam(g, c, 1);
+    fireflies(g, t, o.flies ?? 26, { x0: 0, x1: W, y0: 420, y1: 1000 }, 41, night);
+    if (o.after) o.after(g);
+  }
+}
+
+function drawScene1(g, t) {
+  const t0 = 4, sceneEnd = line('n06').start + 1;
+  const k = clamp((t - t0) / (sceneEnd - t0));
+  const c = { z: 1.0 + 0.07 * ease(k), x: lerp(0, 60, ease(k)), y: lerp(0, 25, ease(k)) };
+  drawGlade(g, t, { cam: c, night: 0, actors: (g) => {
+    const mp = mousePath1(t);
+    const tJump = line('n05').end - 2.4;
+    const twitch = t > tJump + 0.4 && t < tJump + 1.4 ? Math.sin((t - tJump - 0.4) * Math.PI) : 0;
+    g.save(); g.translate(1060, 815); g.scale(0.82, 0.82);
+    lionW.draw(g, { breath: Math.sin(t * 2 * Math.PI / 5.2), eyes: [0, 0], headDY: -twitch * 4, headTilt: twitch * 0.02, tail: Math.sin(t * 0.7) * 0.6 + (noise1(t * 0.3, 4) - 0.5) });
+    g.restore();
+    zzz(g, t, 930, 560, line('n02').start, tJump);
+    if (mp) {
+      g.save(); g.translate(mp.x, mp.y); g.scale(0.55, 0.55);
+      mouseW.draw(g, { t, run: mp.run, hop: 0, flutter: mp.run != null || mp.air ? 1 : 0.3, look: mp.air ? -0.25 : 0, blink: blink(t, 2) });
+      g.restore();
+    }
+  } });
+}
+
+// ================= SCENE 3: night falls, the moon waxes and wanes =================
+function drawScene3(g, t) {
+  const n09 = line('n09'), n10 = line('n10');
+  const k = clamp((t - n09.start + 1) / (n10.end + 3 - n09.start));
+  const c = { z: 1.04 - 0.04 * ease(k), x: lerp(40, 0, ease(k)), y: lerp(15, 0, ease(k)) };
+  const night = span(t, n09.start + 0.5, n09.start + 6);
+  // the moon grows round, then thin, then round again
+  const mp = span(t, n10.start + 1.0, n10.start + 2.6) - span(t, n10.start + 3.0, n10.start + 4.6);
+  drawGlade(g, t, { cam: c, night, starsFrom: n09.start + 3.2, moonPhase: mp, actors: (g) => {
+    g.save(); g.translate(1060, 815); g.scale(0.82, 0.82);
+    const sleepy = span(t, n09.start + 1, n09.start + 4);
+    lionW.draw(g, { breath: Math.sin(t * 2 * Math.PI / 5.6), eyes: [1 - sleepy, 1 - sleepy], smile: 0.6, headDY: sleepy * 4, tail: Math.sin(t * 0.6) * 0.5 });
+    g.restore();
+    zzz(g, t, 930, 560, n09.start + 5, n10.end + 4);
+    // the mouse scampers home through the grass
+    const run = (t - n09.start + 0.6);
+    const mx = 760 - run * 150;
+    if (mx > -80) {
+      g.save(); g.translate(mx, 842 + Math.min(1, run) * 4); g.scale(-0.55, 0.55);
+      mouseW.draw(g, { t, run: t * 2.4, flutter: 1, blink: blink(t, 2) });
+      g.restore();
+    }
+  } });
 }
 
 let LEAVES;
@@ -517,9 +595,9 @@ function finish(g, t) {
   g.globalCompositeOperation = 'source-over'; g.drawImage(FRAME_EDGE, 0, 0);
   g.globalCompositeOperation = 'multiply'; g.globalAlpha = 0.35; g.drawImage(GRAIN, 0, 0);
   g.restore();
-  const fadeIn = 1 - span(t, 0, 1.2), fadeOut = span(t, TL.duration - 4, TL.duration - 0.5);
-  const f = Math.max(fadeIn, fadeOut);
-  if (f > 0) { g.fillStyle = `rgba(242,231,211,${f})`; g.fillRect(0, 0, W, H); }
+  const fadeIn = 1 - span(t, 0, 1.2), fadeOut = span(t, TL.duration - 7, TL.duration - 0.5);
+  if (fadeIn > 0) { g.fillStyle = `rgba(242,231,211,${fadeIn})`; g.fillRect(0, 0, W, H); }
+  if (fadeOut > 0) { g.fillStyle = `rgba(20,24,44,${fadeOut})`; g.fillRect(0, 0, W, H); }
 }
 
 // ================= entry points =================
@@ -545,15 +623,498 @@ window.FABLE = {
     TITLE = paintTitle();
     S1 = paintScene1();
     S2 = paintScene2();
+    lionWalk = makeLionWalk(1.6, 1);
+    NIGHT_SKY = layer((g) => {
+      const grd = g.createLinearGradient(0, -MY, 0, 760);
+      grd.addColorStop(0, '#5d6aa8'); grd.addColorStop(0.7, '#8c8fbf'); grd.addColorStop(1, '#b7a9c6');
+      g.fillStyle = grd; g.fillRect(-M, -MY, LW, LH);
+      wash(g, fluffy(900, 300, 520, 90, 9, 0.3, 3), { color: '#a6a3d0', opacity: 0.25, seed: 5, bleed: 0.12, edge: 0 });
+    });
+    { const r = rng(4242); STARS = []; for (let i = 0; i < 46; i++) STARS.push([r(), r(), r.range(0.6, 1.4), r()]); }
+    S4 = paintForest();
+    S5 = paintHome();
+    S5R = paintRun();
+    S6BG = paintFriendsBg();
+    // the order of the story, and when each picture dissolves into the next
+    SCENES = [
+      [0, drawTitle], [7.6 - 2.2, drawScene1], [line('n06').start - 0.7, drawScene2],
+      [line('n09').start - 0.9, drawScene3], [line('n11').start - 1.2, drawScene4],
+      [line('n15').start - 0.9, drawHome], [line('n16').start - 0.5, drawRun],
+      [line('m05').start - 1.5, drawRescue], [line('l05').start - 1.3, drawFriends],
+      [line('n20').start - 1.3, drawGoodnight],
+    ];
   },
   frame(t) {
     const g = ctx;
-    const titleEnd = 7.6, s2Start = line('n06').start - 0.7;
-    if (t < titleEnd - 2.2) drawTitle(g, t);
-    else if (t < titleEnd) dissolve(g, drawTitle, drawScene1, t, (t - (titleEnd - 2.2)) / 2.2);
-    else if (t < s2Start) drawScene1(g, t);
-    else if (t < s2Start + 1.8) dissolve(g, drawScene1, drawScene2, t, (t - s2Start) / 1.8);
-    else drawScene2(g, t);
+    let i = 0;
+    while (i + 1 < SCENES.length && t >= SCENES[i + 1][0]) i++;
+    const [start, draw] = SCENES[i], D = i === 1 ? 2.2 : 1.8;
+    if (i > 0 && t < start + D) dissolve(g, SCENES[i - 1][1], draw, t, (t - start) / D);
+    else draw(g, t);
     finish(g, t);
   },
 };
+let SCENES;
+
+// =====================================================================================
+// THE REST OF THE STORY
+// =====================================================================================
+let S4, S5, S5R, S6BG, lionWalk;
+
+// ---------- the forest at dusk, where the net waits ----------
+function paintForest() {
+  const DUSK = '#c9a7b4';
+  const sky = layer((g) => {
+    const grd = g.createLinearGradient(0, -MY, 0, 800);
+    grd.addColorStop(0, '#a99bc4'); grd.addColorStop(0.55, '#e3b8ad'); grd.addColorStop(1, '#f2d2ae');
+    g.fillStyle = grd; g.fillRect(-M, -MY, LW, LH);
+    pool(g, 1250, 620, 600, 300, '#fbd9a4', 0.45);
+  });
+  const far = layer((g) => {
+    const r = rng(404);
+    for (let i = 0; i < 13; i++) { // misty trunks far away, fading into the dusk
+      const x = -60 + i * 160 + r.range(-50, 50), w = r.range(16, 36);
+      trunk(g, [[x, 820], [x + r.gauss(0, 6), 300], [x + r.gauss(0, 8), -60]], w, w * 0.7, { seed: 600 + i, haze: r.range(0.68, 0.8), hazeColor: DUSK });
+    }
+    for (let i = 0; i < 12; i++) foliage(g, i * 180 - 40, r.range(-20, 80), 170, 110, { seed: 650 + i, haze: 0.6, hazeColor: DUSK, blobs: 6, opacity: 0.7, leafDensity: 160 });
+    hills(g, 760, 30, '#b5a6a6', { seed: 66, opacity: 0.5 });
+  });
+  const mid = layer((g) => {
+    const hz = { haze: 0.3, hazeColor: DUSK };
+    for (const [x, w, sd] of [[80, 70, 1], [420, 46, 2], [1640, 56, 3]]) {
+      trunk(g, [[x, 880], [x + 8, 400], [x - 6, -60]], w, w * 0.75, { seed: 700 + sd, ...hz });
+      foliage(g, x + 30, 40 + sd * 20, 190, 120, { seed: 720 + sd, ...hz, blobs: 7, opacity: 0.85 });
+    }
+    for (let i = 0; i < 8; i++) foliage(g, -60 + i * 290, 840, 150, 60, { seed: 740 + i, haze: 0.2, hazeColor: DUSK, blobs: 6, opacity: 0.8 });
+  });
+  const ground = layer((g) => {
+    wash(g, smooth([[-M - 50, 840], [600, 820], [1300, 850], [W + M + 50, 830], [W + M + 50, LH], [-M - 50, LH]]), { color: '#a9a172', opacity: 0.9, seed: 801, bleed: 0.02, layers: 24 });
+    wash(g, smooth([[-M - 50, 960], [700, 940], [1500, 970], [W + M + 50, 950], [W + M + 50, LH], [-M - 50, LH]]), { color: '#7f8a5e', opacity: 0.55, seed: 802, bleed: 0.03, layers: 20 });
+    // a soft path through the trees
+    wash(g, smooth([[300, 900], [800, 880], [1400, 890], [W + 60, 905], [W + 60, 960], [1300, 950], [700, 960], [200, 950]]), { color: '#d8c39a', opacity: 0.55, seed: 803, edge: 0.1 });
+    strokes(g, [[-M, 840], [W + M, 840], [W + M, LH], [-M, LH]], { color: '#5f6b3a', count: 1300, len: 9, width: 1.1, alpha: 0.28, seed: 804, dir: () => -Math.PI / 2, curve: 0.4 });
+    const r = rng(805);
+    for (let i = 0; i < 160; i++) { const x = r.range(-80, W + 80), y = r.range(850, 1120); if (y < 975 && x > 700 && x < 1450) continue; grass(g, x, y, { seed: 810 + i, h: 18 + (y - 840) * 0.1, n: 6, alpha: 0.55 }); }
+    for (let i = 0; i < 40; i++) { const x = r.range(-60, W + 60), y = r.range(860, 1100); if (y < 975 && x > 700 && x < 1450) continue; if (r() < 0.6) flower(g, x, y, { seed: 900 + i, size: 4 + (y - 840) * 0.012, color: r.pick([PAL.pink, '#f1e2c8', '#cdb3d6']), stem: 10 }); }
+    for (const [x, y, s] of [[260, 905, 1.1], [300, 912, 0.7], [1620, 905, 0.9], [1580, 912, 0.6]]) mushroom(g, x, y, { seed: x, s });
+    for (let i = 0; i < 5; i++) fern(g, 120 + i * 30, 900, { seed: 950 + i, len: 130, angle: -1.9 + i * 0.25, curl: 0.6, color: PAL.moss });
+  });
+  // the tree whose branch hides the net
+  const tree = layer((g) => {
+    trunk(g, [[1560, 900], [1540, 600], [1555, 300], [1540, -60]], 150, 110, { seed: 830, under: true });
+    for (const [pts, w, sd] of [[[[1490, 895], [1440, 910], [1400, 915]], 36, 1], [[[1630, 895], [1680, 910], [1720, 915]], 36, 2]]) trunk(g, pts, w, 6, { seed: 840 + sd, under: true });
+    trunk(g, [[1520, 200], [1300, 165], [1080, 150], [860, 160], [700, 140]], 54, 14, { seed: 835, under: true });
+  });
+  const canopy = [[760, 150, 170, 105], [1010, 110, 210, 120], [1250, 60, 230, 115], [1520, 30, 260, 130], [1820, 120, 220, 150], [480, 20, 220, 110], [180, 70, 220, 140], [880, 240, 90, 60], [1380, 215, 100, 60]].map(([x, y, rx, ry], i) =>
+    ({ x, y, s: sprite({ x0: x - rx, y0: y - ry, x1: x + rx, y1: y + ry, w: 2 * rx, h: 2 * ry }, 1, (g) => {
+      foliage(g, x, y, rx, ry, { seed: 860 + i * 11, colors: [PAL.moss, '#6f8a6e', PAL.olive, '#8a9a6a', PAL.ochre], blobs: 10, opacity: 0.9 });
+      for (let k = 0; k < 3; k++) { // a few trailing strands of leaves
+        const sx = x + (k - 1) * rx * 0.5, len = ry * (0.6 + k * 0.25);
+        for (let j = 0; j < 6; j++) leaf(g, sx + Math.sin(j) * 6, y + ry * 0.6 + j * len / 6, 9, 0.5 * (j % 2 ? 1 : -1), j % 2 ? PAL.olive : PAL.moss);
+      }
+    }) }));
+  const fg = [];
+  const r = rng(870);
+  for (const [i, [x, h, big]] of [[-20, 230, 1], [300, 130, 0], [1480, 120, 0], [1900, 240, 1]].entries()) {
+    const y = H + 40;
+    fg.push({ x, y, ph: r() * 6, s: sprite({ x0: x - h * 1.3, y0: y - h * 1.35, x1: x + h * 1.3, y1: y + 10, w: h * 2.6, h: h * 1.35 + 10 }, 1, (g) => {
+      grass(g, x, y, { seed: 880 + i, h: h * 0.7, n: 18, width: 4.5, alpha: 0.8, colors: [PAL.moss, PAL.deep, PAL.olive] });
+      if (big) fern(g, x - h * 0.3, y, { seed: 890 + i, len: h * 1.15, angle: -1.25, curl: 0.55, color: PAL.deep, alpha: 0.85, leaf: 1.6 });
+      plant(g, x, y, { seed: 895 + i, h, n: big ? 7 : 5, under: true, colors: [PAL.moss, '#6f8a6e', PAL.olive, '#5c7048'] });
+    }) });
+  }
+  return { sky, far, mid, ground, tree, canopy, fg };
+}
+
+function drawForest(g, t, c, night, actors, after) {
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  g.drawImage(PAPER, 0, 0);
+  drawLayer(g, c, S4.sky, 0.15);
+  drawLayer(g, c, S4.far, 0.35);
+  drawLayer(g, c, S4.mid, 0.65);
+  drawLayer(g, c, S4.ground, 1);
+  drawLayer(g, c, S4.tree, 1);
+  cam(g, c, 1);
+  actors(g);
+  for (const [i, cn] of S4.canopy.entries()) {
+    cam(g, c, 1.03); g.translate(cn.x, cn.y - 60); g.rotate(Math.sin(t * 0.5 + i) * 0.012); g.translate(-cn.x, -(cn.y - 60)); drawSprite(g, cn.s);
+  }
+  cam(g, c, 1);
+  fireflies(g, t, 18, { x0: 0, x1: W, y0: 300, y1: 950 }, 51, 0.7 * (1 - night));
+  for (const tuft of S4.fg) {
+    cam(g, c, 1.2); g.translate(tuft.x, tuft.y); g.rotate(Math.sin(t * 0.6 + tuft.ph) * 0.02); g.translate(-tuft.x, -tuft.y); drawSprite(g, tuft.s);
+  }
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  g.save(); g.globalCompositeOperation = 'soft-light'; g.globalAlpha = 1 - night;
+  const lg = g.createLinearGradient(W, 0, 0, H);
+  lg.addColorStop(0, 'rgba(255,190,140,0.5)'); lg.addColorStop(1, 'rgba(90,60,90,0.3)');
+  g.fillStyle = lg; g.fillRect(0, 0, W, H); g.restore();
+  nightGrade(g, night);
+  if (night > 0) { cam(g, c, 1); fireflies(g, t, 24, { x0: 0, x1: W, y0: 300, y1: 1000 }, 61, night); }
+  if (after) { cam(g, c, 1); after(g); }
+}
+
+// soft roar waves: gentle curved lines spreading out
+function roarWaves(g, t, x, y, t0, t1, dir = -1, scale = 1) {
+  if (t < t0 || t > t1 + 2) return;
+  g.save(); g.strokeStyle = INK; g.lineCap = 'round';
+  for (let k = 0; k < 6; k++) {
+    const ph = (t - t0) / 1.6 - k * 0.33;
+    if (ph < 0 || ph > 1 || t0 + (k * 0.33 + 0) * 1.6 > t1) continue;
+    const rr = (30 + ph * 260) * scale;
+    g.globalAlpha = 0.5 * Math.sin(ph * Math.PI); g.lineWidth = 3.2 * (1 - ph * 0.5);
+    g.beginPath(); g.arc(x, y, rr, dir < 0 ? Math.PI * 0.82 : -Math.PI * 0.18, dir < 0 ? Math.PI * 1.18 : Math.PI * 0.18); g.stroke();
+    g.beginPath(); g.arc(x, y, rr, dir < 0 ? Math.PI * 1.25 : -Math.PI * 0.4, dir < 0 ? Math.PI * 1.4 : -Math.PI * 0.25); g.stroke();
+  }
+  g.restore();
+}
+
+// ================= SCENE 4: a walk in the forest, and the net =================
+const LION4 = [1050, 905], LS4 = 0.62;
+function drawScene4(g, t) {
+  const n11 = line('n11'), n12 = line('n12'), n13 = line('n13'), l04 = line('l04'), n14 = line('n14');
+  // camera: wide, then a slow look up at the hidden net, then back down to the lion
+  const up = span(t, n12.start + 0.6, n12.start + 3.0) * (1 - span(t, n12.end - 0.3, n13.start + 0.6));
+  const drift = clamp((t - n11.start) / 40);
+  const c = { z: 1.0 + 0.2 * up + 0.05 * drift, x: lerp(0, 20, up) + drift * 20, y: lerp(0, -120, up) + drift * 10 };
+  const dropT0 = n13.start + 0.35, drop = clamp((t - dropT0) / 0.7) ** 2;
+  const landed = t > dropT0 + 0.7;
+  const struggle = landed ? span(t, dropT0 + 0.8, dropT0 + 1.4) * (1 - span(t, n13.end - 0.5, n13.end + 0.6)) : 0;
+  const roarK = span(t, n14.start + 2.6, n14.start + 3.2) * (1 - span(t, n14.end + 0.2, n14.end + 1.0));
+  const lookUp = span(t, n14.start + 0.8, n14.start + 2.4) * (1 - span(t, n14.end + 0.4, n14.end + 1.6));
+  const sad = Math.max(span(t, l04.start - 0.6, l04.start + 0.2) * (1 - span(t, n14.start + 0.6, n14.start + 1.4)), struggle * 0.5);
+  // walking in from the right
+  const arrive = n12.start + 1.2, tIn = n11.start - 1.2;
+  const wk = clamp((t - tIn) / (arrive - tIn));
+  const lx = lerp(2200, LION4[0], 1 - (1 - wk) * (1 - wk));
+  const walking = wk < 1;
+  const jitter = struggle * (Math.sin(t * 7) * 6 + Math.sin(t * 11.3) * 3);
+  drawForest(g, t, c, 0.2 * clamp((t - n11.start) / 30), (g) => {
+    if (drop <= 0) drawNetBundle(g, 980, 300, 1, t);
+    g.save(); g.translate(lx + jitter, LION4[1]); g.scale(LS4, LS4);
+    const curious = span(t, n12.start, n12.start + 1) * (1 - span(t, n13.start, n13.start + 0.5));
+    lionWalk.draw(g, {
+      t, walk: walking ? t * 0.85 : (struggle > 0.05 ? Math.sin(t * 3) * 0.08 : null),
+      breath: Math.sin(t * 2 * Math.PI / 4.5),
+      eyes: roarK > 0.3 ? [0, 0] : [1 - blink(t, 9) - sad * 0.25, 1 - blink(t, 9) - sad * 0.25],
+      browUp: Math.max(curious * 0.6, landed && t < dropT0 + 1.6 ? 1 : 0),
+      browSad: sad,
+      smile: walking ? 0.5 : 0.2 * (1 - sad),
+      mouth: Math.max(talking('l04', t) * 0.8, roarK * (0.85 + 0.1 * Math.sin(t * 6))),
+      headTilt: (struggle ? Math.sin(t * 5) * 0.05 : 0) + curious * Math.sin(t * 1.5) * 0.04 + lookUp * 0.12,
+      headDY: sad * 10 - lookUp * 18,
+    });
+    g.restore();
+    if (drop > 0) drawNet(g, lx - 30 + jitter * 0.6, LION4[1] + 4, 560, 380, { t, wiggle: struggle, drop, seed: 9 });
+    const head = [lx - 150 * LS4, LION4[1] - 280 * LS4 - lookUp * 18 * LS4];
+    roarWaves(g, t, head[0] - 40, head[1], n14.start + 2.7, n14.end + 0.2, -1, 1.2);
+  });
+}
+
+// ================= SCENE 5a: the mouse's cosy home in the roots =================
+function paintHome() {
+  const bg = layer((g) => {
+    const grd = g.createLinearGradient(0, -MY, 0, 900);
+    grd.addColorStop(0, '#7d86b8'); grd.addColorStop(1, '#c7b8c8');
+    g.fillStyle = grd; g.fillRect(-M, -MY, LW, LH);
+    const r = rng(1001);
+    for (let i = 0; i < 18; i++) { const x = r.range(900, W + 80), w = r.range(20, 50); trunk(g, [[x, 860], [x, 300], [x, -60]], w, w * 0.8, { seed: 1010 + i, haze: 0.55, hazeColor: '#b9b0c8' }); }
+    for (let i = 0; i < 7; i++) foliage(g, 950 + i * 170, r.range(40, 140), 160, 100, { seed: 1030 + i, haze: 0.55, hazeColor: '#b9b0c8', blobs: 6, leaves: false, detail: false });
+    wash(g, smooth([[-M - 50, 880], [800, 860], [W + M + 50, 875], [W + M + 50, LH], [-M - 50, LH]]), { color: '#9a9a70', opacity: 0.9, seed: 1040, bleed: 0.02 });
+    strokes(g, [[-M, 870], [W + M, 870], [W + M, LH], [-M, LH]], { color: '#5f6b3a', count: 900, len: 9, width: 1.1, alpha: 0.3, seed: 1041, dir: () => -Math.PI / 2, curve: 0.4 });
+    for (let i = 0; i < 60; i++) grass(g, r.range(-60, W + 60), r.range(880, 1110), { seed: 1050 + i, h: 30, n: 7, alpha: 0.6 });
+  });
+  // the great old tree base with a little round-topped door
+  const home = layer((g) => {
+    const base = smooth([[-M - 40, -MY - 20], [520, -MY - 20], [600, 300], [640, 600], [760, 820], [900, 905], [700, 915], [400, 908], [-M - 40, 912]]);
+    wash(g, base, { color: PAL.bark, opacity: 0.94, seed: 1100, under: true, bleed: 0.015 });
+    shadeEdge(g, base, { color: PAL.barkDark, alpha: 0.5, width: 80, dx: 30 });
+    strokes(g, base, { color: PAL.barkDark, count: 700, len: 30, width: 1.5, alpha: 0.35, seed: 1101, dir: () => -Math.PI / 2 + 0.1, curve: 0.15 });
+    pencil(g, base.slice(5, 60), { seed: 1102, alpha: 0.5 });
+    // roots
+    for (const [pts, w, sd] of [[[[700, 880], [820, 905], [960, 915]], 46, 1], [[[300, 900], [180, 915], [60, 920]], 40, 2]]) trunk(g, pts, w, 8, { seed: 1110 + sd, under: true });
+    // moss
+    for (let i = 0; i < 6; i++) foliage(g, 520 + i * 60, 890 - (i % 2) * 10, 60, 22, { seed: 1120 + i, colors: [PAL.moss, PAL.olive, PAL.sage], blobs: 4, leaves: false, opacity: 0.8 });
+    // the door: an arched opening glowing warm inside
+    const arch = smooth([[330, 900], [320, 760], [360, 680], [430, 655], [500, 680], [540, 760], [530, 900]]);
+    wash(g, arch, { color: '#f1b768', opacity: 0.95, seed: 1130, under: true });
+    glaze(g, arch, 430, 820, 120, 110, '#fff0c2', 0.8);
+    // little shelves and a tiny bed inside
+    wash(g, [[350, 780], [510, 780], [510, 790], [350, 790]], { color: '#8a5a38', opacity: 0.8, seed: 1131 });
+    for (const [x, c] of [[370, '#b4503a'], [392, '#6f8a6e'], [410, '#c9a24f'], [470, '#d99a8e']]) wash(g, [[x, 780], [x + 14, 780], [x + 14, 755], [x, 755]], { color: c, opacity: 0.85, seed: x, layers: 10 });
+    wash(g, smooth([[360, 900], [370, 860], [480, 858], [500, 900]]), { color: '#d99a8e', opacity: 0.85, seed: 1132 });
+    const door = smooth([[530, 900], [540, 770], [600, 715], [640, 740], [645, 900]]); // swung open
+    wash(g, door, { color: '#9a6a44', opacity: 0.95, seed: 1133, under: true });
+    for (const x of [565, 590, 615]) ink(g, [[x, 905], [x + 4, 760]], { alpha: 0.35, seed: x });
+    g.fillStyle = '#e8c070'; g.beginPath(); g.arc(560, 830, 5, 0, 7); g.fill();
+    pencil(g, arch, { closed: true, seed: 1134, width: 2, alpha: 0.6 });
+    pencil(g, door, { closed: true, seed: 1135, alpha: 0.55 });
+    // round window
+    const win = ellipse(230, 560, 46, 46, 30);
+    wash(g, win, { color: '#f4c27a', opacity: 0.95, seed: 1136, under: true });
+    ink(g, [[184, 560], [276, 560]], { alpha: 0.6, width: 3 }); ink(g, [[230, 514], [230, 606]], { alpha: 0.6, width: 3 });
+    pencil(g, win, { closed: true, seed: 1137, width: 2.5, alpha: 0.7 });
+    // doorstep, mushrooms, flowers
+    wash(g, smooth([[300, 910], [580, 902], [600, 925], [290, 930]]), { color: '#bfa98a', opacity: 0.9, seed: 1138, under: true });
+    for (const [x, sc] of [[700, 1.3], [745, 0.9], [130, 1.1], [170, 0.7]]) mushroom(g, x, 910, { seed: x, s: sc });
+    for (let i = 0; i < 6; i++) flower(g, 620 + i * 32, 890 - (i % 2) * 8, { seed: 1140 + i, size: 7, color: i % 2 ? PAL.pink : '#f1e2c8', stem: 20 });
+    // a little lantern on a twig post
+    ink(g, [[760, 905], [758, 700]], { width: 5, alpha: 0.8, color: '#5a3d2b', taper: false });
+    ink(g, [[758, 702], [742, 690]], { width: 3, alpha: 0.8, color: '#5a3d2b', taper: false });
+    const lamp = smooth([[748, 690], [772, 690], [778, 720], [742, 720]]);
+    wash(g, lamp, { color: '#ffd27a', opacity: 0.95, seed: 1150, under: true, layers: 10 });
+    pencil(g, lamp, { closed: true, seed: 1151, width: 2, alpha: 0.7 });
+    // ivy and moss climbing the old tree
+    const r = rng(1160);
+    for (let v = 0; v < 4; v++) {
+      let x = 90 + v * 150, y = 120 + v * 60;
+      for (let j = 0; j < 16; j++) { x += r.gauss(0, 8); y += 26; leaf(g, x + (j % 2 ? 10 : -10), y, 11, j % 2 ? 0.6 : -0.6, j % 3 ? PAL.moss : PAL.olive); }
+    }
+    for (let i = 0; i < 5; i++) foliage(g, 80 + i * 110, 300 + (i % 2) * 260, 50, 30, { seed: 1170 + i, colors: [PAL.moss, PAL.olive], blobs: 4, opacity: 0.75 });
+  });
+  // plants and ferns along the open side
+  const plants = layer((g) => {
+    plant(g, 1250, 930, { seed: 1180, h: 140, n: 6, under: true }); plant(g, 1560, 940, { seed: 1181, h: 180, n: 7, under: true });
+    plant(g, 1880, 950, { seed: 1182, h: 230, n: 7, under: true });
+    for (let i = 0; i < 6; i++) fern(g, 1380 + i * 28, 935, { seed: 1190 + i, len: 140, angle: -2.0 + i * 0.25, curl: 0.55, color: PAL.moss });
+    for (const [x, sc] of [[1450, 1.0], [1490, 0.7], [1700, 0.8]]) mushroom(g, x, 935, { seed: x, s: sc });
+    berries(g, 1320, 870, { seed: 1195, size: 7 }); berries(g, 1660, 860, { seed: 1196, size: 7 });
+  });
+  return { bg, home, plants };
+}
+
+function drawHome(g, t) {
+  const n15 = line('n15'), m04 = line('m04');
+  const k = clamp((t - n15.start + 1) / (m04.end - n15.start + 2));
+  const c = { z: 1.0 + 0.06 * ease(k), x: 30 * ease(k), y: 10 * ease(k) };
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  g.drawImage(PAPER, 0, 0);
+  drawLayer(g, c, S5.bg, 0.5);
+  drawLayer(g, c, S5.home, 1);
+  drawLayer(g, c, S5.plants, 1);
+  // the mouse on her doorstep: dozing, then she hears the roar far away
+  const hear = n15.start + 3.6, leave = m04.end + 0.2;
+  const startle = span(t, hear, hear + 0.25) - span(t, hear + 0.3, hear + 0.8);
+  const run = t > leave;
+  const mx = run ? 860 + (t - leave) * 520 : 860;
+  cam(g, c, 1);
+  g.save(); g.translate(mx, 905); g.scale(1.25, 1.25);
+  mouseC.draw(g, {
+    t, run: run ? t * 2.8 : null, hop: startle * 30, flutter: run ? 1 : 0.3,
+    happy: t < hear - 0.2, look: run ? 0 : (t < hear ? 0.05 : -0.1), talk: talking('m04', t),
+    blink: t > hear && t < hear + 2 ? 0 : blink(t, 4), joy: t > m04.start && !run ? 0.5 + 0.3 * Math.sin(t * 7) : 0,
+  });
+  g.restore();
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  nightGrade(g, 0.6);
+  cam(g, c, 1);
+  pool(g, 760, 690, 90, 90, '#ffd88a', 0.35 + 0.05 * Math.sin(t * 3), 'lighter'); // lantern
+  // warm light spilling from the door and window, glowing through the night
+  g.save(); g.globalCompositeOperation = 'lighter';
+  pool(g, 430, 800, 260, 200, '#ffcf80', 0.28); pool(g, 230, 560, 120, 120, '#ffcf80', 0.3);
+  pool(g, 700, 920, 300, 60, '#ffcf80', 0.12);
+  g.restore();
+  cam(g, c, 0.5); stars(g, t, 1, -99, { x0: 1000, x1: 1850, y0: 40, y1: 330 }); moon(g, 1650, 160, 34, 1, 0, '#2c3366');
+  cam(g, c, 1);
+  fireflies(g, t, 16, { x0: 600, x1: W, y0: 400, y1: 950 }, 71, 1);
+  roarWaves(g, t, 2050, 640, hear - 0.2, hear + 2.2, -1, 1.6);
+}
+
+// ================= SCENE 5b: running through the moonlit forest =================
+const RUN_W = 5600, RUN_GROUND = 880;
+const ROOTS = [1000, 2050, 3100, 4200];
+function rootHump(x) { let h = 0; for (const r of ROOTS) h = Math.max(h, 64 * Math.max(0, 1 - ((x - r) / 120) ** 2)); return h; }
+function paintRun() {
+  const strip = (w, h, fn) => { const c = canvas(w, h), g = c.getContext('2d'); fn(g); return c; };
+  const far = strip(3200, H, (g) => {
+    const grd = g.createLinearGradient(0, 0, 0, 900); grd.addColorStop(0, '#7d86b8'); grd.addColorStop(1, '#c4b6c6');
+    g.fillStyle = grd; g.fillRect(0, 0, 3200, H);
+    const r = rng(1201);
+    for (let i = 0; i < 40; i++) { const x = r.range(0, 3200), w = r.range(18, 46); trunk(g, [[x, 880], [x, 300], [x, -60]], w, w * 0.8, { seed: 1210 + i, haze: 0.55, hazeColor: '#b9b0c8' }); }
+    for (let i = 0; i < 18; i++) foliage(g, i * 190, r.range(30, 150), 170, 100, { seed: 1260 + i, haze: 0.5, hazeColor: '#b9b0c8', blobs: 6, leaves: false, detail: false });
+  });
+  const ground = strip(RUN_W, H, (g) => {
+    wash(g, smooth([[-50, RUN_GROUND - 10], [RUN_W / 2, RUN_GROUND - 20], [RUN_W + 50, RUN_GROUND - 10], [RUN_W + 50, H + 50], [-50, H + 50]]), { color: '#9a9a70', opacity: 0.92, seed: 1300, bleed: 0.01 });
+    strokes(g, [[0, RUN_GROUND], [RUN_W, RUN_GROUND], [RUN_W, H], [0, H]], { color: '#5f6b3a', count: 2600, len: 9, width: 1.1, alpha: 0.3, seed: 1301, dir: () => -Math.PI / 2, curve: 0.4 });
+    const r = rng(1302);
+    for (let i = 0; i < 260; i++) grass(g, r.range(0, RUN_W), r.range(RUN_GROUND - 5, H), { seed: 1310 + i, h: r.range(25, 60), n: 8, alpha: 0.7 });
+    for (const x of ROOTS) { // big roots she hops over
+      const pts = []; for (let k = -140; k <= 140; k += 20) pts.push([x + k, RUN_GROUND - rootHump(x + k) + 14]);
+      trunk(g, pts, 46, 46, { seed: 1350 + x, under: true });
+    }
+    for (let i = 0; i < 26; i++) { const x = r.range(0, RUN_W); if (r() < 0.5) mushroom(g, x, RUN_GROUND + r.range(10, 60), { seed: 1400 + i, s: r.range(0.6, 1.2) }); else flower(g, x, RUN_GROUND + r.range(0, 80), { seed: 1450 + i, size: 7, color: r.pick([PAL.pink, '#f1e2c8', '#cdb3d6']), stem: 18 }); }
+    for (let i = 0; i < 14; i++) fern(g, 200 + i * 400 + r.range(-80, 80), RUN_GROUND + 20, { seed: 1500 + i, len: 150, angle: -1.6 + r.gauss(0, 0.4), curl: 0.5, color: PAL.moss });
+  });
+  const top = ((w, h, fn) => { const c = canvas(w, h, false); fn(c.getContext('2d')); return c; })(RUN_W * 1.3, H, (g) => { // ferns hanging from above, very close
+    const r = rng(1600);
+    for (let i = 0; i < 9; i++) {
+      const x = 500 + i * 820 + r.range(-100, 100);
+      for (let k = 0; k < 5; k++) fern(g, x + k * 26, -20, { seed: 1610 + i * 5 + k, len: 340 + k * 20, angle: 1.2 + k * 0.12, curl: -0.5, color: PAL.deep, alpha: 0.9, leaf: 2.2 });
+    }
+  });
+  const topBlur = canvas(top.width, H, false); { const g = topBlur.getContext('2d'); g.filter = 'blur(4px)'; g.drawImage(top, 0, 0); }
+  return { far, ground, top: topBlur };
+}
+
+function drawRun(g, t) {
+  const n16 = line('n16'), t0 = n16.start - 0.6;
+  const sx = Math.max(0, (t - t0)) * 330;
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  g.drawImage(PAPER, 0, 0);
+  g.drawImage(S5R.far, -sx * 0.25 - 100, 0);
+  g.drawImage(S5R.ground, -sx, 0);
+  const mx = 820, gx = sx + mx, hump = rootHump(gx);
+  const slope = rootHump(gx + 20) - rootHump(gx - 20);
+  g.save(); g.translate(mx, RUN_GROUND + 4 - hump); g.rotate(-slope * 0.008); g.scale(1.1, 1.1);
+  mouseC.draw(g, { t, run: t * 2.9, flutter: 1, look: -slope * 0.004, blink: blink(t, 6) });
+  g.restore();
+  g.drawImage(S5R.top, -sx * 1.3, 0);
+  nightGrade(g, 0.8);
+  stars(g, t, 0.8, -99, { x0: 100, x1: 1800, y0: 30, y1: 300 });
+  moon(g, 1500 - sx * 0.05, 150, 30, 1, 0, '#2c3366');
+  fireflies(g, t, 20, { x0: 0, x1: W, y0: 300, y1: 950 }, 81, 1);
+}
+
+// ================= SCENE 5c: nibble, nibble, nibble =================
+const LION5 = [1050, 908], LS5 = 0.62;
+function netCut(t) {
+  const n17 = line('n17'), n18 = line('n18');
+  // a little during the nibbling, then "one rope... another... and another... until at last"
+  return 0.22 * span(t, n17.start + 2.5, n17.end) + 0.12 * span(t, n18.start + 0.6, n18.start + 0.9)
+    + 0.12 * span(t, n18.start + 1.8, n18.start + 2.1) + 0.12 * span(t, n18.start + 2.9, n18.start + 3.2)
+    + 0.42 * span(t, n18.start + 4.0, n18.start + 5.8);
+}
+function drawRescue(g, t) {
+  const m05 = line('m05'), n17 = line('n17'), n18 = line('n18');
+  const k = clamp((t - m05.start + 1.5) / (n18.end - m05.start + 3));
+  const c = { z: 1.95 + 0.08 * ease(k), x: -40 + 10 * ease(k), y: 255 };
+  const free = n18.start + 6.0, freeK = span(t, free, free + 1.4);
+  drawForest(g, t, c, 0.75, (g) => {
+    const watching = span(t, m05.start - 0.5, m05.start + 0.5);
+    const joy = span(t, free + 0.3, free + 1.2);
+    g.save(); g.translate(LION5[0], LION5[1]); g.scale(LS5, LS5);
+    lionC.draw(g, {
+      breath: Math.sin(t * 2 * Math.PI / 5),
+      eyes: joy > 0.5 ? [1, 1] : [1 - blink(t, 13) - 0.2 * (1 - watching), 1 - blink(t, 13) - 0.2 * (1 - watching)],
+      browSad: (1 - joy) * (0.7 - 0.3 * watching), browUp: Math.max(watching * 0.4 * (1 - joy), joy),
+      smile: 0.15 + 0.5 * watching * span(t, n17.start, n17.end) + joy, headTilt: -0.04 * watching, tail: Math.sin(t * 0.8) * (0.3 + joy),
+      headDY: (1 - watching) * 6,
+    });
+    g.restore();
+    // the net: draped over him, ropes snapping, then slipping away (drawn before the mouse so she stays in front)
+    if (freeK < 1) drawNet(g, LION5[0] - 25, LION5[1] + 4, 540, 300 * (1 - freeK * 0.9), { t, cut: Math.min(1, netCut(t)), alpha: 1 - freeK, seed: 11, wiggle: 0.05 });
+    // the mouse: arrives running, speaks, then nibbles along the edge rope
+    const arriveAt = m05.start + 0.2, tIn = arriveAt - 2.2;
+    let mx, run = null, look = -0.18, chew = 0, hop = 0;
+    if (t < arriveAt) { const q = clamp((t - tIn) / 2.2); mx = lerp(380, 735, q); run = t * 2.8; look = 0; }
+    else if (t < n17.start + 0.8) { mx = 735; }
+    else if (t < free) { const q = clamp((t - n17.start - 0.8) / (free - n17.start - 0.8)); mx = lerp(745, 800, q); chew = 0.5 + 0.5 * Math.sin(t * 16); look = 0.18; hop = (Math.abs(Math.sin(t * 8)) * 2); }
+    else { mx = 800; hop = Math.abs(Math.sin((t - free) * 6)) * 14 * (1 - span(t, free + 3, free + 4)); look = -0.25; }
+    g.save(); g.translate(mx, LION5[1] + 2); g.scale(0.5, 0.5);
+    mouseC.draw(g, { t, run, look, hop, talk: Math.max(talking('m05', t), chew * 0.7), flutter: run ? 1 : 0.3, blink: blink(t, 5),
+      happy: t > free + 0.4, joy: t > free + 0.4 ? 0.6 + 0.4 * Math.sin(t * 8) : 0 });
+    g.restore();
+    // tiny bits of rope fluff while she nibbles
+    if (t > n17.start + 1 && t < free) {
+      g.save(); g.fillStyle = rgba('#b8986a', 0.8);
+      for (let i = 0; i < 6; i++) {
+        const ph = ((t * 1.3 + i / 6) % 1), x = mx + 40 + Math.sin(i * 2.1) * 10 + ph * (i % 2 ? 18 : -10), y = LION5[1] - 30 - ph * 22 + ph * ph * 40;
+        g.globalAlpha = 1 - ph; g.fillRect(x, y, 3, 1.4);
+      }
+      g.restore();
+    }
+  });
+}
+
+// ================= SCENE 6: friends =================
+function paintFriendsBg() {
+  const c = canvas(LW, LH), g = c.getContext('2d');
+  const tmp = canvas(LW, LH), h = tmp.getContext('2d');
+  for (const L2 of [S4.sky, S4.far, S4.mid, S4.ground, S4.tree]) h.drawImage(L2, 0, 0);
+  g.filter = 'blur(10px)'; g.drawImage(tmp, 0, 0); g.filter = 'none';
+  return c;
+}
+function drawFriends(g, t) {
+  const l05 = line('l05'), m06 = line('m06'), n19 = line('n19');
+  const k = clamp((t - l05.start + 1) / (n19.end - l05.start + 3));
+  const c = { z: 1.02 + 0.06 * ease(k), x: lerp(-10, 30, ease(k)), y: -10 };
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  g.drawImage(PAPER, 0, 0);
+  drawLayer(g, c, S6BG, 0.5);
+  const lionTalk = talking('l05', t), mouseTalk = talking('m06', t);
+  const tender = span(t, l05.start + 2.2, l05.start + 3);
+  const best = span(t, n19.start + 1.5, n19.start + 2.5);
+  cam(g, c, 1);
+  g.save(); g.translate(1650, 954); g.scale(2.3, 2.3);
+  const lst = {
+    breath: Math.sin(t * 2 * Math.PI / 5.5),
+    eyes: best > 0.5 ? [0, 0] : [(1 - blink(t, 17)) * (1 - 0.25 * tender), (1 - blink(t, 17)) * (1 - 0.25 * tender)], happy: best > 0.5,
+    mouth: lionTalk * 0.85, smile: 0.5 + 0.5 * Math.max(tender, best, span(t, m06.start, m06.start + 1)),
+    browUp: (1 - tender) * span(t, l05.start - 0.3, l05.start + 0.4), browSad: tender * 0.6 * (1 - best),
+    headTilt: -0.04 - best * 0.05 + noise1(t * 0.4, 19) * 0.02, headDY: -lionTalk * 4 + best * 8,
+    tail: Math.sin(t * 0.8) * 0.8, leg: false,
+  };
+  lionC.draw(g, lst);
+  g.restore();
+  // she stands on his big paw, looking up at him
+  const hop = best > 0.2 ? Math.abs(Math.sin((t - n19.start) * 5)) * 18 * (1 - span(t, n19.end - 1, n19.end)) : 0;
+  g.save(); g.translate(1650, 954); g.scale(2.3, 2.3); lionC.drawLeg(g, lst); g.restore();
+  g.save(); g.translate(905, 862); g.scale(1.3, 1.3);
+  mouseC.draw(g, { t, talk: mouseTalk, look: -0.22, hop, blink: blink(t, 8), happy: best > 0.5 && !mouseTalk, joy: best > 0.5 ? 0.5 + 0.4 * Math.sin(t * 7) : 0, flutter: 0.3 });
+  g.restore();
+  // a few little painted hearts drifting up
+  if (best > 0) {
+    g.save();
+    for (let i = 0; i < 4; i++) {
+      const ph = clamp((t - n19.start - 1.6 - i * 0.7) / 4);
+      if (ph <= 0 || ph >= 1) continue;
+      const x = 1050 + i * 60 + Math.sin(ph * 6 + i) * 20, y = 640 - ph * 260, s2 = 10 + i * 2;
+      g.globalAlpha = Math.sin(ph * Math.PI) * 0.8; g.fillStyle = '#d97a76';
+      g.beginPath(); g.moveTo(x, y + s2 * 0.9);
+      g.bezierCurveTo(x - s2 * 1.4, y - s2 * 0.2, x - s2 * 0.5, y - s2 * 1.2, x, y - s2 * 0.4);
+      g.bezierCurveTo(x + s2 * 0.5, y - s2 * 1.2, x + s2 * 1.4, y - s2 * 0.2, x, y + s2 * 0.9); g.fill();
+    }
+    g.restore();
+  }
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  nightGrade(g, 0.55);
+  cam(g, c, 1);
+  fireflies(g, t, 16, { x0: 0, x1: W, y0: 100, y1: 900 }, 91, 1);
+}
+
+// ================= SCENE 7: goodnight under the old tree =================
+function drawGoodnight(g, t) {
+  const n20 = line('n20'), n21 = line('n21'), n22 = line('n22'), n23 = line('n23'), n24 = line('n24');
+  const push = span(t, n20.start, n23.end + 6), slow = clamp((t - n24.end) / 40);
+  const c = { z: 1.0 + 0.16 * push + 0.04 * slow, x: -110 * push, y: 60 * push };
+  const yawn = span(t, n22.start + 0.2, n22.start + 1.0) * (1 - span(t, n22.start + 2.4, n22.start + 3.2));
+  const sleep = span(t, n22.start + 3.0, n22.start + 4.0);
+  const hopT = n22.start + 3.4, hop = clamp((t - hopT) / 1.2);
+  drawGlade(g, t, { cam: c, night: 1, flies: 26, actors: (g) => {
+    g.save(); g.translate(1060, 815); g.scale(0.82, 0.82);
+    const watch = 1 - sleep;
+    lionW.draw(g, {
+      breath: Math.sin(t * 2 * Math.PI / (5.2 + sleep)),
+      eyes: yawn > 0.3 || sleep > 0.5 ? [0, 0] : [(1 - blink(t, 23)) * 0.75, (1 - blink(t, 23)) * 0.75],
+      mouth: yawn, smile: 0.7 * (1 - yawn), headTilt: -0.05 * watch + yawn * 0.06, headDY: -yawn * 8 + sleep * 4,
+      tail: Math.sin(t * 0.5) * 0.4 * watch,
+    });
+    g.restore();
+    // the mouse: on his paw watching the fireflies, then up into his warm mane
+    const p0 = [792, 778], p1 = [772, 655];
+    const x = lerp(p0[0], p1[0], hop), y = lerp(p0[1], p1[1], hop) - Math.sin(hop * Math.PI) * 80;
+    g.save(); g.translate(x, y); g.scale(0.5, 0.5);
+    mouseW.draw(g, { t, look: hop < 1 ? -0.3 : 0.15, happy: hop >= 1, blink: blink(t, 29), hop: 0, flutter: 0.2, tailForward: hop >= 1 });
+    g.restore();
+    zzz(g, t, 960, 560, n23.start + 2.5, TL.duration + 10);
+  }, after: (g) => {
+    // closing words, painted softly in the sky
+    const a = span(t, n24.end + 2.5, n24.end + 5) * (1 - span(t, TL.duration - 12, TL.duration - 7));
+    if (a > 0) {
+      g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.textAlign = 'center';
+      g.fillStyle = `rgba(250,238,210,${0.85 * a})`; g.font = 'italic 76px "Fell"'; g.fillText('Sweet dreams', 960, 220);
+      g.font = 'italic 34px "Fell"'; g.fillStyle = `rgba(250,238,210,${0.6 * a})`; g.fillText('the end', 960, 280);
+      g.restore();
+    }
+  } });
+}
