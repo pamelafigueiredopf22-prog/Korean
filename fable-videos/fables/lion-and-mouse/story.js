@@ -638,7 +638,7 @@ window.FABLE = {
     // a few soft tufts of the lion's mane that fold over the sleeping mouse
     BLANKET = sprite({ x0: 720, y0: 700, x1: 845, y1: 760, w: 120, h: 60 }, 2, (g) => {
       const MC = ['#94431f', '#a64e26', '#8a3a1e'];
-      [[822, 722, 2.95, 66, 20], [818, 734, 3.05, 62, 19], [814, 745, 3.15, 54, 17]].forEach(([cx, cy, a, len, w], i) => {
+      [[826, 724, 2.95, 50, 20], [822, 735, 3.05, 46, 19], [818, 746, 3.15, 40, 17]].forEach(([cx, cy, a, len, w], i) => {
         const sh = tuft(cx, cy, a, 0, len, w, 0.5);
         wash(g, sh, { color: MC[i], opacity: 0.88, seed: 1700 + i, bleed: 0.03, layers: 14, under: true });
         shadeEdge(g, sh, { color: '#4a1a0a', alpha: 0.35, width: 6, dx: 2, dy: -2 });
@@ -1120,7 +1120,8 @@ function drawGoodnight(g, t) {
     const headBob = -breath * 3 * 0.82 * span(t, scootT + 1.5, scootT + 2.4) + sleep * 4 * 0.82 * clamp(scoot);
     const x = lerp(p0[0], p1[0], ease(scoot)), y = lerp(p0[1], p1[1], ease(scoot)) - step + headBob;
     const wiggle = scoot >= 1 ? Math.sin(t * 13) * 0.09 * (1 - settle) : 0;
-    g.save(); g.translate(x, y); g.rotate(wiggle); g.scale(0.5 * (1 - 0.06 * settle), 0.5 * (1 - 0.1 * settle));
+    const face = scoot > 0 ? -1 : 1; // she turns to face us as she snuggles in
+    g.save(); g.translate(x, y); g.rotate(wiggle); g.scale(face * 0.5 * (1 - 0.06 * settle), 0.5 * (1 - 0.1 * settle));
     mouseW.draw(g, { t, run: scoot > 0 && scoot < 1 ? t * 1.6 : null, look: scoot < 1 ? -0.3 : 0.1 + 0.15 * settle,
       happy: scoot >= 1, blink: blink(t, 29), hop: 0, flutter: 0.2, noTail: scoot >= 1 });
     g.restore();
