@@ -1,7 +1,7 @@
 // The Lion and the Mouse: scenes, staging and timing.
-import { W, H, rng, paper, canvas, wash, ink, pool, ellipse, smooth, fluffy, sprite, drawSprite, bbox,
+import { W, H, rng, paper, canvas, wash, ink, pool, strokes, ellipse, smooth, fluffy, sprite, drawSprite, bbox,
   noise1, rgba, mix, tint, shade, clamp, lerp, ease, span, noiseTexture } from '../../engine/watercolor.js';
-import { PAL, foliage, trunk, grass, flower, berries, mushroom, fern, hills, cloud, leaf } from '../../engine/scenery.js';
+import { PAL, foliage, trunk, grass, flower, berries, mushroom, fern, hills, cloud, leaf, plant } from '../../engine/scenery.js';
 import { makeLion } from '../../engine/characters/lion.js';
 import { makeMouse } from '../../engine/characters/mouse.js';
 
@@ -9,7 +9,7 @@ const M = 96, MY = 54;              // layer margin for camera moves
 const LW = W + 2 * M, LH = H + 2 * MY;
 const INK = '#4a3226';
 
-let TL, L, ctx, PAPER, GRAIN, VIGNETTE, bufA, bufB, mask, maskNoise;
+let TL, L, ctx, PAPER, GRAIN, VIGNETTE, FRAME, FRAME_EDGE, bufA, bufB, mask, maskNoise;
 let S1, S2, TITLE, lionW, lionC, mouseW, mouseC;
 
 // ---------- timeline helpers ----------
@@ -81,7 +81,14 @@ function paintScene1() {
     // warm shade under the big tree
     pool(g, 1250, 830, 520, 80, '#6b5a3a', 0.25);
     const r = rng(77);
-    for (let i = 0; i < 140; i++) {
+    // dappled light and leaf shade across the meadow
+    for (let i = 0; i < 26; i++) {
+      const x = r.range(-60, W + 60), y = r.range(720, 1060), sz = r.range(60, 170);
+      pool(g, x, y, sz, sz * 0.3, r() < 0.5 ? '#5f6b3a' : '#fbe2a0', r.range(0.12, 0.25));
+    }
+    strokes(g, [[-M, 700], [W + M, 700], [W + M, LH], [-M, LH]], { color: '#6f7d4c', count: 1400, len: 9, width: 1.1, alpha: 0.28, seed: 78, dir: () => -Math.PI / 2, curve: 0.4 });
+    strokes(g, [[-M, 700], [W + M, 700], [W + M, LH], [-M, LH]], { color: '#e9d79a', count: 500, len: 8, width: 1, alpha: 0.3, seed: 79, dir: () => -Math.PI / 2, curve: 0.4 });
+    for (let i = 0; i < 300; i++) {
       const x = r.range(-80, W + 80), y = r.range(700, 1120);
       if (x > 700 && x < 1560 && y < 860) continue; // keep the lion's bed clear
       grass(g, x, y, { seed: 900 + i, h: 18 + (y - 700) * 0.09, n: 6, alpha: 0.55 });
@@ -117,18 +124,37 @@ function paintScene1() {
       foliage(g, x, y, rx, ry, { seed: 500 + i * 11, colors: [PAL.olive, PAL.moss, PAL.ochre, PAL.sage, '#c98a4a'], blobs: 11, opacity: 0.88 });
       for (let k = 0; k < 4; k++) leaf(g, x + (k - 1.5) * rx * 0.4, y + ry * 0.75 + (k % 2) * 12, 12, 0.3 * (k - 1.5), k % 2 ? PAL.ochre : PAL.olive);
     }) }));
-  // foreground tufts that sway
+  // foreground: lush clusters of leafy plants, ferns, berries and flowers that sway
   const fg = [];
   const r = rng(808);
-  for (let i = 0; i < 22; i++) {
-    const x = -80 + i * 96 + r.gauss(0, 20), y = H + 30 + r.range(0, 30), h = r.range(70, 150);
+  const clusters = [[-30, 230, 1], [250, 150, 0], [560, 110, 0], [1380, 120, 0], [1640, 170, 1], [1930, 240, 1]];
+  for (const [i, [x, h, big]] of clusters.entries()) {
+    const y = H + 40;
+    fg.push({ x, y, ph: r() * 6, s: sprite({ x0: x - h * 1.3, y0: y - h * 1.35, x1: x + h * 1.3, y1: y + 10, w: h * 2.6, h: h * 1.35 + 10 }, 1, (g) => {
+      grass(g, x, y, { seed: 2000 + i, h: h * 0.7, n: 18, width: 4.5, alpha: 0.8, colors: [PAL.moss, PAL.deep, PAL.olive, '#7d8a52'] });
+      if (big) fern(g, x - h * 0.3, y, { seed: 2200 + i, len: h * 1.15, angle: -1.25, curl: 0.55, color: PAL.deep, alpha: 0.85, leaf: 1.6 });
+      plant(g, x, y, { seed: 2300 + i, h, n: big ? 7 : 5, under: true, colors: [PAL.moss, '#7f9a6a', PAL.olive, '#62774a'] });
+      if (i % 2) berries(g, x + h * 0.45, y - h * 0.55, { seed: 2400 + i, n: 5, size: 7 });
+      else flower(g, x - h * 0.4, y - h * 0.7, { seed: 2500 + i, size: 11, color: i % 3 ? '#f0e0c4' : PAL.pink, stem: h * 0.7 });
+      if (big) for (let k = 0; k < 3; k++) flower(g, x + (k - 1) * h * 0.35, y - h * (0.85 + k * 0.08), { seed: 2600 + i * 5 + k, size: 9, color: k % 2 ? PAL.pink : '#f3e6cc', stem: h * 0.8 });
+    }) });
+  }
+  for (let i = 0; i < 14; i++) {
+    const x = 120 + i * 130 + r.gauss(0, 25), y = H + 30, h = r.range(60, 110);
     fg.push({ x, y, ph: r() * 6, s: sprite({ x0: x - h, y0: y - h * 1.2, x1: x + h, y1: y, w: 2 * h, h: h * 1.2 }, 1, (g) => {
-      grass(g, x, y, { seed: 2000 + i, h, n: 14, width: 4.5, alpha: 0.85, colors: [PAL.moss, PAL.deep, PAL.olive, '#7d8a52'] });
-      if (i % 3 === 0) flower(g, x + 20, y - h * 0.8, { seed: 2100 + i, size: 9, color: i % 2 ? '#f0e0c4' : PAL.pink, stem: h * 0.8 });
-      if (i % 4 === 1) fern(g, x - 10, y, { seed: 2200 + i, len: h * 1.1, angle: -1.2 - r() * 0.6, curl: 0.5, color: PAL.deep, alpha: 0.85, leaf: 1.4 });
+      grass(g, x, y, { seed: 2700 + i, h, n: 12, width: 4, alpha: 0.8, colors: [PAL.moss, PAL.deep, PAL.olive, '#7d8a52'] });
     }, { granulate: false }) });
   }
-  return { sky, clouds, far, mid, ground, bigTree, canopy, fg };
+  fg.sort((p, q) => q.s.h - p.s.h); // big clusters behind the small tufts
+  // sunbeams slanting through the canopy, painted once and softly blurred
+  const beams = canvas(W, H);
+  { const g = beams.getContext('2d'); g.filter = 'blur(28px)';
+    for (const [x0, w0, a] of [[380, 70, 0.5], [620, 120, 0.42], [900, 60, 0.35], [1120, 100, 0.3]]) {
+      const grd = g.createLinearGradient(x0, 0, x0 + 520, H);
+      grd.addColorStop(0, `rgba(255,236,190,${a})`); grd.addColorStop(0.7, `rgba(255,226,170,${a * 0.4})`); grd.addColorStop(1, 'rgba(255,220,160,0)');
+      g.fillStyle = grd; g.beginPath(); g.moveTo(x0, 150); g.lineTo(x0 + w0, 150); g.lineTo(x0 + w0 * 3 + 520, H); g.lineTo(x0 + 520, H); g.closePath(); g.fill();
+    } }
+  return { sky, clouds, far, mid, ground, bigTree, canopy, fg, beams };
 }
 
 function fireflies(g, t, n, area, seed, strength = 1) {
@@ -141,6 +167,19 @@ function fireflies(g, t, n, area, seed, strength = 1) {
     const grd = g.createRadialGradient(x, y, 0, x, y, 18);
     grd.addColorStop(0, `rgba(255,236,170,${0.75 * glow})`); grd.addColorStop(0.25, `rgba(255,210,120,${0.3 * glow})`); grd.addColorStop(1, 'rgba(255,200,100,0)');
     g.fillStyle = grd; g.fillRect(x - 18, y - 18, 36, 36);
+  }
+  g.restore();
+}
+
+// dust motes drifting slowly in the sunbeams
+function motes(g, t, n, seed) {
+  g.save(); g.globalCompositeOperation = 'lighter';
+  for (let i = 0; i < n; i++) {
+    const u = noise1(i * 7.3, seed), v = ((t * 0.012 * (0.6 + noise1(i, seed + 3))) + noise1(i * 3.1, seed + 9)) % 1;
+    const x = 420 + u * 800 + v * 420 + Math.sin(t * 0.3 + i) * 12, y = 180 + v * 760;
+    const a = Math.sin(v * Math.PI) * (0.35 + 0.35 * Math.sin(t * 1.3 + i * 2));
+    if (a <= 0.02) continue;
+    g.fillStyle = `rgba(255,240,205,${a})`; g.beginPath(); g.arc(x, y, 1.2 + (i % 3) * 0.6, 0, 7); g.fill();
   }
   g.restore();
 }
@@ -214,10 +253,13 @@ function drawScene1(g, t) {
     g.restore();
   }
   cam(g, c, 1);
+  g.save(); g.globalCompositeOperation = 'screen'; g.globalAlpha = 0.75 + 0.25 * Math.sin(t * 0.25);
+  g.drawImage(S1.beams, 0, 0); g.restore();
+  motes(g, t, 40, 11);
   fireflies(g, t, 22, { x0: 0, x1: W, y0: 380, y1: 980 }, 11, 0.8);
   for (const tuft of S1.fg) {
     cam(g, c, 1.2);
-    g.translate(tuft.x, tuft.y); g.rotate(Math.sin(t * 0.7 + tuft.ph) * 0.03); g.translate(-tuft.x, -tuft.y);
+    g.translate(tuft.x, tuft.y); g.rotate(Math.sin(t * 0.6 + tuft.ph) * 0.02); g.translate(-tuft.x, -tuft.y);
     drawSprite(g, tuft.s);
   }
   g.setTransform(1, 0, 0, 1, 0, 0);
@@ -259,8 +301,9 @@ function paintScene2() {
     for (const [x, y, s, sd] of [[260, 1000, 2.2, 1], [360, 1020, 1.5, 2], [120, 960, 1.2, 3]]) mushroom(g, x, y, { seed: 90 + sd, s });
   });
   const sharpFg = layer((g) => {
-    for (let i = 0; i < 7; i++) grass(g, -40 + i * 40, H + 40, { seed: 3000 + i, h: 300, n: 8, width: 9, alpha: 0.8, colors: [PAL.deep, PAL.moss], lean: 0.3 });
-    for (let i = 0; i < 5; i++) grass(g, W - 160 + i * 50, H + 40, { seed: 3100 + i, h: 260, n: 8, width: 9, alpha: 0.8, colors: [PAL.deep, PAL.moss], lean: -0.3 });
+    for (let i = 0; i < 5; i++) grass(g, -40 + i * 45, H + 40, { seed: 3000 + i, h: 260, n: 8, width: 9, alpha: 0.8, colors: [PAL.deep, PAL.moss], lean: 0.3 });
+    plant(g, 40, H + 60, { seed: 3300, h: 330, n: 6, colors: [PAL.deep, PAL.moss, '#62774a'], under: true });
+    plant(g, W - 60, H + 80, { seed: 3301, h: 300, n: 5, colors: [PAL.moss, PAL.deep, '#62774a'], spread: 1.6, under: true });
     fern(g, W - 40, H + 20, { seed: 3200, len: 420, angle: -2.2, curl: -0.6, color: PAL.deep, alpha: 0.75, leaf: 3 });
   });
   const fg = canvas(LW, LH);
@@ -389,6 +432,39 @@ function drawTitle(g, t) {
   fireflies(g, t, 8, { x0: 300, x1: 1600, y0: 150, y1: 800 }, 31, 0.7);
 }
 
+// ================= painted edge: the picture stops just short of the paper's edge =================
+function buildFrame() {
+  const r = rng(2024), pts = [], inset = 30;
+  const side = (x0, y0, x1, y1) => {
+    const n = Math.ceil(Math.hypot(x1 - x0, y1 - y0) / 28);
+    for (let i = 0; i < n; i++) {
+      const k = i / n, nx = -(y1 - y0), ny = x1 - x0, d = Math.hypot(nx, ny);
+      const bite = r() < 0.03 ? r.range(6, 14) : 0;               // the odd dry-brush bite
+      const off = (noise1(i * 0.22, x0 + y0) - 0.5) * 16 + r.gauss(0, 0.8) - bite;
+      pts.push([x0 + (x1 - x0) * k + nx / d * off, y0 + (y1 - y0) * k + ny / d * off]);
+    }
+  };
+  side(inset, inset, W - inset, inset); side(W - inset, inset, W - inset, H - inset);
+  side(W - inset, H - inset, inset, H - inset); side(inset, H - inset, inset, inset);
+  const shape = smooth(pts, true, 2);
+  const m = canvas(W, H, false), mg = m.getContext('2d');
+  mg.filter = 'blur(2.5px)'; mg.fillStyle = '#fff'; mg.beginPath(); mg.moveTo(shape[0][0], shape[0][1]);
+  for (const p of shape) mg.lineTo(p[0], p[1]); mg.closePath(); mg.fill();
+  FRAME = m;
+  const e = canvas(W, H, false), eg = e.getContext('2d');
+  eg.filter = 'blur(1.6px)'; eg.strokeStyle = 'rgba(110,75,45,0.28)'; eg.lineWidth = 3.5; eg.lineJoin = 'round';
+  eg.beginPath(); eg.moveTo(shape[0][0], shape[0][1]); for (const p of shape) eg.lineTo(p[0], p[1]); eg.closePath(); eg.stroke();
+  eg.filter = 'none';
+  // a few splatters flicked past the edge
+  for (const [cx, cy, n] of [[60, 70, 14], [W - 80, H - 60, 18], [W - 120, 40, 8], [90, H - 50, 10]]) {
+    for (let i = 0; i < n; i++) {
+      eg.fillStyle = rgba(r.pick([PAL.moss, PAL.ochre, PAL.rust, PAL.olive]), r.range(0.25, 0.55));
+      eg.beginPath(); eg.arc(cx + r.gauss(0, 45), cy + r.gauss(0, 30), Math.pow(r(), 2) * 5 + 0.8, 0, 7); eg.fill();
+    }
+  }
+  FRAME_EDGE = e;
+}
+
 // ================= transitions & finish =================
 function buildMaskNoise() {
   const w = 240, h = 135, c = canvas(w, h, false), g = c.getContext('2d');
@@ -420,9 +496,14 @@ function dissolve(g, drawA, drawB, t, p) {
 
 function finish(g, t) {
   g.setTransform(1, 0, 0, 1, 0, 0);
-  g.filter = 'contrast(1.12) saturate(1.1)'; g.drawImage(g.canvas, 0, 0); g.filter = 'none';
-  g.save(); g.globalCompositeOperation = 'multiply'; g.globalAlpha = 0.35; g.drawImage(GRAIN, 0, 0); g.restore();
+  g.filter = 'contrast(1.14) saturate(1.12)'; g.drawImage(g.canvas, 0, 0); g.filter = 'none';
   g.drawImage(VIGNETTE, 0, 0);
+  g.save();
+  g.globalCompositeOperation = 'destination-in'; g.drawImage(FRAME, 0, 0);   // trim to the painted edge
+  g.globalCompositeOperation = 'destination-over'; g.drawImage(PAPER, 0, 0); // bare paper around it
+  g.globalCompositeOperation = 'source-over'; g.drawImage(FRAME_EDGE, 0, 0);
+  g.globalCompositeOperation = 'multiply'; g.globalAlpha = 0.35; g.drawImage(GRAIN, 0, 0);
+  g.restore();
   const fadeIn = 1 - span(t, 0, 1.2), fadeOut = span(t, TL.duration - 4, TL.duration - 0.5);
   const f = Math.max(fadeIn, fadeOut);
   if (f > 0) { g.fillStyle = `rgba(242,231,211,${f})`; g.fillRect(0, 0, W, H); }
@@ -441,8 +522,9 @@ window.FABLE = {
     GRAIN = paper(W, H, '#ffffff', 8);
     VIGNETTE = canvas(W, H);
     { const g = VIGNETTE.getContext('2d'), v = g.createRadialGradient(W / 2, H / 2, H * 0.35, W / 2, H / 2, H * 1.0);
-      v.addColorStop(0, 'rgba(60,35,20,0)'); v.addColorStop(1, 'rgba(70,40,20,0.3)'); g.fillStyle = v; g.fillRect(0, 0, W, H); }
+      v.addColorStop(0, 'rgba(60,35,20,0)'); v.addColorStop(1, 'rgba(70,40,20,0.22)'); g.fillStyle = v; g.fillRect(0, 0, W, H); }
     bufA = canvas(W, H, false); bufB = canvas(W, H, false);
+    buildFrame();
     maskNoise = buildMaskNoise();
     lionW = makeLion(1.0, 1); lionC = makeLion(2.6, 1);
     mouseW = makeMouse(0.9, 2); mouseC = makeMouse(1.9, 2);

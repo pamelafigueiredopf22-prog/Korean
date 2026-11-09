@@ -1,6 +1,6 @@
 // Reusable painted scenery: trees, foliage, grass, flowers, mushrooms, ferns, hills, clouds.
 // All painters draw in the current ctx coordinates with the watercolor engine.
-import { wash, ink, strokes, pool, ellipse, smooth, ribbon, fluffy, bbox, rng, rgba, shade, tint, mix, path, speckle, shadeEdge } from './watercolor.js';
+import { wash, ink, strokes, pool, ellipse, smooth, ribbon, fluffy, bbox, rng, rgba, shade, tint, mix, path, speckle, shadeEdge, pencil } from './watercolor.js';
 
 export const PAL = {
   olive: '#8f9a5b', sage: '#9fae84', moss: '#6f7d4c', deep: '#4f5d3c', ochre: '#c9a24f', gold: '#e2b86a',
@@ -182,4 +182,38 @@ export function leaf(g, x, y, s, a, color) {
   }));
   wash(g, shape, { color, opacity: 0.85, seed: Math.round(x * 7 + y), bleed: 0.03, layers: 10 });
   ink(g, [[x - Math.sin(-a) * s * 0.9, y - Math.cos(a) * s * 0.9], [x + Math.sin(-a) * s * 0.9, y + Math.cos(a) * s * 0.9]], { alpha: 0.3, width: 0.8 });
+}
+
+// a broad-leaf plant: a few big painted leaves on curving stems, veined and shaded
+// (the lush foreground plants of a storybook page)
+export function plant(g, x, y, opts = {}) {
+  const { seed = 1, h = 140, n = 6, colors = [PAL.moss, PAL.olive, '#7f9a6a', PAL.deep], spread = 1.3, opacity = 0.92, haze = 0 } = opts;
+  const r = rng(seed);
+  const col = (c) => haze ? mix(c, opts.hazeColor || PAL.sky, haze) : c;
+  for (let i = 0; i < n; i++) {
+    const a = -Math.PI / 2 + (i / (n - 1) - 0.5) * spread + r.gauss(0, 0.12);
+    const L = h * r.range(0.65, 1.05), w = L * r.range(0.32, 0.42);
+    const stemL = L * 0.45;
+    const sx = x + Math.cos(a) * stemL, sy = y + Math.sin(a) * stemL * 0.9;
+    g.save(); g.strokeStyle = rgba(col(shade(PAL.moss, 0.2)), 0.8); g.lineWidth = 2.2; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + Math.cos(a) * stemL * 0.3, sy + stemL * 0.15, sx, sy); g.stroke(); g.restore();
+    const ca = Math.cos(a), sa = Math.sin(a), px = -sa, py = ca, droop = r.gauss(0.25, 0.15) * Math.sign(ca || 1);
+    const P = (d, o) => [sx + ca * d + px * o + droop * d * d / L * 0.35, sy + sa * d + py * o + Math.abs(droop) * d * d / L * 0.5];
+    const leafShape = smooth([P(0, 0), P(L * 0.2, -w * 0.42), P(L * 0.5, -w * 0.5), P(L * 0.8, -w * 0.3), P(L, 0), P(L * 0.8, w * 0.3), P(L * 0.5, w * 0.5), P(L * 0.2, w * 0.42)]);
+    const c = col(colors[i % colors.length]);
+    wash(g, leafShape, { color: c, opacity, seed: seed * 31 + i, bleed: 0.02, layers: 16, under: opts.under ? col('#e9dcc2') : false });
+    shadeEdge(g, leafShape, { edge: smooth([P(0, 0), P(L * 0.5, 0), P(L, 0)], false), color: col(PAL.deep), alpha: 0.35, width: w * 0.35, dy: w * 0.12 });
+    shadeEdge(g, leafShape, { color: col(tint(c, 0.4)), alpha: 0.5, width: w * 0.25, dy: w * 0.1 });
+    // midrib and side veins
+    g.save(); g.strokeStyle = rgba(col(tint(c, 0.55)), 0.7); g.lineWidth = 1.3; g.lineCap = 'round';
+    const mid = smooth([P(L * 0.02, 0), P(L * 0.5, 0), P(L * 0.95, 0)], false);
+    g.beginPath(); g.moveTo(mid[0][0], mid[0][1]); for (const p of mid) g.lineTo(p[0], p[1]); g.stroke();
+    g.lineWidth = 0.9;
+    for (let k = 1; k < 6; k++) for (const sd of [-1, 1]) {
+      const d = L * k / 6.5, [ax, ay] = P(d, 0), [bx, by] = P(d + L * 0.12, sd * w * 0.36);
+      g.beginPath(); g.moveTo(ax, ay); g.lineTo(bx, by); g.stroke();
+    }
+    g.restore();
+    if (!haze) pencil(g, leafShape, { closed: true, seed: seed * 7 + i, width: 1.1, alpha: 0.35 });
+  }
 }
