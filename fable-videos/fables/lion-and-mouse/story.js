@@ -338,14 +338,24 @@ function drawScene2(g, t) {
   const pinned = t >= press && t < R + 1.0;
   const pawLift = up1 * (1 - down1) + up2 * (1 - down2);
   const pawReach = 85 * (1 - up1) + 85 * up2;
+  // moods, eased in and out around each line
+  const mood = (id, pre = 0.3, post = 0.8) => { const l = line(id); return span(t, l.start - pre, l.start + 0.4) * (1 - span(t, l.end + post - 0.4, l.end + post)); };
+  const curious = mood('l01'), amused = mood('l02'), tender = mood('l03', 0.3, 1.5);
+  const listen = Math.max(mood('m01', 0.2, 0.4), mood('m02', 0.2, 0.6));
+  const l02 = line('l02'), hoho = t > l02.start - 0.05 && t < l02.start + 1.0;
+  const laughing = chuckling || hoho;
+  const soft = 1 - 0.3 * tender; // softer, half-lidded eyes when he is being kind
+  const nod = -lionTalk * 4 - (tender * Math.max(0, Math.sin((t - line('l03').start) * 2.2)) * 4);
   const lst = {
     breath: Math.sin(t * 2 * Math.PI / 5.5) * (1 - awake * 0.5),
-    eyes: chuckling ? [0, 0] : [Math.min(eyeL, 1 - bl), Math.min(eyeR, 1 - bl)],
-    happy: chuckling,
-    mouth: lionTalk * 0.9 + (chuckling ? 0.25 + 0.2 * Math.sin(t * 11) : 0),
-    smile,
-    headTilt: (chuckling ? Math.sin(t * 9) * 0.015 : 0) - 0.035 * awake + noise1(t * 0.4, 9) * 0.02,
-    headDY: chuckling ? Math.abs(Math.sin(t * 9)) * -5 : 0,
+    eyes: laughing ? [0, 0] : [Math.min(eyeL, 1 - bl) * soft, Math.min(eyeR, 1 - bl) * soft],
+    happy: laughing,
+    mouth: lionTalk * 0.85 + (chuckling ? 0.25 + 0.2 * Math.sin(t * 11) : 0),
+    smile: clamp(smile + curious * 0.25 + amused * 0.6 + tender * 0.8),
+    browUp: Math.max(curious, amused * 0.8, listen * 0.35),
+    browSad: Math.max(tender * 0.7, mood('m02', 0.2, 0.6) * 0.4),
+    headTilt: (laughing ? Math.sin(t * 9) * 0.015 : 0) - 0.035 * awake + noise1(t * 0.4, 9) * 0.02 - curious * 0.05 + amused * 0.04 - tender * 0.03 - listen * 0.04,
+    headDY: (laughing ? Math.abs(Math.sin(t * 9)) * -5 : 0) + nod,
     tail: Math.sin(t * 0.8) * 0.7,
     pawLift, pawReach,
     leg: false,
@@ -415,6 +425,9 @@ function paintTitle() {
 function drawTitle(g, t) {
   g.setTransform(1, 0, 0, 1, 0, 0);
   g.drawImage(PAPER, 0, 0);
+  // a warm evening glow on the title page
+  g.fillStyle = 'rgba(250,214,160,0.22)'; g.fillRect(0, 0, W, H);
+  pool(g, 960, 470, 900, 520, '#fbd9a0', 0.35);
   const c = { z: 1 + t * 0.004, x: 0, y: 0 };
   drawLayer(g, c, TITLE, 1);
   cam(g, c, 1);

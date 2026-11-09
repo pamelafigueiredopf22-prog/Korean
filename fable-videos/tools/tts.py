@@ -37,6 +37,7 @@ def main():
     ap.add_argument("fable_dir")
     ap.add_argument("--scenes", default="")
     ap.add_argument("--force", action="store_true")
+    ap.add_argument("--set", action="append", default=[], help='override a voice: lion=\'{"voice": "bm_george", "pitch": 0.98}\'')
     a = ap.parse_args()
 
     from kokoro_onnx import Kokoro
@@ -45,6 +46,10 @@ def main():
     fable = os.path.basename(os.path.normpath(a.fable_dir))
     script = json.load(open(os.path.join(a.fable_dir, "script.json")))
     voices = json.load(open(os.path.join(a.fable_dir, "voices.json")))
+    for o in a.set:
+        who, spec = o.split("=", 1)
+        voices[who] = {**voices[who], **json.loads(spec)}
+        voices[who].pop("pitch", None) if json.loads(spec).get("pitch") == 1.0 else None
     out = os.path.join("build", fable)
     clips = os.path.join(out, "clips")
     os.makedirs(clips, exist_ok=True)
@@ -61,7 +66,7 @@ def main():
         if a.force or not os.path.exists(final):
             raw = os.path.join(clips, f"{line['id']}.raw.wav")
             audio, sr = kokoro.create(line["text"], voice=voice_style(kokoro, v["voice"]),
-                                      speed=v.get("speed", 1.0), lang=v.get("lang", "en-us"))
+                                      speed=v.get("speed", 1.0) * line.get("speed_scale", 1.0), lang=v.get("lang", "en-us"))
             sf.write(raw, audio, sr)
             filters = []
             if v.get("pitch", 1.0) != 1.0:

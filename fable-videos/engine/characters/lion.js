@@ -177,8 +177,6 @@ export function makeLion(res = 1, seed = 1) {
     pencil(g, NOSE, { closed: true, seed: s(124), alpha: 0.5, width: 1.2 });
     pencil(g, HEAD.slice(0, 96), { seed: s(125), alpha: 0.5 });
     ink(g, [[-235, -158], [-235, -146]], { alpha: 0.6, seed: s(126) });
-    ink(g, [[-298, -228], [-277, -235], [-257, -230]], { alpha: 0.4, seed: s(127), width: 1.6 });
-    ink(g, [[-213, -230], [-193, -235], [-172, -228]], { alpha: 0.4, seed: s(128), width: 1.6 });
   }, { seed: s(129) });
 
   function eye(g, x, y, open, happy) {
@@ -208,7 +206,7 @@ export function makeLion(res = 1, seed = 1) {
   }
 
   // st: breath (-1..1), eyes [l,r] (0 closed..1 open), happy, mouth (0..1), smile,
-  //     headTilt (rad), headDY, pawLift (0..1), pawReach (units back toward the body), tail (-1..1)
+  //     browUp, browSad (0..1), headTilt (rad), headDY, pawLift (0..1), pawReach (units back toward the body), tail (-1..1)
   function draw(g, st = {}) {
     const b = st.breath || 0;
     g.save();
@@ -229,17 +227,28 @@ export function makeLion(res = 1, seed = 1) {
     const eo = st.eyes || [0, 0];
     eye(g, LION_EYES[0][0], LION_EYES[0][1], eo[0], st.happy);
     eye(g, LION_EYES[1][0], LION_EYES[1][1], eo[1], st.happy);
+    // eyebrows: browUp lifts them (curious, amused), browSad raises the inner ends (worried, tender)
+    const bu = (st.browUp || 0) * 9, bs = (st.browSad || 0) * 7;
+    g.save(); g.strokeStyle = rgba(C.ink, 0.5); g.lineWidth = 2.2; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(-298, -228 - bu * 0.7); g.quadraticCurveTo(-277, -236 - bu, -257, -230 - bu - bs); g.stroke();
+    g.beginPath(); g.moveTo(-213, -230 - bu - bs); g.quadraticCurveTo(-193, -236 - bu, -172, -228 - bu * 0.7); g.stroke();
+    g.restore();
+    // the mouth is one shape: the little "w" itself parts and opens downward
     const m = clamp(st.mouth || 0), sm = st.smile || 0;
-    g.strokeStyle = rgba(C.ink, 0.75); g.lineWidth = 2.4; g.lineCap = 'round';
-    if (m > 0.05) {
-      g.fillStyle = '#6b2f28';
-      g.beginPath(); g.ellipse(-235, -134 + m * 3, 12 + 4 * sm, 2 + 12 * m, 0, 0, 7); g.fill();
-      g.fillStyle = '#d8857c';
-      g.beginPath(); g.ellipse(-235, -128 + m * 6, 7, 2 + 4 * m, 0, 0, Math.PI); g.fill();
+    const lx = -258 - 3 * m, rx = -212 + 3 * m, cy = -144 - sm * 4, dip = -134 + sm * 2;
+    const upper = () => { g.moveTo(lx, cy); g.quadraticCurveTo(-247, dip, -235, -145); g.quadraticCurveTo(-223, dip, rx, cy); };
+    g.strokeStyle = rgba(C.ink, 0.75); g.lineWidth = 2.4; g.lineCap = 'round'; g.lineJoin = 'round';
+    if (m > 0.04) {
+      const bot = -131 + 17 * m + sm * 2;
+      const shape = () => { g.beginPath(); upper(); g.bezierCurveTo(rx - 1, bot + 2, lx + 1, bot + 2, lx, cy); g.closePath(); };
+      shape();
+      g.save(); g.fillStyle = '#6b2f28'; g.fill(); g.clip();
+      g.fillStyle = '#d8857c'; g.beginPath(); g.ellipse(-235, bot + 1, 12, 3 + 5 * m, 0, 0, 7); g.fill();
+      g.restore();
+      shape(); g.stroke();
+    } else {
+      g.beginPath(); upper(); g.stroke();
     }
-    g.beginPath(); // the little "w" mouth
-    g.moveTo(-258, -144 - sm * 4); g.quadraticCurveTo(-247, -134 + sm * 2, -235, -145);
-    g.quadraticCurveTo(-223, -134 + sm * 2, -212, -144 - sm * 4); g.stroke();
     g.restore();
     if (st.leg !== false) drawLeg(g, st);
     g.restore();
