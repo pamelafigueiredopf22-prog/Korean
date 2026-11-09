@@ -1,6 +1,6 @@
 // The Lion and the Mouse: scenes, staging and timing.
 import { W, H, rng, paper, canvas, wash, ink, pool, strokes, ellipse, smooth, fluffy, sprite, drawSprite, bbox,
-  noise1, rgba, mix, tint, shade, clamp, lerp, ease, span, noiseTexture, glaze, shadeEdge, pencil } from '../../engine/watercolor.js';
+  noise1, rgba, mix, tint, shade, clamp, lerp, ease, span, noiseTexture, glaze, shadeEdge, pencil, tuft } from '../../engine/watercolor.js';
 import { PAL, foliage, trunk, grass, flower, berries, mushroom, fern, hills, cloud, leaf, plant } from '../../engine/scenery.js';
 import { makeLion } from '../../engine/characters/lion.js';
 import { makeMouse } from '../../engine/characters/mouse.js';
@@ -635,6 +635,17 @@ window.FABLE = {
     S5 = paintHome();
     S5R = paintRun();
     S6BG = paintFriendsBg();
+    // a few soft tufts of the lion's mane that fold over the sleeping mouse
+    BLANKET = sprite({ x0: 720, y0: 700, x1: 845, y1: 760, w: 120, h: 60 }, 2, (g) => {
+      const MC = ['#94431f', '#a64e26', '#8a3a1e'];
+      [[822, 722, 2.95, 66, 20], [818, 734, 3.05, 62, 19], [814, 745, 3.15, 54, 17]].forEach(([cx, cy, a, len, w], i) => {
+        const sh = tuft(cx, cy, a, 0, len, w, 0.5);
+        wash(g, sh, { color: MC[i], opacity: 0.88, seed: 1700 + i, bleed: 0.03, layers: 14, under: true });
+        shadeEdge(g, sh, { color: '#4a1a0a', alpha: 0.35, width: 6, dx: 2, dy: -2 });
+        strokes(g, sh, { color: '#5e230f', count: 26, len: 9, width: 0.8, alpha: 0.45, seed: 1720 + i, dir: () => a, curve: 0.3 });
+        strokes(g, sh, { color: '#e3965a', count: 10, len: 8, width: 0.7, alpha: 0.35, seed: 1730 + i, dir: () => a, curve: 0.3 });
+      });
+    });
     // the order of the story, and when each picture dissolves into the next
     SCENES = [
       [0, drawTitle], [7.6 - 2.2, drawScene1], [line('n06').start - 0.7, drawScene2],
@@ -659,7 +670,7 @@ let SCENES;
 // =====================================================================================
 // THE REST OF THE STORY
 // =====================================================================================
-let S4, S5, S5R, S6BG, lionWalk;
+let S4, S5, S5R, S6BG, lionWalk, BLANKET;
 
 // ---------- the forest at dusk, where the net waits ----------
 function paintForest() {
@@ -1089,23 +1100,33 @@ function drawGoodnight(g, t) {
   const c = { z: 1.0 + 0.16 * push + 0.04 * slow, x: -110 * push, y: 60 * push };
   const yawn = span(t, n22.start + 0.2, n22.start + 1.0) * (1 - span(t, n22.start + 2.4, n22.start + 3.2));
   const sleep = span(t, n22.start + 3.0, n22.start + 4.0);
-  const hopT = n22.start + 3.4, hop = clamp((t - hopT) / 1.2);
+  const scootT = n22.start + 3.2, scoot = clamp((t - scootT) / 2.4); // a few small shuffling steps
+  const settle = span(t, scootT + 2.2, scootT + 3.6);                  // wiggling in, then still
   drawGlade(g, t, { cam: c, night: 1, flies: 26, actors: (g) => {
+    const breath = Math.sin(t * 2 * Math.PI / (5.2 + sleep));
     g.save(); g.translate(1060, 815); g.scale(0.82, 0.82);
     const watch = 1 - sleep;
     lionW.draw(g, {
-      breath: Math.sin(t * 2 * Math.PI / (5.2 + sleep)),
+      breath,
       eyes: yawn > 0.3 || sleep > 0.5 ? [0, 0] : [(1 - blink(t, 23)) * 0.75, (1 - blink(t, 23)) * 0.75],
       mouth: yawn, smile: 0.7 * (1 - yawn), headTilt: -0.05 * watch + yawn * 0.06, headDY: -yawn * 8 + sleep * 4,
       tail: Math.sin(t * 0.5) * 0.4 * watch,
     });
     g.restore();
-    // the mouse: on his paw watching the fireflies, then up into his warm mane
-    const p0 = [792, 778], p1 = [772, 655];
-    const x = lerp(p0[0], p1[0], hop), y = lerp(p0[1], p1[1], hop) - Math.sin(hop * Math.PI) * 80;
-    g.save(); g.translate(x, y); g.scale(0.5, 0.5);
-    mouseW.draw(g, { t, look: hop < 1 ? -0.3 : 0.15, happy: hop >= 1, blink: blink(t, 29), hop: 0, flutter: 0.2, tailForward: hop >= 1 });
+    // the mouse: on his paw watching the fireflies, then she shuffles into the bottom of his mane,
+    // wiggles to get cosy, and his soft fur folds over her like a blanket
+    const p0 = [792, 778], p1 = [772, 742];
+    const step = scoot > 0 && scoot < 1 ? Math.abs(Math.sin(scoot * Math.PI * 4)) * 6 : 0;
+    const headBob = -breath * 3 * 0.82 * span(t, scootT + 1.5, scootT + 2.4) + sleep * 4 * 0.82 * clamp(scoot);
+    const x = lerp(p0[0], p1[0], ease(scoot)), y = lerp(p0[1], p1[1], ease(scoot)) - step + headBob;
+    const wiggle = scoot >= 1 ? Math.sin(t * 13) * 0.09 * (1 - settle) : 0;
+    g.save(); g.translate(x, y); g.rotate(wiggle); g.scale(0.5 * (1 - 0.06 * settle), 0.5 * (1 - 0.1 * settle));
+    mouseW.draw(g, { t, run: scoot > 0 && scoot < 1 ? t * 1.6 : null, look: scoot < 1 ? -0.3 : 0.1 + 0.15 * settle,
+      happy: scoot >= 1, blink: blink(t, 29), hop: 0, flutter: 0.2, noTail: scoot >= 1 });
     g.restore();
+    if (settle > 0) { // tufts of his mane drifting over her
+      g.save(); g.globalAlpha = settle; g.translate(0, headBob - (y - lerp(p0[1], p1[1], 1) - headBob) * 0); drawSprite(g, BLANKET); g.restore();
+    }
     zzz(g, t, 960, 560, n23.start + 2.5, TL.duration + 10);
   }, after: (g) => {
     // closing words, painted softly in the sky

@@ -83,7 +83,8 @@ export function makeMouse(res = 1, seed = 2) {
     }
     g.save();
     g.translate(0, -up);
-    if (st.tailForward) { g.save(); g.translate(0, up); drawSprite(g, tailFwd); g.restore(); }
+    if (st.noTail) { /* tucked away while she sleeps */ }
+    else if (st.tailForward) { g.save(); g.translate(0, up); drawSprite(g, tailFwd); g.restore(); }
     else { g.save(); g.translate(-40, -14); g.rotate(Math.sin(p * 0.5 + (st.t || 0) * 2) * 0.12); g.translate(40, 14); drawSprite(g, tail); g.restore(); }
     g.save(); g.translate(10, -56); g.rotate((st.flutter || 0) * 0.35 + Math.sin((st.t || 0) * 9) * 0.06 * (st.flutter || 0)); g.translate(-10, 56); drawSprite(g, scarfTail); g.restore();
     drawSprite(g, body);
