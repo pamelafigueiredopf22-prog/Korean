@@ -213,7 +213,8 @@
       "scene": "s7_goodnight",
       "speaker": "narrator",
       "pause": 30.0,
-      "text": "Goodnight, little one. Sweet dreams."
+      "text": "Goodnight, little one. Sweet dreams.",
+      "whisper": true
     }
   ]
 }

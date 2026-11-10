@@ -49,6 +49,12 @@ export function makeOwl(res = 1, seed = 8) {
       g.fillStyle = '#e8b040'; g.beginPath(); g.arc(x, -188, 11 * Math.max(0.15, op), 0, 7); g.fill();
       buttonEye(g, x, -188, op, { R: 7, happy: st.happy });
     }
+    // her beak: a little hooked, golden beak between the eyes
+    const beak = [[-8, -180], [8, -180], [6, -170], [1, -158], [-1, -158], [-6, -170]];
+    g.fillStyle = '#d6a04a'; g.beginPath(); g.moveTo(...beak[0]); for (const p of beak) g.lineTo(...p); g.closePath(); g.fill();
+    g.fillStyle = 'rgba(255,240,200,0.6)'; g.beginPath(); g.ellipse(-2.5, -175, 2.5, 3, 0, 0, 7); g.fill();
+    g.strokeStyle = rgba(INK, 0.85); g.lineWidth = 1.5; g.lineJoin = 'round';
+    g.beginPath(); g.moveTo(...beak[0]); for (const p of beak) g.lineTo(...p); g.closePath(); g.stroke();
     g.restore();
     g.strokeStyle = '#c89040'; g.lineWidth = 3; g.lineCap = 'round';
     for (const x of [-18, 18]) for (const dx of [-6, 0, 6]) { g.beginPath(); g.moveTo(x, -4); g.lineTo(x + dx, 4); g.stroke(); }

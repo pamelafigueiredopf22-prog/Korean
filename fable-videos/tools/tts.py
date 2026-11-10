@@ -108,6 +108,13 @@ def main():
             filters = []
             if v.get("pitch", 1.0) != 1.0:
                 filters.append(f"rubberband=pitch={v['pitch']}:formant=preserved")
+            if line.get("whisper"):  # a soft whisper in the same voice
+                wraw = raw + ".wh.wav"
+                if raw.endswith(".mp3"): run(["ffmpeg", "-y", "-i", raw, "-ac", "1", raw + ".tmp.wav"]); src = raw + ".tmp.wav"
+                else: src = raw
+                subprocess.run(["python3", os.path.join(os.path.dirname(__file__), "whisper.py"), src, wraw], check=True)
+                os.replace(wraw, raw if raw.endswith(".wav") else raw + ".tmp.wav"); raw = raw if raw.endswith(".wav") else raw + ".tmp.wav"
+                filters.append("lowpass=f=7000"); filters.append("volume=0.8")
             filters += v.get("filters", [])
             filters.append(f"aresample={SR}")
             run(["ffmpeg", "-y", "-i", raw, "-af", ",".join(filters), "-ac", "1", final])
