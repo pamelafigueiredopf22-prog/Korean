@@ -1,0 +1,41 @@
+{
+  "title": "The Tortoise and the Hare",
+  "source": "Aesop's Fables (public domain), gently retold for bedtime",
+  "lines": [
+    {"id": "n01", "scene": "s1_meadow", "speaker": "narrator", "pause": 1.6, "text": "Once upon a time, in a green and sunny meadow, there lived a hare who was very, very fast."},
+    {"id": "n02", "scene": "s1_meadow", "speaker": "narrator", "pause": 1.4, "text": "He could zip through the clover, and leap over the logs, and race the wind itself."},
+    {"id": "h01", "scene": "s1_meadow", "speaker": "hare", "pause": 1.2, "text": "Whee! Nobody is faster than me! Nobody in the whole wide world!"},
+    {"id": "n03", "scene": "s1_meadow", "speaker": "narrator", "pause": 1.6, "text": "In the same meadow lived a tortoise. He was not fast at all. He walked slowly, and carefully, one little step at a time."},
+    {"id": "h02", "scene": "s1_meadow", "speaker": "hare", "pause": 1.0, "text": "Ha! Good morning, Tortoise! Are you going somewhere? Because at that speed, you'll get there next week!"},
+    {"id": "t01", "scene": "s1_meadow", "speaker": "tortoise", "pause": 1.4, "text": "Good morning, Hare. I may be slow... but I always get where I am going."},
+    {"id": "t02", "scene": "s1_meadow", "speaker": "tortoise", "pause": 1.4, "text": "Shall we have a race, you and I? From the old oak stump, all the way to the big willow tree by the pond."},
+    {"id": "h03", "scene": "s1_meadow", "speaker": "hare", "pause": 1.8, "text": "A race? With you? Oh, ho, ho! Alright, Tortoise. This will be easy!"},
+
+    {"id": "n04", "scene": "s2_start", "speaker": "narrator", "pause": 1.4, "text": "The next morning, all the animals of the meadow came to watch. The rabbits, the squirrels, and the little birds."},
+    {"id": "n05", "scene": "s2_start", "speaker": "narrator", "pause": 1.4, "text": "The wise old owl lifted her wing. On your marks... get set... go!"},
+    {"id": "n06", "scene": "s2_start", "speaker": "narrator", "pause": 1.6, "text": "Whoosh! The hare shot off like an arrow, and in the blink of an eye, he was far, far away."},
+    {"id": "n07", "scene": "s2_start", "speaker": "narrator", "pause": 1.8, "text": "And the tortoise? He took one slow step. And then another. And then another."},
+
+    {"id": "n08", "scene": "s3_nap", "speaker": "narrator", "pause": 1.4, "text": "Halfway to the willow tree, the hare stopped and looked back. The tortoise was nowhere to be seen."},
+    {"id": "h04", "scene": "s3_nap", "speaker": "hare", "pause": 1.4, "text": "Hmm. That slowpoke is miles behind me. I have plenty of time for a little nap."},
+    {"id": "n09", "scene": "s3_nap", "speaker": "narrator", "pause": 2.0, "text": "So the hare lay down in the cool shade of a hawthorn bush. The sun was warm, the bees were humming, and soon... he was fast asleep."},
+
+    {"id": "n10", "scene": "s4_plod", "speaker": "narrator", "pause": 1.4, "text": "Meanwhile, the tortoise kept on walking. Step, by step, by step. He didn't stop, and he didn't hurry. He just kept going."},
+    {"id": "t03", "scene": "s4_plod", "speaker": "tortoise", "pause": 1.4, "text": "Slow and steady. Slow and steady. One more step, and then one more."},
+    {"id": "n11", "scene": "s4_plod", "speaker": "narrator", "pause": 2.0, "text": "He walked past the daisies. He walked past the stream. And then, very quietly, he walked right past the sleeping hare."},
+
+    {"id": "n12", "scene": "s5_finish", "speaker": "narrator", "pause": 1.2, "text": "When the hare finally woke up, the sun was sinking low. He rubbed his eyes, and looked toward the willow tree, and..."},
+    {"id": "h05", "scene": "s5_finish", "speaker": "hare", "pause": 1.0, "text": "Oh no! The tortoise! He's almost there!"},
+    {"id": "n13", "scene": "s5_finish", "speaker": "narrator", "pause": 1.4, "text": "The hare ran as fast as he could. Faster than ever before! But it was too late."},
+    {"id": "n14", "scene": "s5_finish", "speaker": "narrator", "pause": 2.0, "text": "With one last slow and steady step, the tortoise crossed the finish line under the big willow tree. And all the animals cheered!"},
+
+    {"id": "h06", "scene": "s6_friends", "speaker": "hare", "pause": 1.2, "text": "You won, Tortoise. I was so sure I would win, that I didn't even try."},
+    {"id": "t04", "scene": "s6_friends", "speaker": "tortoise", "pause": 1.6, "text": "That's alright, Hare. Being fast is a wonderful thing. But slow and steady can get you there too."},
+    {"id": "n15", "scene": "s6_friends", "speaker": "narrator", "pause": 2.0, "text": "And so, the hare learned that it doesn't matter how fast you are. What matters is that you keep going, and never give up."},
+
+    {"id": "n16", "scene": "s7_goodnight", "speaker": "narrator", "pause": 2.0, "text": "That evening, the two new friends sat by the pond, under the willow tree, and watched the fireflies come out."},
+    {"id": "n17", "scene": "s7_goodnight", "speaker": "narrator", "pause": 2.0, "text": "The hare curled up in the soft grass. The tortoise tucked his head into his cosy shell."},
+    {"id": "n18", "scene": "s7_goodnight", "speaker": "narrator", "pause": 2.6, "text": "The stars came out, one by one. The meadow was quiet. And it was time for everyone to rest."},
+    {"id": "n19", "scene": "s7_goodnight", "speaker": "narrator", "pause": 30.0, "text": "Goodnight, little one. Sweet dreams."}
+  ]
+}
