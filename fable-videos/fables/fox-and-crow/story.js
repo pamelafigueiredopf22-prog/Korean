@@ -6,7 +6,7 @@ import { M, MY, LW, LH, INK, layer, cam, drawLayer, fireflies, motes, nightGrade
 import { makeFox2 } from '../../engine/characters/fox2.js';
 import { makeCrow } from '../../engine/characters/crow.js';
 
-let S, fox, crow, crowBig, MEADOW, OAK, PERCH, DEN, TITLE, NIGHT_SKY, NEST_BACK, NEST_FRONT, LEAF;
+let S, SUNSET, fox, crow, crowBig, MEADOW, OAK, PERCH, DEN, TITLE, NIGHT_SKY, NEST_BACK, NEST_FRONT, LEAF;
 const line = (id) => S.line(id);
 
 // ---------------------------------------------------------------- painting helpers
@@ -183,19 +183,81 @@ function paintDen() {
   });
 }
 function paintNest() {
-  const ring = (front) => sprite({ x0: -150, y0: -70, x1: 150, y1: 50, w: 300, h: 120 }, 1.5, (g) => {
-    const r = rng(front ? 701 : 702);
-    const bowl = front ? smooth([[-130, -30], [-110, 20], [0, 40], [110, 20], [130, -30], [80, -10], [0, -4], [-80, -10]]) : ellipse(0, -30, 130, 34, 30);
-    wash(g, bowl, { color: front ? '#8a6a46' : '#5a4430', opacity: 0.95, seed: front ? 703 : 704, under: true });
-    g.save(); g.lineCap = 'round';
-    for (let i = 0; i < (front ? 90 : 40); i++) {
-      const a = r.range(-0.3, Math.PI + 0.3), rr = r.range(0.7, 1.05), x = Math.cos(a) * 130 * rr, y = (front ? 4 : -30) + Math.sin(a) * (front ? 30 : 10) * rr;
-      g.strokeStyle = rgba(r.pick(['#4a3424', '#a88454', '#6f5236']), 0.85); g.lineWidth = r.range(1, 2.6);
-      g.beginPath(); g.moveTo(x - 30, y + r.gauss(0, 6)); g.quadraticCurveTo(x, y + r.gauss(0, 8), x + 30, y + r.gauss(0, 6)); g.stroke();
+  // a deep, cosy bowl of woven twigs, lined with soft moss and downy feathers
+  const twigArc = (g, r, cx, cy, rx, ry, a0, a1, cols, w) => {
+    const pts = []; const n = 10;
+    for (let k = 0; k <= n; k++) { const a = a0 + (a1 - a0) * k / n; pts.push([cx + Math.cos(a) * rx, cy + Math.sin(a) * ry]); }
+    penLine(g, pts, { color: r.pick(cols), w, alpha: 0.95, seed: Math.floor(r() * 1e6), weight: (t) => 0.5 + 0.6 * Math.sin(Math.PI * t) });
+  };
+  const back = sprite({ x0: -175, y0: -95, x1: 175, y1: 20, w: 350, h: 115 }, 2, (g) => {
+    const r = rng(702);
+    // the inside of the bowl, in shadow, with a soft lining
+    wash(g, ellipse(0, -30, 142, 40, 40), { color: '#5a4230', opacity: 0.97, seed: 703, under: true });
+    glaze(g, ellipse(0, -30, 142, 40, 40), 0, -22, 110, 26, '#2e2018', 0.6);
+    for (let k = 0; k < 40; k++) twigArc(g, r, 0, -26, r.range(130, 150), r.range(34, 44), Math.PI * r.range(1.02, 1.3), Math.PI * r.range(1.6, 1.98), ['#6f5236', '#8a6a46', '#4a3424'], r.range(1.4, 2.6));
+    for (let k = 0; k < 26; k++) { // moss around the back rim, a little down here and there
+      const a = Math.PI * r.range(1.05, 1.95), x = Math.cos(a) * 128, y = -30 + Math.sin(a) * 34;
+      g.fillStyle = rgba(k % 5 ? r.pick(['#7f9a5a', '#6f8a4a']) : '#e9e0d0', 0.7); g.beginPath(); g.ellipse(x, y, r.range(8, 15), r.range(4, 7), r.range(-0.4, 0.4), 0, 7); g.fill();
+    }
+    // a soft grey feather tucked in at the back
+    const f = smooth([[60, -40], [80, -86], [96, -92], [90, -60], [70, -36]]);
+    wash(g, f, { color: '#d6d2cc', opacity: 0.95, seed: 704, under: true, layers: 10 });
+    penLine(g, [[64, -38], [92, -88]], { w: 1.2, alpha: 0.5 });
+  }, { granulate: false });
+  const front = sprite({ x0: -185, y0: -70, x1: 185, y1: 90, w: 370, h: 160 }, 2, (g) => {
+    const r = rng(705);
+    const bowl = smooth([[-150, -32], [-146, 6], [-110, 50], [-40, 72], [40, 72], [110, 50], [146, 6], [150, -32], [100, -14], [0, -8], [-100, -14]]);
+    wash(g, bowl, { color: '#8a6a46', opacity: 0.97, seed: 706, under: true });
+    shadeEdge(g, bowl, { color: '#3e2a1c', alpha: 0.55, width: 40, dy: -16 });
+    glaze(g, bowl, -40, -6, 100, 24, '#c9a36e', 0.45);
+    // layer upon layer of curved, woven twigs following the bowl
+    for (let k = 0; k < 120; k++) {
+      const yy = r.range(-20, 64), rx = 150 - Math.max(0, yy) * 0.55;
+      twigArc(g, r, r.gauss(0, 6), yy - 30, rx * r.range(0.85, 1.05), r.range(24, 44), Math.PI * r.range(0.02, 0.35), Math.PI * r.range(0.6, 0.98), ['#6f5236', '#8a6a46', '#a88454', '#4a3424', '#b8955e'], r.range(1.4, 3));
+    }
+    // twig ends poking out of the weave
+    for (let k = 0; k < 16; k++) {
+      const a = Math.PI * r.range(-0.08, 1.08), x = Math.cos(a) * 150, y = -26 + Math.sin(a) * 60, d = r.range(18, 40);
+      penLine(g, [[x - Math.cos(a + 1.4) * 8, y], [x + Math.cos(a) * d * 0.4 + r.gauss(0, 8), y + Math.sin(a) * d * 0.3 - 4], [x + Math.cos(a) * d, y + Math.sin(a) * d * 0.5 + r.gauss(0, 6)]], { color: r.pick(['#6f5236', '#8a6a46', '#4a3424']), w: 2, alpha: 0.9 });
+    }
+    // downy lining peeking over the front rim, moss tufts and a little leaf sprig
+    for (let k = 0; k < 18; k++) { // soft moss along the rim
+      const x = -140 + k * 16 + r.gauss(0, 4), y = -20 + Math.abs(x) * 0.07 + r.gauss(0, 2);
+      g.fillStyle = rgba(r.pick(['#7f9a5a', '#6f8a4a', '#93a862']), 0.75); g.beginPath(); g.ellipse(x, y, r.range(9, 15), r.range(4, 7), r.gauss(0, 0.2), 0, 7); g.fill();
+    }
+    g.save(); g.lineCap = 'round'; // wisps of downy feathers peeking over the rim
+    for (let k = 0; k < 9; k++) {
+      const x0 = r.range(-120, 120), y0 = -22 + Math.abs(x0) * 0.07;
+      for (let j = 0; j < 9; j++) {
+        const a = -Math.PI / 2 + r.gauss(0, 1.1), L = r.range(4, 9);
+        g.strokeStyle = rgba('#f1e8da', r.range(0.25, 0.55)); g.lineWidth = r.range(1.5, 3);
+        g.beginPath(); g.moveTo(x0, y0); g.quadraticCurveTo(x0 + Math.cos(a) * L * 0.6 + r.gauss(0, 3), y0 + Math.sin(a) * L * 0.6, x0 + Math.cos(a) * L, y0 + Math.sin(a) * L); g.stroke();
+      }
     }
     g.restore();
+    for (let k = 0; k < 7; k++) foliage(g, -130 + k * 44 + r.gauss(0, 8), 30 + Math.abs(k - 3) * 6, 18, 10, { seed: 707 + k, colors: ['#6f8a4a', '#8fa252', '#5c7040'], blobs: 3, opacity: 0.9, detail: false });
+    for (let k = 0; k < 5; k++) leaf(g, -150 + k * 10, -10 + k * 9, 11, -0.8 + k * 0.3, k % 2 ? '#8fa252' : '#c9a24f');
+    penLine(g, bowl.slice(Math.floor(bowl.length * 0.08), Math.floor(bowl.length * 0.72)), { w: 2.2, alpha: 0.6, seed: 708 });
   }, { granulate: false });
-  return [ring(false), ring(true)];
+  return [back, front];
+}
+// a soft pink-and-gold evening sky behind the crow's branch
+function paintSunset() {
+  const soft = layer((g) => {
+    const grd = g.createLinearGradient(0, -MY, 0, H + MY);
+    grd.addColorStop(0, '#b8a9d2'); grd.addColorStop(0.3, '#e9b9c8'); grd.addColorStop(0.55, '#f6c9bd'); grd.addColorStop(0.75, '#fadcb4'); grd.addColorStop(1, '#f2c79c');
+    g.fillStyle = grd; g.fillRect(-M, -MY, LW, LH);
+    pool(g, 1350, 640, 520, 300, '#fff0c8', 0.7);                       // the low sun's glow
+    g.fillStyle = 'rgba(255,240,205,0.9)'; g.beginPath(); g.arc(1350, 650, 60, 0, 7); g.fill();
+    for (const [x, y, w, h, c] of [[300, 220, 260, 50, '#f3b6c2'], [900, 150, 300, 46, '#f6c4cc'], [1600, 260, 240, 44, '#f8cfc0'], [600, 420, 220, 36, '#f9d2c4']])
+      cloud(g, x, y, w, h, { seed: x, color: c, opacity: 0.75 });
+    hills(g, 820, 40, '#b99aaa', { seed: 8, opacity: 0.6, bumps: 4 });
+    for (let i = 0; i < 16; i++) foliage(g, -60 + i * 130, 820 + (i % 3) * 10, 70, 46, { seed: 900 + i, haze: 0.55, hazeColor: '#d8a6b4', blobs: 4, detail: false, leaves: false, opacity: 0.8 });
+    // leafy branches framing the top corners, rosy in the evening light
+    for (const [x, y] of [[-40, 40], [220, -20], [1700, -10], [1960, 60]]) foliage(g, x, y, 240, 150, { seed: 950 + x, colors: ['#7a8a5a', '#8f8a5a', '#a08a62'], blobs: 8, detail: false, opacity: 0.9 });
+  });
+  const c = canvas(LW, LH); const g = c.getContext('2d'); g.filter = 'blur(6px)'; g.drawImage(soft, 0, 0);
+  return c;
 }
 
 // ---------------------------------------------------------------- staging
@@ -403,20 +465,24 @@ function drawNest(g, t) {
   const k = clamp((t - n13.start + 1) / (n13.end - n13.start + 3));
   const c = { z: 1.04 + 0.04 * ease(k), x: 0, y: 0 };
   S.paperBg(g);
-  drawLayer(g, c, PERCH.bg, 0.5);
-  g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'soft-light'; g.fillStyle = 'rgba(240,120,140,0.55)'; g.fillRect(0, 0, W, H); g.restore();
+  drawLayer(g, c, SUNSET, 0.5);
   drawLayer(g, c, PERCH.branch, 1);
   cam(g, c, 1);
   const sleepy = span(t, n13.start + 5.5, n13.end + 0.5);
-  const [nx, ny] = [PERCH.perch[0], PERCH.perch[1] - 30];
-  g.save(); g.translate(nx, ny); g.scale(2.2, 2.2); drawSprite(g, NEST_BACK); g.restore();
-  g.save(); g.translate(nx + 30, ny + 10); g.scale(2.4, 2.4);
-  crowBig.draw(g, { t, fluff: 0.6 + sleepy * 0.4, headTilt: -(0.05 + sleepy * 0.3), eye: 1 - sleepy, wingOpen: -sleepy * 0.1 });
+  const [nx, ny] = [PERCH.perch[0], PERCH.perch[1] - 34];
+  g.save(); g.translate(nx, ny); g.scale(1.9, 1.9); drawSprite(g, NEST_BACK); g.restore();
+  // she settles down into the nest, fluffs up, and slowly falls asleep
+  const sink = span(t, n13.start - 0.5, n13.start + 2.0);
+  g.save(); g.translate(nx + 30, ny + 26 + sink * 60); g.scale(2.4, 2.4);
+  crowBig.draw(g, { t, fluff: 0.6 + sleepy * 0.4, headTilt: -(0.05 + sleepy * 0.3), eye: 1 - Math.max(sleepy, S.blink(t, 9) * (1 - sleepy)), wingOpen: -sleepy * 0.1 });
   g.restore();
-  g.save(); g.translate(nx, ny); g.scale(2.2, 2.2); drawSprite(g, NEST_FRONT); g.restore();
-  zzz(g, t, nx - 120, ny - 330, n13.end - 1, n13.end + 6);
-  sunlight(g, 1, 1);
-  nightGrade(g, 0.25 * sleepy);
+  g.save(); g.translate(nx, ny); g.scale(1.9, 1.9); drawSprite(g, NEST_FRONT); g.restore();
+  zzz(g, t, nx - 120, ny - 300, n13.end - 1, n13.end + 6);
+  // warm, rosy evening light over everything
+  g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'soft-light';
+  const lg = g.createLinearGradient(0, 0, W, H); lg.addColorStop(0, 'rgba(255,190,200,0.55)'); lg.addColorStop(1, 'rgba(255,200,150,0.4)');
+  g.fillStyle = lg; g.fillRect(0, 0, W, H); g.restore();
+  nightGrade(g, 0.18 * sleepy);
 }
 
 // ---- scene 5b: the fox in his den
@@ -427,11 +493,11 @@ function drawDen(g, t) {
   S.paperBg(g);
   drawLayer(g, c, DEN, 1);
   cam(g, c, 1);
-  const sleep = span(t, n14.start + 2, n14.start + 4);
-  g.save(); g.translate(990, 985); g.scale(0.95, 0.95);
-  fox.drawSit(g, { t, eyes: 1 - sleep, smile: 0.7, headDY: sleep * 14, breath: Math.sin(t * 1.1), tail: Math.sin(t * 0.4) * 0.5 });
+  const sleep = span(t, n14.start + 1.5, n14.start + 3.5);
+  g.save(); g.translate(970, 975); g.scale(1.25, 1.25);
+  fox.drawCurl(g, { eyes: (1 - sleep) * 0.6, breath: Math.sin(t * 1.1), tail: Math.sin(t * 0.5) });
   g.restore();
-  zzz(g, t, 1080, 640, n14.start + 4, n14.end + 6);
+  zzz(g, t, 860, 760, n14.start + 3.5, n14.end + 6);
   nightGrade(g, 0.6);
   cam(g, c, 1);
   g.save(); g.globalCompositeOperation = 'lighter'; pool(g, 960, 860, 360, 200, '#ffcf80', 0.12); g.restore();
@@ -473,6 +539,7 @@ window.FABLE = {
     PERCH = paintPerch();
     DEN = paintDen();
     [NEST_BACK, NEST_FRONT] = paintNest();
+    SUNSET = paintSunset();
     NIGHT_SKY = layer((g) => {
       const grd = g.createLinearGradient(0, -MY, 0, 760);
       grd.addColorStop(0, '#5d6aa8'); grd.addColorStop(0.7, '#8c8fbf'); grd.addColorStop(1, '#b7a9c6');

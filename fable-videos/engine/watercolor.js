@@ -528,3 +528,32 @@ export function looseWash(ctx, shape, color, opts = {}) {
   }
   ctx.restore();
 }
+
+// Draw a sprite bent like a tail or a stem: it is cut into thin strips along x, from the root to
+// the tip, and each strip is turned a little more than the last, so the bend grows toward the tip.
+// root: [x, y] where it attaches (stays still); tipX: the x of the far end; angle: total bend at the tip.
+export function drawBent(ctx, s, root, tipX, angle, opts = {}) {
+  const { strips = 26, power = 1.6 } = opts;
+  const dir = Math.sign(tipX - root[0]) || 1, L = Math.abs(tipX - root[0]);
+  const res = s.c.width / s.w;
+  // the part of the sprite behind the root never moves
+  const backW = dir > 0 ? root[0] - s.x0 : s.x0 + s.w - root[0];
+  if (backW > 0) {
+    const sx = dir > 0 ? 0 : (root[0] - s.x0) * res;
+    ctx.drawImage(s.c, sx, 0, backW * res, s.c.height, dir > 0 ? s.x0 : root[0], s.y0, backW, s.h);
+  }
+  const rest = dir > 0 ? s.x0 + s.w - root[0] : root[0] - s.x0;
+  const dw = rest / strips;
+  let px = root[0], py = root[1], ang = 0, prev = 0;
+  for (let i = 0; i < strips; i++) {
+    const d0 = i * dw, f = Math.min(1, (d0 + dw) / L);
+    const target = angle * Math.pow(f, power);
+    ang += target - prev; prev = target;
+    const xs = dir > 0 ? root[0] + d0 : root[0] - d0 - dw;
+    ctx.save();
+    ctx.translate(px, py); ctx.rotate(ang * dir);
+    ctx.drawImage(s.c, (xs - s.x0) * res, 0, (dw + 1.2) * res, s.c.height, dir > 0 ? 0 : -dw, s.y0 - root[1], dw + 1.2, s.h);
+    ctx.restore();
+    px += Math.cos(ang * dir) * dw * dir; py += Math.sin(ang * dir) * dw * dir;
+  }
+}

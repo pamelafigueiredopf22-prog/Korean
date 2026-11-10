@@ -1,7 +1,7 @@
 // A naturalistic fox in profile, drawn line-and-wash like a classic storybook illustration.
 // Facing right. Two poses: sitting (looking up) and trotting. Ground at y = 0.
 import { wash, pool, ellipse, smooth, bbox, sprite, drawSprite, shadeEdge, glaze, blooms, soften, furEdge, rng, rgba, shade, tint, clamp,
-  penLine, hatch, looseWash, path } from '../watercolor.js';
+  penLine, hatch, looseWash, path, drawBent } from '../watercolor.js';
 
 const C = {
   fur: '#c8693a', furDark: '#8a3f1e', furLight: '#e3a067', white: '#f3ead8', sock: '#3d2c24', ink: '#33241b',
@@ -47,6 +47,11 @@ const T_TAIL = smooth([[-134, -220], [-196, -246], [-268, -238], [-328, -204], [
 const T_TAIL_TIP = smooth([[-310, -214], [-328, -204], [-356, -160], [-334, -140], [-306, -152]]);
 const T_HEAD_AT = [204, -308], T_HEAD_TILT = 0.12;
 
+// ---------- curled up asleep (a round body, head resting low, tail wrapped around the front) ----------
+const C_BODY = smooth([[-130, -36], [-150, -96], [-110, -150], [-20, -176], [80, -166], [150, -128], [178, -70], [160, -20], [90, -4], [-40, -2]]);
+const C_HAUNCH = ellipse(92, -84, 76, 66, 30);
+const C_TAIL = smooth([[150, -96], [196, -56], [188, -6], [120, 18], [0, 26], [-110, 22], [-196, 2], [-220, -34], [-196, -64], [-150, -52], [-90, -34], [0, -30], [90, -40], [140, -66]]);
+const C_TIP = smooth([[-150, -52], [-196, -64], [-220, -34], [-196, 2], [-150, 12], [-136, -20]]);
 export function makeFox2(res = 1, seed = 5) {
   const s = (n) => seed * 100 + n;
   // the standard recipe for a furry part: paper, loose wash, colour, shade, soften, fur hatching, pen line
@@ -195,7 +200,7 @@ export function makeFox2(res = 1, seed = 5) {
     const b = st.breath || 0;
     g.save();
     pool(g, 0, 4, 190, 16, '#3a2a1a', 0.22);
-    g.save(); g.translate(-80, -20); g.rotate((st.tail || 0) * 0.05); g.translate(80, 20); drawSprite(g, sTail); g.restore();
+    drawBent(g, sTail, [-60, -20], 166, -(st.tail || 0) * 0.28); // only the tip lifts and curls
     drawSprite(g, sFarLeg);
     g.save(); g.scale(1, 1 + b * 0.008); drawSprite(g, sBody); g.restore();
     drawSprite(g, sLeg);
@@ -229,7 +234,7 @@ export function makeFox2(res = 1, seed = 5) {
     const limb = (spr, x, o) => { g.save(); g.translate(x, -LEG - DROP - bob * 0.3 - (moving ? Math.max(0, Math.cos(ph + o)) * 9 : 0)); g.rotate(swing(o)); drawSprite(g, spr); g.restore(); };
     g.save(); g.translate(0, DROP);
     limb(fF, 162, Math.PI); limb(hF, -86, 0);
-    g.save(); g.translate(0, -bob); g.translate(-148, -200); g.rotate((st.tail || 0) * 0.12 + (moving ? Math.sin(ph * 2) * 0.04 : 0)); g.translate(148, 200); drawSprite(g, tTail); g.restore();
+    g.save(); g.translate(0, -bob); drawBent(g, tTail, [-136, -202], -356, (st.tail || 0) * 0.32 + (moving ? Math.sin(ph * 2) * 0.12 : 0)); g.restore();
     limb(hN, -108, Math.PI); limb(fN, 140, 0);
     g.save(); g.translate(0, -bob); drawSprite(g, tBody); g.restore();
     g.save(); g.translate(T_HEAD_AT[0], T_HEAD_AT[1] - bob * 1.1 + (st.headDY || 0)); g.rotate(T_HEAD_TILT); g.scale(1.22, 1.22); drawHead(g, st); g.restore();
@@ -237,5 +242,25 @@ export function makeFox2(res = 1, seed = 5) {
     g.restore();
     g.restore();
   }
-  return { drawSit, drawTrot, drawHead };
+  const cBody = furPart(C_BODY, { sd: 400, hatch: 380, fur: 120, dir: (x, y) => Math.atan2(y + 80, x) + Math.PI / 2, paint: (g) => {
+    shadeEdge(g, C_BODY, { edge: C_HAUNCH, color: C.shadow, alpha: 0.3, width: 22, dx: 8, dy: -6 });
+    glaze(g, C_BODY, -20, -150, 120, 30, C.furLight, 0.45);
+  }, after: (g) => penLine(g, C_HAUNCH.slice(16, 30), { w: 1.6, alpha: 0.55, seed: s(410) }) });
+  const cTail = furPart(C_TAIL, { sd: 420, hatch: 220, fur: 120, dir: () => Math.PI + 0.1, after: (g) => {
+    looseWash(g, C_TIP, C.white, { opacity: 0.95, seed: s(430), shift: 1, reserves: 0 });
+    furEdge(g, C_TIP, { color: C.white, count: 60, len: 13, width: 2.6, alpha: 0.95, seed: s(431) });
+  } });
+  // st: breath, eyes (0 = asleep), tail (tiny tip twitch)
+  function drawCurl(g, st = {}) {
+    const b = st.breath || 0;
+    g.save();
+    pool(g, 0, 6, 240, 22, '#3a2a1a', 0.26);
+    g.save(); g.translate(0, 0); g.scale(1 + b * 0.006, 1 + b * 0.02); drawSprite(g, cBody); g.restore();
+    // head resting low on the front of the curl, nose tucked toward the tail
+    g.save(); g.translate(-112, -78 - b * 1.5); g.rotate(0.38); g.scale(1.12, 1.12);
+    drawHead(g, { eyes: st.eyes ?? 0, smile: 0.5 }); g.restore();
+    drawBent(g, cTail, [120, -20], -220, (st.tail || 0) * 0.06, { strips: 30 });
+    g.restore();
+  }
+  return { drawSit, drawTrot, drawHead, drawCurl };
 }
