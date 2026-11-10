@@ -1,19 +1,19 @@
 // A shiny, slightly proud crow, perched and facing left. Local units: feet on the branch at y = 0.
-import { wash, ink, strokes, pool, ellipse, smooth, bbox, sprite, drawSprite, shadeEdge, glaze, pencil, rgba, shade, tint, clamp, furEdge, blooms, soften, sketch } from '../watercolor.js';
+import { wash, ink, strokes, pool, ellipse, smooth, bbox, sprite, drawSprite, shadeEdge, glaze, pencil, rgba, shade, tint, clamp, furEdge, blooms, soften, sketch, penLine, hatch, looseWash } from '../watercolor.js';
 
 const SHEEN = ['#3b4a7a', '#4a3d6e', '#2f5a66', '#1c1f2b', '#55608a'];
 
 const C = { body: '#12141c', sheen: '#5d6d96', belly: '#232838', beak: '#4b4a52', beakLight: '#8a8790', ink: '#1e1d26', leg: '#3b3a42', cheese: '#f2c14e', cheeseDark: '#d99a2b' };
 
 const BODY = smooth([[-62, -72], [-34, -104], [18, -110], [62, -90], [96, -58], [128, -40], [70, -24], [10, -16], [-36, -30]]);
-const HEAD = ellipse(-56, -116, 40, 37, 30);
+const HEAD = smooth([[-86, -114], [-78, -138], [-52, -146], [-26, -132], [-18, -104], [-40, -88], [-72, -92]]);
 const WING = smooth([[-30, -96], [30, -100], [84, -72], [146, -34], [94, -40], [30, -46], [-14, -58]]);
 const TAIL = smooth([[86, -50], [150, -44], [186, -26], [176, -16], [140, -22], [92, -30]]);
-const BEAK_UP = smooth([[-90, -126], [-118, -122], [-142, -112], [-112, -110], [-90, -110]]);
-const BEAK_LO = smooth([[-90, -110], [-112, -108], [-134, -104], [-108, -100], [-90, -100]]);
-const BEAK_PIVOT = [-90, -110];
-const CHEESE = [[-136, -118], [-112, -92], [-104, -122]];
-export const CROW_EYE = [-64, -124];
+const BEAK_UP = smooth([[-84, -128], [-116, -126], [-150, -114], [-116, -110], [-84, -110]]);
+const BEAK_LO = smooth([[-84, -110], [-112, -108], [-142, -106], [-110, -100], [-84, -98]]);
+const BEAK_PIVOT = [-84, -110];
+const CHEESE = [[-142, -118], [-118, -90], [-110, -122]];
+export const CROW_EYE = [-60, -124];
 
 export function makeCrow(res = 1, seed = 4) {
   const s = (n) => seed * 100 + n;
@@ -27,7 +27,7 @@ export function makeCrow(res = 1, seed = 4) {
     soften(g, 1.5 * res);
     furEdge(g, TAIL, { color: C.body, count: 24, len: 12, width: 4, alpha: 0.9, seed: s(9), lean: 0.4, skip: (x) => x < 140 });
     for (let i = 0; i < 4; i++) ink(g, [[96, -40 + i * 2], [170 - i * 4, -32 + i * 5]], { color: C.sheen, alpha: 0.5, width: 1.1, seed: s(2 + i) });
-    sketch(g, TAIL, { closed: true, color: C.ink, seed: s(6), alpha: 0.3 });
+    penLine(g, TAIL, { closed: true, color: '#0a0a0f', w: 1.8, alpha: 0.8, seed: s(6) });
   }, { seed: s(7) });
   const body = sprite(bbox(BODY.concat(HEAD)), res, (g) => {
     wash(g, BODY, { under: true, color: C.body, opacity: 0.95, seed: s(10) });
@@ -46,8 +46,12 @@ export function makeCrow(res = 1, seed = 4) {
     furEdge(g, BODY, { color: C.body, count: 110, len: 7, width: 2.4, alpha: 0.9, seed: s(43), lean: 0.6, inner: 0.4 });
     furEdge(g, HEAD, { color: C.body, count: 60, len: 5, width: 2, alpha: 0.9, seed: s(44), lean: 0.5, inner: 0.4, skip: (x) => x < -88 });
     furEdge(g, BODY, { color: C.sheen, count: 30, len: 5, width: 1, alpha: 0.35, seed: s(45), lean: 0.6 });
-    sketch(g, BODY.slice(10, 70), { color: C.ink, seed: s(16), alpha: 0.3 });
-    sketch(g, HEAD, { closed: true, color: C.ink, seed: s(17), alpha: 0.28 });
+    hatch(g, BODY, { color: '#0c0d12', count: 260, len: 9, width: 0.8, alpha: 0.55, seed: s(50), dir: () => 0.25, curve: 0.35,
+      density: (x, y) => 0.3 + 0.7 * Math.min(1, Math.max(0, (y + 90) / 80)) });
+    hatch(g, BODY, { color: '#8a98c0', count: 70, len: 8, width: 0.7, alpha: 0.4, seed: s(51), dir: () => 0.25, density: (x, y) => (y < -70 ? 1 : 0.1) });
+    hatch(g, HEAD, { color: '#0c0d12', count: 90, len: 6, width: 0.7, alpha: 0.5, seed: s(52), dir: (x, y) => Math.atan2(y + 116, x + 56) + 1.4 });
+    penLine(g, BODY.slice(10, 72), { color: '#0a0a0f', w: 2.2, alpha: 0.85, seed: s(16), weight: (t) => 0.3 + 0.9 * Math.sin(t * Math.PI) });
+    penLine(g, HEAD, { closed: true, color: '#0a0a0f', w: 2, alpha: 0.8, seed: s(17), weight: (t) => 0.3 + 0.8 * Math.max(0, Math.sin(t * Math.PI * 2 + 1)) });
   }, { seed: s(18) });
   const wing = sprite(bbox(WING), res, (g) => {
     wash(g, WING, { under: true, color: shade(C.body, 0.05), opacity: 0.96, seed: s(20) });
@@ -58,7 +62,8 @@ export function makeCrow(res = 1, seed = 4) {
     // long flight feathers fanning out at the wing tip
     furEdge(g, WING, { color: shade(C.body, 0.05), count: 16, len: 22, width: 6, alpha: 0.95, seed: s(47), lean: 0.9, inner: 0.25, skip: (x, y) => x < 60 });
     furEdge(g, WING, { color: C.sheen, count: 14, len: 14, width: 1, alpha: 0.4, seed: s(48), lean: 0.9, skip: (x) => x < 40 });
-    sketch(g, WING, { closed: true, color: C.ink, seed: s(28), alpha: 0.3 });
+    for (let i = 0; i < 7; i++) penLine(g, [[0 + i * 16, -86 + i * 5], [40 + i * 14, -66 + i * 3], [80 + i * 10, -46]], { color: '#0a0a0f', w: 1.3, alpha: 0.55, seed: s(53 + i) });
+    penLine(g, WING, { closed: true, color: '#0a0a0f', w: 2, alpha: 0.8, seed: s(28), weight: (t) => 0.3 + 0.9 * Math.max(0, Math.sin(t * Math.PI * 2)) });
   }, { seed: s(29) });
   const beakUp = sprite(bbox(BEAK_UP), res, (g) => { wash(g, BEAK_UP, { under: true, color: C.beak, opacity: 0.97, seed: s(30) }); shadeEdge(g, BEAK_UP, { color: C.beakLight, alpha: 0.6, width: 5, dy: 3 }); pencil(g, BEAK_UP, { closed: true, color: C.ink, seed: s(31), alpha: 0.55, width: 1.1 }); }, { seed: s(32) });
   const beakLo = sprite(bbox(BEAK_LO), res, (g) => { wash(g, BEAK_LO, { under: true, color: C.beakLight, opacity: 0.97, seed: s(33) }); glaze(g, BEAK_LO, -100, -104, 14, 5, '#5a3238', 0.5); pencil(g, BEAK_LO, { closed: true, color: C.ink, seed: s(34), alpha: 0.55, width: 1.1 }); }, { seed: s(35) });
@@ -87,9 +92,9 @@ export function makeCrow(res = 1, seed = 4) {
       if (happy) g.arc(x, y + 4, 8, Math.PI * 1.15, Math.PI * 1.85); else g.arc(x, y - 4, 8, Math.PI * 0.15, Math.PI * 0.85);
       g.stroke();
     } else {
-      g.fillStyle = '#e9e4da'; g.beginPath(); g.ellipse(x, y, 10, 10 * open + 1, 0, 0, 7); g.fill();
-      g.fillStyle = '#120f14'; g.beginPath(); g.ellipse(x - 1, y, 7.5, Math.min(7.5, 8 * open), 0, 0, 7); g.fill();
-      g.fillStyle = 'rgba(255,255,255,0.95)'; g.beginPath(); g.arc(x - 4, y - 3 * open, 2.6, 0, 7); g.fill();
+      g.fillStyle = '#d9d2c4'; g.beginPath(); g.ellipse(x, y, 7.5, 7.5 * open + 1, 0, 0, 7); g.fill();
+      g.fillStyle = '#120f14'; g.beginPath(); g.ellipse(x - 1, y, 5.6, Math.min(5.6, 6 * open), 0, 0, 7); g.fill();
+      g.fillStyle = 'rgba(255,255,255,0.95)'; g.beginPath(); g.arc(x - 3, y - 2 * open, 1.9, 0, 7); g.fill();
       g.beginPath(); g.arc(x + 2.5, y + 3 * open, 1.1, 0, 7); g.fill();
     }
     g.restore();

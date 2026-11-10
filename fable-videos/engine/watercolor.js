@@ -460,3 +460,65 @@ export function sketch(ctx, pts, opts = {}) {
   ink(ctx, pts, { closed, color, alpha, width, wobble: 0.9, gaps: 0.9, seed, taper: true });
   ink(ctx, pts.map(([x, y], i) => [x + Math.sin(i * 1.7) * 0.8, y + Math.cos(i * 1.3) * 0.8]), { closed, color, alpha: alpha * 0.45, width: width * 0.7, wobble: 1.2, gaps: 1.6, seed: seed + 1, taper: true });
 }
+
+// ---------- line and wash (pen-and-ink illustration) ----------
+// A pen line whose weight swells and thins along its length (weights: array of widths per point,
+// or a function of t in 0..1). Drawn as a filled ribbon so it looks like a dip pen, not a CAD stroke.
+export function penLine(ctx, pts, opts = {}) {
+  const { color = '#3a2a20', alpha = 0.85, w = 2, weight = (t) => 0.4 + Math.sin(Math.PI * t), seed = 31, wobble = 0.5, closed = false } = opts;
+  const r = rng(seed);
+  const line = smooth(closed ? pts.concat([pts[0]]) : pts, false, 4);
+  const L = [], R = [];
+  for (let i = 0; i < line.length; i++) {
+    const a = line[Math.max(0, i - 1)], b = line[Math.min(line.length - 1, i + 1)];
+    let dx = b[0] - a[0], dy = b[1] - a[1]; const d = Math.hypot(dx, dy) || 1; dx /= d; dy /= d;
+    const t = i / (line.length - 1), ww = w * Math.max(0.15, typeof weight === 'function' ? weight(t) : 1) / 2;
+    const j = r.gauss(0, wobble * 0.3);
+    L.push([line[i][0] - dy * (ww + j), line[i][1] + dx * (ww + j)]); R.push([line[i][0] + dy * ww, line[i][1] - dx * ww]);
+  }
+  ctx.save(); ctx.globalAlpha *= alpha; ctx.fillStyle = color;
+  path(ctx, L.concat(R.reverse())); ctx.fill(); ctx.restore();
+}
+
+// Ink hatching for fur/feathers: short tapered strokes following a direction field, denser where
+// density(x, y) is high (use it to put more lines in the shadows, fewer in the light).
+export function hatch(ctx, clipShape, opts = {}) {
+  const { color = '#3a2a20', count = 300, len = 9, width = 0.9, alpha = 0.55, seed = 41, dir = () => 0, density = () => 1, curve = 0.25 } = opts;
+  const r = rng(seed), b = bbox(clipShape);
+  const m = ctx.getTransform(); const sc = Math.hypot(m.a, m.b) || 1;
+  ctx.save(); path(ctx, clipShape); ctx.clip(); ctx.strokeStyle = color; ctx.lineCap = 'round';
+  let made = 0, tries = 0;
+  while (made < count && tries < count * 8) {
+    tries++;
+    const x = r.range(b.x0, b.x1), y = r.range(b.y0, b.y1);
+    if (r() > density(x, y)) continue;
+    made++;
+    const a = dir(x, y) + r.gauss(0, 0.15), l = len * r.range(0.6, 1.25);
+    const ex = x + Math.cos(a) * l, ey = y + Math.sin(a) * l, c = curve * l * r.gauss(0, 1);
+    // tapered: draw twice, thinner second half
+    ctx.globalAlpha = alpha * r.range(0.6, 1);
+    ctx.lineWidth = width * r.range(0.7, 1.2) / sc;
+    ctx.beginPath(); ctx.moveTo(x, y); ctx.quadraticCurveTo((x + ex) / 2 - Math.sin(a) * c, (y + ey) / 2 + Math.cos(a) * c, ex, ey); ctx.stroke();
+  }
+  ctx.restore();
+}
+
+// A loose wash: lighter, slightly off-register with the drawing, with bits of bare paper left
+// as highlights (paper is whatever `under` filled in). Call before the pen lines.
+export function looseWash(ctx, shape, color, opts = {}) {
+  const { opacity = 0.7, seed = 51, shift = 3, reserves = 3, reserveSize = 0.18 } = opts;
+  const r = rng(seed);
+  const moved = shape.map(([x, y]) => [x + shift * r.range(-1, 1) * 0.6 + shift * 0.5, y + shift * 0.4]);
+  wash(ctx, moved, { color, opacity, seed, bleed: 0.05, edge: 0.45, layers: 26 });
+  // little reserved whites, lifted out of the wet paint
+  const b = bbox(shape);
+  ctx.save(); path(ctx, shape); ctx.clip();
+  ctx.globalCompositeOperation = 'source-atop';
+  for (let i = 0; i < reserves; i++) {
+    const x = r.range(b.x0 + b.w * 0.15, b.x1 - b.w * 0.15), y = r.range(b.y0 + b.h * 0.1, b.y0 + b.h * 0.5);
+    const rr = Math.max(b.w, b.h) * reserveSize * r.range(0.4, 1);
+    const g2 = ctx.createRadialGradient(x, y, 0, x, y, rr); g2.addColorStop(0, 'rgba(247,238,222,0.55)'); g2.addColorStop(1, 'rgba(247,238,222,0)');
+    ctx.fillStyle = g2; ctx.fillRect(x - rr, y - rr, rr * 2, rr * 2);
+  }
+  ctx.restore();
+}
