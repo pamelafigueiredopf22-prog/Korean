@@ -1,7 +1,7 @@
 // The Fox and the Crow: scenes, staging and timing.
 import { W, H, rng, canvas, wash, pool, strokes, ellipse, smooth, sprite, drawSprite, bbox, noise1, rgba, shade, tint,
   clamp, lerp, ease, span, glaze, shadeEdge, penLine, hatch, looseWash } from '../../engine/watercolor.js';
-import { PAL, foliage, trunk, grass, flower, berries, mushroom, fern, hills, cloud, leaf, plant } from '../../engine/scenery.js';
+import { PAL, foliage, trunk, grass, flower, berries, mushroom, fern, hills, cloud, leaf, plant, oak, cottage } from '../../engine/scenery.js';
 import { M, MY, LW, LH, INK, layer, cam, drawLayer, fireflies, motes, nightGrade, sunlight, stars, moon, zzz, makeStage } from '../../engine/stage.js';
 import { makeFox2 } from '../../engine/characters/fox2.js';
 import { makeCrow } from '../../engine/characters/crow.js';
@@ -76,42 +76,14 @@ function paintMeadow() {
     for (let i = 0; i < 18; i++) foliage(g, -60 + i * 120 + noise1(i, 2) * 40, 630 + noise1(i, 5) * 20, 60, 42, { seed: 200 + i, haze: 0.6, hazeColor: '#eadbb8', blobs: 4, opacity: 0.7, detail: false, leaves: false });
     hills(g, 680, 34, '#a9b07e', { seed: 5, opacity: 0.55, bumps: 5 });
   });
-  P.ground = layer((g) => meadowGround(g, 700, 50, (x, y) => (x < 680 && y < 800) || (x > 1440 && y < 790)));
-  // the little cottage with the windowsill
-  P.cottage = layer((g) => {
-    const wall = [[150, 790], [150, 520], [640, 520], [640, 790]];
-    wash(g, wall, { color: '#efdcb8', opacity: 0.95, seed: 61, under: true, bleed: 0.01 });
-    shadeEdge(g, wall, { color: '#a8875a', alpha: 0.35, width: 40, dx: 14 });
-    for (const x of [170, 400, 620]) wash(g, [[x - 9, 790], [x + 9, 790], [x + 9, 520], [x - 9, 520]], { color: '#7b5a44', opacity: 0.85, seed: x });
-    wash(g, [[150, 610], [640, 610], [640, 626], [150, 626]], { color: '#7b5a44', opacity: 0.85, seed: 62 });
-    const roof = smooth([[110, 540], [260, 380], [395, 330], [530, 380], [690, 540], [600, 556], [395, 538], [190, 556]]);
-    wash(g, roof, { color: '#c4a065', opacity: 0.95, seed: 63, under: true });
-    hatch(g, roof, { color: '#7d6036', count: 380, len: 16, width: 1, alpha: 0.5, seed: 64, dir: () => Math.PI / 2 + 0.25 });
-    penLine(g, roof.slice(0, Math.floor(roof.length * 0.6)), { w: 2.4, alpha: 0.7, seed: 65 });
-    // the window and its sill
-    const win = smooth([[440, 700], [440, 640], [470, 618], [510, 618], [540, 640], [540, 700]]);
-    wash(g, win, { color: '#5d6c78', opacity: 0.9, seed: 66, under: true });
-    glaze(g, win, 470, 645, 30, 26, '#c8dce6', 0.6);
-    penLine(g, [[490, 618], [490, 700]], { w: 3, alpha: 0.8 }); penLine(g, [[440, 662], [540, 662]], { w: 3, alpha: 0.8 });
-    penLine(g, win, { closed: true, w: 2.4, alpha: 0.8, seed: 67 });
-    wash(g, [[426, 700], [554, 700], [560, 714], [420, 714]], { color: '#9a6a44', opacity: 0.95, seed: 68, under: true });
-    penLine(g, [[420, 714], [560, 714]], { w: 2, alpha: 0.7 });
-    // door, flower pots, roses
-    const door = smooth([[240, 790], [240, 680], [290, 650], [340, 680], [340, 790]]);
-    wash(g, door, { color: '#7a8a6a', opacity: 0.95, seed: 69, under: true }); penLine(g, door, { closed: true, w: 2.2, alpha: 0.75, seed: 70 });
-    g.fillStyle = '#e8c070'; g.beginPath(); g.arc(325, 735, 5, 0, 7); g.fill();
-    for (let i = 0; i < 10; i++) foliage(g, 160 + i * 52, 780 - (i % 2) * 14, 36, 24, { seed: 80 + i, colors: [PAL.moss, PAL.olive, PAL.sage], blobs: 4, opacity: 0.85, detail: false });
-    for (let i = 0; i < 14; i++) flower(g, 170 + i * 34, 760 - (i % 3) * 16, { seed: 100 + i, size: 8, color: i % 2 ? '#d98a8a' : '#f2e4cc', stem: 10 });
-    penLine(g, [[150, 790], [150, 520], [640, 520], [640, 790]], { w: 2.4, alpha: 0.75, seed: 71 });
-    // chimney with a wisp of smoke
-    wash(g, [[540, 420], [580, 420], [580, 340], [540, 340]], { color: '#a2765a', opacity: 0.95, seed: 72, under: true });
-    penLine(g, [[540, 420], [540, 340], [580, 340], [580, 420]], { w: 2, alpha: 0.7 });
-  });
-  P.cheeseOnSill = [500, 694];
-  P.oak = layer((g) => oakTree(g, 1600, 790, 1000, 450, 120));
-  P.canopy = canopy([[1020, 160, 230, 90], [1300, 100, 260, 130], [1600, 40, 300, 150], [1880, 140, 220, 160]], 140);
+  P.ground = layer((g) => meadowGround(g, 700, 50, (x, y) => (x < 730 && y < 820) || (x > 1300 && x < 1720 && y < 830)));
+  let ck, ok;
+  P.cottage = layer((g) => { ck = cottage(g, 400, 800, 0.95, { seed: 5 }); });
+  P.oak = layer((g) => { ok = oak(g, 1500, 812, 0.72, { seed: 9, perchX: -560, perchY: 300 }); });
+  P.sill = ck.sill; P.chimney = ck.chimney; P.ridge = ck.ridge;
+  P.branch = ok.perch; // where the crow lands
+  P.canopy = [];
   P.fg = fgPlants(160, [[-30, 230, 1], [300, 120, 0], [880, 100, 0], [1360, 130, 0], [1930, 240, 1]]);
-  P.branch = [1190, 438]; // where the crow lands
   return P;
 }
 function drawMeadow(g, t, c, o = {}) {
@@ -125,7 +97,15 @@ function drawMeadow(g, t, c, o = {}) {
   drawLayer(g, c, P.cottage, 1);
   drawLayer(g, c, P.oak, 1);
   cam(g, c, 1);
-  if (o.sill) { g.save(); g.translate(P.cheeseOnSill[0], P.cheeseOnSill[1] - 6); g.scale(0.9, 0.9); crow.drawCheese(g); g.restore(); }
+  // a soft curl of smoke from the chimney
+  g.save();
+  for (let k = 0; k < 7; k++) {
+    const ph = ((t * 0.12 + k / 7) % 1), [cx, cy] = P.chimney;
+    g.globalAlpha = Math.sin(ph * Math.PI) * 0.35 * (1 - night * 0.5);
+    pool(g, cx + Math.sin(ph * 5 + k) * 18 + ph * 60, cy - 20 - ph * 240, 16 + ph * 40, 14 + ph * 34, '#efe8de', 0.8);
+  }
+  g.restore();
+  if (o.cheese) cheeseAt(g, o.cheese[0], o.cheese[1], 0.55, 0);
   if (o.actors) o.actors(g);
   drawCanopy(g, c, P.canopy, t);
   cam(g, c, 1);
@@ -136,7 +116,7 @@ function drawMeadow(g, t, c, o = {}) {
   if (night > 0) {
     cam(g, c, 0.15); stars(g, t, night, o.starsFrom ?? -99); moon(g, 650, 150, 32, night);
     cam(g, c, 1);
-    g.save(); g.globalCompositeOperation = 'lighter'; pool(g, 490, 660, 70, 60, '#ffcf80', 0.4 * night); g.restore(); // glowing window
+    g.save(); g.globalCompositeOperation = 'lighter'; pool(g, P.sill[0], P.sill[1] - 55, 80, 70, '#ffcf80', 0.45 * night); g.restore(); // glowing window
     fireflies(g, t, 24, { x0: 0, x1: W, y0: 420, y1: 1000 }, 41, night);
     if (o.after) o.after(g);
   }
@@ -151,12 +131,13 @@ function paintOak() {
   });
   P.far = canvas(LW, LH); { const g = P.far.getContext('2d'); g.filter = 'blur(7px)'; g.drawImage(soft, 0, 0); }
   P.ground = layer((g) => meadowGround(g, 760, 70, (x, y) => (x > 300 && x < 1000 && y < 1000)));
+  let ok;
   P.oak = layer((g) => {
-    oakTree(g, 1690, 880, 1000, 450, 400, 230);
-    for (const [x, y, s] of [[1460, 900, 1.2], [1500, 908, 0.8], [1880, 905, 1]]) mushroom(g, x, y, { seed: x, s });
-    for (let i = 0; i < 6; i++) fern(g, 1820 + i * 26, 905, { seed: 420 + i, len: 140, angle: -1.9 + i * 0.25, curl: 0.6, color: PAL.moss });
+    ok = oak(g, 1700, 905, 1.25, { seed: 9, perchX: -560, perchY: 330 });
+    for (const [x, y, sc] of [[1440, 910, 1.2], [1480, 916, 0.8], [1900, 912, 1]]) mushroom(g, x, y, { seed: x, s: sc });
   });
-  P.canopy = canopy([[820, 60, 220, 100], [1080, 10, 260, 110], [1400, -20, 300, 140], [1780, 50, 260, 150], [600, 0, 200, 90]], 440);
+  P.perch = ok.perch;
+  P.canopy = [];
   P.fg = fgPlants(470, [[-20, 250, 1], [1100, 110, 0], [1940, 260, 1]]);
   return P;
 }
@@ -218,7 +199,7 @@ function paintNest() {
 }
 
 // ---------------------------------------------------------------- staging
-const OAK_CROW = [1290, 430], OAK_CS = 1.5;   // crow on the branch in the oak scene
+let OAK_CROW = [1290, 430]; const OAK_CS = 1.5;   // crow on the branch in the oak scene
 const FOX_SIT = [700, 960], FOX_S = 1.4;
 function cheeseInBeak(cx, cy, s) { return [cx + -120 * s, cy - 104 * s]; }
 function foxMouth(x, y, s) { // where the cheese sits in the sitting fox's mouth (screen space)
@@ -254,27 +235,66 @@ function paintTitle() {
 }
 
 // ---- scene 1: the meadow, the windowsill, the flight to the oak
-function crowPath1(t) {
-  const n01 = line('n01'), n02 = line('n02'), n03 = line('n03');
-  const roof = [395, 330], sill = [470, 702], br = MEADOW.branch;
-  const hopT = n02.start + 3.2, grabT = n02.end - 1.0, flyT = n03.start + 1.4, landT = n03.start + 5.2;
-  if (t < hopT) return { x: roof[0], y: roof[1], s: 0.55, flip: 1, look: Math.sin(t * 0.8) * 0.15 };
-  if (t < hopT + 1.4) { const k = ease((t - hopT) / 1.4); return { x: lerp(roof[0], sill[0], k), y: lerp(roof[1], sill[1], k) - Math.sin(k * Math.PI) * 60, s: 0.55, flip: 1, fly: true }; }
-  if (t < flyT) { const has = t > grabT; return { x: sill[0], y: sill[1], s: 0.55, flip: 1, cheese: has, peck: t > grabT - 0.6 && t < grabT ? Math.sin((t - grabT + 0.6) / 0.6 * Math.PI) : 0 }; }
-  if (t < landT) {
-    const k = (t - flyT) / (landT - flyT), e = ease(k);
-    return { x: lerp(sill[0], br[0], e), y: lerp(sill[1], br[1], e) - Math.sin(e * Math.PI) * 280, s: lerp(0.55, 0.9, e), flip: -1, fly: true, cheese: true };
+const CS1 = 0.55; // crow size in the wide meadow
+// a flight from p0 to p1 between t0 and t1, arcing up by `lift`; returns position, pitch and wing state
+function flight(t, t0, t1, p0, p1, lift, beats = 3.4) {
+  const k = clamp((t - t0) / (t1 - t0)), e = k * k * (3 - 2 * k);
+  const c = [(p0[0] + p1[0]) / 2, Math.min(p0[1], p1[1]) - lift];
+  const B = (u) => [(1 - u) ** 2 * p0[0] + 2 * (1 - u) * u * c[0] + u * u * p1[0], (1 - u) ** 2 * p0[1] + 2 * (1 - u) * u * c[1] + u * u * p1[1]];
+  const [x, y] = B(e), [x2, y2] = B(Math.min(1, e + 0.02));
+  const vx = x2 - x, vy = y2 - y;
+  const glide = span(k, 0.38, 0.5) * (1 - span(k, 0.66, 0.76));
+  const flare = span(k, 0.8, 0.97), legs = Math.max(1 - span(k, 0.04, 0.16), span(k, 0.74, 0.9));
+  const pitch = clamp(Math.atan2(-vy, Math.abs(vx) + 1e-3), -0.45, 0.45) * 0.7 + flare * 0.5;
+  return { x, y: y - Math.sin(Math.PI * k) * 0, pitch, glide, flare, legs, beat: (t - t0) * beats, dir: Math.sign(p1[0] - p0[0]) || 1 };
+}
+function crow1(t) {
+  const n02 = line('n02'), n03 = line('n03'), c01 = line('c01');
+  const ridge = [MEADOW.ridge[0] - 30, MEADOW.ridge[1] + 4], sill = [MEADOW.sill[0] - 36, MEADOW.sill[1] - 2], perch = MEADOW.branch;
+  const cheese = [sill[0] + 96 * CS1 / 0.55 * 0.55, sill[1] - 8];
+  const hopT0 = n02.start + 1.6, hopT1 = hopT0 + 1.7;          // a short flight down to the sill
+  const grabT = hopT1 + 2.4;                                     // she looks at it... then picks it up
+  const flyT0 = n03.start + 1.1, flyT1 = flyT0 + 4.2;            // off to the oak
+  const turnT = c01.start - 0.6;
+  if (t < hopT0) {
+    const spot = span(t, n02.start - 0.2, n02.start + 0.6);      // she spots the cheese and peers down
+    return { pose: 'perch', x: ridge[0], y: ridge[1], flip: -1, tilt: -Math.sin(t * 0.7) * 0.12 * (1 - spot), lean: spot * 0.35, crouch: span(t, hopT0 - 0.3, hopT0) , cheeseOnSill: cheese };
   }
-  return { x: br[0], y: br[1], s: 0.9, flip: 1, cheese: true, settle: span(t, landT, landT + 0.6) };
+  if (t < hopT1) return { pose: 'fly', ...flight(t, hopT0, hopT1, ridge, sill, 90, 3.8), cheeseOnSill: cheese };
+  if (t < flyT0) {
+    const settle = 1 - span(t, hopT1, hopT1 + 0.45);
+    const look = Math.sin((t - hopT1) * 3.2) * 0.18 * (1 - span(t, grabT - 0.7, grabT - 0.5));
+    const dip = span(t, grabT - 0.5, grabT - 0.05) * (1 - span(t, grabT + 0.15, grabT + 0.6));
+    const has = t >= grabT;
+    const happy = has ? span(t, grabT + 0.6, grabT + 0.9) * (1 - span(t, grabT + 2.2, grabT + 2.5)) : 0;
+    return { pose: 'perch', x: sill[0], y: sill[1], flip: -1, wingOpen: settle, tilt: look, lean: dip * 0.5, hasCheese: has, happy,
+      crouch: span(t, flyT0 - 0.3, flyT0), cheeseOnSill: has ? null : cheese };
+  }
+  if (t < flyT1) return { pose: 'fly', ...flight(t, flyT0, flyT1, sill, perch, 260, 3.2), hasCheese: true };
+  const settle = 1 - span(t, flyT1, flyT1 + 0.5);
+  const turned = t > turnT + 0.25;
+  const hop = t > turnT && t < turnT + 0.5 ? Math.sin((t - turnT) / 0.5 * Math.PI) * 18 : 0;
+  const happy = S.mood(t, 'c01', 0.2, 1.4);
+  return { pose: 'perch', x: perch[0], y: perch[1] - hop, flip: turned ? 1 : -1, wingOpen: settle, hasCheese: true, happy: happy > 0.5, fluff: happy * 0.6 };
 }
 function drawScene1(g, t) {
-  const c = { z: 1.0 + 0.05 * span(t, 6, line('c01').end), x: 30 * span(t, line('n03').start, line('c01').end), y: 0 };
-  const p = crowPath1(t), grabbed = p.cheese;
-  drawMeadow(g, t, c, { sill: !grabbed, actors: (g) => {
-    g.save(); g.translate(p.x, p.y); g.scale(p.s * p.flip, p.s);
-    const happy = S.mood(t, 'c01', 0.2, 1.2);
-    crow.draw(g, { t, cheese: p.cheese, flying: p.fly, flap: p.fly ? 1 : 0, headTilt: (p.look || 0) + (p.peck || 0) * 0.5 - happy * 0.1,
-      eye: happy > 0.5 ? 0 : 1 - S.blink(t, 3), happy: happy > 0.5, fluff: happy * 0.6 });
+  // wide, then in close on the cottage window for the cheese, then back out for the flight to the oak
+  const n02 = line('n02'), n03 = line('n03');
+  const close = ease(span(t, n02.start - 0.2, n02.start + 1.6)) * (1 - ease(span(t, n03.start + 0.6, n03.start + 2.8)));
+  const wide = { z: 1.0 + 0.04 * span(t, 6, line('c01').end), x: 40 * span(t, n03.start + 2, line('c01').end), y: 0 };
+  const near = { z: 1.55, x: MEADOW.sill[0] - 60 - W / 2, y: MEADOW.sill[1] - 175 - H / 2 };
+  const c = { z: lerp(wide.z, near.z, close), x: lerp(wide.x, near.x, close), y: lerp(wide.y, near.y, close) };
+  const p = crow1(t);
+  drawMeadow(g, t, c, { cheese: p.cheeseOnSill, actors: (g) => {
+    g.save(); g.translate(p.x, p.y);
+    if (p.pose === 'fly') {
+      g.scale(-p.dir * CS1, CS1);
+      crow.drawFly(g, { beat: p.beat, glide: p.glide, flare: p.flare, legs: p.legs, pitch: p.pitch, cheese: p.hasCheese, eye: 1 });
+    } else {
+      g.rotate(-(p.lean || 0) * p.flip); g.scale(p.flip * CS1, CS1 * (1 - 0.08 * (p.crouch || 0)));
+      crow.draw(g, { t, cheese: p.hasCheese, headTilt: p.tilt || 0, wingOpen: p.wingOpen || 0, fluff: p.fluff || 0,
+        eye: p.happy ? 0 : 1 - S.blink(t, 3), happy: !!p.happy });
+    }
     g.restore();
   } });
 }
@@ -449,7 +469,7 @@ window.FABLE = {
     LEAF = [PAL.ochre, PAL.rust, PAL.olive].map((col) => sprite({ x0: -14, y0: -14, x1: 14, y1: 14, w: 28, h: 28 }, 1, (g) => leaf(g, 0, 0, 12, 0, col), { granulate: false }));
     TITLE = paintTitle();
     MEADOW = paintMeadow();
-    OAK = paintOak();
+    OAK = paintOak(); OAK_CROW = OAK.perch;
     PERCH = paintPerch();
     DEN = paintDen();
     [NEST_BACK, NEST_FRONT] = paintNest();

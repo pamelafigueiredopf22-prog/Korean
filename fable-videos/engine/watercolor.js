@@ -465,9 +465,15 @@ export function sketch(ctx, pts, opts = {}) {
 // A pen line whose weight swells and thins along its length (weights: array of widths per point,
 // or a function of t in 0..1). Drawn as a filled ribbon so it looks like a dip pen, not a CAD stroke.
 export function penLine(ctx, pts, opts = {}) {
-  const { color = '#3a2a20', alpha = 0.85, w = 2, weight = (t) => 0.4 + Math.sin(Math.PI * t), seed = 31, wobble = 0.5, closed = false } = opts;
+  const { color = '#3a2a20', alpha = 0.85, w = 2, weight = (t) => 0.4 + Math.sin(Math.PI * t), seed = 31, wobble = 0.5, closed = false, sharp = false } = opts;
   const r = rng(seed);
-  const line = smooth(closed ? pts.concat([pts[0]]) : pts, false, 4);
+  const src = closed ? pts.concat([pts[0]]) : pts;
+  let line;
+  if (sharp) { // straight segments, for buildings: densify without rounding the corners
+    line = [];
+    for (let i = 0; i < src.length - 1; i++) for (let k = 0; k < 8; k++) line.push([src[i][0] + (src[i + 1][0] - src[i][0]) * k / 8, src[i][1] + (src[i + 1][1] - src[i][1]) * k / 8]);
+    line.push(src[src.length - 1]);
+  } else line = smooth(src, false, 4);
   const L = [], R = [];
   for (let i = 0; i < line.length; i++) {
     const a = line[Math.max(0, i - 1)], b = line[Math.min(line.length - 1, i + 1)];

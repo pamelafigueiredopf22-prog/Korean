@@ -13,6 +13,10 @@ const BEAK_UP = smooth([[-86, -128], [-114, -126], [-142, -115], [-114, -110], [
 const BEAK_LO = smooth([[-86, -111], [-108, -112], [-128, -113], [-108, -105], [-86, -101]]);
 const BEAK_PIVOT = [-86, -110];
 const CHEESE = [[-136, -118], [-114, -90], [-106, -122]];
+// an open wing for flight, pointing straight up from the shoulder at (0,0); fingers at the tip
+const FWING = smooth([[-20, 6], [-28, -60], [-24, -120], [-14, -166], [6, -178], [28, -176], [46, -166], [56, -130], [62, -80], [58, -30], [40, 6]]);
+// five long primary 'fingers' fanning from the wing tip: [base x, base y, angle, length]
+const FINGERS = [[-10, -160, -0.32, 84], [4, -168, -0.14, 92], [18, -170, 0.04, 94], [32, -166, 0.22, 88], [44, -156, 0.4, 78]];
 export const CROW_EYE = [-58, -126];
 
 export function makeCrow(res = 1, seed = 4) {
@@ -65,6 +69,31 @@ export function makeCrow(res = 1, seed = 4) {
     for (let i = 0; i < 7; i++) penLine(g, [[0 + i * 16, -86 + i * 5], [40 + i * 14, -66 + i * 3], [80 + i * 10, -46]], { color: '#0a0a0f', w: 1.3, alpha: 0.55, seed: s(53 + i) });
     penLine(g, WING, { closed: true, color: '#0a0a0f', w: 2, alpha: 0.8, seed: s(28), weight: (t) => 0.3 + 0.9 * Math.max(0, Math.sin(t * Math.PI * 2)) });
   }, { seed: s(29) });
+  // the open flight wing: coverts near the shoulder, long secondaries, and fingered primaries at the tip
+  const fwing = sprite(bbox(FWING.concat([[-30, -300], [100, -300]])), res, (g) => {
+    for (const [x, y, a, L] of FINGERS) {
+      const ca = Math.sin(a), tipx = x + ca * L, tipy = y - Math.cos(a) * L;
+      const f = smooth([[x - 7, y + 24], [x - 8 + ca * L * 0.5, y - L * 0.5], [tipx - 3, tipy + 6], [tipx, tipy], [tipx + 4, tipy + 8], [x + 9 + ca * L * 0.5, y - L * 0.45], [x + 8, y + 24]]);
+      wash(g, f, { under: true, color: '#141620', opacity: 0.97, seed: s(60) + x, bleed: 0.015, layers: 12 });
+      penLine(g, [[x, y + 14], [tipx, tipy + 4]], { color: '#6a78a0', w: 1, alpha: 0.55, seed: s(61) + x });
+      penLine(g, f, { closed: true, color: '#0a0a0f', w: 1.4, alpha: 0.8, seed: s(62) + x });
+    }
+    wash(g, FWING, { under: true, color: '#171a26', opacity: 0.97, seed: s(63), bleed: 0.02 });
+    blooms(g, FWING, SHEEN, { n: 6, seed: s(64), alpha: 0.45 });
+    // rows of feathers: small coverts at the base, long flight feathers above
+    for (let i = 0; i < 6; i++) { // secondaries
+      const y = -40 - i * 22;
+      penLine(g, [[-16, y + 10], [20, y - 4], [58, y + 4]], { color: '#0a0a0f', w: 1.2, alpha: 0.5, seed: s(65 + i) });
+      penLine(g, [[-10, y + 4], [40, y - 6]], { color: '#7c8ab4', w: 0.9, alpha: 0.4, seed: s(75 + i) });
+    }
+    for (let r = 0; r < 2; r++) for (let i = 0; i < 4; i++) {
+      const x = -16 + i * 18 + r * 4, y = -8 - r * 20;
+      penLine(g, [[x, y], [x + 8, y - 16], [x + 18, y - 4]], { color: '#0a0a0f', w: 1, alpha: 0.5, seed: s(85 + r * 6 + i) });
+    }
+    shadeEdge(g, FWING, { color: C.sheen, alpha: 0.4, width: 14, dx: -6 });
+    soften(g, 0.9 * res);
+    penLine(g, FWING, { closed: true, color: '#0a0a0f', w: 2, alpha: 0.85, seed: s(95), weight: (t) => 0.3 + 0.8 * Math.max(0, Math.sin(t * Math.PI * 2)) });
+  }, { seed: s(96) });
   const beakUp = sprite(bbox(BEAK_UP), res, (g) => { wash(g, BEAK_UP, { under: true, color: C.beak, opacity: 0.97, seed: s(30) }); shadeEdge(g, BEAK_UP, { color: C.beakLight, alpha: 0.6, width: 5, dy: 3 }); pencil(g, BEAK_UP, { closed: true, color: C.ink, seed: s(31), alpha: 0.55, width: 1.1 }); }, { seed: s(32) });
   const beakLo = sprite(bbox(BEAK_LO), res, (g) => { wash(g, BEAK_LO, { under: true, color: C.beak, opacity: 0.97, seed: s(33) }); pencil(g, BEAK_LO, { closed: true, color: C.ink, seed: s(34), alpha: 0.55, width: 1.1 }); }, { seed: s(35) });
   const cheese = sprite(bbox(CHEESE), res, (g) => {
@@ -125,7 +154,40 @@ export function makeCrow(res = 1, seed = 4) {
     }
     g.restore();
   }
+  // flying (facing left). st.beat: wingbeat phase in cycles; st.glide (0..1); st.pitch (radians, + = nose up);
+  // st.legs (0..1, dangling for landing); st.flare (0..1, wings spread forward to brake)
+  function drawFly(g, st = {}) {
+    const ph = (st.beat || 0) * Math.PI * 2, glide = st.glide || 0, flare = st.flare || 0;
+    // wing angle: +1 = straight up, -1 = straight down. Downstroke is quicker than the upstroke.
+    const beat = Math.cos(ph + 0.35 * Math.sin(ph));
+    const up = (1 - glide) * beat + glide * 0.18;
+    const sy = (up >= 0 ? 0.12 + 0.88 * up : 0.12 + 0.95 * up) * (1 - glide) + glide * 0.14; // flips through edge-on
+    const sweep = 0.32 - 0.2 * (1 - up) * (1 - glide) - flare * 0.7;
+    g.save();
+    g.translate(20, -60); g.rotate(st.pitch || 0); g.translate(-20, 60);
+    const wingAt = (dx, dy, k, far) => {
+      g.save(); g.translate(dx, dy); g.rotate(sweep + (far ? 0.06 : 0)); g.scale(k, sy * k);
+      if (far) g.filter = 'brightness(0.72)';
+      drawSprite(g, fwing); g.restore();
+    };
+    wingAt(30, -92, 0.9, true);
+    g.save(); g.translate(90, -40); g.rotate(-0.12 - glide * 0.1); g.translate(-90, 40); drawSprite(g, tail); g.restore();
+    if (st.legs) { // legs dangling, toes spread, ready to land
+      g.save(); g.globalAlpha *= st.legs; g.strokeStyle = C.leg; g.lineCap = 'round'; g.lineWidth = 4;
+      for (const x of [-6, 16]) { g.beginPath(); g.moveTo(x, -26); g.lineTo(x - 8, -4); g.stroke();
+        g.lineWidth = 3; for (const dx of [-12, -4, 6]) { g.beginPath(); g.moveTo(x - 8, -4); g.lineTo(x - 8 + dx, 4); g.stroke(); } g.lineWidth = 4; }
+      g.restore();
+    }
+    g.save(); g.translate(20, -40); g.scale(1.04, 0.92); g.translate(-20, 40); drawSprite(g, body); g.restore();
+    g.save(); g.translate(-56, -116); g.rotate(st.headTilt || 0); g.translate(56, 116);
+    drawSprite(g, beakUp); drawSprite(g, beakLo);
+    if (st.cheese) drawSprite(g, cheese);
+    eye(g, st.eye ?? 1, st.happy);
+    g.restore();
+    wingAt(18, -86, 1, false);
+    g.restore();
+  }
   // the cheese on its own (falling, in the fox's mouth, on a windowsill); centred near (0,0)
   function drawCheese(g) { g.save(); g.translate(118, 110); drawSprite(g, cheese); g.restore(); }
-  return { draw, drawCheese };
+  return { draw, drawFly, drawCheese };
 }

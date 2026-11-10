@@ -1,6 +1,6 @@
 // Reusable painted scenery: trees, foliage, grass, flowers, mushrooms, ferns, hills, clouds.
 // All painters draw in the current ctx coordinates with the watercolor engine.
-import { wash, ink, strokes, pool, ellipse, smooth, ribbon, fluffy, bbox, rng, rgba, shade, tint, mix, path, speckle, shadeEdge, pencil } from './watercolor.js';
+import { wash, ink, strokes, pool, ellipse, smooth, ribbon, fluffy, bbox, rng, rgba, shade, tint, mix, path, speckle, shadeEdge, pencil, glaze, penLine, hatch } from './watercolor.js';
 
 export const PAL = {
   olive: '#8f9a5b', sage: '#9fae84', moss: '#6f7d4c', deep: '#4f5d3c', ochre: '#c9a24f', gold: '#e2b86a',
@@ -216,4 +216,183 @@ export function plant(g, x, y, opts = {}) {
     g.restore();
     if (!haze) pencil(g, leafShape, { closed: true, seed: seed * 7 + i, width: 1.1, alpha: 0.35 });
   }
+}
+
+// ---------------------------------------------------------------- an oak tree
+// A proper oak: a short, massive, gnarled trunk; crooked limbs spreading wide; a broad crown
+// built from many shaded clumps of lobed leaves. Returns useful points (the low perch limb).
+function oakLeaf(g, x, y, s, a, color, alpha = 0.9) {
+  // a small lobed oak leaf (four rounded lobes a side)
+  g.save(); g.translate(x, y); g.rotate(a); g.scale(s, s);
+  g.fillStyle = rgba(color, alpha); g.beginPath(); g.moveTo(0, 1);
+  for (const side of [1, -1]) {
+    for (let k = 0; k < 4; k++) { const yy = 0.8 - k * 0.45; g.quadraticCurveTo(side * (0.62 - k * 0.08), yy + 0.05, side * 0.22, yy - 0.2); }
+    g.quadraticCurveTo(0, -1.15, 0, -1.1);
+  }
+  g.fill();
+  g.restore();
+}
+function clamp01(v) { return Math.max(0, Math.min(1, v)); }
+export function oak(g, x, ground, S = 1, opts = {}) {
+  const { seed = 1, crownW = 1000, crownH = 520, crownY = 560, perchX = -520, perchY = 320, haze = 0, hazeColor = '#e9dcbc', clip = null } = opts;
+  const r = rng(seed);
+  const col = (c) => haze ? mix(c, hazeColor, haze) : c;
+  const P = (px, py) => [x + px * S, ground - py * S];
+  const cy = crownY, cw = crownW / 2, ch = crownH / 2;
+  // ---- the crown's clumps, in a broad dome, wider than tall, bumpy on top
+  const clumps = [];
+  for (let i = 0; i < 46; i++) {
+    const u = r.range(-1, 1), v = r.range(-1, 1);
+    if (u * u + v * v * 1.3 > 1) { i--; continue; }
+    const px = u * cw * 0.92, py = cy + v * ch * 0.8 + (1 - u * u) * ch * 0.18;
+    clumps.push({ px, py, rr: r.range(90, 150) * (0.8 + 0.35 * (1 - Math.abs(u))) });
+  }
+  clumps.sort((a, b) => a.py - b.py); // lower clumps first (further back), higher ones on top... then lit ones last
+  const clumpShape = (c, k = 1, dx = 0, dy = 0) => fluffy(x + (c.px + dx) * S, ground - (c.py + dy) * S, c.rr * S * k, c.rr * 0.78 * S * k, 7 + Math.floor(r() * 3), 0.2, seed + Math.round(c.px * 3 + c.py));
+  // dark mass behind everything: the shadowed inside of the crown
+  for (const c of clumps) wash(g, clumpShape(c, 1.05, 10, -14), { color: col('#3f4d2e'), opacity: 0.88, seed: seed + 7, bleed: 0.05, layers: 12 });
+  // ---- trunk and limbs
+  const limb = (pts, w0, w1, sd) => trunk(g, pts.map(([a, b]) => P(a, b)), w0 * S, w1 * S, { seed: seed + sd, under: true, haze, hazeColor });
+  limb([[0, 0], [-8, 90], [6, 200], [-4, 300], [10, 380]], 190, 120, 1);                 // the main trunk
+  limb([[-60, 14], [-110, 2], [-160, -8]], 70, 10, 2); limb([[60, 14], [116, 2], [170, -8]], 70, 10, 3); // root flare
+  limb([[-10, 330], [-120, 420], [-240, 470], [-360, 520]], 92, 34, 4);                  // big limbs into the crown
+  limb([[16, 340], [120, 430], [240, 480], [380, 520]], 88, 30, 5);
+  limb([[0, 370], [-20, 470], [10, 560], [-10, 640]], 80, 28, 6);
+  // the long low limb reaching out sideways (the crow's perch), crooked like an oak's
+  const pl = [[-30, 250], [perchX * 0.3, perchY + 20], [perchX * 0.6, perchY - 14], [perchX * 0.85, perchY + 8], [perchX, perchY - 6]];
+  limb(pl, 70, 18, 7);
+  limb([[perchX * 0.55, perchY], [perchX * 0.62, perchY + 70], [perchX * 0.72, perchY + 110]], 18, 5, 8);
+  if (!haze) {
+    // bark: knots, a hollow, gnarled ridges
+    wash(g, ellipse(...P(-10, 170), 22 * S, 32 * S, 20), { color: '#3a281c', opacity: 0.9, seed: seed + 9 });
+    penLine(g, ellipse(...P(-10, 170), 26 * S, 36 * S, 20), { closed: true, w: 2 * S, alpha: 0.5, seed: seed + 10 });
+    for (let k = 0; k < 7; k++) penLine(g, [P(-70 + k * 22, 10), P(-60 + k * 20 + r.gauss(0, 6), 120), P(-66 + k * 20 + r.gauss(0, 8), 240), P(-50 + k * 16, 340)], { w: 1.4 * S, alpha: 0.35, seed: seed + 20 + k });
+    penLine(g, pl.map(([a, b]) => P(a, b + 26 - 20 * Math.abs(a / perchX))), { w: 2 * S, alpha: 0.5, seed: seed + 13 });
+  }
+  // ---- crown clumps, shaded like real foliage masses: dark below, sunlit on the upper left
+  const greens = ['#5f7a3e', '#6d8744', '#58703a', '#7a9048'];
+  const keep = (c) => !(c.py < cy - ch * 0.35 && Math.abs(c.px - perchX * 0.55) < 200); // keep the perch in view
+  for (const c of clumps) {
+    if (!keep(c)) continue;
+    const sh = clumpShape(c);
+    wash(g, sh, { color: col(r.pick(greens)), opacity: 0.92, seed: seed + Math.round(c.px), bleed: 0.06, layers: 16 });
+    shadeEdge(g, sh, { color: col('#2f3c22'), alpha: 0.5, width: c.rr * 0.5 * S, dx: 8 * S, dy: -c.rr * 0.25 * S });
+    glaze(g, sh, x + (c.px - c.rr * 0.3) * S, ground - (c.py + c.rr * 0.35) * S, c.rr * 0.7 * S, c.rr * 0.45 * S, col('#c2c06e'), 0.5);
+  }
+  // leafy texture: soft dabs inside each clump (sunlit above, shaded below) and small bumps breaking the edge
+  for (const c of clumps) {
+    if (!keep(c)) continue;
+    const cx = x + c.px * S, cyy = ground - c.py * S, R = c.rr * S;
+    const sh = clumpShape(c);
+    g.save(); path(g, sh); g.clip();
+    for (let k = 0; k < c.rr * 0.9; k++) {
+      const u = r.range(-1, 1), v = r.range(-1, 1); if (u * u + v * v > 1) continue;
+      const lx = cx + u * R, ly = cyy + v * R * 0.78, light = clamp01(0.5 - v * 0.6 - u * 0.25);
+      g.fillStyle = rgba(col(light > 0.55 ? r.pick(['#9fb05c', '#b2b866', '#8ea452']) : light > 0.3 ? r.pick(['#6f8a46', '#7a9450']) : r.pick(['#3f5130', '#4a5e34'])), r.range(0.35, 0.7));
+      g.beginPath(); g.ellipse(lx, ly, r.range(5, 11) * S, r.range(3.5, 7) * S, r() * 3, 0, 7); g.fill();
+    }
+    g.restore();
+    // the bumpy, leafy outline along the top of the clump
+    for (let k = 0; k < c.rr / 5; k++) {
+      const a = Math.PI * r.range(1.05, 1.95), rr = R * r.range(0.92, 1.03);
+      const lx = cx + Math.cos(a) * rr, ly = cyy + Math.sin(a) * rr * 0.78;
+      g.fillStyle = rgba(col(Math.sin(a) < -0.6 ? '#8ea452' : '#6a8444'), 0.85);
+      g.beginPath(); g.ellipse(lx, ly, r.range(6, 11) * S, r.range(5, 8) * S, a, 0, 7); g.fill();
+    }
+  }
+  // acorns, a few, hanging under the crown
+  if (!haze) for (let k = 0; k < 6; k++) {
+    const [ax, ay] = P(r.range(-cw * 0.6, cw * 0.6), cy - ch * 0.75 + r.range(-20, 20));
+    g.fillStyle = '#9a6a32'; g.beginPath(); g.ellipse(ax, ay + 6 * S, 5 * S, 7 * S, 0, 0, 7); g.fill();
+    g.fillStyle = '#6a4a2a'; g.beginPath(); g.ellipse(ax, ay, 6 * S, 4 * S, 0, 0, 7); g.fill();
+  }
+  return { perch: P(perchX * 0.72, perchY + 8), limb: pl.map(([a, b]) => P(a, b)) };
+}
+
+// ---------------------------------------------------------------- a storybook cottage
+// Plaster walls with timber framing on a stone footing, a thick rounded thatched roof,
+// a shuttered window with a sill and window box, an arched door, a stone chimney, roses.
+export function cottage(g, x, ground, S = 1, opts = {}) {
+  const { seed = 3 } = opts;
+  const r = rng(seed);
+  const P = (px, py) => [x + px * S, ground - py * S];
+  const rect = (x0, y0, x1, y1) => [P(x0, y0), P(x1, y0), P(x1, y1), P(x0, y1)];
+  const wallH = 230, half = 250;
+  // chimney (behind the roof)
+  const chim = rect(150, 300, 205, 470);
+  wash(g, chim, { color: '#b49a80', opacity: 0.97, seed: seed + 1, under: true, bleed: 0.008 });
+  for (let k = 0; k < 9; k++) penLine(g, [P(150, 310 + k * 18), P(205, 310 + k * 18)], { w: 1 * S, alpha: 0.35, seed: seed + 50 + k });
+  wash(g, rect(142, 462, 213, 484), { color: '#8f7660', opacity: 0.97, seed: seed + 2, under: true, bleed: 0.008 });
+  penLine(g, chim, { closed: true, sharp: true, w: 2 * S, alpha: 0.7, seed: seed + 3 });
+  // walls
+  const wall = rect(-half, 0, half, wallH);
+  wash(g, wall, { color: '#f1e3c4', opacity: 0.97, seed: seed + 4, under: true, bleed: 0.008 });
+  glaze(g, wall, ...P(-120, 150), 260 * S, 120 * S, '#fff6e2', 0.5);
+  // stone footing
+  const foot = rect(-half - 6, 0, half + 6, 46);
+  wash(g, foot, { color: '#b8ab98', opacity: 0.97, seed: seed + 5, under: true, bleed: 0.008 });
+  for (let row = 0; row < 2; row++) for (let k = 0; k < 13; k++) {
+    const sx = -half + k * 40 + (row ? 20 : 0) + r.gauss(0, 3), sy = 4 + row * 21;
+    const st = smooth([P(sx + 2, sy + 2), P(sx + 36, sy + 1), P(sx + 37, sy + 18), P(sx + 1, sy + 19)]);
+    wash(g, st, { color: r.pick(['#a99a86', '#c2b6a2', '#9c8f7e']), opacity: 0.8, seed: seed + 60 + row * 20 + k, layers: 8, edge: 0.2 });
+    penLine(g, st, { closed: true, w: 1 * S, alpha: 0.4, seed: seed + 100 + row * 20 + k });
+  }
+  // timber framing
+  const beam = (pts, w) => { const b = ribbon(pts.map(([a, c]) => P(a, c)), w * S, w * S); wash(g, b, { color: '#6b4a34', opacity: 0.95, seed: seed + Math.round(pts[0][0] + pts[0][1]), under: true, layers: 10, bleed: 0.01 }); penLine(g, pts.map(([a2, c2]) => P(a2, c2)), { w: 1 * S, alpha: 0.3 }); };
+  for (const bx of [-half + 10, -40, half - 10]) beam([[bx, 46], [bx, wallH]], 18);
+  beam([[-half, 140], [half, 140]], 14);
+  beam([[-half + 10, 140], [-150, 230]], 12); beam([[half - 10, 140], [150, 230]], 12);
+  shadeEdge(g, wall, { color: '#7c6448', alpha: 0.45, width: 70 * S, dy: 30 * S }); // shadow under the eaves
+  // the door: arched, planked
+  const door = smooth([P(-200, 46), P(-200, 150), P(-178, 182), P(-140, 194), P(-102, 182), P(-80, 150), P(-80, 46)]);
+  wash(g, door, { color: '#5f7a72', opacity: 0.96, seed: seed + 6, under: true, bleed: 0.008 });
+  for (let k = 1; k < 5; k++) penLine(g, [P(-200 + k * 24, 50), P(-200 + k * 24, 184 - Math.abs(k - 2.5) * 6)], { w: 1.2 * S, alpha: 0.45 });
+  penLine(g, door, { closed: true, w: 2.2 * S, alpha: 0.8, seed: seed + 7 });
+  g.fillStyle = '#d8b060'; g.beginPath(); g.arc(...P(-98, 110), 5 * S, 0, 7); g.fill();
+  wash(g, rect(-212, -8, -68, 6), { color: '#a4998a', opacity: 0.95, seed: seed + 8, under: true });
+  // the window: four panes, shutters, a sill and a window box of flowers
+  const wx0 = 40, wx1 = 170, wy0 = 76, wy1 = 196;
+  const win = rect(wx0, wy0, wx1, wy1);
+  wash(g, win, { color: '#4c5d6a', opacity: 0.95, seed: seed + 9, under: true, bleed: 0.008 });
+  glaze(g, win, ...P(wx0 + 34, wy1 - 30), 50 * S, 36 * S, '#c8dce4', 0.7);
+  const glow = rect(wx0 + 6, wy0 + 4, wx1 - 6, wy1 - 6); // warm lamplight inside, drawn faintly
+  wash(g, glow, { color: '#e6b86a', opacity: 0.18, seed: seed + 10, edge: 0 });
+  penLine(g, [P((wx0 + wx1) / 2, wy0), P((wx0 + wx1) / 2, wy1)], { w: 3.4 * S, alpha: 0.85 });
+  penLine(g, [P(wx0, (wy0 + wy1) / 2), P(wx1, (wy0 + wy1) / 2)], { w: 3.4 * S, alpha: 0.85 });
+  penLine(g, win, { closed: true, sharp: true, w: 3 * S, alpha: 0.9, seed: seed + 11 });
+  for (const [s0, s1] of [[wx0 - 52, wx0 - 6], [wx1 + 6, wx1 + 52]]) {
+    const sh = rect(s0, wy0, s1, wy1);
+    wash(g, sh, { color: '#6f8f86', opacity: 0.96, seed: seed + 12 + s0, under: true, bleed: 0.008 });
+    for (let k = 1; k < 6; k++) penLine(g, [P(s0 + 4, wy0 + k * 20), P(s1 - 4, wy0 + k * 20)], { w: 1 * S, alpha: 0.45 });
+    penLine(g, sh, { closed: true, sharp: true, w: 1.8 * S, alpha: 0.75 });
+  }
+  const sill = rect(wx0 - 14, wy0 - 12, wx1 + 14, wy0);
+  wash(g, sill, { color: '#8a6040', opacity: 0.97, seed: seed + 13, under: true, bleed: 0.008 });
+  penLine(g, sill, { closed: true, sharp: true, w: 1.8 * S, alpha: 0.8 });
+  for (const px of [-226, -54]) { // flower pots by the door
+    const pot = smooth([P(px - 14, 0), P(px - 18, 30), P(px + 18, 30), P(px + 14, 0)]);
+    wash(g, pot, { color: '#b86a4a', opacity: 0.95, seed: seed + 220 + px, under: true, layers: 10 });
+    penLine(g, pot, { closed: true, sharp: true, w: 1.4 * S, alpha: 0.7 });
+    foliage(g, ...P(px, 44), 22 * S, 16 * S, { seed: seed + 230 + px, colors: [PAL.moss, PAL.olive], blobs: 3, opacity: 0.9, detail: false });
+    for (let k = 0; k < 3; k++) flower(g, ...P(px - 10 + k * 10, 52 + (k % 2) * 6), { seed: seed + 240 + px + k, size: 7 * S, color: k % 2 ? '#d8706a' : '#f2e2c4', stem: 0 });
+  }
+  // the thatched roof: thick, rounded, overhanging
+  const roof = smooth([P(-half - 66, wallH - 24), P(-half - 40, wallH + 10), P(-half + 20, wallH + 80), P(-150, wallH + 160), P(-110, wallH + 200), P(-60, wallH + 214),
+    P(60, wallH + 214), P(110, wallH + 200), P(150, wallH + 160), P(half - 20, wallH + 80), P(half + 40, wallH + 10), P(half + 66, wallH - 24), P(half + 20, wallH - 10), P(0, wallH - 4), P(-half - 20, wallH - 10)], true, 3);
+  wash(g, roof, { color: '#c9a560', opacity: 0.97, seed: seed + 15, under: true, bleed: 0.01 });
+  glaze(g, roof, ...P(-80, wallH + 160), 220 * S, 70 * S, '#e8cf8a', 0.6);
+  hatch(g, roof, { color: '#7d5e30', count: 900, len: 20 * S, width: 1.1, alpha: 0.45, seed: seed + 16, dir: (px) => Math.PI / 2 - (px - x) / (half * S) * 0.6, curve: 0.2 });
+  // the thick rolled edge of the thatch along the eaves
+  const eave = ribbon([P(-half - 70, wallH - 22), P(-half + 40, wallH - 6), P(0, wallH - 2), P(half - 40, wallH - 6), P(half + 70, wallH - 22)], 34 * S, 34 * S);
+  wash(g, eave, { color: '#b28a48', opacity: 0.97, seed: seed + 17, under: true });
+  hatch(g, eave, { color: '#6d4e26', count: 300, len: 12 * S, width: 1, alpha: 0.5, seed: seed + 18, dir: () => Math.PI / 2 });
+  penLine(g, eave, { closed: true, w: 2 * S, alpha: 0.7 });
+  // ridge, and a little eyebrow over the window
+  penLine(g, roof.slice(0, Math.floor(roof.length * 0.74)), { w: 2.6 * S, alpha: 0.8, seed: seed + 19 });
+  // roses climbing the left wall
+  for (let k = 0; k < 8; k++) foliage(g, ...P(-half + 4 + Math.sin(k) * 10, 30 + k * 24), 26 * S, 18 * S, { seed: seed + 300 + k, colors: [PAL.moss, PAL.deep, PAL.olive], blobs: 3, opacity: 0.9, detail: false });
+  for (let k = 0; k < 9; k++) flower(g, ...P(-half + r.range(-14, 22), r.range(40, 210)), { seed: seed + 320 + k, size: 9 * S, color: k % 3 ? '#cf6a6a' : '#e9a0a0', stem: 0 });
+  // bushes along the footing
+  for (let k = 0; k < 9; k++) foliage(g, ...P(-half + 20 + k * 60, 10), 40 * S, 26 * S, { seed: seed + 400 + k, colors: [PAL.moss, PAL.olive, PAL.sage], blobs: 4, opacity: 0.9 });
+  return { sill: P((wx0 + wx1) / 2, wy0), chimney: P(178, 484), window: P((wx0 + wx1) / 2, (wy0 + wy1) / 2), ridge: P(0, wallH + 222) };
 }
