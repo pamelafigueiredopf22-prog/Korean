@@ -10,7 +10,7 @@ const HEAD = smooth([[-90, -112], [-84, -142], [-54, -156], [-22, -140], [-14, -
 const WING = smooth([[-30, -96], [30, -100], [84, -72], [146, -34], [94, -40], [30, -46], [-14, -58]]);
 const TAIL = smooth([[86, -50], [150, -44], [186, -26], [176, -16], [140, -22], [92, -30]]);
 const BEAK_UP = smooth([[-86, -128], [-114, -126], [-142, -115], [-114, -110], [-86, -110]]);
-const BEAK_LO = smooth([[-86, -110], [-110, -108], [-134, -106], [-108, -100], [-86, -98]]);
+const BEAK_LO = smooth([[-86, -111], [-108, -112], [-128, -113], [-108, -105], [-86, -101]]);
 const BEAK_PIVOT = [-86, -110];
 const CHEESE = [[-136, -118], [-114, -90], [-106, -122]];
 export const CROW_EYE = [-58, -126];
@@ -66,7 +66,7 @@ export function makeCrow(res = 1, seed = 4) {
     penLine(g, WING, { closed: true, color: '#0a0a0f', w: 2, alpha: 0.8, seed: s(28), weight: (t) => 0.3 + 0.9 * Math.max(0, Math.sin(t * Math.PI * 2)) });
   }, { seed: s(29) });
   const beakUp = sprite(bbox(BEAK_UP), res, (g) => { wash(g, BEAK_UP, { under: true, color: C.beak, opacity: 0.97, seed: s(30) }); shadeEdge(g, BEAK_UP, { color: C.beakLight, alpha: 0.6, width: 5, dy: 3 }); pencil(g, BEAK_UP, { closed: true, color: C.ink, seed: s(31), alpha: 0.55, width: 1.1 }); }, { seed: s(32) });
-  const beakLo = sprite(bbox(BEAK_LO), res, (g) => { wash(g, BEAK_LO, { under: true, color: C.beakLight, opacity: 0.97, seed: s(33) }); glaze(g, BEAK_LO, -100, -104, 14, 5, '#5a3238', 0.5); pencil(g, BEAK_LO, { closed: true, color: C.ink, seed: s(34), alpha: 0.55, width: 1.1 }); }, { seed: s(35) });
+  const beakLo = sprite(bbox(BEAK_LO), res, (g) => { wash(g, BEAK_LO, { under: true, color: C.beak, opacity: 0.97, seed: s(33) }); pencil(g, BEAK_LO, { closed: true, color: C.ink, seed: s(34), alpha: 0.55, width: 1.1 }); }, { seed: s(35) });
   const cheese = sprite(bbox(CHEESE), res, (g) => {
     wash(g, CHEESE, { under: true, color: C.cheese, opacity: 0.97, seed: s(40), bleed: 0.01, layers: 12 });
     shadeEdge(g, CHEESE, { color: C.cheeseDark, alpha: 0.6, width: 6, dy: -2 });

@@ -20,7 +20,7 @@ const MUZ = smooth([[42, 22], [62, 16], [84, 12], [82, 18], [62, 24], [44, 30]])
 const JAW = smooth([[44, 18], [84, 12], [82, 18], [64, 26], [46, 30]]);
 const JAW_PIVOT = [42, 20];
 const EYE = [22, -14];
-export let EYE_STYLE = 'bead';
+export let EYE_STYLE = 'button';
 export function setFoxEyeStyle(v) { EYE_STYLE = v; }
 
 // ---------- sitting body ----------
