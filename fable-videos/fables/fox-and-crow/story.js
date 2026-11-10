@@ -1,6 +1,6 @@
 // The Fox and the Crow: scenes, staging and timing.
 import { W, H, rng, canvas, wash, pool, strokes, ellipse, smooth, sprite, drawSprite, bbox, noise1, rgba, shade, tint,
-  clamp, lerp, ease, span, glaze, shadeEdge, penLine, hatch, looseWash } from '../../engine/watercolor.js';
+  clamp, lerp, ease, span, glaze, shadeEdge, penLine, hatch, looseWash, path } from '../../engine/watercolor.js';
 import { PAL, foliage, trunk, grass, flower, berries, mushroom, fern, hills, cloud, leaf, plant, oak, cottage } from '../../engine/scenery.js';
 import { M, MY, LW, LH, INK, layer, cam, drawLayer, fireflies, motes, nightGrade, sunlight, stars, moon, zzz, makeStage } from '../../engine/stage.js';
 import { makeFox2 } from '../../engine/characters/fox2.js';
@@ -162,25 +162,80 @@ function paintPerch() {
   return P;
 }
 function paintDen() {
-  return layer((g) => {
-    sky(g, '#6c76a8', '#9c93b8', '#b5a6b8');
-    meadowGround(g, 800, 600);
-    // a great root arch, the fox's cosy den beneath
-    const mound = smooth([[-M - 40, 820], [300, 520], [700, 400], [1200, 420], [1600, 560], [W + M + 40, 820], [W + M + 40, 1000], [-M - 40, 1000]]);
-    wash(g, mound, { color: '#8a7a54', opacity: 0.95, seed: 601, under: true });
-    strokes(g, mound, { color: '#5f6b3a', count: 700, len: 10, width: 1.2, alpha: 0.35, seed: 602, dir: () => -Math.PI / 2, curve: 0.4 });
-    for (let i = 0; i < 9; i++) foliage(g, 200 + i * 190, 470 + Math.abs(i - 4) * 30, 120, 50, { seed: 610 + i, colors: [PAL.moss, PAL.olive, PAL.sage], blobs: 5, opacity: 0.85 });
-    const hole = smooth([[560, 990], [560, 760], [700, 640], [960, 610], [1220, 650], [1360, 770], [1360, 990]]);
-    wash(g, hole, { color: '#3a2c22', opacity: 0.95, seed: 620, under: true });
-    glaze(g, hole, 960, 860, 360, 160, '#6a4c36', 0.6);
-    for (const [pts, w, sd] of [[[[540, 990], [560, 760], [700, 640], [900, 600]], 60, 1], [[[1380, 990], [1360, 770], [1220, 650], [1020, 600]], 60, 2], [[[700, 640], [960, 590], [1220, 650]], 44, 3]])
-      trunk(g, pts, w, w * 0.6, { seed: 630 + sd, under: true });
-    for (let i = 0; i < 6; i++) fern(g, 450 + i * 22, 990, { seed: 640 + i, len: 180, angle: -1.9 + i * 0.25, curl: 0.6, color: PAL.moss });
-    for (let i = 0; i < 6; i++) fern(g, 1460 - i * 22, 990, { seed: 650 + i, len: 180, angle: -1.2 - i * 0.25, curl: -0.6, color: PAL.olive });
-    // a soft bed of leaves inside
-    wash(g, ellipse(960, 975, 300, 40, 30), { color: '#b8803e', opacity: 0.85, seed: 660 });
-    for (let k = 0; k < 24; k++) leaf(g, 700 + k * 22, 965 + (k % 3) * 8, 14, k * 0.9, k % 2 ? PAL.ochre : PAL.rust);
+  const P = {};
+  P.bg = layer((g) => {
+    sky(g, '#4f5a92', '#7d80b0', '#a99cbc');
+    hills(g, 640, 50, '#6e6c94', { seed: 21, opacity: 0.7, bumps: 3 });
+    for (let i = 0; i < 18; i++) foliage(g, -80 + i * 125, 640 + noise1(i, 4) * 30, 80, 60, { seed: 980 + i, haze: 0.55, hazeColor: '#8a86b0', blobs: 4, detail: false, leaves: false, opacity: 0.8 });
   });
+  P.bank = layer((g) => {
+    const r = rng(611);
+    // the old tree whose roots shelter the den: its trunk rises out of view
+    trunk(g, [[1010, 520], [1000, 300], [1020, 80], [1000, -80]], 420, 360, { seed: 600, under: true });
+    for (let k = 0; k < 9; k++) penLine(g, [[830 + k * 40, 520], [826 + k * 42 + r.gauss(0, 6), 300], [840 + k * 38 + r.gauss(0, 8), 60]], { w: 1.4, alpha: 0.35, seed: 601 + k });
+    // the grassy bank
+    const mound = smooth([[-M - 40, 760], [200, 600], [520, 500], [820, 470], [1200, 470], [1520, 520], [1800, 640], [W + M + 40, 760], [W + M + 40, LH], [-M - 40, LH]]);
+    wash(g, mound, { color: '#7c7a50', opacity: 0.96, seed: 602, under: true });
+    glaze(g, mound, 960, 520, 700, 90, '#9a9a62', 0.5);
+    strokes(g, mound, { color: '#4f5a32', count: 1400, len: 11, width: 1.2, alpha: 0.4, seed: 603, dir: () => -Math.PI / 2, curve: 0.4 });
+    strokes(g, mound, { color: '#b5b878', count: 500, len: 9, width: 1, alpha: 0.35, seed: 604, dir: () => -Math.PI / 2, curve: 0.4 });
+    for (let i = 0; i < 12; i++) foliage(g, 120 + i * 150 + r.gauss(0, 20), 560 + Math.abs(i - 6) * 26 + r.gauss(0, 10), 70, 30, { seed: 610 + i, colors: [PAL.moss, '#5f7a3e', PAL.sage], blobs: 4, opacity: 0.85 });
+    for (let i = 0; i < 70; i++) { const x = r.range(-60, W + 60), y = r.range(560, 1060); if (x > 520 && x < 1400 && y > 600) continue; grass(g, x, y, { seed: 620 + i, h: 26 + (y - 560) * 0.06, n: 7, alpha: 0.7 }); }
+    // the den: a deep, warm hollow in the earth
+    const hole = smooth([[560, 1000], [566, 800], [640, 690], [800, 628], [960, 612], [1120, 628], [1270, 690], [1350, 800], [1356, 1000]]);
+    wash(g, hole, { color: '#4a3424', opacity: 0.97, seed: 630, under: true });
+    glaze(g, hole, 960, 900, 360, 180, '#7a5636', 0.75);            // warmer toward the floor
+    shadeEdge(g, hole, { color: '#21160f', alpha: 0.7, width: 70, dy: 26 }); // shadow under the roof
+    // layered earth and little pebbles in the walls
+    g.save(); path(g, hole); g.clip();
+    for (let k = 0; k < 7; k++) penLine(g, [[540, 700 + k * 44 + r.gauss(0, 6)], [960, 690 + k * 46 + r.gauss(0, 6)], [1380, 702 + k * 44 + r.gauss(0, 6)]], { color: '#2e2016', w: 1.2, alpha: 0.35, seed: 640 + k });
+    for (let k = 0; k < 40; k++) { const x = r.range(570, 1350), y = r.range(650, 960); g.fillStyle = rgba(r.pick(['#8a7a68', '#a39380', '#6e6052']), 0.75); g.beginPath(); g.ellipse(x, y, r.range(4, 10), r.range(3, 7), r() * 3, 0, 7); g.fill(); }
+    // fine roots dangling from the ceiling
+    for (let k = 0; k < 16; k++) {
+      const x = r.range(640, 1280), y0 = 630 + Math.abs(x - 960) * 0.22, L = r.range(40, 120);
+      penLine(g, [[x, y0], [x + r.gauss(0, 8), y0 + L * 0.5], [x + r.gauss(0, 12), y0 + L]], { color: '#6a4c34', w: r.range(1.6, 3.2), alpha: 0.85, seed: 650 + k });
+    }
+    g.restore();
+    // a little root shelf with treasures: acorns, a pinecone, a feather, berries
+    trunk(g, [[1150, 760], [1240, 752], [1330, 770]], 18, 12, { seed: 660, under: true });
+    for (const [x, y] of [[1172, 740], [1192, 742]]) { g.fillStyle = '#9a6a32'; g.beginPath(); g.ellipse(x, y, 8, 11, 0, 0, 7); g.fill(); g.fillStyle = '#5e4028'; g.beginPath(); g.ellipse(x, y - 9, 9, 5, 0, 0, 7); g.fill(); }
+    const cone = ellipse(1232, 732, 14, 22, 20); wash(g, cone, { color: '#8a5a32', opacity: 0.95, seed: 661, under: true, layers: 10 });
+    for (let k = 0; k < 5; k++) penLine(g, [[1220, 716 + k * 8], [1244, 722 + k * 8]], { w: 1, alpha: 0.6 });
+    const feather = smooth([[1262, 744], [1286, 700], [1300, 690], [1294, 716], [1270, 746]]);
+    wash(g, feather, { color: '#d9d2c6', opacity: 0.95, seed: 662, under: true, layers: 10 }); penLine(g, [[1264, 746], [1298, 692]], { w: 1, alpha: 0.6 });
+    berries(g, 1318, 744, { seed: 663, size: 6, n: 4 });
+    // the two big roots arching over the doorway, with ivy trailing down
+    for (const [pts, w0, sd] of [[[[520, 1010], [560, 820], [650, 680], [820, 600], [990, 580]], 74, 1], [[[1400, 1010], [1360, 820], [1270, 680], [1100, 600], [940, 586]], 74, 2]])
+      trunk(g, pts, w0, 40, { seed: 670 + sd, under: true });
+    penLine(g, [[536, 1000], [570, 830], [660, 700], [820, 626], [960, 610], [1100, 626], [1260, 700], [1350, 830], [1384, 1000]], { w: 2.2, alpha: 0.6, seed: 673 });
+    for (let v = 0; v < 6; v++) {
+      let x = 640 + v * 120 + r.gauss(0, 20), y = 600 + Math.abs(x - 960) * 0.18;
+      const n = 4 + Math.floor(r() * 5);
+      for (let j = 0; j < n; j++) { y += 18; x += r.gauss(0, 4); leaf(g, x + (j % 2 ? 7 : -7), y, 10, j % 2 ? 0.7 : -0.7, j % 3 ? PAL.moss : '#7f9a5a'); }
+    }
+    // stones and moss around the entrance
+    for (let k = 0; k < 10; k++) {
+      const x = k < 5 ? 470 + k * 26 : 1340 + (k - 5) * 26, y = 985 + (k % 2) * 10;
+      const st = ellipse(x, y, r.range(18, 30), r.range(12, 18), 16, r.gauss(0, 0.3));
+      wash(g, st, { color: r.pick(['#8f8a80', '#a49e92', '#7d786e']), opacity: 0.95, seed: 680 + k, under: true, layers: 10 });
+      glaze(g, st, x - 6, y - 6, 12, 6, '#7f9a5a', 0.6);
+      penLine(g, st, { closed: true, w: 1.2, alpha: 0.5 });
+    }
+    // a soft bed: moss, straw and autumn leaves
+    const bed = ellipse(960, 985, 330, 46, 30);
+    wash(g, bed, { color: '#8a8a4a', opacity: 0.92, seed: 690, under: true });
+    for (let k = 0; k < 60; k++) penLine(g, [[r.range(660, 1260), r.range(960, 1010)], [0, 0]].map((p, i, arr) => i ? [arr[0][0] + r.range(-30, 30), arr[0][1] + r.range(-8, 8)] : p), { color: r.pick(['#d6b46a', '#c49a50', '#b88a40']), w: 1.4, alpha: 0.8 });
+    for (let k = 0; k < 30; k++) leaf(g, r.range(660, 1260), r.range(958, 1012), r.range(10, 16), r() * 6, r.pick([PAL.ochre, PAL.rust, '#c98a4a', '#a8783a']));
+    // ferns, bluebells and little mushrooms at the doorway
+    for (let i = 0; i < 6; i++) fern(g, 410 + i * 22, 1000, { seed: 700 + i, len: 190, angle: -1.9 + i * 0.25, curl: 0.6, color: PAL.moss });
+    for (let i = 0; i < 6; i++) fern(g, 1520 - i * 22, 1000, { seed: 710 + i, len: 190, angle: -1.2 - i * 0.25, curl: -0.6, color: PAL.olive });
+    for (let i = 0; i < 9; i++) { const x = 340 + i * 30, y = 940 + (i % 3) * 18; flower(g, x, y, { seed: 720 + i, size: 7, color: i % 2 ? '#8a8ad0' : '#a7a2dc', stem: 26 }); }
+    for (let i = 0; i < 7; i++) { const x = 1560 + i * 34, y = 930 + (i % 2) * 20; flower(g, x, y, { seed: 730 + i, size: 8, color: i % 2 ? '#f1e2c8' : '#d8a8c8', stem: 24 }); }
+    P.glowShrooms = [[600, 1004, 0.9], [632, 1010, 0.6], [1300, 1006, 0.8], [1330, 1012, 0.55], [1270, 1012, 0.5]];
+    for (const [x, y, sc] of P.glowShrooms) mushroom(g, x, y, { seed: Math.round(x), s: sc, cap: '#e8d6a0' });
+  });
+  P.fg = fgPlants(740, [[-30, 230, 1], [1950, 240, 1]]);
+  return P;
 }
 function paintNest() {
   // a deep, cosy bowl of woven twigs, lined with soft moss and downy feathers
@@ -404,7 +459,7 @@ function drawOak(g, t) {
   crow.draw(g, { t, cheese: crowHas, fluff: Math.max(proud, singUp) * 0.8, headTilt: -singUp * 0.45 + listen * 0.08 * Math.sin(t * 0.7) - shock * 0.1,
     beak: Math.max(caw * 1.1, shock * 0.25), eye: singUp > 0.4 && caw > 0.1 ? 0 : 1 - S.blink(t, 4), happy: singUp > 0.4 && caw > 0.1, wingOpen: caw * 0.4 + shock * 0.3 });
   g.restore();
-  if (!crowHas && !foxHas) { // fluttering down, down, down
+  if (!crowHas && t < fallT1) { // fluttering down, down, down
     const k = (t - fallT0) / (fallT1 - fallT0), e = k * k * 0.4 + k * 0.6;
     const x = lerp(beak[0], paw[0], e) + Math.sin(k * Math.PI * 3) * 40 * (1 - k), y = lerp(beak[1], paw[1], e);
     cheeseAt(g, x + 120 * 1.2 - 120 * 1.2, y, 1.2, Math.sin(k * 9) * 0.6);
@@ -498,18 +553,25 @@ function drawNest(g, t) {
 function drawDen(g, t) {
   const n14 = line('n14');
   const k = clamp((t - n14.start + 1) / (n14.end - n14.start + 3));
-  const c = { z: 1.0 + 0.06 * ease(k), x: 0, y: 30 * ease(k) };
+  const c = { z: 1.32 + 0.06 * ease(k), x: 0, y: 150 + 20 * ease(k) };
   S.paperBg(g);
-  drawLayer(g, c, DEN, 1);
+  drawLayer(g, c, DEN.bg, 0.3);
+  drawLayer(g, c, DEN.bank, 1);
   cam(g, c, 1);
   const sleep = span(t, n14.start + 1.5, n14.start + 3.5);
   g.save(); g.translate(970, 975); g.scale(1.25, 1.25);
   fox.drawCurl(g, { eyes: (1 - sleep) * 0.6, breath: Math.sin(t * 1.1), tail: Math.sin(t * 0.5) });
   g.restore();
   zzz(g, t, 860, 760, n14.start + 3.5, n14.end + 6);
-  nightGrade(g, 0.6);
+  drawFg(g, c, DEN.fg, t);
+  nightGrade(g, 0.4);
+  cam(g, c, 0.3); stars(g, t, 1, -99, { x0: 100, x1: 1800, y0: 40, y1: 380 }); moon(g, 1560, 260, 30, 1);
   cam(g, c, 1);
-  g.save(); g.globalCompositeOperation = 'lighter'; pool(g, 960, 860, 360, 200, '#ffcf80', 0.12); g.restore();
+  // a soft, warm glow in the den, and the little mushrooms glowing at the doorway
+  g.save(); g.globalCompositeOperation = 'lighter';
+  pool(g, 960, 860, 420, 230, '#ffcf80', 0.24);
+  for (const [x, y, sc] of DEN.glowShrooms) pool(g, x, y - 26 * sc, 60 * sc, 40 * sc, '#fff0b0', 0.3 + 0.08 * Math.sin(t * 1.5 + x));
+  g.restore();
   fireflies(g, t, 22, { x0: 0, x1: W, y0: 380, y1: 1000 }, 71, 1);
 }
 
@@ -518,11 +580,7 @@ function drawNight(g, t) {
   const n15 = line('n15'), n16 = line('n16');
   const k = clamp((t - n15.start) / (S.TL.duration - n15.start));
   const c = { z: 1.04 - 0.04 * ease(k), x: 20 - 20 * ease(k), y: 0 };
-  drawMeadow(g, t, c, { night: 1, starsFrom: n15.start - 0.5, actors: (g) => {
-    const [bx, by] = MEADOW.branch;
-    g.save(); g.translate(bx, by + 6); g.scale(0.8, 0.8); drawSprite(g, NEST_BACK); g.restore();
-    g.save(); g.translate(bx + 12, by + 8); g.scale(0.85, 0.85); crow.draw(g, { t, fluff: 1, headTilt: -0.3, eye: 0 }); g.restore();
-    g.save(); g.translate(bx, by + 6); g.scale(0.8, 0.8); drawSprite(g, NEST_FRONT); g.restore();
+  drawMeadow(g, t, c, { night: 1, starsFrom: n15.start - 0.5, actors: () => {
   }, after: (g) => {
     const a = span(t, n16.end + 2.5, n16.end + 5) * (1 - span(t, S.TL.duration - 12, S.TL.duration - 7));
     if (a > 0) {
