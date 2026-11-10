@@ -28,9 +28,12 @@ def elevenlabs(text, v, speed_scale, out):
     """ElevenLabs text-to-speech. The API key is added by the session's network proxy
     (or set ELEVENLABS_API_KEY when running elsewhere)."""
     import urllib.request
-    settings = {"stability": v.get("stability", 0.45), "similarity_boost": v.get("similarity", 0.75),
-                "style": v.get("style", 0.35), "use_speaker_boost": True,
-                "speed": max(0.7, min(1.2, v.get("speed", 1.0) * speed_scale))}
+    if v.get("model") == "eleven_v3":  # the expressive model: emotion comes from [tags] in the text
+        settings = {"stability": v.get("stability", 0.5), "similarity_boost": v.get("similarity", 0.75)}
+    else:
+        settings = {"stability": v.get("stability", 0.45), "similarity_boost": v.get("similarity", 0.75),
+                    "style": v.get("style", 0.35), "use_speaker_boost": True,
+                    "speed": max(0.7, min(1.2, v.get("speed", 1.0) * speed_scale))}
     body = json.dumps({"text": text, "model_id": v.get("model", "eleven_multilingual_v2"), "voice_settings": settings}).encode()
     req = urllib.request.Request(f"https://api.elevenlabs.io/v1/text-to-speech/{v['voice_id']}?output_format=mp3_44100_128", data=body,
                                  headers={"xi-api-key": os.environ.get("ELEVENLABS_API_KEY", "proxy-injected"), "Content-Type": "application/json"})
@@ -82,7 +85,7 @@ def main():
         if (a.force and (not only or line["speaker"] in only)) or not os.path.exists(final):
             raw = os.path.join(clips, f"{line['id']}.raw" + (".mp3" if v.get("engine") == "elevenlabs" else ".wav"))
             if v.get("engine") == "elevenlabs":
-                elevenlabs(line["text"], v, line.get("speed_scale", 1.0), raw)
+                elevenlabs(line.get("speech", line["text"]), v, line.get("speed_scale", 1.0), raw)
             else:
                 style = voice_style(kokoro, v["voice"]); spd = v.get("speed", 1.0) * line.get("speed_scale", 1.0)
                 audio, sr = kokoro.create(line.get("speech", line["text"]), voice=style, speed=spd, lang=v.get("lang", "en-us"))

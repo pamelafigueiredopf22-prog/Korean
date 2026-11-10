@@ -1,0 +1,40 @@
+{
+  "pause_scale": 1.2,
+  "lead_in": 7.0,
+  "narrator": {
+    "voice": {
+      "af_heart": 0.7,
+      "af_nicole": 0.3
+    },
+    "speed": 0.86,
+    "lang": "en-us",
+    "filters": [
+      "lowpass=f=9000",
+      "aecho=0.8:0.5:40|75:0.12|0.07"
+    ]
+  },
+  "hare": {
+    "engine": "elevenlabs",
+    "model": "eleven_v3",
+    "voice_id": "TX3LPaxmHKxFdv7VOQHJ",
+    "name": "Liam",
+    "stability": 0.4,
+    "gain": 2.0,
+    "filters": [
+      "loudnorm=I=-28.5:TP=-6",
+      "aecho=0.8:0.5:30:0.05"
+    ]
+  },
+  "tortoise": {
+    "engine": "elevenlabs",
+    "model": "eleven_v3",
+    "voice_id": "JBFqnCBsd6RMkjVDRZzb",
+    "name": "George",
+    "stability": 0.5,
+    "gain": 2.0,
+    "filters": [
+      "loudnorm=I=-28.5:TP=-6",
+      "aecho=0.8:0.5:40:0.06"
+    ]
+  }
+}
