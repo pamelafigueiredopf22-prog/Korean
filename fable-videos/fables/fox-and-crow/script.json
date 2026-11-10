@@ -2,33 +2,179 @@
   "title": "The Fox and the Crow",
   "source": "Aesop's Fables (public domain), gently retold for bedtime",
   "lines": [
-    {"id": "n01", "scene": "s1_morning", "speaker": "narrator", "pause": 1.6, "text": "Once upon a time, in a sunny meadow at the edge of the woods, there lived a shiny black crow."},
-    {"id": "n02", "scene": "s1_morning", "speaker": "narrator", "pause": 1.4, "text": "One bright afternoon, the crow spotted something wonderful on a windowsill. A little piece of golden cheese!"},
-    {"id": "n03", "scene": "s1_morning", "speaker": "narrator", "pause": 1.6, "text": "She snatched it up in her beak, flapped away, and settled high on the branch of a tall old oak tree."},
-    {"id": "c01", "scene": "s1_morning", "speaker": "narrator", "pause": 1.8, "text": "Mmm, she thought. What a lovely supper this will be."},
-
-    {"id": "n04", "scene": "s2_fox", "speaker": "narrator", "pause": 1.4, "text": "Just then, a fox came trotting along the path. His nose twitched. Sniff, sniff. He smelled the cheese."},
-    {"id": "n05", "scene": "s2_fox", "speaker": "narrator", "pause": 1.4, "text": "He looked up, and there it was, way up high, in the crow's beak. And the fox began to think of a clever plan."},
-    {"id": "f01", "scene": "s2_fox", "speaker": "fox", "pause": 1.2, "text": "Good afternoon, Miss Crow! My, my... how beautiful you look today."},
-    {"id": "f02", "scene": "s2_fox", "speaker": "fox", "pause": 1.2, "text": "Your feathers shine like the night sky. And your eyes sparkle, like two little stars."},
-    {"id": "n06", "scene": "s2_fox", "speaker": "narrator", "pause": 1.4, "text": "The crow fluffed up her feathers. She had never heard such lovely words."},
-    {"id": "f03", "scene": "s2_fox", "speaker": "fox", "pause": 1.4, "text": "A bird so beautiful must surely have the sweetest voice in all the woods. Oh, if only I could hear you sing, just once..."},
-
-    {"id": "n07", "scene": "s3_song", "speaker": "narrator", "pause": 1.2, "text": "The crow felt so proud. She lifted her head, opened her beak wide, and sang out..."},
-    {"id": "c02", "scene": "s3_song", "speaker": "crow", "pause": 1.4, "text": "Caw! Caw! Caaaw!"},
-    {"id": "n08", "scene": "s3_song", "speaker": "narrator", "pause": 1.6, "text": "And down, down, down fell the cheese... right into the fox's waiting paws."},
-    {"id": "f04", "scene": "s3_song", "speaker": "fox", "pause": 1.2, "text": "Thank you, Miss Crow! You do have a voice. But next time, little one, be careful who you listen to."},
-    {"id": "f05", "scene": "s3_song", "speaker": "fox", "pause": 1.6, "text": "Sweet words can be lovely... but they are not always true."},
-    {"id": "n09", "scene": "s3_song", "speaker": "narrator", "pause": 2.0, "text": "And with a swish of his bushy tail, the fox trotted off into the woods."},
-
-    {"id": "n10", "scene": "s4_lesson", "speaker": "narrator", "pause": 1.6, "text": "The crow sat on her branch for a long while, thinking."},
-    {"id": "c03", "scene": "s4_lesson", "speaker": "crow", "pause": 1.6, "text": "Hmm. I was so busy listening to nice words, that I forgot to hold on to my supper."},
-    {"id": "n11", "scene": "s4_lesson", "speaker": "narrator", "pause": 1.4, "text": "But the crow was not sad for long. Because now she knew something very important."},
-    {"id": "n12", "scene": "s4_lesson", "speaker": "narrator", "pause": 2.0, "text": "Be kind to everyone, and listen to everyone... but think for yourself. And never let a little flattery make you forget what matters."},
-
-    {"id": "n13", "scene": "s5_goodnight", "speaker": "narrator", "pause": 2.0, "text": "The sun went down, painting the sky pink and gold. The crow flew home to her cosy nest, and tucked her head under her soft black wing."},
-    {"id": "n14", "scene": "s5_goodnight", "speaker": "narrator", "pause": 2.0, "text": "Far away in the woods, the fox curled up in his den, his bushy tail wrapped around him like a blanket."},
-    {"id": "n15", "scene": "s5_goodnight", "speaker": "narrator", "pause": 2.6, "text": "The stars came out. The meadow grew quiet. And everyone, big and small, drifted off to sleep."},
-    {"id": "n16", "scene": "s5_goodnight", "speaker": "narrator", "pause": 30.0, "text": "Goodnight, little one. Sweet dreams."}
+    {
+      "id": "n01",
+      "scene": "s1_morning",
+      "speaker": "narrator",
+      "pause": 1.6,
+      "text": "Once upon a time, in a sunny meadow at the edge of the woods, there lived a shiny black crow."
+    },
+    {
+      "id": "n02",
+      "scene": "s1_morning",
+      "speaker": "narrator",
+      "pause": 1.4,
+      "text": "One bright afternoon, the crow spotted something wonderful on a windowsill. A little piece of golden cheese!"
+    },
+    {
+      "id": "n03",
+      "scene": "s1_morning",
+      "speaker": "narrator",
+      "pause": 1.6,
+      "text": "She snatched it up in her beak, flapped away, and settled high on the branch of a tall old oak tree."
+    },
+    {
+      "id": "c01",
+      "scene": "s1_morning",
+      "speaker": "narrator",
+      "pause": 1.8,
+      "text": "Mmmmm... she thought. What a lovely supper this will be.",
+      "speech": "she thought. What a lovely supper this will be.",
+      "hum": {
+        "phonemes": "mmmmm",
+        "seconds": 1.1,
+        "gap": 0.35
+      }
+    },
+    {
+      "id": "n04",
+      "scene": "s2_fox",
+      "speaker": "narrator",
+      "pause": 1.4,
+      "text": "Just then, a fox came trotting along the path. His nose twitched. Sniff, sniff. He smelled the cheese."
+    },
+    {
+      "id": "n05",
+      "scene": "s2_fox",
+      "speaker": "narrator",
+      "pause": 1.4,
+      "text": "He looked up, and there it was, way up high, in the crow's beak. And the fox began to think of a clever plan."
+    },
+    {
+      "id": "f01",
+      "scene": "s2_fox",
+      "speaker": "fox",
+      "pause": 1.2,
+      "text": "Good afternoon, Miss Crow! My, my... how beautiful you look today."
+    },
+    {
+      "id": "f02",
+      "scene": "s2_fox",
+      "speaker": "fox",
+      "pause": 1.2,
+      "text": "Your feathers shine like the night sky. And your eyes sparkle, like two little stars."
+    },
+    {
+      "id": "n06",
+      "scene": "s2_fox",
+      "speaker": "narrator",
+      "pause": 1.4,
+      "text": "The crow fluffed up her feathers. She had never heard such lovely words."
+    },
+    {
+      "id": "f03",
+      "scene": "s2_fox",
+      "speaker": "fox",
+      "pause": 1.4,
+      "text": "A bird so beautiful must surely have the sweetest voice in all the woods. Oh, if only I could hear you sing, just once..."
+    },
+    {
+      "id": "n07",
+      "scene": "s3_song",
+      "speaker": "narrator",
+      "pause": 1.2,
+      "text": "The crow felt so proud. She lifted her head, opened her beak wide, and sang out..."
+    },
+    {
+      "id": "c02",
+      "scene": "s3_song",
+      "speaker": "crow",
+      "pause": 2.2,
+      "text": "Caw! Caw! Caaaw!"
+    },
+    {
+      "id": "n08",
+      "scene": "s3_song",
+      "speaker": "narrator",
+      "pause": 1.6,
+      "text": "And down, down, down fell the cheese... right into the fox's waiting paws."
+    },
+    {
+      "id": "f04",
+      "scene": "s3_song",
+      "speaker": "fox",
+      "pause": 1.2,
+      "text": "Thank you, Miss Crow! You do have a voice. But next time, little one, be careful who you listen to."
+    },
+    {
+      "id": "f05",
+      "scene": "s3_song",
+      "speaker": "fox",
+      "pause": 1.6,
+      "text": "Sweet words can be lovely... but they are not always true."
+    },
+    {
+      "id": "n09",
+      "scene": "s3_song",
+      "speaker": "narrator",
+      "pause": 2.0,
+      "text": "And with a swish of his bushy tail, the fox trotted off into the woods."
+    },
+    {
+      "id": "n10",
+      "scene": "s4_lesson",
+      "speaker": "narrator",
+      "pause": 1.6,
+      "text": "The crow sat on her branch for a long while, thinking."
+    },
+    {
+      "id": "c03",
+      "scene": "s4_lesson",
+      "speaker": "crow",
+      "pause": 1.6,
+      "text": "Hmm. I was so busy listening to nice words, that I forgot to hold on to my supper."
+    },
+    {
+      "id": "n11",
+      "scene": "s4_lesson",
+      "speaker": "narrator",
+      "pause": 1.4,
+      "text": "But the crow was not sad for long. Because now she knew something very important."
+    },
+    {
+      "id": "n12",
+      "scene": "s4_lesson",
+      "speaker": "narrator",
+      "pause": 2.0,
+      "text": "Be kind to everyone, and listen to everyone... but think for yourself. And never let a little flattery make you forget what matters."
+    },
+    {
+      "id": "n13",
+      "scene": "s5_goodnight",
+      "speaker": "narrator",
+      "pause": 2.0,
+      "text": "The sun went down, painting the sky pink and gold. The crow flew home to her cosy nest, and tucked her head under her soft black wing."
+    },
+    {
+      "id": "n14",
+      "scene": "s5_goodnight",
+      "speaker": "narrator",
+      "pause": 2.0,
+      "text": "Far away in the woods, the fox curled up in his den, his bushy tail wrapped around him like a blanket."
+    },
+    {
+      "id": "n15",
+      "scene": "s5_goodnight",
+      "speaker": "narrator",
+      "pause": 2.6,
+      "text": "The stars came out. The meadow grew quiet. And everyone, big and small, drifted off to sleep."
+    },
+    {
+      "id": "n16",
+      "scene": "s5_goodnight",
+      "speaker": "narrator",
+      "pause": 30.0,
+      "text": "Goodnight, little one. Sweet dreams."
+    }
   ]
 }

@@ -84,8 +84,23 @@ def main():
             if v.get("engine") == "elevenlabs":
                 elevenlabs(line["text"], v, line.get("speed_scale", 1.0), raw)
             else:
-                audio, sr = kokoro.create(line["text"], voice=voice_style(kokoro, v["voice"]),
-                                          speed=v.get("speed", 1.0) * line.get("speed_scale", 1.0), lang=v.get("lang", "en-us"))
+                style = voice_style(kokoro, v["voice"]); spd = v.get("speed", 1.0) * line.get("speed_scale", 1.0)
+                audio, sr = kokoro.create(line.get("speech", line["text"]), voice=style, speed=spd, lang=v.get("lang", "en-us"))
+                if line.get("hum"):
+                    # a hummed sound ("Mmm...") made from phonemes, stretched smoothly to the wanted length
+                    h = line["hum"]
+                    hum, _ = kokoro.create(h["phonemes"], voice=style, speed=spd, is_phonemes=True)
+                    hop = sr // 100; en = np.array([np.sqrt(np.mean(hum[i:i + hop] ** 2)) for i in range(0, len(hum), hop)])
+                    a0 = int(np.argmax(en > en.max() * 0.3)); a1 = a0          # only the steady hum itself
+                    while a1 + 1 < len(en) and en[a1 + 1] > en.max() * 0.15: a1 += 1
+                    hum = hum[a0 * hop:(a1 + 1) * hop]
+                    hraw, hst = raw + ".hum.wav", raw + ".humst.wav"
+                    sf.write(hraw, hum, sr)
+                    ratio = max(0.3, (len(hum) / sr) / h.get("seconds", 1.0))
+                    run(["ffmpeg", "-y", "-i", hraw, "-af", f"rubberband=tempo={ratio:.3f},afade=t=in:d=0.08,afade=t=out:st={h.get('seconds', 1.0) - 0.25:.2f}:d=0.25", hst])
+                    hum, _ = sf.read(hst, dtype="float32")
+                    audio = np.concatenate([hum, np.zeros(int(h.get("gap", 0.35) * sr), dtype=np.float32), audio])
+                    os.remove(hraw); os.remove(hst)
                 sf.write(raw, audio, sr)
             filters = []
             if v.get("pitch", 1.0) != 1.0:

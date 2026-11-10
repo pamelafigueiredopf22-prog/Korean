@@ -202,7 +202,53 @@ function finish(S, t) {
   g.globalCompositeOperation = 'source-over'; g.drawImage(S.FRAME_EDGE, 0, 0);
   g.globalCompositeOperation = 'multiply'; g.globalAlpha = 0.35; g.drawImage(S.GRAIN, 0, 0);
   g.restore();
+  if (S.captions !== false) drawCaption(g, t, S.TL);
   const fadeIn = 1 - span(t, 0, 1.2), fadeOut = span(t, S.TL.duration - 7, S.TL.duration - 0.5);
   if (fadeIn > 0) { g.fillStyle = `rgba(242,231,211,${fadeIn})`; g.fillRect(0, 0, W, H); }
   if (fadeOut > 0) { g.fillStyle = `rgba(20,24,44,${fadeOut})`; g.fillRect(0, 0, W, H); }
+}
+
+// ---------- captions: the words of each line, shown softly at the bottom while they are spoken ----------
+let CAP_CACHE = null;
+export function drawCaption(g, t, timeline) {
+  if (!CAP_CACHE || CAP_CACHE.tl !== timeline) CAP_CACHE = { tl: timeline, lines: timeline.lines.slice().sort((a, b) => a.start - b.start) };
+  const lines = CAP_CACHE.lines;
+  let cur = null, next = null;
+  for (let i = 0; i < lines.length; i++) {
+    const l = lines[i], nx = lines[i + 1];
+    const end = Math.min(l.end + 0.6, nx ? nx.start - 0.15 : l.end + 0.6);
+    if (t >= l.start - 0.15 && t <= end) { cur = l; next = end; break; }
+  }
+  if (!cur) return;
+  const a = clamp((t - (cur.start - 0.15)) / 0.3) * clamp((next - t) / 0.3);
+  if (a <= 0) return;
+  const quote = cur.speaker !== 'narrator';
+  const text = quote ? `“${cur.text}”` : cur.text;
+  g.save();
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  g.font = '46px "Fell", Georgia, serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
+  // wrap into at most two balanced lines
+  const maxW = 1380, words = text.split(' ');
+  let rows = [text];
+  if (g.measureText(text).width > maxW) {
+    let best = null;
+    for (let k = 1; k < words.length; k++) {
+      const r1 = words.slice(0, k).join(' '), r2 = words.slice(k).join(' ');
+      const w = Math.max(g.measureText(r1).width, g.measureText(r2).width);
+      if (!best || w < best.w) best = { w, rows: [r1, r2] };
+    }
+    rows = best.rows;
+  }
+  const lh = 58, boxW = Math.max(...rows.map((r) => g.measureText(r).width)) + 70, boxH = rows.length * lh + 30;
+  const cx = W / 2, cy = H - 70 - boxH / 2;
+  g.globalAlpha = a;
+  g.filter = 'blur(6px)'; g.fillStyle = 'rgba(34,24,16,0.5)';
+  g.beginPath(); g.roundRect(cx - boxW / 2, cy - boxH / 2, boxW, boxH, 26); g.fill();
+  g.filter = 'none';
+  rows.forEach((r, i) => {
+    const y = cy - (rows.length - 1) * lh / 2 + i * lh;
+    g.fillStyle = 'rgba(20,14,10,0.6)'; g.fillText(r, cx + 1.5, y + 2);
+    g.fillStyle = '#fbf3e2'; g.fillText(r, cx, y);
+  });
+  g.restore();
 }

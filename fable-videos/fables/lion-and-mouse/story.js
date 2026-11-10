@@ -6,6 +6,7 @@ import { makeLion } from '../../engine/characters/lion.js';
 import { makeMouse } from '../../engine/characters/mouse.js';
 import { makeLionWalk } from '../../engine/characters/lion-walk.js';
 import { drawNet, drawNetBundle } from '../../engine/props.js';
+import { drawCaption } from '../../engine/stage.js';
 
 const M = 96, MY = 54;              // layer margin for camera moves
 const LW = W + 2 * M, LH = H + 2 * MY;
@@ -595,6 +596,7 @@ function finish(g, t) {
   g.globalCompositeOperation = 'source-over'; g.drawImage(FRAME_EDGE, 0, 0);
   g.globalCompositeOperation = 'multiply'; g.globalAlpha = 0.35; g.drawImage(GRAIN, 0, 0);
   g.restore();
+  drawCaption(g, t, TL);
   const fadeIn = 1 - span(t, 0, 1.2), fadeOut = span(t, TL.duration - 7, TL.duration - 0.5);
   if (fadeIn > 0) { g.fillStyle = `rgba(242,231,211,${fadeIn})`; g.fillRect(0, 0, W, H); }
   if (fadeOut > 0) { g.fillStyle = `rgba(20,24,44,${fadeOut})`; g.fillRect(0, 0, W, H); }
