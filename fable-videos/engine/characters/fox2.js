@@ -1,7 +1,7 @@
 // A naturalistic fox in profile, drawn line-and-wash like a classic storybook illustration.
 // Facing right. Two poses: sitting (looking up) and trotting. Ground at y = 0.
 import { wash, pool, ellipse, smooth, bbox, sprite, drawSprite, shadeEdge, glaze, blooms, soften, furEdge, rng, rgba, shade, tint, clamp,
-  penLine, hatch, looseWash, path, drawBent } from '../watercolor.js';
+  penLine, hatch, looseWash, path, drawBent, lerp } from '../watercolor.js';
 
 const C = {
   fur: '#c8693a', furDark: '#8a3f1e', furLight: '#e3a067', white: '#f3ead8', sock: '#3d2c24', ink: '#33241b',
@@ -113,14 +113,26 @@ export function makeFox2(res = 1, seed = 5) {
     g.save();
     g.rotate(st.headTilt || 0);
     const m = clamp(st.mouth || 0), sm = st.smile || 0;
-    if (m > 0.03) { // the inside of the mouth, seen when the jaw drops
-      g.fillStyle = '#5c2622'; g.beginPath(); g.moveTo(44, 19); g.lineTo(86, 11); g.lineTo(84, 13 + m * 20); g.lineTo(48, 24 + m * 12); g.closePath(); g.fill();
-    }
     drawSprite(g, head);
-    g.save(); g.translate(JAW_PIVOT[0], JAW_PIVOT[1]); g.rotate(m * 0.32); g.translate(-JAW_PIVOT[0], -JAW_PIVOT[1]); drawSprite(g, jaw); g.restore();
-    // mouth line, curling up at the corner when he smiles
-    g.strokeStyle = rgba(C.ink, 0.8); g.lineWidth = 1.8; g.lineCap = 'round';
-    g.beginPath(); g.moveTo(84, 11); g.quadraticCurveTo(66, 16, 48, 19 - sm * 7); g.stroke();
+    // ONE mouth: the lower jaw swings down from the corner of the mouth; the gap that opens between
+    // the upper lip and the jaw is the inside of the mouth. Closed, it is just the smiling lip line.
+    const piv = JAW_PIVOT, a = m * 0.36;
+    const rot = ([x, y]) => [piv[0] + (x - piv[0]) * Math.cos(a) - (y - piv[1]) * Math.sin(a), piv[1] + (x - piv[0]) * Math.sin(a) + (y - piv[1]) * Math.cos(a)];
+    const lip = []; // the upper lip, from the corner of the mouth to the tip of the snout
+    for (let k = 0; k <= 8; k++) { const u = k / 8; lip.push([lerp(46, 84, u), lerp(19 - sm * 7, 11, u) + Math.sin(u * Math.PI) * 2.5]); }
+    const jawTop = lip.map(([x, y], k) => rot([x, k === 0 ? y + sm * 7 : y]));
+    if (m > 0.03) {
+      g.save(); g.beginPath(); g.moveTo(...lip[0]);
+      for (const p of lip) g.lineTo(...p);
+      for (let k = jawTop.length - 1; k >= 0; k--) g.lineTo(...jawTop[k]);
+      g.closePath(); g.fillStyle = '#5c2622'; g.fill(); g.clip();
+      const tip = rot([74, 14]); g.fillStyle = '#d8857c'; g.beginPath(); g.ellipse(tip[0] - 8, tip[1] - 1, 13, 3 + 4 * m, a * 0.8, 0, 7); g.fill();
+      g.restore();
+    }
+    g.save(); g.translate(piv[0], piv[1]); g.rotate(a); g.translate(-piv[0], -piv[1]); drawSprite(g, jaw); g.restore();
+    g.strokeStyle = rgba(C.ink, 0.8); g.lineWidth = 1.8; g.lineCap = 'round'; g.lineJoin = 'round';
+    g.beginPath(); g.moveTo(...lip[lip.length - 1]); for (let k = lip.length - 2; k >= 0; k--) g.lineTo(...lip[k]); g.stroke();
+    if (m > 0.03) { g.lineWidth = 1.4; g.globalAlpha = 0.7; g.beginPath(); g.moveTo(...jawTop[0]); for (const p of jawTop) g.lineTo(...p); g.stroke(); g.globalAlpha = 1; }
     // eye: almond, amber, with a sly heavy lid
     const [ex, ey] = EYE, open = st.eyes ?? 1, sly = st.sly || 0;
     g.save();
