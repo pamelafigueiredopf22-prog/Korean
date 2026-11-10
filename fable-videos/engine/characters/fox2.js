@@ -20,6 +20,8 @@ const MUZ = smooth([[42, 22], [62, 16], [84, 12], [82, 18], [62, 24], [44, 30]])
 const JAW = smooth([[44, 18], [84, 12], [82, 18], [64, 26], [46, 30]]);
 const JAW_PIVOT = [42, 20];
 const EYE = [22, -14];
+export let EYE_STYLE = 'bead';
+export function setFoxEyeStyle(v) { EYE_STYLE = v; }
 
 // ---------- sitting body ----------
 const S_BODY = smooth([[-104, -18], [-118, -76], [-100, -142], [-62, -202], [-20, -252], [16, -288], [44, -300], [80, -292], [94, -250], [97, -200], [90, -150],
@@ -122,20 +124,40 @@ export function makeFox2(res = 1, seed = 5) {
       if (st.happy) g.arc(ex, ey + 6, 11, Math.PI * 1.2, Math.PI * 1.8); else g.arc(ex, ey - 5, 11, Math.PI * 0.2, Math.PI * 0.8);
       g.stroke();
     } else {
-      const R = 14, top = ey - R * open + sly * R * 0.9;
-      g.fillStyle = '#f4ead4'; g.beginPath(); g.ellipse(ex, ey, R, R * Math.max(0.15, open), 0, 0, 7); g.fill();
-      g.save(); g.beginPath(); g.rect(ex - R - 2, top, R * 2 + 4, R * 2 + 4); g.clip();
-      const ig = g.createRadialGradient(ex + 2, ey + 2, 1, ex + 2, ey, 9); ig.addColorStop(0, '#f3c25c'); ig.addColorStop(1, '#a8621c');
-      g.fillStyle = ig; g.beginPath(); g.arc(ex + 2, ey, 11.5, 0, 7); g.fill();
-      g.fillStyle = "#1c120c"; g.beginPath(); g.arc(ex + 3, ey, 7, 0, 7); g.fill();
-      g.fillStyle = "rgba(255,255,255,0.95)"; g.beginPath(); g.arc(ex - 1, ey - 4.5, 3.6, 0, 7); g.fill();
-      g.beginPath(); g.arc(ex + 6, ey + 3.5, 1.3, 0, 7); g.fill();
+      const style = st.eyeStyle || EYE_STYLE;
+      // the eye shape for each style (no human-like white: animals in storybooks have dark or amber eyes)
+      const R = style === 'button' ? 7 : style === 'bead' ? 10 : 12;
+      const ry = (style === 'amber' ? R * 0.62 : R * 0.95) * open * (1 - 0.42 * sly); // sly: a lazy, half-lowered lid
+      const shape = () => {
+        g.beginPath();
+        if (style === 'amber') { // almond, tilted up toward the ear like a real fox
+          g.moveTo(ex - R, ey + 2); g.quadraticCurveTo(ex - 2, ey - ry * 1.5, ex + R + 2, ey - 3); g.quadraticCurveTo(ex + 2, ey + ry * 1.2, ex - R, ey + 2);
+        } else g.ellipse(ex, ey, R * (style === 'bead' ? 0.92 : 1), ry, 0, 0, 7);
+        g.closePath();
+      };
+      g.save(); shape(); g.clip();
+      if (style === 'amber') {
+        const ig = g.createRadialGradient(ex + 1, ey - 1, 1, ex + 1, ey, R); ig.addColorStop(0, '#f2bf5a'); ig.addColorStop(1, '#a25a1a');
+        g.fillStyle = ig; g.fillRect(ex - R - 3, ey - R, 2 * R + 6, 2 * R);
+        g.fillStyle = '#1a110b'; g.beginPath(); g.ellipse(ex + 1, ey - 1, 4.5, ry + 1, 0, 0, 7); g.fill();
+      } else {
+        const ig = g.createRadialGradient(ex - 2, ey - 3, 1, ex, ey, R); ig.addColorStop(0, '#5a3a26'); ig.addColorStop(0.55, '#24160f'); ig.addColorStop(1, '#120a06');
+        g.fillStyle = ig; g.fillRect(ex - R - 3, ey - R - 3, 2 * R + 6, 2 * R + 6);
+      }
+      // a glossy highlight, and a smaller one below
+      g.fillStyle = 'rgba(255,255,255,0.92)'; g.beginPath(); g.arc(ex - R * 0.32, ey - ry * 0.38, Math.max(1.6, R * 0.26), 0, 7); g.fill();
+      g.fillStyle = 'rgba(255,255,255,0.55)'; g.beginPath(); g.arc(ex + R * 0.35, ey + ry * 0.35, Math.max(0.8, R * 0.1), 0, 7); g.fill();
+      // sly: a fur-coloured lid slides down over the top of the eye
       g.restore();
-      // upper lid (heavier and lower when sly), little lashes, soft lower line
-      g.strokeStyle = rgba(C.ink, 0.92); g.lineWidth = 2.8;
-      g.beginPath(); g.moveTo(ex - R - 1, ey + 1); g.quadraticCurveTo(ex, top - 3, ex + R + 2, ey - 1); g.stroke();
-      g.lineWidth = 1.6; g.beginPath(); g.moveTo(ex + R + 1, ey - 1); g.lineTo(ex + R + 7, ey - 5); g.stroke();
-      g.lineWidth = 1; g.globalAlpha = 0.6; g.beginPath(); g.moveTo(ex - R + 2, ey + 4); g.quadraticCurveTo(ex, ey + R * open + 1, ex + R - 1, ey + 3); g.stroke(); g.globalAlpha = 1;
+      g.strokeStyle = rgba(C.ink, 0.9); g.lineCap = 'round';
+      if (style === 'amber') { // dark rim and the fox's eyeliner flick
+        g.lineWidth = 2.2; shape(); g.stroke();
+        g.lineWidth = 2; g.beginPath(); g.moveTo(ex + R + 1, ey - 3); g.lineTo(ex + R + 8, ey - 1); g.stroke();
+      } else {
+        g.lineWidth = style === 'button' ? 1.4 : 1.8;
+        g.lineWidth += sly * 1.2;
+        g.beginPath(); g.moveTo(ex - R - 1, ey - ry * 0.2); g.quadraticCurveTo(ex, ey - ry - 3, ex + R + 1, ey - ry * 0.3); g.stroke();
+      }
     }
     // brow
     const bu = (st.browUp || 0) * 6;
