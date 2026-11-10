@@ -95,8 +95,8 @@ export function makeCrow(res = 1, seed = 4) {
       // head group: beak, cheese and eye tilt together
       g.save(); g.translate(-56, -116); g.rotate(st.headTilt || 0); g.translate(56, 116);
       const open = clamp(st.beak || 0);
-      g.save(); g.translate(BEAK_PIVOT[0], BEAK_PIVOT[1]); g.rotate(-open * 0.32); g.translate(-BEAK_PIVOT[0], -BEAK_PIVOT[1]); drawSprite(g, beakUp); g.restore();
-      g.save(); g.translate(BEAK_PIVOT[0], BEAK_PIVOT[1]); g.rotate(open * 0.42); g.translate(-BEAK_PIVOT[0], -BEAK_PIVOT[1]); drawSprite(g, beakLo); g.restore();
+      g.save(); g.translate(BEAK_PIVOT[0], BEAK_PIVOT[1]); g.rotate(open * 0.32); g.translate(-BEAK_PIVOT[0], -BEAK_PIVOT[1]); drawSprite(g, beakUp); g.restore();
+      g.save(); g.translate(BEAK_PIVOT[0], BEAK_PIVOT[1]); g.rotate(-open * 0.42); g.translate(-BEAK_PIVOT[0], -BEAK_PIVOT[1]); drawSprite(g, beakLo); g.restore();
       if (st.cheese) drawSprite(g, cheese);
       eye(g, st.eye ?? 1, st.happy);
       g.restore();
