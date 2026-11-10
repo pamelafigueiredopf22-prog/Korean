@@ -1,5 +1,7 @@
 // A shiny, slightly proud crow, perched and facing left. Local units: feet on the branch at y = 0.
-import { wash, ink, strokes, pool, ellipse, smooth, bbox, sprite, drawSprite, shadeEdge, glaze, pencil, rgba, shade, tint, clamp } from '../watercolor.js';
+import { wash, ink, strokes, pool, ellipse, smooth, bbox, sprite, drawSprite, shadeEdge, glaze, pencil, rgba, shade, tint, clamp, furEdge, blooms, soften, sketch } from '../watercolor.js';
+
+const SHEEN = ['#3b4a7a', '#4a3d6e', '#2f5a66', '#1c1f2b', '#55608a'];
 
 const C = { body: '#12141c', sheen: '#5d6d96', belly: '#232838', beak: '#4b4a52', beakLight: '#8a8790', ink: '#1e1d26', leg: '#3b3a42', cheese: '#f2c14e', cheeseDark: '#d99a2b' };
 
@@ -21,27 +23,42 @@ export function makeCrow(res = 1, seed = 4) {
   };
   const tail = sprite(bbox(TAIL), res, (g) => {
     wash(g, TAIL, { under: true, color: shade(C.body, 0.1), opacity: 0.95, seed: s(1) });
+    blooms(g, TAIL, SHEEN, { n: 4, seed: s(8), alpha: 0.45 });
+    soften(g, 1.5 * res);
+    furEdge(g, TAIL, { color: C.body, count: 24, len: 12, width: 4, alpha: 0.9, seed: s(9), lean: 0.4, skip: (x) => x < 140 });
     for (let i = 0; i < 4; i++) ink(g, [[96, -40 + i * 2], [170 - i * 4, -32 + i * 5]], { color: C.sheen, alpha: 0.5, width: 1.1, seed: s(2 + i) });
-    pencil(g, TAIL, { closed: true, color: C.ink, seed: s(6), alpha: 0.5 });
+    sketch(g, TAIL, { closed: true, color: C.ink, seed: s(6), alpha: 0.3 });
   }, { seed: s(7) });
   const body = sprite(bbox(BODY.concat(HEAD)), res, (g) => {
     wash(g, BODY, { under: true, color: C.body, opacity: 0.95, seed: s(10) });
+    blooms(g, BODY, SHEEN, { n: 8, seed: s(19), alpha: 0.45 });
     glaze(g, BODY, -10, -40, 50, 22, C.belly, 0.6);
     shadeEdge(g, BODY, { color: C.sheen, alpha: 0.45, width: 16, dy: 7 }); // sheen along the back
     feathered(g, BODY, 11, () => 0.2);
     wash(g, HEAD, { under: true, color: C.body, opacity: 0.96, seed: s(13) });
+    blooms(g, HEAD, SHEEN, { n: 4, seed: s(15), alpha: 0.4 });
     shadeEdge(g, HEAD, { color: C.sheen, alpha: 0.5, width: 14, dy: 6, dx: 3 });
     glaze(g, HEAD, -66, -128, 18, 14, '#4a5470', 0.6); // soft eye patch
     feathered(g, HEAD, 14, (x, y) => Math.atan2(y + 116, x + 56), 0.5);
     pool(g, -76, -100, 12, 7, '#b77a8a', 0.25);
-    pencil(g, BODY.slice(10, 70), { color: C.ink, seed: s(16), alpha: 0.45 });
-    pencil(g, HEAD, { closed: true, color: C.ink, seed: s(17), alpha: 0.45 });
+    soften(g, 1.8 * res);
+    // soft, ruffled feather edges, combed back toward the tail
+    furEdge(g, BODY, { color: C.body, count: 110, len: 7, width: 2.4, alpha: 0.9, seed: s(43), lean: 0.6, inner: 0.4 });
+    furEdge(g, HEAD, { color: C.body, count: 60, len: 5, width: 2, alpha: 0.9, seed: s(44), lean: 0.5, inner: 0.4, skip: (x) => x < -88 });
+    furEdge(g, BODY, { color: C.sheen, count: 30, len: 5, width: 1, alpha: 0.35, seed: s(45), lean: 0.6 });
+    sketch(g, BODY.slice(10, 70), { color: C.ink, seed: s(16), alpha: 0.3 });
+    sketch(g, HEAD, { closed: true, color: C.ink, seed: s(17), alpha: 0.28 });
   }, { seed: s(18) });
   const wing = sprite(bbox(WING), res, (g) => {
     wash(g, WING, { under: true, color: shade(C.body, 0.05), opacity: 0.96, seed: s(20) });
+    blooms(g, WING, SHEEN, { n: 6, seed: s(46), alpha: 0.5 });
     shadeEdge(g, WING, { color: C.sheen, alpha: 0.5, width: 12, dy: 6 });
     for (let i = 0; i < 6; i++) ink(g, [[10 + i * 18, -50 - i * 3], [70 + i * 14, -40 - i * 4]], { color: C.sheen, alpha: 0.45, width: 1.1, seed: s(21 + i) });
-    pencil(g, WING, { closed: true, color: C.ink, seed: s(28), alpha: 0.5 });
+    soften(g, 1.5 * res);
+    // long flight feathers fanning out at the wing tip
+    furEdge(g, WING, { color: shade(C.body, 0.05), count: 16, len: 22, width: 6, alpha: 0.95, seed: s(47), lean: 0.9, inner: 0.25, skip: (x, y) => x < 60 });
+    furEdge(g, WING, { color: C.sheen, count: 14, len: 14, width: 1, alpha: 0.4, seed: s(48), lean: 0.9, skip: (x) => x < 40 });
+    sketch(g, WING, { closed: true, color: C.ink, seed: s(28), alpha: 0.3 });
   }, { seed: s(29) });
   const beakUp = sprite(bbox(BEAK_UP), res, (g) => { wash(g, BEAK_UP, { under: true, color: C.beak, opacity: 0.97, seed: s(30) }); shadeEdge(g, BEAK_UP, { color: C.beakLight, alpha: 0.6, width: 5, dy: 3 }); pencil(g, BEAK_UP, { closed: true, color: C.ink, seed: s(31), alpha: 0.55, width: 1.1 }); }, { seed: s(32) });
   const beakLo = sprite(bbox(BEAK_LO), res, (g) => { wash(g, BEAK_LO, { under: true, color: C.beakLight, opacity: 0.97, seed: s(33) }); glaze(g, BEAK_LO, -100, -104, 14, 5, '#5a3238', 0.5); pencil(g, BEAK_LO, { closed: true, color: C.ink, seed: s(34), alpha: 0.55, width: 1.1 }); }, { seed: s(35) });

@@ -408,3 +408,55 @@ export function tuft(cx, cy, a, r0, r1, w, curl = 0) {
   pts.push(P(r0 + L * 0.7, w * 0.5), P(r0 + L * 0.35, w * 0.55), P(r0 - L * 0.1, w * 0.45));
   return smooth(pts);
 }
+
+// ---------- softer, hand-drawn finishing ----------
+function centroid(shape) { let x = 0, y = 0; for (const p of shape) { x += p[0]; y += p[1]; } return [x / shape.length, y / shape.length]; }
+
+// Fur (or feathers) breaking the silhouette: short strokes along the outline, leaning outward.
+// lean: extra angle (radians) to comb the fur in one direction.
+export function furEdge(ctx, shape, opts = {}) {
+  const { color = '#a24d22', count = 220, len = 10, width = 1.4, alpha = 0.8, seed = 9, lean = 0, inner = 0.45, skip = null } = opts;
+  const r = rng(seed), [cx, cy] = centroid(shape), n = shape.length;
+  const m = ctx.getTransform(); const sc = Math.hypot(m.a, m.b) || 1;
+  ctx.save(); ctx.strokeStyle = color; ctx.lineCap = 'round';
+  for (let i = 0; i < count; i++) {
+    const k = Math.floor(r() * n), p = shape[k], a = shape[(k + n - 1) % n], b = shape[(k + 1) % n];
+    if (skip && skip(p[0], p[1])) continue;
+    let nx = -(b[1] - a[1]), ny = b[0] - a[0]; const d = Math.hypot(nx, ny) || 1; nx /= d; ny /= d;
+    if (nx * (p[0] - cx) + ny * (p[1] - cy) < 0) { nx = -nx; ny = -ny; }
+    // combed: lying mostly along the outline rather than sticking straight out
+    const ang = Math.atan2(ny, nx) + 0.95 + lean * 0.4 + r.gauss(0, 0.22), L = len * 0.7 * r.range(0.5, 1.2);
+    const x0 = p[0] - Math.cos(ang) * L * inner, y0 = p[1] - Math.sin(ang) * L * inner;
+    const x1 = p[0] + Math.cos(ang) * L * (1 - inner), y1 = p[1] + Math.sin(ang) * L * (1 - inner);
+    ctx.globalAlpha = alpha * 0.8 * r.range(0.5, 1); ctx.lineWidth = width * r.range(0.6, 1.2) / sc;
+    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.quadraticCurveTo((x0 + x1) / 2 + r.gauss(0, L * 0.15), (y0 + y1) / 2 + r.gauss(0, L * 0.15), x1, y1); ctx.stroke();
+  }
+  ctx.restore();
+}
+
+// Wet-in-wet colour variation: soft pools of related hues, kept inside the shape.
+export function blooms(ctx, shape, colors, opts = {}) {
+  const { n = 7, size = 0.35, alpha = 0.3, seed = 13 } = opts;
+  const r = rng(seed), b = bbox(shape);
+  ctx.save(); path(ctx, shape); ctx.clip();
+  for (let i = 0; i < n; i++) {
+    const x = r.range(b.x0, b.x1), y = r.range(b.y0, b.y1), rr = Math.max(b.w, b.h) * size * r.range(0.5, 1.2);
+    pool(ctx, x, y, rr, rr * r.range(0.6, 1), r.pick(colors), alpha * r.range(0.5, 1));
+  }
+  ctx.restore();
+}
+
+// Soften everything painted so far on this canvas (like wet edges), before the fine details go on.
+export function soften(ctx, px = 1.2) {
+  const c = ctx.canvas, tmp = canvas(c.width, c.height);
+  tmp.getContext('2d').drawImage(c, 0, 0);
+  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, c.width, c.height);
+  ctx.filter = `blur(${px}px)`; ctx.drawImage(tmp, 0, 0); ctx.restore();
+}
+
+// A light, sketchy pencil line: two loose passes with breaks, never a hard continuous outline.
+export function sketch(ctx, pts, opts = {}) {
+  const { closed = false, color = '#4a3226', alpha = 0.42, width = 1.2, seed = 21 } = opts;
+  ink(ctx, pts, { closed, color, alpha, width, wobble: 0.9, gaps: 0.9, seed, taper: true });
+  ink(ctx, pts.map(([x, y], i) => [x + Math.sin(i * 1.7) * 0.8, y + Math.cos(i * 1.3) * 0.8]), { closed, color, alpha: alpha * 0.45, width: width * 0.7, wobble: 1.2, gaps: 1.6, seed: seed + 1, taper: true });
+}

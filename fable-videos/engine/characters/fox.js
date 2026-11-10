@@ -1,7 +1,9 @@
 // A charming, slightly sly fox, facing right. Two bodies (trotting, sitting) share one
 // expressive front-facing head. Local units: ground at y = 0, origin under the middle.
 import { wash, ink, strokes, pool, ellipse, smooth, ribbon, bbox, sprite, drawSprite, shadeEdge, glaze, tuft, pencil,
-  rng, rgba, shade, tint, clamp } from '../watercolor.js';
+  rng, rgba, shade, tint, clamp, furEdge, blooms, soften, sketch } from '../watercolor.js';
+
+const WARM = ['#e8894a', '#c25a28', '#f2b06a', '#b8462a', '#d9773a'];
 
 const C = {
   fur: '#d8743a', furDark: '#a24d22', furLight: '#f0a25e', white: '#f6ecdc', sock: '#4a3328', sockLight: '#6b4c3c',
@@ -31,6 +33,7 @@ const PAW = ellipse(6, LEG - 4, 18, 9, 18);
 const TAIL = smooth([[-150, -205], [-215, -238], [-292, -228], [-342, -186], [-356, -140], [-330, -116], [-284, -138], [-226, -158], [-168, -168]]);
 const TAIL_TIP = smooth([[-318, -206], [-342, -186], [-356, -140], [-336, -118], [-312, -134], [-304, -170]]);
 const HEAD_TROT = [166, -262];
+const RUFF = smooth([[96, -238], [150, -268], [206, -252], [214, -206], [186, -160], [130, -150], [100, -186]]);
 
 // ---- sitting body (facing right, chest upright) ----
 const SIT_BODY = smooth([[-70, -10], [-110, -70], [-96, -150], [-40, -210], [30, -250], [80, -232], [96, -170], [80, -90], [60, -10], [0, 4]]);
@@ -51,16 +54,24 @@ export function makeFox(res = 1, seed = 3) {
   const head = sprite(bbox(FACE.concat(EAR_L, EAR_R)), res, (g) => {
     for (const [e, ei, et, n] of [[EAR_L, EARIN_L, EARTIP_L, 0], [EAR_R, EARIN_R, EARTIP_R, 1]]) {
       wash(g, e, { under: true, color: C.fur, opacity: 0.95, seed: s(10 + n) });
+      blooms(g, e, WARM, { n: 3, seed: s(18 + n), alpha: 0.35 });
       wash(g, ei, { color: C.white, opacity: 0.85, seed: s(12 + n), edge: 0.1 });
       glaze(g, ei, 0, -90, 80, 30, C.pink, 0.25);
       wash(g, et, { color: C.sock, opacity: 0.9, seed: s(14 + n) });
-      pencil(g, e, { closed: true, seed: s(16 + n), alpha: 0.5 });
+      furEdge(g, ei, { color: C.white, count: 26, len: 8, width: 1.6, alpha: 0.8, seed: s(36 + n), inner: 0.7 });
+      sketch(g, e, { closed: true, seed: s(16 + n), alpha: 0.35 });
     }
     wash(g, FACE, { under: true, color: C.fur, opacity: 0.95, seed: s(20), bleed: 0.025 });
+    blooms(g, FACE, WARM, { n: 6, seed: s(19), alpha: 0.35 });
     glaze(g, FACE, 0, -50, 60, 30, C.furLight, 0.6);
     shadeEdge(g, FACE, { color: C.shadow, alpha: 0.25, width: 18, dy: -5 });
     furred(g, FACE, C.fur, 21, (x, y) => Math.atan2(y + 10, x) * 0.6 - Math.PI / 2, 0.6);
+    soften(g, 2.0 * res);
+    furEdge(g, FACE, { color: C.fur, count: 120, len: 9, width: 2.2, alpha: 0.9, seed: s(22), skip: (x, y) => y > 10 });
+    furEdge(g, FACE, { color: C.furDark, count: 60, len: 7, width: 1, alpha: 0.5, seed: s(23), skip: (x, y) => y > 10 });
     for (const [ch, n] of [[CHEEK_L, 0], [CHEEK_R, 1]]) {
+      // the fox's fluffy white cheek ruffs, spiking outward
+      furEdge(g, ch, { color: C.white, count: 60, len: 13, width: 2.6, alpha: 0.95, seed: s(34 + n), inner: 0.3, skip: (x) => Math.abs(x) < 34 });
       wash(g, ch, { color: C.white, opacity: 0.95, seed: s(24 + n), bleed: 0.03 });
       strokes(g, ch, { color: '#c9b49a', count: 30, len: 6, width: 0.8, alpha: 0.35, seed: s(26 + n), dir: () => (n ? -0.6 : Math.PI + 0.6) });
     }
@@ -75,57 +86,91 @@ export function makeFox(res = 1, seed = 3) {
     g.save(); g.strokeStyle = rgba(C.ink, 0.3); g.lineWidth = 0.7;
     for (const sd of [-1, 1]) for (let i = 0; i < 3; i++) { g.beginPath(); g.moveTo(sd * 22, 34 + i * 5); g.quadraticCurveTo(sd * 50, 30 + i * 6, sd * 76, 36 + i * 10); g.stroke(); }
     g.restore();
-    pencil(g, FACE, { closed: true, seed: s(32), alpha: 0.5 });
+    sketch(g, FACE.slice(0, Math.floor(FACE.length * 0.5)), { seed: s(32), alpha: 0.35 });
   }, { seed: s(33) });
 
   // a wide fluffy tail (shared look for both poses)
   const tailSprite = (shape, tip, sd) => sprite(bbox(shape), res, (g) => {
     wash(g, shape, { under: true, color: C.fur, opacity: 0.94, seed: s(sd), bleed: 0.04 });
+    blooms(g, shape, WARM, { n: 8, seed: s(sd + 6), alpha: 0.35 });
     shadeEdge(g, shape, { color: C.shadow, alpha: 0.35, width: 20, dy: -8 });
     shadeEdge(g, shape, { color: C.furLight, alpha: 0.5, width: 16, dy: 8 });
     wash(g, tip, { color: C.white, opacity: 0.95, seed: s(sd + 1), bleed: 0.05 });
+    soften(g, 2.2 * res);
+    furEdge(g, shape, { color: C.fur, count: 260, len: 16, width: 2.6, alpha: 0.9, seed: s(sd + 7), lean: 0.5, inner: 0.35 });
+    furEdge(g, tip, { color: C.white, count: 90, len: 16, width: 2.6, alpha: 0.95, seed: s(sd + 8), lean: 0.5, inner: 0.35 });
+    furEdge(g, shape, { color: C.furDark, count: 120, len: 12, width: 1, alpha: 0.45, seed: s(sd + 9), lean: 0.5 });
     strokes(g, shape, { color: C.furDark, count: 200, len: 13, width: 1, alpha: 0.3, seed: s(sd + 2), dir: (x, y) => Math.atan2(y - shape[0][1], x - shape[0][0]), curve: 0.4 });
     strokes(g, tip, { color: '#cbb89f', count: 30, len: 9, width: 0.8, alpha: 0.4, seed: s(sd + 3), dir: () => Math.PI });
-    pencil(g, shape, { closed: true, seed: s(sd + 4), alpha: 0.45 });
+    sketch(g, shape.slice(0, Math.floor(shape.length * 0.55)), { seed: s(sd + 4), alpha: 0.3 });
   }, { seed: s(sd + 5) });
   const tail = tailSprite(TAIL, TAIL_TIP, 40);
   const sitTail = tailSprite(SIT_TAIL, SIT_TAIL_TIP, 50);
 
   const torso = sprite(bbox(TORSO), res, (g) => {
     wash(g, TORSO, { under: true, color: C.fur, opacity: 0.94, seed: s(60) });
+    blooms(g, TORSO, WARM, { n: 9, seed: s(65), alpha: 0.35 });
     glaze(g, TORSO, 120, -160, 70, 25, C.white, 0.85); // pale chest
     glaze(g, TORSO, 0, -150, 140, 18, '#f3c79a', 0.5);
     shadeEdge(g, TORSO, { color: C.shadow, alpha: 0.38, width: 26, dy: -10 });
     shadeEdge(g, TORSO, { color: C.furLight, alpha: 0.55, width: 22, dy: 10 });
+    soften(g, 2.1 * res);
     furred(g, TORSO, C.fur, 61, () => Math.PI + 0.1);
-    pencil(g, TORSO, { closed: true, seed: s(63), alpha: 0.45 });
+    furEdge(g, TORSO, { color: C.fur, count: 220, len: 11, width: 2.4, alpha: 0.9, seed: s(66), lean: -0.6 });
+    furEdge(g, TORSO, { color: '#f6e6d0', count: 50, len: 12, width: 2.4, alpha: 0.9, seed: s(67), lean: -0.4, skip: (x, y) => !(x > 60 && y > -190) });
+    sketch(g, TORSO.slice(0, Math.floor(TORSO.length * 0.5)), { seed: s(63), alpha: 0.3 });
   }, { seed: s(64) });
   const legSprite = (shape, dark, sd) => sprite(bbox(shape.concat(PAW)), res, (g) => {
     wash(g, shape, { under: true, color: dark ? shade(C.fur, 0.2) : C.fur, opacity: 0.94, seed: s(sd) });
     // dark socks on the lower leg, like a real fox
-    g.save(); g.beginPath(); g.rect(-60, 84, 120, 200); g.clip();
-    wash(g, shape, { color: dark ? shade(C.sock, 0.1) : C.sock, opacity: 0.95, seed: s(sd + 1) });
-    g.restore();
+    { // dark socks that fade in softly down the leg
+      const sock = document.createElement('canvas'); sock.width = g.canvas.width; sock.height = g.canvas.height;
+      const sg = sock.getContext('2d'); sg.setTransform(g.getTransform());
+      wash(sg, shape, { color: dark ? shade(C.sock, 0.1) : C.sock, opacity: 0.95, seed: s(sd + 1) });
+      sg.globalCompositeOperation = 'destination-in';
+      const gr = sg.createLinearGradient(0, 60, 0, 112); gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(1, 'rgba(0,0,0,1)');
+      sg.fillStyle = gr; sg.fillRect(-80, 40, 160, 200);
+      g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.drawImage(sock, 0, 0); g.restore();
+    }
     wash(g, PAW, { under: true, color: dark ? shade(C.sock, 0.15) : C.sock, opacity: 0.97, seed: s(sd + 2) });
     shadeEdge(g, shape, { color: C.shadow, alpha: 0.3, width: 10, dx: 4 });
-    pencil(g, shape, { closed: true, seed: s(sd + 3), alpha: dark ? 0.3 : 0.45 });
+    soften(g, 1.7 * res);
+    furEdge(g, shape, { color: dark ? shade(C.fur, 0.2) : C.fur, count: 50, len: 7, width: 1.8, alpha: 0.8, seed: s(sd + 5), lean: 0.8, skip: (x, y) => y > 80 });
+    sketch(g, shape, { closed: true, seed: s(sd + 3), alpha: dark ? 0.2 : 0.3 });
   }, { seed: s(sd + 4) });
+  const ruff = sprite(bbox(RUFF), res, (g) => {
+    wash(g, RUFF, { under: true, color: C.fur, opacity: 0.94, seed: s(104) });
+    glaze(g, RUFF, 175, -190, 40, 40, C.white, 0.9);
+    soften(g, 2.1 * res);
+    furEdge(g, RUFF, { color: C.fur, count: 90, len: 12, width: 2.4, alpha: 0.9, seed: s(105), lean: 0.3 });
+    furEdge(g, RUFF, { color: C.white, count: 60, len: 13, width: 2.4, alpha: 0.95, seed: s(106), skip: (x, y) => !(x > 150 && y > -230) });
+  }, { seed: s(107) });
   const fNear = legSprite(FLEG, false, 70), fFar = legSprite(FLEG, true, 76);
   const hNear = legSprite(HLEG, false, 82), hFar = legSprite(HLEG, true, 88);
 
   const sitBody = sprite(bbox(SIT_BODY.concat(SIT_FLEG)), res, (g) => {
     wash(g, SIT_BODY, { under: true, color: C.fur, opacity: 0.94, seed: s(90) });
+    blooms(g, SIT_BODY, WARM, { n: 9, seed: s(101), alpha: 0.35 });
     shadeEdge(g, SIT_BODY, { color: C.shadow, alpha: 0.35, width: 26, dx: -10 });
     shadeEdge(g, SIT_BODY, { edge: SIT_HAUNCH, color: C.shadow, alpha: 0.3, width: 18, dx: 6, dy: -4 });
     glaze(g, SIT_BODY, -70, -90, 50, 40, C.furLight, 0.5);
     furred(g, SIT_BODY, C.fur, 91, (x, y) => -Math.PI / 2 + 0.4 + x / 400);
     wash(g, SIT_CHEST, { color: C.white, opacity: 0.95, seed: s(93), bleed: 0.03 });
     strokes(g, SIT_CHEST, { color: '#c9b49a', count: 40, len: 7, width: 0.8, alpha: 0.35, seed: s(94), dir: () => Math.PI / 2 });
-    pencil(g, SIT_BODY, { closed: true, seed: s(95), alpha: 0.45 });
+    soften(g, 2.1 * res);
+    furEdge(g, SIT_BODY, { color: C.fur, count: 220, len: 12, width: 2.4, alpha: 0.9, seed: s(102), lean: 0.5 });
+    furEdge(g, SIT_CHEST, { color: C.white, count: 60, len: 12, width: 2.4, alpha: 0.9, seed: s(103), skip: (x) => x < 70 });
+    sketch(g, SIT_BODY.slice(0, Math.floor(SIT_BODY.length * 0.6)), { seed: s(95), alpha: 0.3 });
     wash(g, SIT_FLEG, { under: true, color: C.fur, opacity: 0.94, seed: s(96) });
-    g.save(); g.beginPath(); g.rect(30, -66, 70, 80); g.clip(); wash(g, SIT_FLEG, { color: C.sock, opacity: 0.95, seed: s(97) }); g.restore();
+    { const sock = document.createElement('canvas'); sock.width = g.canvas.width; sock.height = g.canvas.height;
+      const sg = sock.getContext('2d'); sg.setTransform(g.getTransform());
+      wash(sg, SIT_FLEG, { color: C.sock, opacity: 0.95, seed: s(97) });
+      sg.globalCompositeOperation = 'destination-in';
+      const gr = sg.createLinearGradient(0, -80, 0, -40); gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(1, 'rgba(0,0,0,1)');
+      sg.fillStyle = gr; sg.fillRect(20, -120, 100, 130);
+      g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.drawImage(sock, 0, 0); g.restore(); }
     wash(g, ellipse(68, -6, 22, 9, 18), { under: true, color: C.sock, opacity: 0.97, seed: s(98) });
-    pencil(g, SIT_FLEG, { closed: true, seed: s(99), alpha: 0.45 });
+    sketch(g, SIT_FLEG, { closed: true, seed: s(99), alpha: 0.3 });
   }, { seed: s(100) });
 
   function eye(g, x, y, open, happy, sly) {
@@ -188,7 +233,7 @@ export function makeFox(res = 1, seed = 3) {
     limb(fFar, 116, Math.PI); limb(hFar, -84, 0);
     g.save(); g.translate(30, -bob); g.translate(-160, -190); g.rotate((st.tail || 0) * 0.15 + (moving ? Math.sin(ph * 2) * 0.05 : 0)); g.translate(160, 190); drawSprite(g, tail); g.restore();
     limb(hNear, -104, Math.PI); limb(fNear, 94, 0);
-    g.save(); g.translate(0, -bob); drawSprite(g, torso); g.restore();
+    g.save(); g.translate(0, -bob); drawSprite(g, torso); drawSprite(g, ruff); g.restore();
     g.save(); g.translate(HEAD_TROT[0], HEAD_TROT[1] - bob * 1.2 + (st.headDY || 0)); drawHead(g, st); g.restore();
     g.restore();
   }
