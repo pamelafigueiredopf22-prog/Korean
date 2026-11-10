@@ -1,0 +1,102 @@
+<title>Maths Paper 3 Flashcards</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&display=swap">
+<style>
+/* Layout: one study column; the question card is the only raised object, the explanation unfolds beneath it like working on paper. Blue = maths, green = answer, amber = tip. */
+:root{
+  --bg:#f3f5f9;--card:#ffffff;--ink:#18202e;--muted:#596377;--line:#d8dee9;
+  --accent:#3550c8;--answer:#0f7a52;--answerbg:#e9f7f0;--tip:#9a5a00;--tipbg:#fff5e3;--bad:#c23b3b;--focus:#ffb000;
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --body:"Lexend",ui-sans-serif,system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#11151d;--card:#1b2130;--ink:#eef1f7;--muted:#9ba5b9;--line:#2f384a;
+  --accent:#8fa2ff;--answer:#4fd39b;--answerbg:#14281f;--tip:#ffc266;--tipbg:#2a2315;--bad:#ff7a7a;--focus:#ffd166;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#11151d;--card:#1b2130;--ink:#eef1f7;--muted:#9ba5b9;--line:#2f384a;
+  --accent:#8fa2ff;--answer:#4fd39b;--answerbg:#14281f;--tip:#ffc266;--tipbg:#2a2315;--bad:#ff7a7a;--focus:#ffd166;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:17px/1.55 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px}
+main{max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+h1{font:800 1.6rem/1.15 var(--display);margin:0;text-wrap:balance}
+.sub{color:var(--muted);margin:4px 0 0;font-size:.92rem}
+.bar{display:flex;flex-wrap:wrap;gap:8px}
+select,button{font:inherit;font-size:1rem;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;min-height:44px}
+select{flex:1 1 200px;min-width:0}
+button:focus-visible,select:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.stats{color:var(--muted);font-size:.88rem;font-variant-numeric:tabular-nums}
+.meter{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.meter div{height:100%;background:var(--answer);width:0;transition:width .3s}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 18px 20px;box-shadow:0 8px 24px rgba(0,0,0,.07);display:flex;flex-direction:column;gap:14px}
+.tag{align-self:flex-start;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:99px;background:var(--accent);color:var(--card)}
+.q{font-size:1.22rem;font-weight:600;line-height:1.45;margin:0}
+.reveal{background:var(--accent);color:var(--card);border-color:transparent;font-weight:700}
+.ans{background:var(--answerbg);border-left:4px solid var(--answer);border-radius:8px;padding:10px 14px}
+.lbl{font-size:.75rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:4px}
+.ans .lbl{color:var(--answer)}
+.ans .v{font-weight:700;font-size:1.08rem}
+.how .lbl{color:var(--muted)}
+.how ol{margin:6px 0 0;padding-left:1.4em;display:flex;flex-direction:column;gap:8px}
+.how li{padding-left:2px}
+.tip{background:var(--tipbg);border-radius:8px;padding:10px 14px;color:var(--ink)}
+.tip .lbl{color:var(--tip)}
+.rate{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rate .no{border-color:var(--bad);color:var(--bad);font-weight:700}
+.rate .yes{border-color:var(--answer);color:var(--answer);font-weight:700}
+.nav{display:flex;justify-content:space-between;gap:8px}
+.done{text-align:center;padding:32px 14px;background:var(--card);border:1px solid var(--line);border-radius:18px;display:flex;flex-direction:column;gap:12px;align-items:center}
+.done h2{font:800 1.4rem var(--display);margin:0}
+@media (prefers-reduced-motion:reduce){.meter div{transition:none}}
+</style>
+<main>
+  <div>
+    <h1>Maths Paper 3 Flashcards</h1>
+    <p class="sub">Edexcel GCSE Higher · Calculator paper · Read the question, try it on paper, then reveal the answer and the steps.</p>
+  </div>
+  <div class="bar">
+    <select id="topic" aria-label="Topic"><option value="all">All topics</option></select>
+    <button id="shuffle">Shuffle</button>
+    <button id="reset">Restart</button>
+  </div>
+  <div class="stats" id="stats"></div>
+  <div class="meter" aria-hidden="true"><div id="meter"></div></div>
+  <div id="area"></div>
+</main>
+<script>
+const CARDS=/*CARDS*/[];
+let deck=[],i=0,known=0,again=[];
+const $=id=>document.getElementById(id);
+const esc=x=>String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+$('topic').innerHTML='<option value="all">All topics ('+CARDS.length+' cards)</option>'+[...new Set(CARDS.map(c=>c.t))].map(t=>`<option>${esc(t)}</option>`).join('');
+function build(shuffle){const t=$('topic').value;deck=CARDS.filter(c=>t==='all'||c.t===t);
+ if(shuffle)for(let k=deck.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[deck[k],deck[j]]=[deck[j],deck[k]];}
+ i=0;known=0;again=[];render();}
+function render(){
+ $('stats').textContent=`Card ${Math.min(i+1,deck.length)} of ${deck.length} · Got it: ${known} · To practise again: ${again.length}`;
+ $('meter').style.width=(100*Math.min(i,deck.length)/Math.max(deck.length,1))+'%';
+ if(i>=deck.length){$('area').innerHTML=`<div class="done"><h2>Round finished</h2><p>You knew ${known} of ${deck.length}.</p>${again.length?'<button class="reveal" id="redo">Practise the '+again.length+' I missed</button>':'<p>Perfect round.</p>'}</div>`;
+  if(again.length)$('redo').onclick=()=>{deck=again;i=0;known=0;again=[];render();};return;}
+ const c=deck[i];
+ $('area').innerHTML=`<div class="card">
+   <span class="tag">${esc(c.t)}</span>
+   <p class="q">${esc(c.q)}</p>
+   <button class="reveal" id="show">Show answer and explanation</button>
+   <div id="back" hidden>
+     <div style="display:flex;flex-direction:column;gap:14px">
+       <div class="ans"><div class="lbl">Answer</div><div class="v">${esc(c.a)}</div></div>
+       <div class="how"><div class="lbl">How to do it, step by step</div><ol>${c.steps.map(s=>`<li>${esc(s)}</li>`).join('')}</ol></div>
+       ${c.tip?`<div class="tip"><div class="lbl">Tip</div>${esc(c.tip)}</div>`:''}
+     </div>
+   </div>
+ </div>
+ <div class="rate" style="margin-top:12px"><button class="no" id="no">✗ Need practice</button><button class="yes" id="yes">✓ Got it</button></div>
+ <div class="nav" style="margin-top:10px"><button id="prev">← Back</button><button id="skip">Skip →</button></div>`;
+ $('show').onclick=()=>{$('back').hidden=false;$('show').hidden=true;};
+ $('yes').onclick=()=>{known++;i++;render();window.scrollTo(0,0);};
+ $('no').onclick=()=>{again.push(c);i++;render();window.scrollTo(0,0);};
+ $('prev').onclick=()=>{if(i>0){i--;render();}};
+ $('skip').onclick=()=>{i++;render();};}
+$('topic').onchange=()=>build(false);$('shuffle').onclick=()=>build(true);$('reset').onclick=()=>build(false);
+build(false);
+</script>
