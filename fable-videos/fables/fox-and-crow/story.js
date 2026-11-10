@@ -386,7 +386,14 @@ function drawOak(g, t) {
   // ---- the cheese's journey
   const fallT0 = c02.start + 0.45, fallT1 = n08.start + 3.4;
   const beak = cheeseInBeak(OAK_CROW[0], OAK_CROW[1], OAK_CS), mouth = foxMouth(FOX_SIT[0], FOX_SIT[1], FOX_S);
-  const crowHas = t < fallT0, foxHas = t >= fallT1;
+  // the fox lifts a paw to catch it, holds it while he talks, then pops it into his mouth and trots off
+  const leaveT = n09.start + 1.4, popT = leaveT - 1.1;
+  const pawUp = span(t, fallT1 - 1.4, fallT1 - 0.5) * (1 - span(t, popT + 0.25, popT + 0.8));
+  const PIV = [73, -140], HOLD = [98, 2];
+  const pawAt = (up) => { const a = -1.85 * up, dx = HOLD[0] - PIV[0], dy = HOLD[1] - PIV[1];
+    return [FOX_SIT[0] + (PIV[0] + dx * Math.cos(a) - dy * Math.sin(a)) * FOX_S, FOX_SIT[1] + (PIV[1] + dx * Math.sin(a) + dy * Math.cos(a)) * FOX_S]; };
+  const paw = pawAt(1);
+  const crowHas = t < fallT0, inPaw = t >= fallT1 && t < popT, popping = t >= popT && t < popT + 0.4, foxHas = t >= popT + 0.4;
   // ---- the crow
   const proud = S.mood(t, 'n06', 0.2, 99) * (1 - span(t, c02.end + 0.3, c02.end + 1.2));
   const singUp = span(t, n07.start + 2.5, n07.end + 0.4) * (1 - span(t, c02.end + 0.2, c02.end + 0.9));
@@ -399,7 +406,7 @@ function drawOak(g, t) {
   g.restore();
   if (!crowHas && !foxHas) { // fluttering down, down, down
     const k = (t - fallT0) / (fallT1 - fallT0), e = k * k * 0.4 + k * 0.6;
-    const x = lerp(beak[0], mouth[0], e) + Math.sin(k * Math.PI * 3) * 40 * (1 - k), y = lerp(beak[1], mouth[1], e);
+    const x = lerp(beak[0], paw[0], e) + Math.sin(k * Math.PI * 3) * 40 * (1 - k), y = lerp(beak[1], paw[1], e);
     cheeseAt(g, x + 120 * 1.2 - 120 * 1.2, y, 1.2, Math.sin(k * 9) * 0.6);
   }
   // ---- the fox
@@ -408,11 +415,12 @@ function drawOak(g, t) {
   const sly = Math.max(S.mood(t, 'f01', 0.1, 0.4), S.mood(t, 'f02', 0.1, 0.4), S.mood(t, 'f03', 0.1, 0.6)) * 0.75;
   const foxTalk = S.talk(['f01', 'f02', 'f03', 'f04', 'f05'], t);
   const sniff = t > line('n04').start + 4.5 && t < line('n04').end ? Math.max(0, Math.sin((t - line('n04').start) * 9)) * 0.3 : 0;
-  const catchK = span(t, fallT1 - 0.6, fallT1 - 0.1) * (1 - span(t, fallT1 + 0.05, fallT1 + 0.4));
+  const catchK = 0.3 * span(t, fallT1 - 0.6, fallT1 - 0.1) * (1 - span(t, fallT1 + 0.05, fallT1 + 0.4)) + 0.8 * span(t, popT - 0.1, popT + 0.2) * (1 - span(t, popT + 0.35, popT + 0.6));
   const pleased = S.mood(t, 'f04', 0.4, 1.0) + S.mood(t, 'f05', 0.2, 1.0);
   const st = { t, eyes: 1 - S.blink(t, 6), sly: sly + pleased * 0.3, smile: 0.4 + sly * 0.6 + pleased * 0.6, browUp: Math.max(S.mood(t, 'n05', -1.5, 1), sly * 0.6),
     mouth: Math.max(foxTalk * 0.8, catchK * 0.9, sniff), breath: Math.sin(t * 1.3), tail: Math.sin(t * 0.9),
-    headDY: -sniff * 6, cheese: foxHas ? (g, x, y) => cheeseAt(g, x * 1.22 + 6, y * 1.22 + 2, 1.0 / FOX_S * 1.2, 0.3) : null };
+    headDY: -sniff * 6, cheese: foxHas ? (g, x, y) => cheeseAt(g, x * 1.22 + 6, y * 1.22 + 2, 1.0 / FOX_S * 1.2, 0.3) : null,
+    pawUp, pawHold: inPaw ? (g, x, y) => cheeseAt(g, HOLD[0], HOLD[1], 1.35 / FOX_S, 1.85) : null };
   if (fs.mode === 'sit') {
     g.save(); g.translate(FOX_SIT[0], FOX_SIT[1]); g.scale(FOX_S, FOX_S); fox.drawSit(g, { ...st, headDY: st.headDY - lookUp * 6 }); g.restore();
     if (fs.blend < 1) { g.save(); g.globalAlpha = 1 - fs.blend; g.translate(FOX_SIT[0] - 60, FOX_SIT[1]); g.scale(FOX_S * 0.86, FOX_S * 0.86); fox.drawTrot(g, { ...st, walk: null }); g.restore(); }
@@ -420,6 +428,7 @@ function drawOak(g, t) {
     g.save(); g.translate(fs.x, FOX_SIT[1]); g.scale(FOX_S * 0.86 * fs.flip, FOX_S * 0.86); fox.drawTrot(g, { ...st, walk: fs.walk, sly: 0, smile: 0.8 }); g.restore();
     if (fs.blend !== undefined && fs.blend < 1) { g.save(); g.globalAlpha = 1 - fs.blend; g.translate(FOX_SIT[0], FOX_SIT[1]); g.scale(FOX_S, FOX_S); fox.drawSit(g, st); g.restore(); }
   }
+  if (popping) { const k = ease((t - popT) / 0.4), from = pawAt(1 - span(t, popT + 0.25, popT + 0.8)); cheeseAt(g, lerp(from[0], mouth[0], k), lerp(from[1], mouth[1], k) - Math.sin(k * Math.PI) * 30, 1.2, k * 0.3); }
   // ---- leaves, motes, foreground
   drawCanopy(g, c, P.canopy, t);
   cam(g, c, 1.05);

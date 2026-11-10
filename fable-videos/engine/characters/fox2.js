@@ -203,7 +203,12 @@ export function makeFox2(res = 1, seed = 5) {
     drawBent(g, sTail, [-60, -20], 166, -(st.tail || 0) * 0.28); // only the tip lifts and curls
     drawSprite(g, sFarLeg);
     g.save(); g.scale(1, 1 + b * 0.008); drawSprite(g, sBody); g.restore();
-    drawSprite(g, sLeg);
+    // the near front leg can lift forward to catch or hold something (st.pawUp 0..1, st.pawHold draws on the paw)
+    { const up = st.pawUp || 0, piv = [73, -140];
+      g.save(); g.translate(piv[0], piv[1]); g.rotate(-1.85 * up); g.translate(-piv[0], -piv[1]);
+      drawSprite(g, sLeg);
+      if (st.pawHold) st.pawHold(g, 80, -14);
+      g.restore(); }
     g.save(); g.translate(S_HEAD_AT[0], S_HEAD_AT[1] - b * 2 + (st.headDY || 0)); g.rotate(S_HEAD_TILT); g.scale(1.22, 1.22); drawHead(g, st); g.restore();
     if (st.cheese) { g.save(); g.translate(S_HEAD_AT[0], S_HEAD_AT[1]); g.rotate(S_HEAD_TILT); st.cheese(g, 80, 26); g.restore(); }
     g.restore();
