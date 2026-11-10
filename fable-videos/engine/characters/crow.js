@@ -6,14 +6,14 @@ const SHEEN = ['#3b4a7a', '#4a3d6e', '#2f5a66', '#1c1f2b', '#55608a'];
 const C = { body: '#12141c', sheen: '#5d6d96', belly: '#232838', beak: '#4b4a52', beakLight: '#8a8790', ink: '#1e1d26', leg: '#3b3a42', cheese: '#f2c14e', cheeseDark: '#d99a2b' };
 
 const BODY = smooth([[-62, -72], [-34, -104], [18, -110], [62, -90], [96, -58], [128, -40], [70, -24], [10, -16], [-36, -30]]);
-const HEAD = smooth([[-86, -114], [-78, -138], [-52, -146], [-26, -132], [-18, -104], [-40, -88], [-72, -92]]);
+const HEAD = smooth([[-90, -112], [-84, -142], [-54, -156], [-22, -140], [-14, -106], [-40, -86], [-76, -90]]);
 const WING = smooth([[-30, -96], [30, -100], [84, -72], [146, -34], [94, -40], [30, -46], [-14, -58]]);
 const TAIL = smooth([[86, -50], [150, -44], [186, -26], [176, -16], [140, -22], [92, -30]]);
-const BEAK_UP = smooth([[-84, -128], [-116, -126], [-150, -114], [-116, -110], [-84, -110]]);
-const BEAK_LO = smooth([[-84, -110], [-112, -108], [-142, -106], [-110, -100], [-84, -98]]);
-const BEAK_PIVOT = [-84, -110];
-const CHEESE = [[-142, -118], [-118, -90], [-110, -122]];
-export const CROW_EYE = [-60, -124];
+const BEAK_UP = smooth([[-86, -128], [-114, -126], [-142, -115], [-114, -110], [-86, -110]]);
+const BEAK_LO = smooth([[-86, -110], [-110, -108], [-134, -106], [-108, -100], [-86, -98]]);
+const BEAK_PIVOT = [-86, -110];
+const CHEESE = [[-136, -118], [-114, -90], [-106, -122]];
+export const CROW_EYE = [-58, -126];
 
 export function makeCrow(res = 1, seed = 4) {
   const s = (n) => seed * 100 + n;
@@ -40,7 +40,7 @@ export function makeCrow(res = 1, seed = 4) {
     shadeEdge(g, HEAD, { color: C.sheen, alpha: 0.5, width: 14, dy: 6, dx: 3 });
     glaze(g, HEAD, -66, -128, 18, 14, '#4a5470', 0.6); // soft eye patch
     feathered(g, HEAD, 14, (x, y) => Math.atan2(y + 116, x + 56), 0.5);
-    pool(g, -76, -100, 12, 7, '#b77a8a', 0.25);
+    pool(g, -64, -104, 13, 8, '#d08a96', 0.45);
     soften(g, 1.8 * res);
     // soft, ruffled feather edges, combed back toward the tail
     furEdge(g, BODY, { color: C.body, count: 110, len: 7, width: 2.4, alpha: 0.9, seed: s(43), lean: 0.6, inner: 0.4 });
@@ -92,9 +92,9 @@ export function makeCrow(res = 1, seed = 4) {
       if (happy) g.arc(x, y + 4, 8, Math.PI * 1.15, Math.PI * 1.85); else g.arc(x, y - 4, 8, Math.PI * 0.15, Math.PI * 0.85);
       g.stroke();
     } else {
-      g.fillStyle = '#d9d2c4'; g.beginPath(); g.ellipse(x, y, 7.5, 7.5 * open + 1, 0, 0, 7); g.fill();
-      g.fillStyle = '#120f14'; g.beginPath(); g.ellipse(x - 1, y, 5.6, Math.min(5.6, 6 * open), 0, 0, 7); g.fill();
-      g.fillStyle = 'rgba(255,255,255,0.95)'; g.beginPath(); g.arc(x - 3, y - 2 * open, 1.9, 0, 7); g.fill();
+      g.fillStyle = '#e4ddcf'; g.beginPath(); g.ellipse(x, y, 10, 10 * open + 1, 0, 0, 7); g.fill();
+      g.fillStyle = '#120f14'; g.beginPath(); g.ellipse(x - 1, y, 7.6, Math.min(7.6, 8 * open), 0, 0, 7); g.fill();
+      g.fillStyle = 'rgba(255,255,255,0.95)'; g.beginPath(); g.arc(x - 3.5, y - 3 * open, 2.8, 0, 7); g.fill();
       g.beginPath(); g.arc(x + 2.5, y + 3 * open, 1.1, 0, 7); g.fill();
     }
     g.restore();

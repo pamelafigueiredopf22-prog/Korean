@@ -10,16 +10,16 @@ const C = {
 const WARM = ['#d27a44', '#b5552a', '#e0a062', '#9c4522'];
 
 // ---------- head (profile), origin at the skull centre ----------
-const HEAD = smooth([[-46, -6], [-40, -30], [-20, -44], [10, -46], [38, -36], [64, -22], [92, -12], [108, -4], [110, 4], [100, 10], [74, 14], [50, 22], [26, 34], [0, 42], [-26, 40], [-44, 24]]);
-const EAR_N = smooth([[-20, -38], [-12, -76], [-4, -104], [8, -72], [20, -38]]);
-const EAR_F = smooth([[-42, -28], [-46, -64], [-40, -94], [-28, -62], [-20, -40]]);
-const EAR_IN = smooth([[-12, -44], [-6, -74], [-3, -92], [4, -70], [12, -44]]);
-const EAR_TIP = smooth([[-10, -80], [-4, -104], [4, -80]]);
-const RUFF = smooth([[-46, 14], [-34, 36], [-8, 46], [20, 40], [46, 24], [26, 16], [0, 18], [-28, 12]]);
-const MUZ = smooth([[48, 22], [74, 14], [100, 10], [96, 17], [72, 23], [52, 28]]);
-const JAW = smooth([[50, 18], [100, 10], [97, 16], [74, 24], [52, 28]]);
-const JAW_PIVOT = [48, 18];
-const EYE = [30, -15];
+const HEAD = smooth([[-48, -6], [-44, -34], [-22, -50], [8, -52], [36, -42], [58, -26], [78, -14], [90, -5], [92, 4], [84, 12], [62, 16], [42, 24], [22, 36], [0, 44], [-26, 42], [-46, 26]]);
+const EAR_N = smooth([[-24, -40], [-18, -82], [-4, -112], [12, -82], [26, -40]]);
+const EAR_F = smooth([[-46, -28], [-52, -66], [-44, -100], [-30, -64], [-22, -40]]);
+const EAR_IN = smooth([[-14, -46], [-8, -80], [-3, -98], [6, -78], [16, -46]]);
+const EAR_TIP = smooth([[-13, -88], [-4, -112], [7, -88]]);
+const RUFF = smooth([[-48, 14], [-36, 38], [-8, 48], [20, 42], [42, 26], [24, 16], [0, 18], [-28, 12]]);
+const MUZ = smooth([[42, 22], [62, 16], [84, 12], [82, 18], [62, 24], [44, 30]]);
+const JAW = smooth([[44, 18], [84, 12], [82, 18], [64, 26], [46, 30]]);
+const JAW_PIVOT = [42, 20];
+const EYE = [22, -14];
 
 // ---------- sitting body ----------
 const S_BODY = smooth([[-104, -18], [-118, -76], [-100, -142], [-62, -202], [-20, -252], [16, -288], [44, -300], [80, -292], [94, -250], [97, -200], [90, -150],
@@ -37,7 +37,7 @@ const S_HEAD_AT = [52, -318], S_HEAD_TILT = -0.22;
 const T_BODY = smooth([[-140, -208], [-112, -240], [-30, -248], [60, -254], [106, -262], [140, -288], [176, -300], [206, -262], [196, -206], [164, -168],
   [100, -160], [20, -166], [-60, -172], [-112, -150], [-142, -176]]);
 const T_BIB = smooth([[170, -296], [204, -262], [196, -214], [170, -184], [160, -230]]);
-const LEG = 132;
+const LEG = 118;
 const T_FLEG = smooth([[-16, -8], [16, -8], [12, 80], [11, LEG - 4], [-10, LEG - 2], [-12, 80]]);
 const T_HLEG = smooth([[-30, -14], [26, -14], [20, 56], [4, 106], [12, LEG - 4], [-8, LEG - 2], [-22, 110], [-32, 50]]);
 const T_PAW = smooth([[-12, LEG - 10], [14, LEG - 12], [26, LEG - 4], [20, LEG + 2], [-12, LEG + 2]]);
@@ -87,10 +87,11 @@ export function makeFox2(res = 1, seed = 5) {
     hatch(g, HEAD, { color: '#5a2c16', count: 170, len: 7, width: 0.7, alpha: 0.5, seed: s(18), dir: (x) => Math.PI + (x > 40 ? 0.05 : 0.4),
       density: (x, y) => 0.3 + 0.7 * clamp((y + 10) / 50) });
     // dark line of the lips and the nose
-    g.fillStyle = C.nose; g.beginPath(); g.ellipse(106, 0, 7.5, 6, 0.2, 0, 7); g.fill();
-    g.fillStyle = 'rgba(255,255,255,0.5)'; g.beginPath(); g.arc(104, -2.5, 1.8, 0, 7); g.fill();
+    g.fillStyle = C.nose; g.beginPath(); g.ellipse(88, 1, 9, 7.5, 0.15, 0, 7); g.fill();
+    pool(g, 36, 10, 16, 10, '#e2867a', 0.45); // rosy cheek
+    g.fillStyle = 'rgba(255,255,255,0.6)'; g.beginPath(); g.arc(85, -2, 2.4, 0, 7); g.fill();
     g.save(); g.strokeStyle = rgba(C.ink, 0.3); g.lineWidth = 0.7; // whiskers
-    for (let i = 0; i < 4; i++) { g.beginPath(); g.moveTo(84, 8 + i * 2); g.quadraticCurveTo(70, 14 + i * 6, 54, 16 + i * 10); g.stroke(); }
+    for (let i = 0; i < 3; i++) { g.beginPath(); g.moveTo(70, 10 + i * 2); g.quadraticCurveTo(60, 14 + i * 6, 46, 16 + i * 9); g.stroke(); }
     g.restore();
     penLine(g, HEAD.slice(0, Math.floor(HEAD.length * 0.62)), { w: 2.2, seed: s(19), weight: (t) => 0.3 + 0.8 * Math.sin(t * Math.PI) });
     penLine(g, HEAD.slice(Math.floor(HEAD.length * 0.62)), { w: 1.4, alpha: 0.5, seed: s(20) });
@@ -106,13 +107,13 @@ export function makeFox2(res = 1, seed = 5) {
     g.rotate(st.headTilt || 0);
     const m = clamp(st.mouth || 0), sm = st.smile || 0;
     if (m > 0.03) { // the inside of the mouth, seen when the jaw drops
-      g.fillStyle = '#5c2622'; g.beginPath(); g.moveTo(50, 18); g.lineTo(102, 9); g.lineTo(100, 12 + m * 22); g.lineTo(54, 22 + m * 12); g.closePath(); g.fill();
+      g.fillStyle = '#5c2622'; g.beginPath(); g.moveTo(44, 19); g.lineTo(86, 11); g.lineTo(84, 13 + m * 20); g.lineTo(48, 24 + m * 12); g.closePath(); g.fill();
     }
     drawSprite(g, head);
     g.save(); g.translate(JAW_PIVOT[0], JAW_PIVOT[1]); g.rotate(m * 0.32); g.translate(-JAW_PIVOT[0], -JAW_PIVOT[1]); drawSprite(g, jaw); g.restore();
     // mouth line, curling up at the corner when he smiles
     g.strokeStyle = rgba(C.ink, 0.8); g.lineWidth = 1.8; g.lineCap = 'round';
-    g.beginPath(); g.moveTo(102, 9); g.quadraticCurveTo(78, 15, 56, 18 - sm * 7); g.stroke();
+    g.beginPath(); g.moveTo(84, 11); g.quadraticCurveTo(66, 16, 48, 19 - sm * 7); g.stroke();
     // eye: almond, amber, with a sly heavy lid
     const [ex, ey] = EYE, open = st.eyes ?? 1, sly = st.sly || 0;
     g.save();
@@ -121,18 +122,20 @@ export function makeFox2(res = 1, seed = 5) {
       if (st.happy) g.arc(ex, ey + 6, 11, Math.PI * 1.2, Math.PI * 1.8); else g.arc(ex, ey - 5, 11, Math.PI * 0.2, Math.PI * 0.8);
       g.stroke();
     } else {
-      const h = 7 * open * (1 - 0.45 * sly);
-      g.beginPath(); g.moveTo(ex - 13, ey + 1); g.quadraticCurveTo(ex, ey - h * 1.3, ex + 13, ey - 2); g.quadraticCurveTo(ex, ey + h, ex - 13, ey + 1); g.closePath();
-      g.fillStyle = '#f2e6cc'; g.fill(); g.save(); g.clip();
-      const ig = g.createRadialGradient(ex + 2, ey, 1, ex + 2, ey, 8); ig.addColorStop(0, '#f0b850'); ig.addColorStop(1, '#a8621c');
-      g.fillStyle = ig; g.beginPath(); g.arc(ex + 2, ey - 1, 7, 0, 7); g.fill();
-      g.fillStyle = '#1c120c'; g.beginPath(); g.ellipse(ex + 3, ey - 1, 2.6, 5, 0, 0, 7); g.fill();
-      g.fillStyle = 'rgba(255,255,255,0.9)'; g.beginPath(); g.arc(ex, ey - 3, 1.8, 0, 7); g.fill();
+      const R = 14, top = ey - R * open + sly * R * 0.9;
+      g.fillStyle = '#f4ead4'; g.beginPath(); g.ellipse(ex, ey, R, R * Math.max(0.15, open), 0, 0, 7); g.fill();
+      g.save(); g.beginPath(); g.rect(ex - R - 2, top, R * 2 + 4, R * 2 + 4); g.clip();
+      const ig = g.createRadialGradient(ex + 2, ey + 2, 1, ex + 2, ey, 9); ig.addColorStop(0, '#f3c25c'); ig.addColorStop(1, '#a8621c');
+      g.fillStyle = ig; g.beginPath(); g.arc(ex + 2, ey, 11.5, 0, 7); g.fill();
+      g.fillStyle = "#1c120c"; g.beginPath(); g.arc(ex + 3, ey, 7, 0, 7); g.fill();
+      g.fillStyle = "rgba(255,255,255,0.95)"; g.beginPath(); g.arc(ex - 1, ey - 4.5, 3.6, 0, 7); g.fill();
+      g.beginPath(); g.arc(ex + 6, ey + 3.5, 1.3, 0, 7); g.fill();
       g.restore();
-      g.strokeStyle = rgba(C.ink, 0.92); g.lineWidth = 2.6;
-      g.beginPath(); g.moveTo(ex - 14, ey + 1); g.quadraticCurveTo(ex, ey - h * 1.3 - 1, ex + 14, ey - 2); g.stroke();
-      g.lineWidth = 1.2; g.beginPath(); g.moveTo(ex - 12, ey + 2); g.quadraticCurveTo(ex, ey + h + 1, ex + 12, ey - 1); g.stroke();
-      g.lineWidth = 2; g.beginPath(); g.moveTo(ex + 13, ey - 2); g.lineTo(ex + 20, ey + 1); g.stroke(); // the fox's dark eye line
+      // upper lid (heavier and lower when sly), little lashes, soft lower line
+      g.strokeStyle = rgba(C.ink, 0.92); g.lineWidth = 2.8;
+      g.beginPath(); g.moveTo(ex - R - 1, ey + 1); g.quadraticCurveTo(ex, top - 3, ex + R + 2, ey - 1); g.stroke();
+      g.lineWidth = 1.6; g.beginPath(); g.moveTo(ex + R + 1, ey - 1); g.lineTo(ex + R + 7, ey - 5); g.stroke();
+      g.lineWidth = 1; g.globalAlpha = 0.6; g.beginPath(); g.moveTo(ex - R + 2, ey + 4); g.quadraticCurveTo(ex, ey + R * open + 1, ex + R - 1, ey + 3); g.stroke(); g.globalAlpha = 1;
     }
     // brow
     const bu = (st.browUp || 0) * 6;
@@ -174,7 +177,7 @@ export function makeFox2(res = 1, seed = 5) {
     drawSprite(g, sFarLeg);
     g.save(); g.scale(1, 1 + b * 0.008); drawSprite(g, sBody); g.restore();
     drawSprite(g, sLeg);
-    g.save(); g.translate(S_HEAD_AT[0], S_HEAD_AT[1] - b * 2 + (st.headDY || 0)); g.rotate(S_HEAD_TILT); drawHead(g, st); g.restore();
+    g.save(); g.translate(S_HEAD_AT[0], S_HEAD_AT[1] - b * 2 + (st.headDY || 0)); g.rotate(S_HEAD_TILT); g.scale(1.22, 1.22); drawHead(g, st); g.restore();
     if (st.cheese) { g.save(); g.translate(S_HEAD_AT[0], S_HEAD_AT[1]); g.rotate(S_HEAD_TILT); st.cheese(g, 80, 26); g.restore(); }
     g.restore();
   }
@@ -196,7 +199,7 @@ export function makeFox2(res = 1, seed = 5) {
 
   function drawTrot(g, st = {}) {
     const ph = (st.walk ?? 0) * Math.PI * 2, moving = st.walk != null;
-    const DROP = 50; // the body is drawn for longer legs; lower it onto the shorter ones
+    const DROP = 64; // the body is drawn for longer legs; lower it onto the shorter ones
     const swing = (o) => moving ? Math.sin(ph + o) * 0.4 : 0;
     const bob = moving ? Math.abs(Math.sin(ph)) * 5 : 0;
     g.save();
@@ -207,7 +210,7 @@ export function makeFox2(res = 1, seed = 5) {
     g.save(); g.translate(0, -bob); g.translate(-148, -200); g.rotate((st.tail || 0) * 0.12 + (moving ? Math.sin(ph * 2) * 0.04 : 0)); g.translate(148, 200); drawSprite(g, tTail); g.restore();
     limb(hN, -108, Math.PI); limb(fN, 140, 0);
     g.save(); g.translate(0, -bob); drawSprite(g, tBody); g.restore();
-    g.save(); g.translate(T_HEAD_AT[0], T_HEAD_AT[1] - bob * 1.1 + (st.headDY || 0)); g.rotate(T_HEAD_TILT); drawHead(g, st); g.restore();
+    g.save(); g.translate(T_HEAD_AT[0], T_HEAD_AT[1] - bob * 1.1 + (st.headDY || 0)); g.rotate(T_HEAD_TILT); g.scale(1.22, 1.22); drawHead(g, st); g.restore();
     if (st.cheese) { g.save(); g.translate(T_HEAD_AT[0], T_HEAD_AT[1] - bob * 1.1); g.rotate(T_HEAD_TILT); st.cheese(g, 80, 26); g.restore(); }
     g.restore();
     g.restore();

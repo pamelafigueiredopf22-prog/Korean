@@ -1,0 +1,7 @@
+{
+  "pause_scale": 1.2,
+  "lead_in": 7.0,
+  "narrator": {"voice": {"af_heart": 0.7, "af_nicole": 0.3}, "speed": 0.86, "lang": "en-us", "filters": ["lowpass=f=9000", "aecho=0.8:0.5:40|75:0.12|0.07"]},
+  "fox": {"voice": "am_puck", "speed": 0.92, "lang": "en-us", "gain": 1.0, "filters": ["lowpass=f=9500", "aecho=0.8:0.5:40:0.06"]},
+  "crow": {"voice": "af_bella", "speed": 0.95, "lang": "en-us", "gain": 0.95, "filters": ["lowpass=f=10000", "aecho=0.8:0.5:30:0.06"]}
+}
