@@ -14,27 +14,29 @@
     ]
   },
   "lion": {
-    "voice": {
-      "am_michael": 0.6,
-      "am_fenrir": 0.4
-    },
-    "speed": 0.86,
-    "lang": "en-us",
-    "gain": 1.05,
+    "engine": "elevenlabs",
+    "voice_id": "pqHfZKP75CvOlQylNhV4",
+    "name": "Bill",
+    "speed": 0.9,
+    "stability": 0.5,
+    "style": 0.4,
     "filters": [
-      "lowpass=f=9000",
-      "aecho=0.8:0.5:45:0.07"
-    ]
+      "loudnorm=I=-28.5:TP=-6",
+      "aecho=0.8:0.5:45:0.06"
+    ],
+    "gain": 2.0
   },
   "mouse": {
-    "voice": "af_bella",
-    "speed": 1.0,
-    "pitch": 1.06,
-    "lang": "en-us",
-    "gain": 0.95,
+    "engine": "elevenlabs",
+    "voice_id": "cgSgspJ2msm6clMCkdW9",
+    "name": "Jessica",
+    "speed": 0.95,
+    "stability": 0.45,
+    "style": 0.45,
     "filters": [
-      "lowpass=f=10000",
-      "aecho=0.8:0.5:30:0.07"
-    ]
+      "loudnorm=I=-28.5:TP=-6",
+      "aecho=0.8:0.5:30:0.05"
+    ],
+    "gain": 2.0
   }
 }

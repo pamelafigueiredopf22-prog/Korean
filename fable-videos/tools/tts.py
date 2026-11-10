@@ -24,6 +24,20 @@ def run(cmd):
     subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
 
 
+def elevenlabs(text, v, speed_scale, out):
+    """ElevenLabs text-to-speech. The API key is added by the session's network proxy
+    (or set ELEVENLABS_API_KEY when running elsewhere)."""
+    import urllib.request
+    settings = {"stability": v.get("stability", 0.45), "similarity_boost": v.get("similarity", 0.75),
+                "style": v.get("style", 0.35), "use_speaker_boost": True,
+                "speed": max(0.7, min(1.2, v.get("speed", 1.0) * speed_scale))}
+    body = json.dumps({"text": text, "model_id": v.get("model", "eleven_multilingual_v2"), "voice_settings": settings}).encode()
+    req = urllib.request.Request(f"https://api.elevenlabs.io/v1/text-to-speech/{v['voice_id']}?output_format=mp3_44100_128", data=body,
+                                 headers={"xi-api-key": os.environ.get("ELEVENLABS_API_KEY", "proxy-injected"), "Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=120) as r:
+        open(out, "wb").write(r.read())
+
+
 def voice_style(kokoro, spec):
     """A voice can be a single name or a weighted blend {"bf_emma": 0.6, ...}."""
     if isinstance(spec, str):
@@ -37,6 +51,7 @@ def main():
     ap.add_argument("fable_dir")
     ap.add_argument("--scenes", default="")
     ap.add_argument("--force", action="store_true")
+    ap.add_argument("--only", default="", help="re-voice only these speakers, e.g. lion,mouse")
     ap.add_argument("--set", action="append", default=[], help='override a voice: lion=\'{"voice": "bm_george", "pitch": 0.98}\'')
     a = ap.parse_args()
 
@@ -63,11 +78,15 @@ def main():
     for line in lines:
         v = voices[line["speaker"]]
         final = os.path.join(clips, f"{line['id']}.wav")
-        if a.force or not os.path.exists(final):
-            raw = os.path.join(clips, f"{line['id']}.raw.wav")
-            audio, sr = kokoro.create(line["text"], voice=voice_style(kokoro, v["voice"]),
-                                      speed=v.get("speed", 1.0) * line.get("speed_scale", 1.0), lang=v.get("lang", "en-us"))
-            sf.write(raw, audio, sr)
+        only = set(filter(None, a.only.split(",")))
+        if (a.force and (not only or line["speaker"] in only)) or not os.path.exists(final):
+            raw = os.path.join(clips, f"{line['id']}.raw" + (".mp3" if v.get("engine") == "elevenlabs" else ".wav"))
+            if v.get("engine") == "elevenlabs":
+                elevenlabs(line["text"], v, line.get("speed_scale", 1.0), raw)
+            else:
+                audio, sr = kokoro.create(line["text"], voice=voice_style(kokoro, v["voice"]),
+                                          speed=v.get("speed", 1.0) * line.get("speed_scale", 1.0), lang=v.get("lang", "en-us"))
+                sf.write(raw, audio, sr)
             filters = []
             if v.get("pitch", 1.0) != 1.0:
                 filters.append(f"rubberband=pitch={v['pitch']}:formant=preserved")
