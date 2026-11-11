@@ -1,0 +1,38 @@
+{
+  "title": "The Town Mouse and the Country Mouse",
+  "source": "Aesop's Fables (public domain), gently retold for bedtime",
+  "lines": [
+    {"id": "n01", "scene": "s1_country", "speaker": "narrator", "pause": 1.6, "text": "Once upon a time, in a quiet meadow at the edge of a wheat field, there lived a little country mouse."},
+    {"id": "n02", "scene": "s1_country", "speaker": "narrator", "pause": 1.4, "text": "Her home was a cosy burrow under the roots of an old hedge, with a soft bed of moss, and a window that looked out at the stars."},
+    {"id": "n03", "scene": "s1_country", "speaker": "narrator", "pause": 1.4, "text": "One sunny morning, a visitor came hurrying down the lane. It was her cousin, the town mouse, in his smart little coat."},
+    {"id": "t01", "scene": "s1_country", "speaker": "town", "speech": "[cheerful, a little grand] Hello, dear cousin! I've come all the way from the big town, just to see you!", "pause": 1.0, "text": "Hello, dear cousin! I've come all the way from the big town, just to see you!"},
+    {"id": "c01", "scene": "s1_country", "speaker": "country", "speech": "[delighted, warm] Cousin! What a lovely surprise! Come in, come in. You must be hungry after your long walk.", "pause": 1.6, "text": "Cousin! What a lovely surprise! Come in, come in. You must be hungry after your long walk."},
+
+    {"id": "n04", "scene": "s2_supper", "speaker": "narrator", "pause": 1.4, "text": "The country mouse set out the very best food she had. Some barley seeds, a few blackberries, and a little piece of crunchy corn."},
+    {"id": "t02", "scene": "s2_supper", "speaker": "town", "speech": "[politely, but unimpressed] Oh... seeds and berries. How... simple.", "pause": 1.2, "text": "Oh... seeds and berries. How... simple."},
+    {"id": "t03", "scene": "s2_supper", "speaker": "town", "speech": "[eager, persuasive] Cousin, you must come and visit me in town! I eat cakes, and cheese, and jelly every day. You've never tasted anything so wonderful!", "pause": 1.2, "text": "Cousin, you must come and visit me in town! I eat cakes, and cheese, and jelly every day. You've never tasted anything so wonderful!"},
+    {"id": "c02", "scene": "s2_supper", "speaker": "country", "speech": "[curious, excited] Cakes and jelly? Oh, my! Alright, cousin. I'll come!", "pause": 1.8, "text": "Cakes and jelly? Oh, my! Alright, cousin. I'll come!"},
+
+    {"id": "n05", "scene": "s3_journey", "speaker": "narrator", "pause": 1.4, "text": "So the two mice set off together. Over the hill, along the lane, and all the way into the big, busy town."},
+    {"id": "n06", "scene": "s3_journey", "speaker": "narrator", "pause": 2.0, "text": "The town mouse lived in a grand old house, with tall windows, and soft carpets, and a great big dining room."},
+
+    {"id": "n07", "scene": "s4_feast", "speaker": "narrator", "pause": 1.4, "text": "On the long table, there was a feast. Cream cakes, and cheeses, and wobbly red jelly."},
+    {"id": "t04", "scene": "s4_feast", "speaker": "town", "speech": "[proud, sweeping] There you are, cousin. Help yourself!", "pause": 1.0, "text": "There you are, cousin. Help yourself!"},
+    {"id": "c03", "scene": "s4_feast", "speaker": "country", "speech": "[amazed, softly] Oh... I've never seen so much food in all my life!", "pause": 1.4, "text": "Oh... I've never seen so much food in all my life!"},
+    {"id": "n08", "scene": "s4_feast", "speaker": "narrator", "pause": 1.0, "text": "But just as she took her very first nibble of cake... the door creaked open."},
+    {"id": "n09", "scene": "s4_feast", "speaker": "narrator", "pause": 1.0, "text": "In padded the house cat. Big, and fluffy, and yawning. Meow!"},
+    {"id": "t05", "scene": "s4_feast", "speaker": "town", "speech": "[urgent whisper] Quick, cousin! Run! Into the mouse hole!", "pause": 1.4, "text": "Quick, cousin! Run! Into the mouse hole!"},
+    {"id": "n10", "scene": "s4_feast", "speaker": "narrator", "pause": 2.0, "text": "Scurry, scurry, scurry! The two mice ran across the table, down the tablecloth, and into a tiny hole in the wall."},
+
+    {"id": "n11", "scene": "s5_hole", "speaker": "narrator", "pause": 1.4, "text": "They waited, and waited, in the dark. Their little hearts were going thump, thump, thump. At last, the sleepy cat wandered away."},
+    {"id": "c04", "scene": "s5_hole", "speaker": "country", "speech": "[gently, thoughtful] Cousin... thank you for showing me your fine house. But I think I'd like to go home now.", "pause": 1.2, "text": "Cousin... thank you for showing me your fine house. But I think I'd like to go home now."},
+    {"id": "c05", "scene": "s5_hole", "speaker": "country", "speech": "[warmly, sure] I would rather eat my seeds and berries in peace, than cakes and jelly with a cat at the door.", "pause": 1.2, "text": "I would rather eat my seeds and berries in peace, than cakes and jelly with a cat at the door."},
+    {"id": "t06", "scene": "s5_hole", "speaker": "town", "speech": "[softly, understanding, a small chuckle] I understand, cousin. Every mouse has her own kind of home.", "pause": 1.8, "text": "I understand, cousin. Every mouse has her own kind of home."},
+
+    {"id": "n12", "scene": "s6_home", "speaker": "narrator", "pause": 1.6, "text": "So the country mouse walked all the way back to her quiet field. The sun was setting, and the wheat was gold."},
+    {"id": "n13", "scene": "s6_home", "speaker": "narrator", "pause": 2.0, "text": "She crept into her cosy burrow, ate a few sweet blackberries, and snuggled into her soft bed of moss."},
+    {"id": "n14", "scene": "s6_home", "speaker": "narrator", "pause": 2.0, "text": "Because a simple home, full of peace and quiet, is the best home of all."},
+    {"id": "n15", "scene": "s6_home", "speaker": "narrator", "pause": 2.6, "text": "Outside her little window, the stars came out, one by one. And far away in the big town, her cousin was fast asleep too."},
+    {"id": "n16", "scene": "s6_home", "speaker": "narrator", "voice": "whisper", "speech": "[whispers] Goodnight, little one... [softly] Sweet dreams.", "pause": 30.0, "text": "Goodnight, little one. Sweet dreams."}
+  ]
+}
