@@ -1,0 +1,39 @@
+{
+  "title": "The Ant and the Grasshopper",
+  "source": "Aesop's Fables (public domain), gently retold for bedtime",
+  "lines": [
+    {"id": "n01", "scene": "s1_summer", "speaker": "narrator", "pause": 1.6, "text": "Once upon a time, on a warm summer day, the meadow was golden and full of sunshine."},
+    {"id": "n02", "scene": "s1_summer", "speaker": "narrator", "pause": 1.4, "text": "High on a tall stalk of grass, a grasshopper sat with his little fiddle, playing a happy tune."},
+    {"id": "g01", "scene": "s1_summer", "speaker": "grasshopper", "speech": "[cheerful, singing a little] La la la... What a beautiful day! The sun is shining, and there is nothing in the world to do but sing!", "pause": 1.4, "text": "La la la... What a beautiful day! The sun is shining, and there is nothing in the world to do but sing!"},
+    {"id": "n03", "scene": "s1_summer", "speaker": "narrator", "pause": 1.4, "text": "Down below, a little ant came marching past, carrying a big grain of wheat on her back."},
+    {"id": "g02", "scene": "s1_summer", "speaker": "grasshopper", "speech": "[friendly, curious] Hello, little Ant! Why are you working so hard on such a lovely day? Come and sing with me!", "pause": 1.2, "text": "Hello, little Ant! Why are you working so hard on such a lovely day? Come and sing with me!"},
+    {"id": "a01", "scene": "s1_summer", "speaker": "ant", "speech": "[kindly, a little out of breath] Thank you, Grasshopper, but I can't. I'm gathering food for the winter. When the cold comes, there will be nothing left to eat.", "pause": 1.2, "text": "Thank you, Grasshopper, but I can't. I'm gathering food for the winter. When the cold comes, there will be nothing left to eat."},
+    {"id": "a02", "scene": "s1_summer", "speaker": "ant", "speech": "[gently] You should gather some too.", "pause": 1.2, "text": "You should gather some too."},
+    {"id": "g03", "scene": "s1_summer", "speaker": "grasshopper", "speech": "[laughs, carefree] Winter? Oh, winter is so far away! There's plenty of food today. Why worry about tomorrow?", "pause": 1.8, "text": "Winter? Oh, winter is so far away! There's plenty of food today. Why worry about tomorrow?"},
+
+    {"id": "n04", "scene": "s2_work", "speaker": "narrator", "pause": 1.4, "text": "So the grasshopper went on singing, and the ant went on working."},
+    {"id": "n05", "scene": "s2_work", "speaker": "narrator", "pause": 1.6, "text": "All summer long, she carried seeds and grains, one at a time, down into her cosy little home under the ground."},
+    {"id": "n06", "scene": "s2_work", "speaker": "narrator", "pause": 2.0, "text": "And all summer long, the grasshopper played his fiddle, and danced in the sun."},
+
+    {"id": "n07", "scene": "s3_autumn", "speaker": "narrator", "pause": 1.4, "text": "Then, the days grew shorter. The leaves turned red and gold, and they began to fall, one by one."},
+    {"id": "n08", "scene": "s3_autumn", "speaker": "narrator", "pause": 2.0, "text": "The wind grew cooler, and the meadow grew quiet. But the grasshopper still didn't gather any food."},
+
+    {"id": "n09", "scene": "s4_winter", "speaker": "narrator", "pause": 1.4, "text": "And then, one morning, the meadow was white. Soft snow had fallen everywhere, covering the grass and the flowers."},
+    {"id": "n10", "scene": "s4_winter", "speaker": "narrator", "pause": 1.2, "text": "The grasshopper looked for something to eat. But there was nothing. Not a single seed. Not a single leaf."},
+    {"id": "g04", "scene": "s4_winter", "speaker": "grasshopper", "speech": "[shivering, sad] Brrr... I'm so cold... and so hungry. Oh, what am I going to do?", "pause": 1.6, "text": "Brrr... I'm so cold... and so hungry. Oh, what am I going to do?"},
+    {"id": "n11", "scene": "s4_winter", "speaker": "narrator", "pause": 2.0, "text": "Then he remembered the little ant. So he hopped through the snow, slowly, slowly, until he found her tiny door."},
+
+    {"id": "n12", "scene": "s5_door", "speaker": "narrator", "pause": 1.2, "text": "Knock, knock, knock."},
+    {"id": "a03", "scene": "s5_door", "speaker": "ant", "speech": "[surprised, then warm] Why, Grasshopper! You're shivering! Come in, come in, out of the cold.", "pause": 1.2, "text": "Why, Grasshopper! You're shivering! Come in, come in, out of the cold."},
+    {"id": "g05", "scene": "s5_door", "speaker": "grasshopper", "speech": "[sheepish, quietly] I'm sorry, Ant. You were right. I sang all summer, and I didn't save anything for the winter.", "pause": 1.4, "text": "I'm sorry, Ant. You were right. I sang all summer, and I didn't save anything for the winter."},
+    {"id": "a04", "scene": "s5_door", "speaker": "ant", "speech": "[kindly] That's alright. I have plenty to share. Here, have some warm seed soup.", "pause": 1.4, "text": "That's alright. I have plenty to share. Here, have some warm seed soup."},
+    {"id": "n13", "scene": "s5_door", "speaker": "narrator", "pause": 1.4, "text": "The grasshopper ate, and ate, until his tummy was full and his toes were warm."},
+    {"id": "g06", "scene": "s5_door", "speaker": "grasshopper", "speech": "[grateful, touched] Thank you, Ant. Next summer, I will work with you. And maybe... in the evenings, I can play you a song?", "pause": 1.2, "text": "Thank you, Ant. Next summer, I will work with you. And maybe... in the evenings, I can play you a song?"},
+    {"id": "a05", "scene": "s5_door", "speaker": "ant", "speech": "[happy, smiling] I would like that very much.", "pause": 1.8, "text": "I would like that very much."},
+
+    {"id": "n14", "scene": "s6_goodnight", "speaker": "narrator", "pause": 2.0, "text": "So, all winter long, the two friends stayed warm and cosy together. And every evening, the grasshopper played a soft, sleepy song."},
+    {"id": "n15", "scene": "s6_goodnight", "speaker": "narrator", "pause": 2.0, "text": "Because it is good to play, and it is good to sing. But it is also good to work hard, and to get ready for what's to come."},
+    {"id": "n16", "scene": "s6_goodnight", "speaker": "narrator", "pause": 2.6, "text": "Outside, the snow fell softly. Inside, the little ones were fast asleep."},
+    {"id": "n17", "scene": "s6_goodnight", "speaker": "narrator", "voice": "whisper", "speech": "[whispers] Goodnight, little one... [softly] Sweet dreams.", "pause": 30.0, "text": "Goodnight, little one. Sweet dreams."}
+  ]
+}
