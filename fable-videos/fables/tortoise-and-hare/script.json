@@ -214,7 +214,8 @@
       "speaker": "narrator",
       "pause": 30.0,
       "text": "Goodnight, little one. Sweet dreams.",
-      "whisper": true
+      "voice": "whisper",
+      "speech": "[whispers] Goodnight, little one... [softly] Sweet dreams."
     }
   ]
 }

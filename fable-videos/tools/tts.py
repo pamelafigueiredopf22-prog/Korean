@@ -79,7 +79,7 @@ def main():
     timeline, t = [], lead
     pieces = [np.zeros(int(lead * SR), dtype=np.float32)]
     for line in lines:
-        v = voices[line["speaker"]]
+        v = voices[line.get("voice", line["speaker"])]  # a line can borrow another voice (e.g. the whispered goodnight)
         final = os.path.join(clips, f"{line['id']}.wav")
         only = set(filter(None, a.only.split(",")))
         if (a.force and (not only or line["speaker"] in only)) or not os.path.exists(final):

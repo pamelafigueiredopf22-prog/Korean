@@ -36,5 +36,17 @@
       "loudnorm=I=-28.5:TP=-6",
       "aecho=0.8:0.5:40:0.06"
     ]
+  },
+  "whisper": {
+    "engine": "elevenlabs",
+    "model": "eleven_v3",
+    "voice_id": "cgSgspJ2msm6clMCkdW9",
+    "name": "Jessica (whisper)",
+    "stability": 0.5,
+    "gain": 1.6,
+    "filters": [
+      "loudnorm=I=-28.5:TP=-8",
+      "aecho=0.8:0.5:40:0.06"
+    ]
   }
 }
