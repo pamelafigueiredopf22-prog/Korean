@@ -106,12 +106,14 @@ export function makeGrasshopper(res = 1, seed = 31) {
     pool(g, -20, 2, 90, 10, '#2a1e12', 0.24 * (1 - Math.min(1, (st.hop || 0) / 80)));
     g.translate(jit, -(st.hop || 0));
     g.rotate((st.lean || 0) - crouch * 0.08);
+    const D = 36, LEGK = 0.62;          // shorter legs: the whole body sits lower
+    g.translate(0, D);
     const hipY = -100 + crouch * 30;
     // far hind leg
     const farHip = [-14, hipY - 6];
-    g.save(); g.translate(...farHip); g.scale(1, 1 - crouch * 0.25); drawSprite(g, thighF); g.restore();
-    const fKnee = [farHip[0] - 60, farHip[1] - 88 * (1 - crouch * 0.25)];
-    limb(g, [fKnee, [-60, -4], [-30, 0]], 7, 4, shade(GC.leg, 0.2));
+    g.save(); g.translate(...farHip); g.scale(1, LEGK * (1 - crouch * 0.25)); drawSprite(g, thighF); g.restore();
+    const fKnee = [farHip[0] - 60, farHip[1] - 88 * LEGK * (1 - crouch * 0.25)];
+    limb(g, [fKnee, [-58, -D - 4], [-30, -D]], 7, 4, shade(GC.leg, 0.2));
     // antennae (behind the head)
     const ant = st.antenna || 0, ab = Math.sin(t * 1.3) * 0.04 + ant * Math.sin(t * 7) * 0.08;
     for (const [dx, ph] of [[0, 0], [10, 0.6]]) {
@@ -159,9 +161,9 @@ export function makeGrasshopper(res = 1, seed = 31) {
     g.restore();
     // near hind leg: the big drumstick thigh, the thin shin down to the ground, and the foot
     const hip = [0, hipY];
-    g.save(); g.translate(...hip); g.scale(1, 1 - crouch * 0.25); drawSprite(g, thigh); g.restore();
-    const knee = [hip[0] - 66, hip[1] - 96 * (1 - crouch * 0.25)];
-    limb(g, [knee, [-44, -4], [-4, 0]], 9, 6, GC.leg);
+    g.save(); g.translate(...hip); g.scale(1, LEGK * (1 - crouch * 0.25)); drawSprite(g, thigh); g.restore();
+    const knee = [hip[0] - 66, hip[1] - 96 * LEGK * (1 - crouch * 0.25)];
+    limb(g, [knee, [-44, -D - 4], [-4, -D]], 9, 6, GC.leg);
     g.restore();
   }
   return { draw };
