@@ -51,6 +51,9 @@ function smileMouth(g, x, y, w, m, sm = 0.5) {
     g.quadraticCurveTo(x, y + depth * 1.6, pts[0][0], pts[0][1]); g.closePath();
     g.fillStyle = '#5c2622'; g.fill(); g.save(); g.clip();
     g.fillStyle = '#d8857c'; g.beginPath(); g.ellipse(x, y + depth * 0.9, w * 0.3, depth * 0.4, 0, 0, 7); g.fill(); g.restore();
+    // outline the mouth itself (rebuild its path: the tongue drawing replaced it)
+    g.beginPath(); g.moveTo(...pts[0]); for (const p of pts) g.lineTo(...p);
+    g.quadraticCurveTo(x, y + depth * 1.6, pts[0][0], pts[0][1]); g.closePath();
     g.strokeStyle = rgba(INK, 0.8); g.lineWidth = 1.8; g.stroke();
   } else {
     g.strokeStyle = rgba(INK, 0.8); g.lineWidth = 1.8; g.beginPath(); g.moveTo(...pts[0]); for (const p of pts) g.lineTo(...p); g.stroke();

@@ -68,25 +68,43 @@ function paintSeason(name) {
     // a big flower head on top of the plant
     for (let k = 0; k < 10; k++) { const a = k / 10 * Math.PI * 2; wash(g, ellipse(1330 + Math.cos(a) * 70, 70 + Math.sin(a) * 40, 60, 24, 20, a), { color: C.flowers[0], opacity: 0.9, seed: 34 + k, under: true, layers: 10 }); }
     wash(g, ellipse(1330, 70, 36, 26, 20), { color: C.snow ? '#e8e4dc' : '#d89a3a', opacity: 0.95, seed: 45, under: true });
-    // the ant's home: a mossy mound under a twisting root, with a little round door and a window
-    const mound = smooth([[60, 880], [100, 700], [220, 610], [380, 590], [520, 640], [600, 760], [620, 880]]);
+    // the ant's home: a grassy bank running off the left edge, under a twisting root, with a round door
+    const mound = smooth([[-M - 60, 880], [-M - 60, 560], [60, 560], [220, 590], [380, 590], [520, 640], [600, 740], [640, 880]]);
     wash(g, mound, { color: shade(C.soil, 0.1), opacity: 0.97, seed: 50, under: true });
-    strokes(g, mound, { color: shade(C.soil, 0.4), count: 300, len: 6, width: 1.4, alpha: 0.4, seed: 51, dir: () => r() * 3 });
-    trunk(g, [[-60, 640], [120, 600], [300, 560], [470, 600], [640, 700]], 50, 30, { seed: 52, under: true });
-    for (let k = 0; k < 8; k++) foliage(g, 120 + k * 60, 600 + Math.abs(k - 4) * 14, 40, 16, { seed: 53 + k, colors: C.snow ? ['#f4f6f8', '#e6eaee'] : name === 'autumn' ? ['#a8883a', '#8a7a3a'] : [PAL.moss, '#7f9a5a'], blobs: 3, opacity: 0.9, detail: false });
+    shadeEdge(g, mound, { color: shade(C.soil, 0.55), alpha: 0.35, width: 60, dx: 26, dy: -10 });
+    strokes(g, mound, { color: shade(C.soil, 0.4), count: 420, len: 6, width: 1.4, alpha: 0.4, seed: 51, dir: () => r() * 3 });
+    for (let k = 0; k < 18; k++) { const x = r.range(-80, 560), y = r.range(640, 860); if (x > 240 && x < 440 && y > 720) continue;
+      const st = ellipse(x, y, r.range(8, 16), r.range(6, 10), 12); wash(g, st, { color: shade(C.soil, 0.25), opacity: 0.7, seed: 54 + k, layers: 6 }); }  // little stones in the earth
+    trunk(g, [[-M - 60, 600], [120, 580], [300, 560], [470, 600], [640, 700], [700, 880]], 56, 30, { seed: 52, under: true });
+    trunk(g, [[60, 585], [20, 650], [-20, 720]], 18, 6, { seed: 55, under: true });
+    const capCol = C.snow ? ['#f4f6f8', '#e6eaee'] : name === 'autumn' ? ['#a8883a', '#8a7a3a', '#c09048'] : [PAL.moss, '#7f9a5a', '#8fa252'];
+    for (let k = 0; k < 13; k++) foliage(g, -80 + k * 54, 560 + Math.max(0, k - 6) * 14 + (k % 2) * 6, 46, 18, { seed: 56 + k, colors: capCol, blobs: 3, opacity: 0.92, detail: false });
+    if (!C.snow) for (let k = 0; k < 12; k++) grass(g, -60 + k * 55, 570 + Math.max(0, k - 6) * 14, { seed: 70 + k, h: 40, n: 6, colors: capCol });
+    // a stone arch around the door
+    for (let k = 0; k < 9; k++) { const a = Math.PI * (1 + k / 8), x = 340 + Math.cos(a) * 92, y = 822 + Math.sin(a) * 96 * (k === 0 || k === 8 ? 0.5 : 1);
+      const st = ellipse(x, y, 18, 13, 12, a + Math.PI / 2); wash(g, st, { color: C.snow ? '#c8ccd2' : '#b8ae9c', opacity: 0.97, seed: 80 + k, under: true, layers: 8 }); penLine(g, st, { closed: true, w: 1.2, alpha: 0.6 }); }
     const door = smooth([[270, 880], [270, 790], [300, 752], [340, 742], [380, 752], [410, 790], [410, 880]]);
     wash(g, door, { color: '#7a5236', opacity: 0.98, seed: 60, under: true });
     for (let k = 1; k < 4; k++) penLine(g, [[270 + k * 35, 884], [270 + k * 35, 760 - Math.abs(k - 2) * 8]], { w: 1.4, alpha: 0.5 });
     penLine(g, door, { closed: true, w: 2.2, alpha: 0.85 });
     g.fillStyle = '#e8c070'; g.beginPath(); g.arc(392, 820, 6, 0, 7); g.fill();
-    const win = ellipse(490, 730, 30, 30, 20); wash(g, win, { color: C.snow ? '#f2c070' : '#7a8a90', opacity: 0.95, seed: 61, under: true });
-    penLine(g, [[460, 730], [520, 730]], { w: 2, alpha: 0.8 }); penLine(g, [[490, 700], [490, 760]], { w: 2, alpha: 0.8 }); penLine(g, win, { closed: true, w: 2.2, alpha: 0.8 });
-    // a little seed pile by the door in summer, a doormat
-    wash(g, smooth([[250, 896], [430, 896], [440, 910], [240, 910]]), { color: '#a8885a', opacity: 0.9, seed: 62 });
+    // the round window with little shutters and a flower box
+    const win = ellipse(500, 712, 30, 30, 20); wash(g, win, { color: C.snow ? '#f2c070' : '#7a8a90', opacity: 0.95, seed: 61, under: true });
+    penLine(g, [[470, 712], [530, 712]], { w: 2, alpha: 0.8 }); penLine(g, [[500, 682], [500, 742]], { w: 2, alpha: 0.8 }); penLine(g, win, { closed: true, w: 2.2, alpha: 0.8 });
+    wash(g, smooth([[466, 748], [534, 748], [530, 764], [470, 764]]), { color: '#8a5a32', opacity: 0.95, seed: 63, under: true });
+    if (!C.snow) for (let k = 0; k < 4; k++) flower(g, 474 + k * 17, 744, { seed: 64 + k, size: 6, color: k % 2 ? '#f2c4d0' : '#f8f0dc', stem: 0 });
+    // a little lantern hanging from the root, the doorstep and a path of flat stones
+    penLine(g, [[200, 586], [200, 640]], { w: 1.4, alpha: 0.8 });
+    const lamp = smooth([[188, 640], [212, 640], [216, 672], [184, 672]]); wash(g, lamp, { color: '#f2c070', opacity: 0.95, seed: 65, under: true, layers: 8 }); penLine(g, lamp, { closed: true, w: 1.6, alpha: 0.8 });
+    pool(g, 200, 656, 40, 34, '#ffe0a0', 0.35);
+    wash(g, smooth([[250, 880], [430, 880], [446, 902], [234, 902]]), { color: C.snow ? '#c8ccd2' : '#a49884', opacity: 0.97, seed: 62, under: true });
+    penLine(g, [[234, 902], [446, 902]], { w: 1.4, alpha: 0.6 });
+    for (const [x, y] of [[470, 930], [560, 960], [660, 990]]) { const st = ellipse(x, y, 36, 12, 14); wash(g, st, { color: C.snow ? '#d4d8de' : '#b8ae9c', opacity: 0.95, seed: x, under: true, layers: 8 }); penLine(g, st, { closed: true, w: 1.2, alpha: 0.5 }); }
+    if (!C.snow) { for (const [x, sc] of [[120, 1.0], [150, 0.7], [560, 0.8]]) mushroom(g, x, 880, { seed: x, s: sc }); for (let k = 0; k < 6; k++) flower(g, 440 + k * 22, 872 - (k % 2) * 6, { seed: 90 + k, size: 7, color: name === 'autumn' ? '#e8a04a' : k % 2 ? '#f2c4d0' : '#f8f0dc', stem: 16 }); }
     if (C.snow) { // snow over everything
       wash(g, smooth([[-M - 50, 860], [600, 850], [1300, 868], [W + M + 50, 856], [W + M + 50, LH], [-M - 50, LH]]), { color: '#f6f8fa', opacity: 0.9, seed: 70 });
-      wash(g, smooth([[90, 700], [220, 600], [380, 580], [530, 630], [600, 740], [480, 690], [300, 660]]), { color: '#fbfcfd', opacity: 0.95, seed: 71 });
-      wash(g, smooth([[-60, 630], [300, 548], [480, 590], [640, 690], [470, 584], [300, 538], [-60, 620]]), { color: '#fbfcfd', opacity: 0.95, seed: 72 });
+      wash(g, smooth([[-M - 60, 556], [60, 552], [220, 584], [380, 584], [520, 632], [600, 730], [480, 680], [300, 640], [60, 600], [-M - 60, 600]]), { color: '#fbfcfd', opacity: 0.95, seed: 71 });
+      wash(g, smooth([[-M - 60, 584], [300, 540], [480, 584], [640, 684], [700, 860], [660, 700], [470, 600], [300, 556], [-M - 60, 604]]), { color: '#fbfcfd', opacity: 0.95, seed: 72 });
     }
     // fallen leaves in autumn
     if (name === 'autumn') for (let k = 0; k < 40; k++) leaf(g, r.range(0, W), r.range(840, 1080), r.range(12, 20), r() * 6, r.pick(['#c86a3a', '#d89a3a', '#a85a2a', '#e8b050']));

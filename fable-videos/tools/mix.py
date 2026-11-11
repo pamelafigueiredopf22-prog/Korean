@@ -11,7 +11,7 @@ import argparse, json, os, subprocess
 ap = argparse.ArgumentParser()
 ap.add_argument('fable')
 ap.add_argument('--music-db', type=float, default=-21)
-ap.add_argument('--violin-db', type=float, default=-17)
+ap.add_argument('--violin-db', type=float, default=-22)
 ap.add_argument('--out', default=None)
 a = ap.parse_args()
 b = os.path.join('build', a.fable)
