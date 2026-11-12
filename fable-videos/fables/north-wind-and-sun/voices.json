@@ -1,0 +1,64 @@
+{
+  "pause_scale": 1.2,
+  "lead_in": 7.0,
+  "narrator": {
+    "voice": {
+      "af_heart": 0.7,
+      "af_nicole": 0.3
+    },
+    "speed": 0.86,
+    "lang": "en-us",
+    "filters": [
+      "lowpass=f=9000",
+      "aecho=0.8:0.5:40|75:0.12|0.07"
+    ]
+  },
+  "wind": {
+    "engine": "elevenlabs",
+    "model": "eleven_v3",
+    "voice_id": "CwhRBWXzGAHq8TQ4Fs17",
+    "name": "Roger",
+    "stability": 0.4,
+    "gain": 2.0,
+    "filters": [
+      "loudnorm=I=-28.5:TP=-6",
+      "aecho=0.8:0.5:60|110:0.12|0.08"
+    ]
+  },
+  "sun": {
+    "engine": "elevenlabs",
+    "model": "eleven_v3",
+    "voice_id": "pFZP5JQG7iQjIQuC4Bku",
+    "name": "Lily",
+    "stability": 0.5,
+    "gain": 2.0,
+    "filters": [
+      "loudnorm=I=-28.5:TP=-6",
+      "aecho=0.8:0.5:50:0.08"
+    ]
+  },
+  "traveller": {
+    "engine": "elevenlabs",
+    "model": "eleven_v3",
+    "voice_id": "iP95p4xoKVk53GoZ742B",
+    "name": "Chris",
+    "stability": 0.45,
+    "gain": 2.0,
+    "filters": [
+      "loudnorm=I=-28.5:TP=-6",
+      "aecho=0.8:0.5:30:0.05"
+    ]
+  },
+  "whisper": {
+    "engine": "elevenlabs",
+    "model": "eleven_v3",
+    "voice_id": "cgSgspJ2msm6clMCkdW9",
+    "name": "Jessica (whisper)",
+    "stability": 0.5,
+    "gain": 1.6,
+    "filters": [
+      "loudnorm=I=-28.5:TP=-8",
+      "aecho=0.8:0.5:40:0.06"
+    ]
+  }
+}
