@@ -1,0 +1,34 @@
+{
+  "title": "The North Wind and the Sun",
+  "source": "Aesop's Fables (public domain), gently retold for bedtime",
+  "lines": [
+    {"id": "n01", "scene": "s1_sky", "speaker": "narrator", "pause": 1.6, "text": "Once upon a time, high above the hills and the meadows, the North Wind and the Sun shared the big blue sky."},
+    {"id": "n02", "scene": "s1_sky", "speaker": "narrator", "pause": 1.4, "text": "One day, they began to argue about which of them was the strongest."},
+    {"id": "w01", "scene": "s1_sky", "speaker": "wind", "speech": "[boastful, booming] I am the strongest! When I blow, the trees bend, and the waves roar!", "pause": 1.0, "text": "I am the strongest! When I blow, the trees bend, and the waves roar!"},
+    {"id": "s01", "scene": "s1_sky", "speaker": "sun", "speech": "[calm, warm, gently amused] Perhaps. But let us find out.", "pause": 1.2, "text": "Perhaps. But let us find out."},
+    {"id": "n03", "scene": "s1_sky", "speaker": "narrator", "pause": 1.4, "text": "Just then, they saw a traveller walking along the winding road below, wrapped in a warm red coat."},
+    {"id": "s02", "scene": "s1_sky", "speaker": "sun", "speech": "[kindly] Whoever can make that traveller take off his coat, is the strongest.", "pause": 1.0, "text": "Whoever can make that traveller take off his coat, is the strongest."},
+    {"id": "w02", "scene": "s1_sky", "speaker": "wind", "speech": "[laughs, confident] Ha! That will be easy. Watch me!", "pause": 1.8, "text": "Ha! That will be easy. Watch me!"},
+
+    {"id": "n04", "scene": "s2_wind", "speaker": "narrator", "pause": 1.4, "text": "So the North Wind took a deep breath, and blew. Whoosh!"},
+    {"id": "n05", "scene": "s2_wind", "speaker": "narrator", "pause": 1.4, "text": "The leaves went spinning. The grass bowed low. And the traveller's hat nearly flew away!"},
+    {"id": "t01", "scene": "s2_wind", "speaker": "traveller", "speech": "[surprised, holding on] Oh my! What a chilly wind!", "pause": 1.2, "text": "Oh my! What a chilly wind!"},
+    {"id": "n06", "scene": "s2_wind", "speaker": "narrator", "pause": 1.4, "text": "So the Wind blew harder. And harder. But the harder he blew, the tighter the traveller wrapped his coat around him."},
+    {"id": "n07", "scene": "s2_wind", "speaker": "narrator", "pause": 2.0, "text": "At last, the North Wind was all out of breath. He puffed, and he huffed, and then he gave up."},
+
+    {"id": "s03", "scene": "s3_sun", "speaker": "sun", "speech": "[gently] Now, it is my turn.", "pause": 1.2, "text": "Now, it is my turn."},
+    {"id": "n08", "scene": "s3_sun", "speaker": "narrator", "pause": 1.4, "text": "The Sun came out from behind the clouds, and began to shine. Softly at first, and then warmer, and warmer."},
+    {"id": "n09", "scene": "s3_sun", "speaker": "narrator", "pause": 1.4, "text": "The flowers opened their petals. The bees began to hum. And the butterflies came out to dance."},
+    {"id": "t02", "scene": "s3_sun", "speaker": "traveller", "speech": "[relieved, happy, a little sigh] Ahh... what a lovely warm day it has become.", "pause": 1.2, "text": "Ahh... what a lovely warm day it has become."},
+    {"id": "n10", "scene": "s3_sun", "speaker": "narrator", "pause": 1.4, "text": "The traveller unbuttoned his coat. And then, he took it off, and laid it on the grass."},
+    {"id": "n11", "scene": "s3_sun", "speaker": "narrator", "pause": 2.0, "text": "He sat down to rest in the cool shade of an apple tree, and listened to the birds singing."},
+
+    {"id": "w03", "scene": "s4_lesson", "speaker": "wind", "speech": "[softly, humbly] You did it, Sun. And you didn't even have to try hard at all.", "pause": 1.2, "text": "You did it, Sun. And you didn't even have to try hard at all."},
+    {"id": "s04", "scene": "s4_lesson", "speaker": "sun", "speech": "[warm, wise] Sometimes, my friend, a little kindness and warmth can do what all the force in the world cannot.", "pause": 2.0, "text": "Sometimes, my friend, a little kindness and warmth can do what all the force in the world cannot."},
+
+    {"id": "n12", "scene": "s5_goodnight", "speaker": "narrator", "pause": 2.0, "text": "And so, the Wind became a gentle breeze, softly rocking the leaves of the apple tree."},
+    {"id": "n13", "scene": "s5_goodnight", "speaker": "narrator", "pause": 2.0, "text": "The Sun sank slowly down behind the hills, painting the sky pink and gold. And under the tree, the traveller fell fast asleep."},
+    {"id": "n14", "scene": "s5_goodnight", "speaker": "narrator", "pause": 2.6, "text": "Then the moon rose, round and silver, and the first stars began to twinkle."},
+    {"id": "n15", "scene": "s5_goodnight", "speaker": "narrator", "voice": "whisper", "speech": "[whispers] Goodnight, little one... [softly] Sweet dreams.", "pause": 30.0, "text": "Goodnight, little one. Sweet dreams."}
+  ]
+}
