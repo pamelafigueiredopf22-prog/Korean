@@ -209,15 +209,27 @@ export function makeTraveller(res = 1, seed = 81) {
     g.save(); g.translate(0, -bob); g.translate(0, -40); g.rotate(hud * 0.16); g.translate(0, 40);
     // far arm
     const shF = [-12, -170];
+    // the hat: on his head, or blown off (st.hatFly = { dx, dy, rot }, in body space) and caught by his far paw
+    const reach = st.hatReach ?? (st.hatHold ? 1 : 0), hh = reach > 0.01, fly = st.hatFly || null;
+    const tilt = (st.headTilt || 0) + hud * 0.14;
+    const rotP = (x, y, a, cx, cy) => [cx + (x - cx) * Math.cos(a) - (y - cy) * Math.sin(a), cy + (x - cx) * Math.sin(a) + (y - cy) * Math.cos(a)];
+    const grip = fly ? rotP(-40 + fly.dx, -250 + fly.dy, fly.rot, 8 + fly.dx, -250 + fly.dy) : rotP(-40, -250, tilt, 8, -188);
     let armF;
-    if (st.hatHold) armF = joint(shF, -2.05, 42, -2.0, 36);
-    else if (hud > 0.5) armF = joint(shF, 0.9, 32, -0.2, 28);
+    if (hud > 0.5) armF = joint(shF, 0.9, 32, -0.2, 28);
     else if (st.carryCoat) armF = joint(shF, 1.3, 32, 0.7, 28);
     else if (st.unbutton) armF = joint(shF, 1.0, 32, -0.4, 28);
     else if (moving) armF = joint(shF, 1.57 + Math.sin(p + Math.PI) * 0.4, 32, 1.35, 28);
     else armF = joint(shF, 1.5, 32, 1.3, 28);
+    if (hh) { // reach for the hat: a two-bone arm whose paw goes to the hat's brim, elbow bent back
+      const T = [lerp(armF[2][0], grip[0], reach), lerp(armF[2][1], grip[1], reach)], l1 = 42, l2 = 38;
+      const dx = T[0] - shF[0], dy = T[1] - shF[1], d = clamp(Math.hypot(dx, dy), 12, l1 + l2 - 1), a = Math.atan2(dy, dx);
+      const al = Math.acos(clamp((l1 * l1 + d * d - l2 * l2) / (2 * l1 * d), -1, 1));
+      const e1 = [shF[0] + Math.cos(a + al) * l1, shF[1] + Math.sin(a + al) * l1], e2 = [shF[0] + Math.cos(a - al) * l1, shF[1] + Math.sin(a - al) * l1];
+      const el = e1[0] < e2[0] ? e1 : e2, ha = Math.atan2(T[1] - el[1], T[0] - el[0]);
+      armF = [shF, el, [el[0] + Math.cos(ha) * Math.min(l2, Math.hypot(T[0] - el[0], T[1] - el[1])), el[1] + Math.sin(ha) * Math.min(l2, Math.hypot(T[0] - el[0], T[1] - el[1]))]];
+    }
     const sleeveF = st.coatOff ? SHIRT : shade(COAT, 0.2);
-    if (!st.hatHold) { limb(g, armF, 22, 18, sleeveF, { cuff: true }); paw(g, ...armF[2], 0.4, 9); }
+    if (!hh) { limb(g, armF, 22, 18, sleeveF, { cuff: true }); paw(g, ...armF[2], 0.4, 9); }
     if (!st.coatOff) { drawSprite(g, roll); drawSprite(g, pack); }
     if (!st.coatOff) {
       g.save(); // the coat hem swings back in the wind
@@ -228,14 +240,15 @@ export function makeTraveller(res = 1, seed = 81) {
     } else { drawSprite(g, seat); drawSprite(g, body); }
     drawSprite(g, knot);
     if (wind < 0.3) scarfTail(g, t, wind);
-    if (st.hatHold) limb(g, armF, 20, 17, sleeveF, { cuff: true });
-    headGroup(g, st, hud, (st.headTilt || 0) + hud * 0.14);
+    if (hh) limb(g, armF, 20, 17, sleeveF, { cuff: true });
+    headGroup(g, fly ? { ...st, hatOff: true } : st, hud, tilt);
     if (wind >= 0.3) scarfTail(g, t, wind);
-    if (st.hatHold) paw(g, ...armF[2], -2.2, 9);
+    if (fly && !st.hatOff) { g.save(); g.translate(8 + fly.dx, -250 + fly.dy); g.rotate(fly.rot); g.translate(-8, 250); drawSprite(g, hat); drawSprite(g, brim); g.restore(); }
+    if (hh) paw(g, ...armF[2], -2.2, 9);
     // near arm
     const shN = [14, -168];
     let armN;
-    if (hud > 0.5 || st.hatHold) armN = joint(shN, 1.0, 30, -2.5, 28);                 // clutching his coat shut
+    if (hud > 0.5 || hh) armN = joint(shN, 1.0, 30, -2.5, 28);                 // clutching his coat shut
     else if (st.wipe > 0.5) armN = joint(shN, -0.45, 34, -2.6 + Math.sin(t * 6) * 0.2, 30);
     else if (st.unbutton) armN = joint(shN, 1.1, 30, -0.9 + Math.sin(t * 5) * 0.15, 26);
     else if (st.carryCoat) armN = joint(shN, 1.15, 32, -0.25, 30);
@@ -244,7 +257,7 @@ export function makeTraveller(res = 1, seed = 81) {
     limb(g, armN, 23, 19, st.coatOff ? SHIRT : COAT, { cuff: true });
     const hand = armN[2];
     if (st.carryCoat) { g.save(); g.translate(hand[0] - 4, hand[1] + 6); g.rotate(0.1); g.scale(0.62, 0.62); g.translate(0, 30); drawSprite(g, folded); g.restore(); }
-    if (!st.noStick && !st.hatHold && hud < 0.5 && !(st.wipe > 0.5) && !st.carryCoat && !st.unbutton) staff(g, hand, bob);
+    if (!st.noStick && !hh && hud < 0.5 && !(st.wipe > 0.5) && !st.carryCoat && !st.unbutton) staff(g, hand, bob);
     paw(g, ...hand, 0.3, 10);
     g.restore();
     if (!st.coatOff) legs(false);

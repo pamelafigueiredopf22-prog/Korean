@@ -217,13 +217,21 @@ function drawBlow(g, t) {
   // the traveller: walks on into the wind until he reaches his spot, then braces himself
   const walkD = Math.max(0, t - (line('n03').start + 1)) * RATE, there = walkD >= STOP_D;
   const p = onLane(Math.min(walkD, STOP_D));
-  const hatLift = span(t, n05.start + 3.6, n05.start + 4.2) * (1 - span(t, n05.start + 4.4, n05.start + 4.8));
-  const holding = t > n05.start + 4.3 && t < n07.end + 1.2;
+  // the gust snatches his hat: it tumbles up and back, his paw shoots up and catches it, and he pulls it back on
+  const tA = n05.start + 3.5, catchT = tA + 0.55, backT = tA + 0.85;
+  let hatFly = null;
+  if (t > tA && t < backT + 0.6) {
+    const at = (tt) => { const e = clamp((tt - tA) / 0.55); return { dx: -95 * e, dy: -110 * Math.sin(e * Math.PI / 2) + 20 * e * e, rot: -1.5 * e }; };
+    const f = at(Math.min(t, catchT)), b = ease(clamp((t - backT) / 0.6));
+    const wob = t < catchT ? Math.sin(t * 25) * 0.12 : 0;
+    hatFly = { dx: f.dx * (1 - b), dy: f.dy * (1 - b), rot: (f.rot + wob) * (1 - b) };
+  }
+  const hatReach = ease(span(t, tA + 0.12, catchT)) * (1 - span(t, n07.end + 0.8, n07.end + 1.6));
   const hud = Math.max(0.35 * span(t, blowT, blowT + 1.5), span(t, n06.start + 3.5, n06.start + 5)) * (1 - 0.6 * span(t, n07.end, n07.end + 1.5));
   const shiver = s * Math.sin(t * 30) * 1.5;
   world(g, t, c, {
     warm: 0, wind: s, bend: 0.05 + s, open: 0, cloudDrift: -t * 4 - Math.max(0, t - blowT) * 60 * Math.min(1, s * 2),
-    actors: (g2) => TR(g2, p.x + shiver, p.y, p.sc, p.face, { t, walk: there ? null : t * (1.3 - s * 0.6), huddle: hud, wind: s, hatLift, hatHold: holding, mouth: say('t01', t) * 0.9,
+    actors: (g2) => TR(g2, p.x + shiver, p.y, p.sc, p.face, { t, walk: there ? null : t * (1.3 - s * 0.6), huddle: hud, wind: s, hatFly, hatReach, mouth: say('t01', t) * 0.9,
       browUp: S.mood(t, 't01') * 0.8, eyes: (1 - S.blink(t, 4)) * (1 - 0.5 * s), smile: 0.4 - s * 0.4 }),
     sky: (g2) => {
       WIND(g2, 420, 300, 0.58 * (1 + inhale * 0.14 + puff * 0.04 - tiredK * 0.1), { t, puff: Math.max(puff, inhale * 0.6), eyes: inhale > 0.3 ? 0 : 1 - S.blink(t, 6), tired: tiredK, gust: 0.3 + s * 0.7, smile: 0.4 - tiredK * 0.6, browUp: inhale * 0.6 });
