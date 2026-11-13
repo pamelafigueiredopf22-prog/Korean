@@ -1,46 +1,49 @@
 <!doctype html><html><body style="margin:0"><canvas id="c" width="1920" height="1080"></canvas>
 <script type="module">
-import { paper, drawSprite } from '../../engine/watercolor.js';
+import { paper, drawSprite, canvas, granulate } from '../../engine/watercolor.js';
+import { sunlight } from '../../engine/stage.js';
 import { makeWind, makeSun, windStreams } from '../../engine/characters/sky.js';
 import { makeTraveller } from '../../engine/characters/traveller.js';
-import { sunlight } from '../../engine/stage.js';
-import { MOOD, paintSky, paintLand, flowerSpots, drawFlowers, appleTree, drawAppleTree, skyClouds } from '../north-wind-and-sun/scene.js';
+import { MOOD, paintSky, paintLand, paintLaneAndWalls, flowerSpots, drawFlowers, appleTree, drawAppleTree } from '../north-wind-and-sun/scene.js';
 const ctx = document.getElementById('c').getContext('2d');
-let P, wind, sun, tr, cold = {}, warm = {};
-function bake(m, o) { const c = document.createElement('canvas'); c.width = 1920; c.height = 1080; const g = c.getContext('2d'); paintSky(g, m); o.inRoad = paintLand(g, m); o.bg = c; o.tree = appleTree(m); o.flowers = flowerSpots(31, o.inRoad); o.clouds = skyClouds(m); }
+let cold = {}, warm = {}, wind, sun, tr, P;
+function bake(m, o) {
+  const mk = () => { const c = document.createElement('canvas'); c.width = 1920; c.height = 1080; return c; };
+  o.bg = mk(); o.front = mk(); const g = o.bg.getContext('2d');
+  paintSky(g, m); paintLand(g, m); paintLaneAndWalls(g, o.front.getContext('2d'), m, 900); granulate(g, 1920, 1080, 0.22, 5);
+  o.tree = appleTree(m); o.flowers = flowerSpots(31);
+}
 window.FABLE = {
-  async setup() { P = paper(); wind = makeWind(1); sun = makeSun(1); tr = makeTraveller(1); bake(MOOD.cold, cold); bake(MOOD.warm, warm); },
+  async setup() { P = paper(); wind = makeWind(1); sun = makeSun(1); tr = makeTraveller(1.5); bake(MOOD.cold, cold); bake(MOOD.warm, warm); },
   frame(t) {
     const g = ctx;
-    if (t < 10) { // character sheet
+    if (t < 10) {
       g.drawImage(P, 0, 0);
-      g.save(); g.translate(330, 300); g.scale(0.85, 0.85); wind.draw(g, { t, smile: 0.4 }); g.restore();
-      g.save(); g.translate(330, 760); g.scale(0.85, 0.85); wind.draw(g, { t, puff: 1 }); g.restore();
-      g.save(); g.translate(950, 300); g.scale(0.8, 0.8); sun.draw(g, { t, glow: 0.5, mouth: 0.4 }); g.restore();
-      g.save(); g.translate(950, 780); g.scale(0.8, 0.8); sun.draw(g, { t, glow: 0.9, happy: true }); g.restore();
+      g.save(); g.translate(330, 290); g.scale(0.72, 0.72); wind.draw(g, { t, smile: 0.5, mouth: 0.3, puff: 0 }); g.restore();
+      g.save(); g.translate(330, 780); g.scale(0.72, 0.72); wind.draw(g, { t, puff: 1 }); g.restore();
+      g.save(); g.translate(900, 300); g.scale(0.85, 0.85); sun.draw(g, { t, glow: 0.4 }); g.restore();
+      g.save(); g.translate(900, 790); g.scale(0.85, 0.85); sun.draw(g, { t, glow: 0.9, mouth: 0.5 }); g.restore();
       const poses = [{ walk: 0.25, smile: 0.6 }, { walk: 0.6, huddle: 1, wind: 1, hatHold: true }, { coatOff: true, carryCoat: true, walk: 0.1, happy: true }];
-      poses.forEach((p, i) => { g.save(); g.translate(1380 + i * 200, 470); g.scale(1.25, 1.25); tr.draw(g, { t, ...p }); g.restore(); });
-      g.save(); g.translate(1420, 960); g.scale(1.25, 1.25); tr.drawSit(g, { t, sleep: 1 }); g.restore(); g.save(); g.translate(1750, 950); g.scale(1.1, 1.1); tr.drawCoatLaid(g); g.restore();
+      poses.forEach((p, i) => { g.save(); g.translate(1330 + i * 230, 470); g.scale(1.15, 1.15); tr.draw(g, { t, ...p }); g.restore(); });
+      g.save(); g.translate(1420, 990); g.scale(1.15, 1.15); tr.drawSit(g, { t, sleep: 1 }); g.restore();
+      g.save(); g.translate(1780, 990); tr.drawCoatLaid(g); g.restore();
       return;
     }
     const isCold = t < 20, S = isCold ? cold : warm, m = isCold ? MOOD.cold : MOOD.warm;
     g.drawImage(S.bg, 0, 0);
-    for (const c of S.clouds) drawSprite(g, c.s, 0.9);
-    if (isCold) {
-      g.save(); g.translate(1130, 190); g.scale(0.62, 0.62); wind.draw(g, { t, puff: 1 }); g.restore();
-    } else {
-      g.save(); g.translate(560, 230); g.scale(0.75, 0.75); sun.draw(g, { t, glow: 0.9, smile: 0.9 }); g.restore();
-    }
-    drawFlowers(g, m, S.flowers, isCold ? 0 : 1, t, isCold ? 0.25 : 0);
+    drawFlowers(g, m, S.flowers, isCold ? 0 : 1, t, 0);
     drawAppleTree(g, S.tree, t, isCold ? 1 : 0, drawSprite);
     if (isCold) {
-      g.save(); g.translate(820, 880); g.scale(1.3, 1.3); tr.draw(g, { t, walk: 0.6, huddle: 1, wind: 1, hatHold: true }); g.restore();
-      windStreams(g, t, 0.9, { x0: 0, x1: 1920, y0: 330, y1: 960 }, { n: 12 });
+      g.save(); g.translate(980, 190); g.scale(0.62, 0.62); wind.draw(g, { t, puff: 1 }); g.restore();
+      g.save(); g.translate(830, 868); g.scale(0.95, 0.95); tr.draw(g, { t, walk: 0.6, huddle: 1, wind: 1, hatHold: true }); g.restore();
+      windStreams(g, t, 0.8, { x0: 0, x1: 1920, y0: 330, y1: 960 }, { n: 11 });
     } else {
-      g.save(); g.save(); g.translate(1220, 960); g.scale(1.2, 1.2); tr.drawCoatLaid(g); g.restore();
-      g.save(); g.translate(1520, 900); g.scale(1.2, 1.2); tr.drawSit(g, { t, smile: 0.9, eyes: 0.8 }); g.restore();
-      sunlight(g, 1, 0);
+      g.save(); g.translate(480, 210); g.scale(0.72, 0.72); sun.draw(g, { t, glow: 0.9 }); g.restore();
+      g.save(); g.translate(1770, 985); g.scale(0.9, 0.9); tr.drawCoatLaid(g); g.restore();
+      g.save(); g.translate(1520, 905); tr.drawSit(g, { t, smile: 0.9, eyes: 0.9 }); g.restore();
     }
+    g.drawImage(S.front, 0, 0);
+    if (!isCold) sunlight(g, 0.8, 0);
   }
 };
 </script></body></html>
