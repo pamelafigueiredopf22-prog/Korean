@@ -378,5 +378,5 @@ export function drawAppleTree(g, tree, t = 0, bend = 0, drawSprite) {
 
 // a drifting cumulus as a sprite (same painting as the sky's own clouds)
 export function cloudSprite(m, cx, cy, cw, seed) {
-  return sprite({ x0: cx - cw * 1.15, y0: cy - cw * 0.55, x1: cx + cw * 1.15, y1: cy + cw * 0.3, w: cw * 2.3, h: cw * 0.85 }, 1, (g) => cumulus(g, m, cx, cy, cw, seed), { granulate: false });
+  return sprite({ x0: cx - cw * 1.2, y0: cy - cw * 0.6, x1: cx + cw * 1.2, y1: cy + cw * 0.6, w: cw * 2.4, h: cw * 1.2 }, 1, (g) => cumulus(g, m, cx, cy, cw, seed), { granulate: false });
 }

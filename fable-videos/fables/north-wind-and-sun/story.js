@@ -278,8 +278,8 @@ function drawTree(g, t, o = {}) {
   const t0 = n10.end + 0.2 - 1.6;           // walking in during the dissolve
   const arrive = n11.start + 0.2, layT = arrive + 0.2, sitT = arrive + 1.3;
   const c = { z: TREECAM.z + Math.sin(t * 0.13) * 0.01, x: TREECAM.x, y: TREECAM.y };
-  const x = lerp(1180, 1700, clamp((t - t0) / (arrive - t0)));
-  const laid = span(t, layT, layT + 0.6), sit = span(t, sitT, sitT + 0.8);
+  const x = lerp(1180, SIT[0], clamp((t - t0) / (arrive - t0)));
+  const laid = span(t, layT, layT + 0.6), sit = span(t, sitT, sitT + 0.35);
   const birds = t > n11.start + 3;
   world(g, t, o.cam || c, {
     warm: 1, wind: o.breeze || 0, bend: 0.03 + (o.breeze || 0) * 0.4, open: 1,
