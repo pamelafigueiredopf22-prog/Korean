@@ -252,24 +252,26 @@ export function makeTraveller(res = 1, seed = 81) {
   }
   // sitting on the grass with his back against a tree (behind him, to the left), legs stretched out; sleep 0..1
   function drawSit(g, st = {}) {
-    const t = st.t || 0, sl = st.sleep || 0, br = (st.breath || 0) * 1.6;
+    const t = st.t || 0, sl = st.sleep || 0, br = (st.breath || 0) * 1.6, lean = -0.1 - sl * 0.04; // leaning back against the trunk
     g.save();
     pool(g, 40, 2, 120, 12, '#2a1e12', 0.25);
-    g.save(); g.translate(0, 46 - br);
-    const armF = joint([-12, -170], 1.5, 30, 0.6, 26); limb(g, armF, 22, 18, SHIRT, { cuff: true }); paw(g, ...armF[2], 0.4, 9);
-    drawSprite(g, seat); drawSprite(g, body);
-    g.restore();
-    for (const far of [true, false]) {
+    const upper = (fn) => { g.save(); g.translate(-20, -4); g.rotate(lean); g.translate(20, 4); g.translate(0, 46 - br); fn(); g.restore(); };
+    upper(() => {
+      const armF = joint([-12, -170], 1.75, 30, 0.35, 24); limb(g, armF, 22, 18, SHIRT, { cuff: true }); paw(g, ...armF[2], 0.4, 9);
+      drawSprite(g, seat); drawSprite(g, body);
+    });
+    for (const far of [true, false]) { // legs stretched out along the grass
       const hip = [far ? -10 : 2, -24], y1 = far ? -16 : -12;
       limb(g, [hip, [hip[0] + 46, y1 - 2], [hip[0] + 88, y1]], 28, 22, far ? shade(TWEED, 0.2) : TWEED);
       g.save(); g.translate(hip[0] + 92, y1 + 12); g.rotate(-0.7); drawSprite(g, foot); g.restore();
     }
-    g.save(); g.translate(0, 46 - br);
-    drawSprite(g, knot);
-    scarfTail(g, t, 0);
-    headGroup(g, { ...st, eyes: sl > 0.5 ? 0 : st.eyes, smile: st.smile ?? 0.7, hatTip: sl * 0.18, sleepy: sl }, 0, sl * 0.18 + (st.headTilt || 0));
-    const armN = joint([14, -168], 1.2, 30, -0.3 + sl * 0.25, 28); limb(g, armN, 23, 19, SHIRT, { cuff: true }); paw(g, ...armN[2], 0.2, 10); // paws folded on his tummy
-    g.restore();
+    upper(() => {
+      drawSprite(g, knot);
+      scarfTail(g, t, 0);
+      headGroup(g, { ...st, eyes: sl > 0.5 ? 0 : st.eyes, smile: st.smile ?? 0.7, hatTip: sl * 0.18, sleepy: sl }, 0, sl * 0.2 + (st.headTilt || 0));
+      // paws folded on his tummy
+      const armN = joint([14, -168], 1.8, 30, 0.45 - sl * 0.1, 24); limb(g, armN, 23, 19, SHIRT, { cuff: true }); paw(g, ...armN[2], 0.2, 10);
+    });
     g.restore();
   }
   function drawCoatLaid(g) { pool(g, 0, 4, 90, 12, '#2a1e12', 0.22); drawSprite(g, folded); }
