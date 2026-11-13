@@ -176,7 +176,7 @@ export function makeTraveller(res = 1, seed = 81) {
     face(g, st, hud);
     if (!st.hatOff) {
       const lift = st.hatLift || 0;
-      g.save(); g.translate(lift * 24, -lift * 62); g.rotate(-lift * 0.55 + (st.hatTip || 0)); drawSprite(g, hat); drawSprite(g, brim); g.restore();
+      g.save(); g.translate(lift * 24, -lift * 62); g.translate(8, -236); g.rotate(-lift * 0.55 + (st.hatTip || 0)); g.translate(-8, 236 - (st.hatTip || 0) * 20); drawSprite(g, hat); drawSprite(g, brim); g.restore(); // tips about the crown of his head
     }
     g.restore();
   }
