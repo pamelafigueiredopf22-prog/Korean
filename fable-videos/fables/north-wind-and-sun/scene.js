@@ -206,13 +206,14 @@ export function cumulus(g, m, cx, cy, w, seed) {
   g.restore();
   for (const [i, sh] of shapes.entries()) ink(g, sh.filter(([x, y]) => y < bumps[i][1] - bumps[i][2] * 0.25), { width: 0.9, alpha: 0.42, gaps: 1.4, seed: seed + 20 + i });
 }
-export function paintSky(g, m, seed = 3) {
+export const CLOUDS = [[250, 170, 230], [960, 110, 280], [1720, 200, 210], [600, 330, 120], [1380, 300, 140]];
+export function paintSky(g, m, seed = 3, o = {}) {
   const grd = g.createLinearGradient(0, -100, 0, 640);
   grd.addColorStop(0, m.sky[0]); grd.addColorStop(0.6, m.sky[1]); grd.addColorStop(1, m.sky[2]);
   g.fillStyle = '#f4ecdc'; g.fillRect(-400, -300, 2720, 1700);
   g.globalAlpha = 0.85; g.fillStyle = grd; g.fillRect(-400, -300, 2720, 1700); g.globalAlpha = 1;
   brushWash(g, [[-400, -300], [2320, -300], [2320, 560], [-400, 560]], [m.sky[0], tint(m.sky[0], 0.3), m.sky[1], shade(m.sky[0], 0.1)], { seed, count: 70, width: [30, 80], len: [200, 600], alpha: [0.12, 0.3], base: 0.05, blur: 3, angle: () => -0.04, lifts: 0.15 });
-  for (const [cx, cy, cw, i] of [[250, 170, 230, 0], [960, 110, 280, 1], [1720, 200, 210, 2], [600, 330, 120, 3], [1380, 300, 140, 4]]) cumulus(g, m, cx, cy, cw, seed * 50 + i * 13);
+  if (o.clouds !== false) CLOUDS.forEach(([cx, cy, cw], i) => cumulus(g, m, cx, cy, cw, seed * 50 + i * 13));
 }
 export function paintLand(g, m, seed = 11) {
   const r = rng(seed);
@@ -276,10 +277,10 @@ export function paintLaneAndWalls(gBack, gFront, m, splitY = 9999, seed = 90) {
 // meadow flowers that can open; returns spots so the story can animate them
 export function flowerSpots(seed = 31) {
   const r = rng(seed), out = [];
-  for (let i = 0; i < 90; i++) {
+  for (let i = 0; i < 150; i++) {
     const y = r.range(690, 1070), x = r.range(20, 1900), c = laneAt(y);
     if (Math.abs(x - c[0]) < laneW(y) * 0.7) continue;
-    out.push({ x, y, c: i, s: 3 + (y - 690) * 0.016, ph: r() * 6 });
+    out.push({ x, y, c: i, s: 4.5 + (y - 690) * 0.026, ph: r() * 6 });
   }
   return out.sort((a, b) => a.y - b.y);
 }
@@ -370,7 +371,12 @@ export function drawAppleTree(g, tree, t = 0, bend = 0, drawSprite) {
   g.save(); g.translate(x, pivot); g.rotate(-bend * 0.05 + Math.sin(t * 0.7) * 0.004); g.translate(-x, -pivot); drawSprite(g, tree.mass); g.restore();
   drawSprite(g, tree.trunk);
   for (const c of tree.clumps) {
-    const h = pivot - c.cy, sw = Math.sin(t * (0.8 + bend * 5) + c.ph) * (0.006 + bend * 0.025);
+    const h = pivot - c.cy, ab = Math.abs(bend), sw = Math.sin(t * (0.8 + ab * 5) + c.ph) * (0.006 + ab * 0.025);
     g.save(); g.translate(x, pivot); g.rotate(-bend * 0.05 * (1 + h / 400) + sw); g.translate(-x, -pivot); drawSprite(g, c.s); g.restore();
   }
+}
+
+// a drifting cumulus as a sprite (same painting as the sky's own clouds)
+export function cloudSprite(m, cx, cy, cw, seed) {
+  return sprite({ x0: cx - cw * 1.15, y0: cy - cw * 0.55, x1: cx + cw * 1.15, y1: cy + cw * 0.3, w: cw * 2.3, h: cw * 0.85 }, 1, (g) => cumulus(g, m, cx, cy, cw, seed), { granulate: false });
 }
