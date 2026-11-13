@@ -1,0 +1,15 @@
+QA REPORT - Easy Mazes for Kids Ages 4-6 (book01-easy-mazes-vol1.pdf)
+============================================================
+[PASS] 60 mazes generated
+[PASS] Every maze: all cells reachable
+[PASS] Every maze: passages form a tree (no loops)
+[PASS] Every maze: exactly one solution (path search)
+[PASS] Every maze: exactly 2 border openings (start, finish)
+[PASS] No duplicate mazes within this book or across other books  (60 mazes; 0 from other books checked; mirror images and near-copies (<40% walls different) rejected: 834)
+[PASS] Trim size 8.5 x 11 in  (8.50 x 11.00 in)
+[PASS] Page count even and within 60-100  (82 pages)
+[PASS] All fonts embedded  (AtkinsonHyperlegible-Bold, AtkinsonHyperlegible-Regular, Sniglet-ExtraBold)
+[PASS] Nothing inside the 0.5 in safe margin (rendered-pixel scan)  (82 pages scanned at 100 dpi)
+[PASS] Printed mazes match verified data (pixel re-read of every wall)  (60 maze pages re-read)
+============================================================
+ALL CHECKS PASSED

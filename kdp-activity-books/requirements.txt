@@ -1,0 +1,4 @@
+reportlab>=4.0
+Pillow>=10.0
+numpy>=1.24
+# system tools used by QA/previews: poppler-utils (pdftoppm, pdfinfo, pdffonts)
