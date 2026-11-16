@@ -27,8 +27,6 @@ function futureSam(x, y, s, o = {}) { ch(Object.assign({ x, y, s, c: mix(COL.sam
   g.save(); g.translate(x, y); g.scale(o.flip ? -s : s, s); const ey = -178 + Math.sin(TT * 2.3 + 6.2) * 3; g.strokeStyle = COL.ink; g.lineWidth = 5;
   [-24, 24].forEach(dx => { g.beginPath(); g.arc(dx, ey, 22, 0, 7); g.stroke(); }); line(-2, ey, 2, ey, 5, COL.ink);
   g.fillStyle = '#E8E4DC'; [-14, 0, 14].forEach(d => { ell(d, -244, 10, 6); g.fill(); }); g.restore(); }
-function arrowLine(x1, y1, x2, y2, p, c = COL.ink, w = 8) { if (p <= 0) return; const x = lerp(x1, x2, p), y = lerp(y1, y2, p); line(x1, y1, x, y, w, c); const an = Math.atan2(y2 - y1, x2 - x1);
-  g.fillStyle = c; g.beginPath(); g.moveTo(x + Math.cos(an) * 18, y + Math.sin(an) * 18); g.lineTo(x + Math.cos(an + 2.4) * 22, y + Math.sin(an + 2.4) * 22); g.lineTo(x + Math.cos(an - 2.4) * 22, y + Math.sin(an - 2.4) * 22); g.fill(); }
 function trophy(x, y, s) { g.save(); g.translate(x, y); g.scale(s, s); g.fillStyle = '#F2B84B'; g.beginPath(); g.moveTo(-60, -100); g.lineTo(60, -100); g.quadraticCurveTo(60, 10, 0, 20); g.quadraticCurveTo(-60, 10, -60, -100); g.fill();
   g.lineWidth = 12; g.strokeStyle = '#F2B84B'; g.beginPath(); g.arc(-60, -60, 26, Math.PI * .5, Math.PI * 1.5); g.stroke(); g.beginPath(); g.arc(60, -60, 26, -Math.PI * .5, Math.PI * .5); g.stroke();
   g.fillStyle = '#D99A2B'; g.fillRect(-12, 20, 24, 40); rr(-50, 56, 100, 26, 6); g.fill(); g.restore(); }

@@ -65,6 +65,9 @@ function ch(o){
   if(top==='tuft'){g.strokeStyle=dark(col,.35);g.lineWidth=8;g.lineCap='round';[-14,0,14].forEach((d,i)=>{g.beginPath();g.moveTo(d,by+6);g.quadraticCurveTo(d+6,by-18,d+16-i*6,by-26);g.stroke()})}
   if(top==='hood'){g.save();g.strokeStyle=dark(col,.28);g.lineWidth=10;g.beginPath();g.arc(0,by+92,62,Math.PI*1.06,Math.PI*1.94);g.stroke();g.restore()}
   if(top==='spike'){g.beginPath();g.moveTo(-30,by+12);g.lineTo(-18,by-22);g.lineTo(-4,by+4);g.lineTo(10,by-28);g.lineTo(22,by+4);g.lineTo(34,by-14);g.lineTo(36,by+16);g.closePath();g.fill()}
+  if(top==='crown'){g.fillStyle='#F2C230';g.beginPath();g.moveTo(-40,by+14);g.lineTo(-44,by-34);g.lineTo(-20,by-10);g.lineTo(0,by-44);g.lineTo(20,by-10);g.lineTo(44,by-34);g.lineTo(40,by+14);g.closePath();g.fill();g.fillStyle=COL.red;g.beginPath();g.arc(0,by-6,6,0,7);g.fill()}
+  if(top==='slick'){g.fillStyle=dark(col,.45);g.beginPath();g.moveTo(-58,by+40);g.quadraticCurveTo(-60,by-16,10,by-14);g.quadraticCurveTo(64,by-10,62,by+30);g.quadraticCurveTo(20,by+4,-58,by+40);g.fill()}
+  if(top==='part'){g.fillStyle=dark(col,.4);g.beginPath();g.moveTo(-60,by+50);g.quadraticCurveTo(-56,by-12,-14,by-8);g.lineTo(-20,by+26);g.closePath();g.fill();g.beginPath();g.moveTo(-6,by-8);g.quadraticCurveTo(58,by-10,60,by+46);g.quadraticCurveTo(30,by+14,-4,by+20);g.closePath();g.fill()}
   if(top==='baby'){g.strokeStyle=dark(col,.35);g.lineWidth=7;g.beginPath();g.arc(6,by-4,12,Math.PI*.9,Math.PI*2.2);g.stroke()}
   // arms in front
   if(arms==='wave'){arm(-58,-80,by+205);const a=-1.25+sw*.35;line(58,by+130,58+Math.cos(a)*95,by+130+Math.sin(a)*95,20,armC)}
@@ -85,14 +88,15 @@ function ch(o){
   else{const big=expr==='o'||expr==='scared'?1.25:1;
     [-24,24].forEach(dx=>{g.fillStyle=COL.white;ell(dx,ey,15*big,18*big*blink);g.fill();
       if(blink>.5){g.fillStyle=COL.ink;ell(dx+lx,ey+3+lookY*3,(expr==='scared'?5:8),(expr==='scared'?5:8));g.fill();g.fillStyle='#fff';ell(dx+lx+3,ey-1,2.5,2.5);g.fill()}
-      if(expr==='tired'){g.fillStyle=col;g.fillRect(dx-17,ey-20,34,19)}});}
+      if(expr==='tired'||expr==='smug'||expr==='flat'){g.fillStyle=col;g.fillRect(dx-17,ey-20,34,expr==='flat'?14:19)}});}
   g.strokeStyle=COL.ink;g.lineWidth=6;g.lineCap='round';
   if(['worried','nervous','sad','scared'].includes(expr)){[-1,1].forEach(sg=>{g.beginPath();g.moveTo(sg*12,ey-26);g.lineTo(sg*34,ey-32+(expr==='sad'?0:4));g.stroke()})}
   if(expr==='determined'){[-1,1].forEach(sg=>{g.beginPath();g.moveTo(sg*12,ey-24);g.lineTo(sg*34,ey-32);g.stroke()})}
   const my=ey+40;g.beginPath();
   if(expr==='smile'||expr==='calm'||expr==='determined'){g.arc(0,my-10,16,.2*Math.PI,.8*Math.PI);g.stroke()}
   else if(expr==='joy'){g.moveTo(-20,my-6);g.quadraticCurveTo(0,my+26,20,my-6);g.closePath();g.fillStyle=COL.ink;g.fill();g.fillStyle='#E07A7A';ell(0,my+8,8,5);g.fill()}
-  else if(expr==='neutral'||expr==='tired'){g.moveTo(-12,my);g.lineTo(12,my);g.stroke()}
+  else if(expr==='smug'){g.moveTo(-18,my-2);g.quadraticCurveTo(4,my+12,22,my-10);g.stroke()}
+  else if(expr==='neutral'||expr==='tired'||expr==='flat'){g.moveTo(-12,my);g.lineTo(12,my);g.stroke()}
   else if(expr==='o'||expr==='scared'){ell(0,my+2,8,10);g.fillStyle=COL.ink;g.fill()}
   else if(expr==='nervous'||expr==='worried'){g.moveTo(-18,my+2);for(let i=1;i<=4;i++)g.lineTo(-18+i*9,my+2+(i%2?-5:5));g.stroke()}
   else if(expr==='sad'){g.arc(0,my+14,14,1.2*Math.PI,1.8*Math.PI);g.stroke()}
@@ -208,6 +212,8 @@ function label(s, x, y, tx, ty, p, c = COL.ink) { if (p <= 0) return; withA(p, (
 function bar(x, base, w, h, c, p) { const hh = h * p; g.fillStyle = c; rr(x - w / 2, base - hh, w, hh, 14); g.fill(); }
 function confetti(lt, t0) { for (let i = 0; i < 70; i++) { const a = lt - t0 - (i % 7) * .03; if (a < 0) continue; const x = (i * 263) % W, y = -40 + a * (260 + (i % 5) * 60) + Math.sin(a * 3 + i) * 20;
   g.save(); g.translate(x, y); g.rotate(a * 4 + i); g.fillStyle = [COL.ivy, COL.sam, COL.alex, COL.max, COL.red][i % 5]; g.fillRect(-9, -5, 18, 10); g.restore(); } }
+function arrowLine(x1, y1, x2, y2, p, c = COL.ink, w = 8) { if (p <= 0) return; const x = lerp(x1, x2, p), y = lerp(y1, y2, p); line(x1, y1, x, y, w, c); const an = Math.atan2(y2 - y1, x2 - x1);
+  g.fillStyle = c; g.beginPath(); g.moveTo(x + Math.cos(an) * 18, y + Math.sin(an) * 18); g.lineTo(x + Math.cos(an + 2.4) * 22, y + Math.sin(an + 2.4) * 22); g.lineTo(x + Math.cos(an - 2.4) * 22, y + Math.sin(an - 2.4) * 22); g.fill(); }
 const S = {};
 // ============================================================ render
 let NODIP_IN = new Set(), NODIP_OUT = new Set();
