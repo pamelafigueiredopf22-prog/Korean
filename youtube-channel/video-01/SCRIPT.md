@@ -1,6 +1,6 @@
 # Introvert, Shy, or Socially Anxious? (They're NOT the Same)
 
-Recording script. Record each numbered line as its own file in `voice/` (e.g. `voice/open_1.wav`) and rebuild: the animation re-times itself to your voice.
+Recording script. Record each numbered line as its own file in `voice/` (e.g. `voice/open_1.wav`) and rebuild (`node engine/build.js <video>`): the animation re-times itself to your voice.
 
 **1249 words** · scratch-voice length 8:13 · at a natural 150 words/min your read will be about 8:47
 

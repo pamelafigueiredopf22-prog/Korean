@@ -5,7 +5,9 @@
 const fs = require('fs'), path = require('path'), crypto = require('crypto');
 const { execFileSync } = require('child_process');
 
-const ROOT = __dirname;
+// usage: node engine/build.js video-02
+const ROOT = path.resolve(process.argv[2] || '.');
+const CHANNEL = path.resolve(__dirname, '..');
 const B = path.join(ROOT, 'build');
 const RATE = 24000;
 const LEAD = 0.4, GAP = 0.55, TAIL = 0.9;
@@ -40,7 +42,7 @@ const ownPath = (id, i) => ['wav', 'mp3', 'm4a', 'ogg'].map(e => path.join(ROOT,
 const jobs = [];
 for (const sc of script.scenes) sc.lines.forEach((text, i) => { if (!ownPath(sc.id, i) && !fs.existsSync(ttsPath(text))) jobs.push({ text, out: ttsPath(text), voice: VOICE, speed: SPEED }); });
 if (jobs.length) { fs.writeFileSync(path.join(B, 'jobs.json'), JSON.stringify(jobs)); console.log(`generating ${jobs.length} clips with Kokoro voice ${VOICE}...`);
-  execFileSync('python3', [path.join(ROOT, 'kokoro_tts.py'), path.join(B, 'jobs.json')], { cwd: ROOT, stdio: ['ignore', 'ignore', 'inherit'] }); }
+  execFileSync('python3', [path.join(__dirname, 'kokoro_tts.py'), path.join(B, 'jobs.json')], { cwd: CHANNEL, stdio: ['ignore', 'ignore', 'inherit'] }); }
 
 function clipFor(sceneId, i, text) {
   const own = ownPath(sceneId, i);
@@ -87,7 +89,7 @@ fs.writeFileSync(path.join(B, 'captions.srt'), srt);
 
 // readable recording script
 const mmss = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
-let md = `# ${script.title}\n\nRecording script. Record each numbered line as its own file in \`voice/\` (e.g. \`voice/open_1.wav\`) and rebuild: the animation re-times itself to your voice.\n\n`;
+let md = `# ${script.title}\n\nRecording script. Record each numbered line as its own file in \`voice/\` (e.g. \`voice/open_1.wav\`) and rebuild (\`node engine/build.js <video>\`): the animation re-times itself to your voice.\n\n`;
 const words = script.scenes.flatMap(s => s.lines).join(' ').split(/\s+/).length;
 md += `**${words} words** · scratch-voice length ${mmss(t)} · at a natural 150 words/min your read will be about ${mmss(words / 150 * 60 + timeline.scenes.length * 1.2)}\n\n`;
 script.scenes.forEach((sc, k) => {
@@ -99,6 +101,6 @@ fs.writeFileSync(path.join(ROOT, 'SCRIPT.md'), md);
 console.log(`timeline ${mmss(t)} (${t.toFixed(1)}s), ${timeline.scenes.length} scenes, ${total} lines, ${ownCount} from your own recordings, ${words} words`);
 
 // YouTube chapters (paste into the description). First chapter must be 0:00.
-const CH = { open: 'You\'ve probably met all three', ivy: 'The introvert', sam: 'Shyness', grid: 'Introvert vs shy: mix & match', alex: 'Social anxiety', myths: '3 myths', check: 'Quick self-check', tips: 'What actually helps', recap: 'Back to the party' };
+const CH = Object.fromEntries(script.scenes.filter(s => s.chapter).map(s => [s.id, s.chapter]));
 const chapters = timeline.scenes.filter(s => CH[s.id]).map((s, i) => `${i ? mmss(s.start) : '0:00'} ${CH[s.id]}`).join('\n');
 fs.writeFileSync(path.join(B, 'chapters.txt'), chapters + '\n');

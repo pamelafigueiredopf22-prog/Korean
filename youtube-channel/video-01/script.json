@@ -9,7 +9,8 @@
     "Picture a party.",
     "One person is in the corner, quietly watching. Another is laughing in the middle of the room... but their hands are shaking.",
     "And a third person isn't here at all. They got dressed, walked all the way to the door... and went back home."
-   ]
+   ],
+   "chapter": "You've probably met all three"
   },
   {
    "id": "labels",
@@ -45,7 +46,8 @@
     "Let's start with the introvert. Meet Ivy.",
     "Ivy likes people. She has close friends, she's good at conversations, and she isn't afraid of anyone.",
     "So what makes her an introvert? A helpful way to think about it is energy, not fear."
-   ]
+   ],
+   "chapter": "The introvert"
   },
   {
    "id": "battery",
@@ -77,7 +79,8 @@
     "Now, meet Sam.",
     "Sam actually loves being around people. Parties sound fun. Meeting someone new sounds fun.",
     "But when the moment comes, something gets in the way."
-   ]
+   ],
+   "chapter": "Shyness"
   },
   {
    "id": "samNervous",
@@ -125,7 +128,8 @@
     "And then there's the one people forget. The shy extravert. Someone who craves people... but feels nervous getting close to them.",
     "Back in 1981, the researchers Jonathan Cheek and Arnold Buss found exactly this. Shyness and sociability were only loosely connected.",
     "And the people who were both shy and very sociable seemed the most tense and awkward of all. They wanted connection, but their nerves kept getting in the way."
-   ]
+   ],
+   "chapter": "Introvert vs shy: mix & match"
   },
   {
    "id": "alex",
@@ -134,7 +138,8 @@
    "lines": [
     "Which brings us back to the third person at the party. The one who never came in. Meet Alex.",
     "From the outside, Alex might just look shy. But what's happening on the inside is much stronger."
-   ]
+   ],
+   "chapter": "Social anxiety"
   },
   {
    "id": "spotlight",
@@ -181,7 +186,8 @@
     "Myth number two. Shy people are just introverts. False. As we saw, plenty of shy people are extraverts.",
     "Myth number three. Social anxiety is just extreme shyness, so you should force yourself through it. Not quite. The two do overlap, but social anxiety disorder is a real mental health condition, and gritting your teeth through it alone often keeps the fear going.",
     "The good news? Social anxiety is very treatable. Cognitive behavioral therapy has strong evidence behind it. Facing fears in small, planned steps helps the brain learn that the danger isn't as big as it feels."
-   ]
+   ],
+   "chapter": "3 myths"
   },
   {
    "id": "check",
@@ -192,7 +198,8 @@
     "One. After a big social event, do I feel drained, even if I had a great time? That points to introversion.",
     "Two. Do I want to join in, but feel nervous, especially with new people? That points to shyness.",
     "Three. Is the fear strong enough that I avoid things I need or want to do, and has it been going on for months? That points to social anxiety, and it's worth getting checked out."
-   ]
+   ],
+   "chapter": "Quick self-check"
   },
   {
    "id": "tips",
@@ -204,7 +211,8 @@
     "If you're shy, familiarity is your friend. Arrive early, before the room fills up. Prepare a couple of easy questions. And remember, most people are far too busy worrying about themselves to judge you.",
     "That last part has a name. It's called the spotlight effect. In one famous study, students wearing an embarrassing T-shirt guessed that about half the room noticed it. In reality, only about a quarter did.",
     "And if it's social anxiety, the most important step is not doing it alone. A therapist can help you build a ladder of small challenges, one step at a time, at a pace that feels possible."
-   ]
+   ],
+   "chapter": "What actually helps"
   },
   {
    "id": "recap",
@@ -215,7 +223,8 @@
     "Ivy, in the corner, isn't sad. She's recharging. That's introversion.",
     "Sam, with the shaky hands, really wants to be there. That's shyness.",
     "And Alex, who went home, isn't being rude. Alex is fighting something much harder. That's social anxiety."
-   ]
+   ],
+   "chapter": "Back to the party"
   },
   {
    "id": "end",

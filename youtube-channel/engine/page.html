@@ -1,0 +1,29 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Video renderer</title>
+<style>
+@font-face{font-family:Fredoka;font-weight:500;src:url(../node_modules/@fontsource/fredoka/files/fredoka-latin-500-normal.woff2)}
+@font-face{font-family:Fredoka;font-weight:600;src:url(../node_modules/@fontsource/fredoka/files/fredoka-latin-600-normal.woff2)}
+@font-face{font-family:Fredoka;font-weight:700;src:url(../node_modules/@fontsource/fredoka/files/fredoka-latin-700-normal.woff2)}
+@font-face{font-family:Nunito;font-weight:400;src:url(../node_modules/@fontsource/nunito/files/nunito-latin-400-normal.woff2)}
+@font-face{font-family:Nunito;font-weight:700;src:url(../node_modules/@fontsource/nunito/files/nunito-latin-700-normal.woff2)}
+@font-face{font-family:Nunito;font-weight:800;src:url(../node_modules/@fontsource/nunito/files/nunito-latin-800-normal.woff2)}
+html,body{margin:0;background:#111}
+canvas{display:block;width:100vw;max-width:1920px}
+#ui{position:fixed;left:8px;bottom:8px;color:#fff;font:14px sans-serif}
+</style></head>
+<body>
+<canvas id="c" width="1920" height="1080"></canvas>
+<div id="ui"></div>
+<script>
+// usage: engine/page.html?v=video-01[&t=seconds][&play][&headless]
+const VID=new URLSearchParams(location.search).get('v')||'video-01';
+document.write(`<script src="../${VID}/build/timeline.js"><\/script><script src="core.js"><\/script><script src="../${VID}/scenes.js"><\/script>`);
+</script>
+<script>
+window.DURATION=TIMELINE.duration;
+const q=new URLSearchParams(location.search);
+if(!q.has('headless')){let t=parseFloat(q.get('t')||0),playing=q.has('play'),last=performance.now();
+  window.ready.then(()=>{const loop=now=>{if(playing)t+=(now-last)/1000;last=now;if(t>TIMELINE.duration)t=0;render(t);document.getElementById('ui').textContent=t.toFixed(2)+'s';requestAnimationFrame(loop)};requestAnimationFrame(loop)});
+  addEventListener('keydown',e=>{if(e.key===' ')playing=!playing;if(e.key==='ArrowRight')t+=5;if(e.key==='ArrowLeft')t=Math.max(0,t-5)})}
+</script>
+</body></html>
