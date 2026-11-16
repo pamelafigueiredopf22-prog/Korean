@@ -7,6 +7,7 @@ Animated explainers made entirely from code: original characters, no stock foota
 | `engine/` | Shared tools: `core.js` (characters, props, drawing helpers), `page.html`, `build.js` (narration → timeline), `render.js` (frames → MP4), `kokoro_tts.py` (AI voice) |
 | `video-01/` | Introvert, Shy, or Socially Anxious? |
 | `video-02/` | Why You Can't Forget That Embarrassing Moment |
+| `video-03/` | Why You Procrastinate (It's Not Laziness) |
 
 Each video folder has `script.json` (the narration, which you edit), `scenes.js` (its animation), `SCRIPT.md` (the generated recording sheet), `UPLOAD.md` (title, description, sources and settings) and `build/` (outputs, not in git).
 

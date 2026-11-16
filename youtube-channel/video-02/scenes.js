@@ -2,14 +2,6 @@
 // Each S.<type>(lt, L, Le, D, at): lt = time in scene, L/Le = line start/end times, at(i,f) = f-fraction through line i.
 
 // ---------- helpers for this video
-// crossfade between panels; starts = line index where each panel begins
-function panels(lt, L, starts, fns) {
-  starts.forEach((li, k) => {
-    const a0 = k === 0 ? 1 : E(lt, L[li] - .15, .4), a1 = k < starts.length - 1 ? E(lt, L[starts[k + 1]] - .15, .4) : 0;
-    const a = a0 * (1 - a1); if (a > .001) withA(a, fns[k]);
-  });
-}
-function lying(o) { g.save(); g.translate(o.x, o.y); g.rotate(-Math.PI / 2); ch(Object.assign({}, o, { x: 0, y: 0 })); g.restore(); }
 function bedroom(o = {}) {
   const wall = g.createLinearGradient(0, 0, 0, H); wall.addColorStop(0, '#1F2547'); wall.addColorStop(1, '#2C3360'); g.fillStyle = wall; g.fillRect(0, 0, W, H);
   // window + moon
@@ -33,35 +25,15 @@ function blanket(x0, x1, y, c = '#6C8EBF') { g.fillStyle = c; rr(x0, y, x1 - x0,
 function waiter(x, y, s, o = {}) { ch(Object.assign({ x, y, c: '#3E4A61', s, expr: 'smile', sd: 8, arms: 'down' }, o));
   g.save(); g.translate(x, y); g.scale(s, s); g.fillStyle = '#fff'; g.beginPath(); g.moveTo(-34, -132); g.lineTo(34, -132); g.lineTo(0, -95); g.fill();
   g.fillStyle = COL.red; g.beginPath(); g.moveTo(0, -125); g.lineTo(-22, -138); g.lineTo(-22, -112); g.fill(); g.beginPath(); g.moveTo(0, -125); g.lineTo(22, -138); g.lineTo(22, -112); g.fill(); g.restore(); }
-function memCard(x, y, w, h, text, o = {}) { const { hl = 0, rot = 0, a = 1, size = 44, fill = COL.white, sub } = o; withA(a, () => { g.save(); g.translate(x, y); g.rotate(rot);
-  g.fillStyle = 'rgba(43,45,66,.18)'; rr(-w / 2 + 8, -h / 2 + 10, w, h, 18); g.fill(); g.fillStyle = fill; rr(-w / 2, -h / 2, w, h, 18); g.fill(); g.lineWidth = 5; g.strokeStyle = COL.ink; g.stroke();
-  if (hl > 0) { g.fillStyle = 'rgba(255,224,70,.85)'; g.font = `700 ${size}px Fredoka`; const tw = g.measureText(text).width + 30; rr(-tw / 2, -size * .55 + (sub ? -14 : 0), tw * clamp(hl), size * 1.1, 10); g.fill(); }
-  txt(text, 0, 3 + (sub ? -14 : 0), { size, weight: 700 }); if (sub) txt(sub, 0, 40, { size: 26, font: 'Nunito', weight: 700, color: COL.ink2 }); g.restore() }) }
-function brainChar(x, y, s, o = {}) { const { expr = 'smile', amyg = 0, hippo = 0, a = 1 } = o; withA(a, () => { g.save(); g.translate(x, y); g.scale(s, s);
-  const c = '#F4A7B9'; g.fillStyle = 'rgba(43,45,66,.15)'; ell(0, 170, 170, 22); g.fill();
-  g.fillStyle = c; [[-110, -10, 90], [-40, -70, 100], [60, -70, 100], [120, 0, 90], [60, 60, 95], [-50, 60, 95], [0, 0, 110]].forEach(([cx, cy, r]) => { g.beginPath(); g.arc(cx, cy, r, 0, 7); g.fill(); });
-  g.strokeStyle = dark(c, .2); g.lineWidth = 8; g.lineCap = 'round'; line(0, -150, 0, 140, 8, dark(c, .2));
-  [[-150, -40, -70, -20], [-130, 50, -60, 30], [60, -40, 150, -20], [70, 40, 160, 60], [-90, -110, -40, -80], [40, -120, 90, -100]].forEach(([a1, b1, a2, b2]) => { g.beginPath(); g.moveTo(a1, b1); g.quadraticCurveTo((a1 + a2) / 2, b1 - 30, a2, b2); g.stroke(); });
-  if (hippo > 0) { g.strokeStyle = `rgba(42,157,143,${hippo})`; g.lineWidth = 16; g.beginPath(); g.arc(30, 60, 50, Math.PI * .1, Math.PI * .9); g.stroke(); }
-  if (amyg > 0) { const pu = 1 + .15 * Math.sin(TT * 8); const gl = g.createRadialGradient(-30, 70, 4, -30, 70, 70 * pu); gl.addColorStop(0, `rgba(255,120,60,${amyg})`); gl.addColorStop(1, 'rgba(255,120,60,0)'); g.fillStyle = gl; g.beginPath(); g.arc(-30, 70, 70 * pu, 0, 7); g.fill();
-    g.fillStyle = `rgba(231,90,50,${amyg})`; ell(-30, 70, 20, 14, .4); g.fill(); }
-  // face
-  g.fillStyle = COL.white; ell(-40, -20, 18, 22); g.fill(); ell(40, -20, 18, 22); g.fill(); g.fillStyle = COL.ink; ell(-36, -16, 9, 9); g.fill(); ell(44, -16, 9, 9); g.fill();
-  g.strokeStyle = COL.ink; g.lineWidth = 7; g.beginPath(); if (expr === 'smirk') { g.moveTo(-26, 30); g.quadraticCurveTo(10, 50, 34, 22); } else g.arc(0, 20, 22, .2 * Math.PI, .8 * Math.PI); g.stroke();
-  if (expr === 'smirk') { line(-60, -56, -22, -46, 7, COL.ink); line(60, -56, 22, -46, 7, COL.ink); }
-  g.restore() }) }
-function label(s, x, y, tx, ty, p, c = COL.ink) { if (p <= 0) return; withA(p, () => { g.setLineDash([10, 8]); line(x, y, lerp(x, tx, p), lerp(y, ty, p), 4, c); g.setLineDash([]); pill(s, x, y, { p: B(p, 0, 1), bg: c, size: 36 }); }) }
-function bar(x, base, w, h, c, p) { const hh = h * p; g.fillStyle = c; rr(x - w / 2, base - hh, w, hh, 14); g.fill(); }
 function bear(x, y, s) { g.save(); g.translate(x, y); g.scale(s, s); g.fillStyle = '#FFFFFF'; g.strokeStyle = COL.ink; g.lineWidth = 6;
   [[-44, -54], [44, -54]].forEach(([a, b]) => { g.beginPath(); g.arc(a, b, 22, 0, 7); g.fill(); g.stroke(); }); ell(0, 0, 80, 70); g.fill(); g.stroke();
   g.fillStyle = COL.ink; ell(-26, -10, 7, 7); g.fill(); ell(26, -10, 7, 7); g.fill(); ell(0, 18, 14, 10); g.fill(); g.restore(); }
 function car(x, y, s, cardText) { g.save(); g.translate(x, y); g.scale(s, s); g.fillStyle = COL.alex; rr(-150, -70, 300, 80, 24); g.fill(); rr(-90, -130, 170, 70, 22); g.fill();
   g.fillStyle = '#BFE3F2'; rr(-75, -118, 65, 48, 10); g.fill(); rr(0, -118, 65, 48, 10); g.fill(); g.fillStyle = COL.ink; [-90, 90].forEach(a => { g.beginPath(); g.arc(a, 14, 32, 0, 7); g.fill(); });
   g.restore(); if (cardText) memCard(x, y - 180 * s, 230, 80, cardText, { size: 34 }); }
-function confetti(lt, t0) { for (let i = 0; i < 70; i++) { const a = lt - t0 - (i % 7) * .03; if (a < 0) continue; const x = (i * 263) % W, y = -40 + a * (260 + (i % 5) * 60) + Math.sin(a * 3 + i) * 20;
-  g.save(); g.translate(x, y); g.rotate(a * 4 + i); g.fillStyle = [COL.ivy, COL.sam, COL.alex, COL.max, COL.red][i % 5]; g.fillRect(-9, -5, 18, 10); g.restore(); } }
 function fly(x, y, s) { g.save(); g.translate(x, y); g.scale(s, s); g.fillStyle = 'rgba(200,230,255,.8)'; const fl = Math.sin(TT * 40) * .3; ell(-14, -16, 16, 9, -.6 + fl); g.fill(); ell(14, -16, 16, 9, .6 - fl); g.fill();
   g.fillStyle = COL.ink; ell(0, 0, 18, 14); g.fill(); g.beginPath(); g.arc(-18, -2, 10, 0, 7); g.fill(); g.fillStyle = '#C0392B'; g.beginPath(); g.arc(-22, -5, 4, 0, 7); g.fill(); g.restore(); }
+
 
 // ---------- scenes
 S.bedOpen = (lt, L, Le, D, at) => {

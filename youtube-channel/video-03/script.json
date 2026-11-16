@@ -1,0 +1,123 @@
+{
+ "title": "Why You Procrastinate (It's Not Laziness)",
+ "scenes": [
+  {
+   "id": "open",
+   "type": "deskOpen",
+   "chapter": "The 11 p.m. panic",
+   "note": "Sam at his desk at night. Montage of distractions. Clock hits 11. 'LAZY?' label, then lazy vs procrastinator.",
+   "lines": [
+    "Sam has an essay due tomorrow morning. He's known about it for three weeks.",
+    "So, naturally, tonight he reorganized his sock drawer, watched a documentary about octopuses, and checked his phone about a hundred times.",
+    "Now it's eleven p.m., and the panic finally kicks in.",
+    "Most people would call Sam lazy. But psychologists who study procrastination say that's usually not the real problem.",
+    "Because a lazy person doesn't want to do the work. Sam does want to do it. He just... doesn't."
+   ]
+  },
+  {
+   "id": "title",
+   "type": "title3",
+   "note": "Title card.",
+   "lines": [
+    "So why do we put things off, even when we know we'll regret it? Let's find out."
+   ]
+  },
+  {
+   "id": "define",
+   "type": "define",
+   "chapter": "Procrastination isn't laziness",
+   "note": "Definition card with three highlighted words. Then the numbers.",
+   "lines": [
+    "Let's start with a definition. The psychologist Piers Steel describes procrastination as voluntarily delaying something you intend to do, even though you expect to be worse off for the delay.",
+    "Look at the pieces. Voluntarily: nobody's forcing you. Intend: you actually want to do it. Worse off: you know it'll cost you. That's what makes it so frustrating.",
+    "And you're in very big company. Estimates suggest that eighty to ninety-five percent of college students procrastinate, and around fifteen to twenty percent of adults do it chronically.",
+    "And it's nothing new. Around seven hundred B.C., the Greek poet Hesiod was already warning people: do not put your work off till tomorrow, and the day after. Humans have been struggling with this for a very long time.",
+    "One important note, though. Not every delay is procrastination. Waiting for more information, or pausing because something more urgent came up, can be a smart choice. It only becomes procrastination when the delay is needless, and you know it."
+   ]
+  },
+  {
+   "id": "feelings",
+   "type": "feelings",
+   "chapter": "It's about feelings, not time",
+   "note": "The essay as a grey storm of feelings. Sam escapes to his phone; a relief meter jumps. Short-term mood repair. The avoidance loop. Pychyl's list of task triggers.",
+   "lines": [
+    "So if it's not laziness, what is it? According to researchers like Tim Pychyl and Fuschia Sirois, procrastination is mostly about emotions.",
+    "When a task makes you feel bad, whether that's bored, anxious, confused, or afraid of doing it badly, your brain looks for a quick escape.",
+    "Avoiding the task gives you instant relief. Opening a video feels better, right now, than opening a blank document.",
+    "Sirois and Pychyl describe this as short-term mood repair. You trade a bad feeling now for a bigger problem later.",
+    "And here's the trap. That moment of relief feels rewarding, so avoiding can turn into a habit. When the essay feels bad, run. And the next time, running is even easier.",
+    "Pychyl lists the kinds of tasks we're most likely to put off. Ones that are boring, frustrating, difficult, unclear, unstructured, not rewarding, or not meaningful to us. Sound familiar?"
+   ]
+  },
+  {
+   "id": "time",
+   "type": "timeScene",
+   "chapter": "Why 'later' feels so easy",
+   "note": "Near reward looks big, far reward looks small. Steel's motivation formula. Motivation spikes the night before the deadline.",
+   "lines": [
+    "There's a second ingredient: the way our brains treat time.",
+    "Rewards that are close feel big. Rewards that are far away feel small. Psychologists and economists call this temporal discounting.",
+    "Piers Steel even turned it into a formula. Your motivation goes up with how confident you are and how much you value the task. And it goes down with how impulsive you are, and how far away the payoff is.",
+    "And when Steel combined hundreds of studies, the strongest predictors of procrastination matched this formula. Finding the task unpleasant. Low confidence. Impulsiveness. Getting easily distracted. And payoffs that are far away.",
+    "That's why a deadline three weeks away barely registers. But the night before, the delay is almost zero, and suddenly, motivation shoots up.",
+    "That's also why breaking a big project into smaller deadlines can help. In a study by Dan Ariely and Klaus Wertenbroch, students who had evenly spaced deadlines for their papers did better than students who could hand everything in at the end."
+   ]
+  },
+  {
+   "id": "future",
+   "type": "future",
+   "chapter": "Meet Future Sam",
+   "note": "Sam and older Future Sam. Sam hands him the essay. Brain comparison: future self vs a stranger. Aged-photo savings experiment.",
+   "lines": [
+    "And then there's the strangest part. Meet Future Sam.",
+    "When Sam puts off his essay, he's really handing the problem to Future Sam. And in a way, Future Sam feels like a different person.",
+    "It's why we make big promises like: tomorrow, I'll wake up at six and go to the gym. Present Sam makes the promises. Future Sam has to keep them.",
+    "In a classic study led by Daniel Read, people choosing movies to watch later mostly picked serious, highbrow films. But when choosing a movie to watch right now, they were much more likely to pick something light and fun.",
+    "In a brain imaging study led by Hal Hershfield, thinking about your future self looked, in some ways, more like thinking about another person than thinking about yourself right now.",
+    "And the people whose future self looked the most like a stranger tended to be the least patient with money.",
+    "In later experiments, Hershfield's team showed people digitally aged pictures of themselves. Afterwards, they chose to set aside more money for retirement. Seeing their future self made that person feel real."
+   ]
+  },
+  {
+   "id": "myths",
+   "type": "myths3",
+   "chapter": "3 myths",
+   "note": "Three myth cards with stamps.",
+   "lines": [
+    "Let's bust a few myths.",
+    "Myth number one. Procrastinators are just lazy. As we've seen, they usually care. The problem is managing the feelings, not a lack of effort.",
+    "Myth number two. Procrastinators are perfectionists. It sounds right, but Piers Steel's big review of the research found that, on average, perfectionism is barely linked to procrastination.",
+    "Myth number three. I work better under pressure. Some people really feel that way. But in Steel's review, procrastination was generally linked to worse performance, not better. And in a large Swedish study of university students, those who procrastinated more later reported a bit more stress, anxiety and poor sleep. The links were small, but they were there."
+   ]
+  },
+  {
+   "id": "helps",
+   "type": "helps3",
+   "chapter": "What actually helps",
+   "note": "Five research-backed tips, then a note on getting professional help.",
+   "lines": [
+    "So what actually helps? Here are six ideas backed by research.",
+    "One. Forgive yourself. In a study by Michael Wohl, Tim Pychyl and Shannon Bennett, students who forgave themselves for procrastinating before one exam procrastinated less before the next one. Beating yourself up just adds more bad feelings, and feeds the same escape loop.",
+    "Two. Make the first step ridiculously small. Not, write the essay. Just, open the document and write one sentence. Getting started is often the hardest part, and a tiny step makes the bad feeling smaller.",
+    "Three. Use if-then plans. If it's seven p.m., then I sit at my desk and write for twenty minutes. A large review by Peter Gollwitzer and Paschal Sheeran found that plans like this make people noticeably more likely to reach their goals.",
+    "Four. Make the escape harder. Put your phone in another room. Close the extra tabs. The easier it is to get distracted, the more often you will.",
+    "Five. Get to know Future You. Picture them in detail. Maybe even write them a short note. The more real they feel, the easier it is to do them a favor.",
+    "Six. Pair the task with something you enjoy. In a study led by Katherine Milkman, people who could only listen to their favorite audiobooks while at the gym ended up going to the gym more often. Researchers call this temptation bundling.",
+    "And if procrastination is constant and seriously affecting your life, it can be linked to things like ADHD or depression. Talking to a professional can really help, and cognitive behavioral therapy has been shown to reduce procrastination."
+   ]
+  },
+  {
+   "id": "outro",
+   "type": "outro3",
+   "chapter": "Back to Sam",
+   "note": "Sam forgives himself, puts the phone away, writes one sentence, then more. Future Sam gives a thumbs up. Comment prompt. Thanks.",
+   "lines": [
+    "So, back to Sam. It's eleven p.m., and this time he tries something new.",
+    "He forgives himself for the last three weeks, puts his phone in the kitchen, and writes one sentence.",
+    "Then another. Then another. Future Sam is going to be very grateful.",
+    "What's the thing you've been putting off? Write it in the comments. And maybe, right after this video, take one tiny step.",
+    "Thanks for watching. See you in the next one."
+   ]
+  }
+ ]
+}

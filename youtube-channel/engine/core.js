@@ -178,6 +178,36 @@ function camera(keys,lt){ // keys: [time,cx,cy,zoom]
   for(let i=1;i<keys.length;i++){const p=E(lt,keys[i-1][0],Math.max(.01,keys[i][0]-keys[i-1][0]));if(lt>=keys[i-1][0]){cx=lerp(keys[i-1][1],keys[i][1],p);cy=lerp(keys[i-1][2],keys[i][2],p);z=lerp(keys[i-1][3],keys[i][3],p)}}
   cx=clamp(cx,W/(2*z),W-W/(2*z));cy=clamp(cy,H/(2*z),H-H/(2*z));g.translate(W/2,H/2);g.scale(z,z);g.translate(-cx,-cy)}
 
+// ============================================================ shared scene helpers
+// crossfade between panels; starts = line index where each panel begins
+function panels(lt, L, starts, fns) {
+  starts.forEach((li, k) => {
+    const a0 = k === 0 ? 1 : E(lt, L[li] - .15, .4), a1 = k < starts.length - 1 ? E(lt, L[starts[k + 1]] - .15, .4) : 0;
+    const a = a0 * (1 - a1); if (a > .001) withA(a, fns[k]);
+  });
+}
+function lying(o) { g.save(); g.translate(o.x, o.y); g.rotate(-Math.PI / 2); ch(Object.assign({}, o, { x: 0, y: 0 })); g.restore(); }
+function memCard(x, y, w, h, text, o = {}) { const { hl = 0, rot = 0, a = 1, size = 44, fill = COL.white, sub } = o; withA(a, () => { g.save(); g.translate(x, y); g.rotate(rot);
+  g.fillStyle = 'rgba(43,45,66,.18)'; rr(-w / 2 + 8, -h / 2 + 10, w, h, 18); g.fill(); g.fillStyle = fill; rr(-w / 2, -h / 2, w, h, 18); g.fill(); g.lineWidth = 5; g.strokeStyle = COL.ink; g.stroke();
+  if (hl > 0) { g.fillStyle = 'rgba(255,224,70,.85)'; g.font = `700 ${size}px Fredoka`; const tw = g.measureText(text).width + 30; rr(-tw / 2, -size * .55 + (sub ? -14 : 0), tw * clamp(hl), size * 1.1, 10); g.fill(); }
+  txt(text, 0, 3 + (sub ? -14 : 0), { size, weight: 700 }); if (sub) txt(sub, 0, 40, { size: 26, font: 'Nunito', weight: 700, color: COL.ink2 }); g.restore() }) }
+function brainChar(x, y, s, o = {}) { const { expr = 'smile', amyg = 0, hippo = 0, a = 1 } = o; withA(a, () => { g.save(); g.translate(x, y); g.scale(s, s);
+  const c = '#F4A7B9'; g.fillStyle = 'rgba(43,45,66,.15)'; ell(0, 170, 170, 22); g.fill();
+  g.fillStyle = c; [[-110, -10, 90], [-40, -70, 100], [60, -70, 100], [120, 0, 90], [60, 60, 95], [-50, 60, 95], [0, 0, 110]].forEach(([cx, cy, r]) => { g.beginPath(); g.arc(cx, cy, r, 0, 7); g.fill(); });
+  g.strokeStyle = dark(c, .2); g.lineWidth = 8; g.lineCap = 'round'; line(0, -150, 0, 140, 8, dark(c, .2));
+  [[-150, -40, -70, -20], [-130, 50, -60, 30], [60, -40, 150, -20], [70, 40, 160, 60], [-90, -110, -40, -80], [40, -120, 90, -100]].forEach(([a1, b1, a2, b2]) => { g.beginPath(); g.moveTo(a1, b1); g.quadraticCurveTo((a1 + a2) / 2, b1 - 30, a2, b2); g.stroke(); });
+  if (hippo > 0) { g.strokeStyle = `rgba(42,157,143,${hippo})`; g.lineWidth = 16; g.beginPath(); g.arc(30, 60, 50, Math.PI * .1, Math.PI * .9); g.stroke(); }
+  if (amyg > 0) { const pu = 1 + .15 * Math.sin(TT * 8); const gl = g.createRadialGradient(-30, 70, 4, -30, 70, 70 * pu); gl.addColorStop(0, `rgba(255,120,60,${amyg})`); gl.addColorStop(1, 'rgba(255,120,60,0)'); g.fillStyle = gl; g.beginPath(); g.arc(-30, 70, 70 * pu, 0, 7); g.fill();
+    g.fillStyle = `rgba(231,90,50,${amyg})`; ell(-30, 70, 20, 14, .4); g.fill(); }
+  // face
+  g.fillStyle = COL.white; ell(-40, -20, 18, 22); g.fill(); ell(40, -20, 18, 22); g.fill(); g.fillStyle = COL.ink; ell(-36, -16, 9, 9); g.fill(); ell(44, -16, 9, 9); g.fill();
+  g.strokeStyle = COL.ink; g.lineWidth = 7; g.beginPath(); if (expr === 'smirk') { g.moveTo(-26, 30); g.quadraticCurveTo(10, 50, 34, 22); } else g.arc(0, 20, 22, .2 * Math.PI, .8 * Math.PI); g.stroke();
+  if (expr === 'smirk') { line(-60, -56, -22, -46, 7, COL.ink); line(60, -56, 22, -46, 7, COL.ink); }
+  g.restore() }) }
+function label(s, x, y, tx, ty, p, c = COL.ink) { if (p <= 0) return; withA(p, () => { g.setLineDash([10, 8]); line(x, y, lerp(x, tx, p), lerp(y, ty, p), 4, c); g.setLineDash([]); pill(s, x, y, { p: B(p, 0, 1), bg: c, size: 36 }); }) }
+function bar(x, base, w, h, c, p) { const hh = h * p; g.fillStyle = c; rr(x - w / 2, base - hh, w, hh, 14); g.fill(); }
+function confetti(lt, t0) { for (let i = 0; i < 70; i++) { const a = lt - t0 - (i % 7) * .03; if (a < 0) continue; const x = (i * 263) % W, y = -40 + a * (260 + (i % 5) * 60) + Math.sin(a * 3 + i) * 20;
+  g.save(); g.translate(x, y); g.rotate(a * 4 + i); g.fillStyle = [COL.ivy, COL.sam, COL.alex, COL.max, COL.red][i % 5]; g.fillRect(-9, -5, 18, 10); g.restore(); } }
 const S = {};
 // ============================================================ render
 let NODIP_IN = new Set(), NODIP_OUT = new Set();
