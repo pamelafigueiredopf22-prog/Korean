@@ -291,7 +291,7 @@ S.spectrum=(lt,L,Le,D,at)=>{
       const sh=E(lt,L[2]+.3,1);if(sh>0){g.save();g.beginPath();g.rect(x0,0,(890-x0),H);g.clip();g.fillStyle=`rgba(42,157,143,${.55*sh})`;g.beginPath();g.moveTo(x0,yb-40);for(let x=x0;x<=x1;x+=8)g.lineTo(x,bell(x));g.lineTo(x1,yb-40);g.fill();g.restore()}
       g.beginPath();for(let x=x0;x<=x1;x+=8)g.lineTo(x,bell(x));g.lineWidth=7;g.strokeStyle=COL.ink;g.stroke();g.restore()}
     pill('AMBIVERTS',960,bell(960)-60,{p:B(lt,at(1,.5)),bg:COL.ink,size:42});
-    withA(E(lt,L[2]+.6),()=>{txt('⅓ to ½',470,420,{size:84,weight:700,color:COL.ivy});txt('lean introverted',470,495,{size:40,font:'Nunito',weight:800,color:COL.ivy})});
+    withA(E(lt,L[2]+.6),()=>{txt('⅓ to ½',470,420,{size:84,weight:700,color:COL.ivy});txt('lean introverted',470,495,{size:40,font:'Nunito',weight:800,color:COL.ivy});txt('(popular estimates)',470,545,{size:30,font:'Nunito',weight:700,color:COL.ink2})});
     // slider knob before curve
     const kx=lerp(x0,x1,.5+.42*Math.sin(TT*1.3));withA(bp*(1-E(lt,L[1],.4)),()=>{g.fillStyle=COL.white;g.beginPath();g.arc(kx,yb,34,0,7);g.fill();g.lineWidth=8;g.strokeStyle=COL.ink;g.stroke()});
   });
@@ -437,14 +437,14 @@ S.stat7=(lt,L,Le,D,at)=>{
     for(let i=0;i<100;i++){const x=200+(i%10)*72,y=210+Math.floor(i/10)*72,on=i<n;g.fillStyle=on?COL.alex:'#D7CCC4';withA(B(lt,.1+i*.008,.3),()=>{g.beginPath();g.arc(x,y,26,0,7);g.fill()})}
     txt(Math.round(n)+'%',1350,400,{size:220,weight:700,color:COL.alex,alpha:B(lt,at(0,.55))});
     wrap('of U.S. adults in any given year',1350,600,700,64,{size:52,font:'Nunito',weight:800,alpha:E(lt,at(0,.65))});
-    pill('one of the most common mental health conditions',W/2,1000,{p:B(lt,at(0,.2)),size:36});
+    pill('one of the most common anxiety disorders',W/2,1000,{p:B(lt,at(0,.2)),size:36});
     source('Source: U.S. National Institute of Mental Health',E(lt,at(0,.65)))});
   withA(tl,()=>{txt('A LONG WAIT',W/2,150,{size:80,weight:700,color:COL.alex});
     const x0=200,x1=1720,y=560,p=E(lt,L[1],1.6);line(x0,y,lerp(x0,x1,p),y,14,COL.ink);
-    withA(B(lt,at(1,.12)),()=>{ch(P_(ALEX,{x:520,y:y-20,s:.75,expr:'worried'}));pill('often starts in the early teens',520,y+90,{size:36,bg:COL.alex})});
+    withA(B(lt,at(1,.12)),()=>{ch(P_(ALEX,{x:520,y:y-20,s:.75,expr:'worried'}));pill('usually starts in the teens',520,y+90,{size:36,bg:COL.alex})});
     const br=E(lt,at(1,.55),1);g.lineWidth=8;g.strokeStyle=COL.red;g.beginPath();g.moveTo(640,y+170);g.lineTo(640,y+200);g.lineTo(lerp(640,1600,br),y+200);if(br>.98){g.lineTo(1600,y+170)}g.stroke();
     txt('10+ years before getting help',1120,y+260,{size:52,font:'Nunito',weight:800,color:COL.red,alpha:E(lt,at(1,.7))});
-    txt('for over 1 in 3 people with it',1120,y+330,{size:40,font:'Nunito',weight:700,color:COL.ink2,alpha:E(lt,at(1,.8))});
+    txt('for more than 1 in 3 people with it',1120,y+330,{size:40,font:'Nunito',weight:700,color:COL.ink2,alpha:E(lt,at(1,.8))});
     withA(B(lt,at(1,.85)),()=>ch(P_(ALEX,{x:1660,y:y-20,s:.75,expr:'smile',top:null})));
     source('Source: Anxiety and Depression Association of America',E(lt,at(1,.6)))});
 };
@@ -473,7 +473,7 @@ S.myths=(lt,L,Le,D,at)=>{
     const k=clamp((lt-L[4]-.6)/(Le[4]-L[4]-1)*4.4,0,4.4),st=Math.floor(k),f=k-st;const ax=515+(st+eio(f))*230,ay=900-(st+eio(f))*110-Math.sin(f*Math.PI)*40*(st<4.4?1:0);
     ch({x:ax-150,y:ay+(ax-150<515?0:110),c:'#93B7A8',s:.85,expr:'smile',arms:'wave',sd:3,alpha:E(lt,L[4]+.4)});
     ch(P_(ALEX,{x:ax,y:ay,s:.95,expr:k>2.5?'joy':k>1?'smile':'worried',sweat:k<1}));
-    pill('CBT · small, guided steps',1350,300,{p:B(lt,at(4,.35)),bg:COL.ivy,size:46});
+    pill('CBT · small, planned steps',1350,300,{p:B(lt,at(4,.35)),bg:COL.ivy,size:46});
     source('Cognitive behavioral therapy is a first-line treatment for social anxiety disorder',E(lt,at(4,.4)));});
 };
 S.check=(lt,L,Le,D,at)=>{
@@ -493,8 +493,8 @@ S.tips=(lt,L,Le,D,at)=>{
   if(idx===2){ch(P_(SAM,{x:330,y:900,s:1.4,expr:'smile'}));tipList(SAM,'If you\'re shy',['arrive early, before the room fills','prepare a couple of easy questions',"everyone's busy worrying about themselves"],2)}
   if(idx===3){txt('THE SPOTLIGHT EFFECT',W/2,120,{size:76,weight:700,color:COL.alex});
     ch(P_(SAM,{x:420,y:900,s:1.5,expr:'nervous',sweat:true}));g.save();g.translate(420,900-1.5*120);g.fillStyle=COL.white;rr(-62,-40,124,96,14);g.fill();txt(':P',0,8,{size:56,weight:700,color:COL.max});g.restore();
-    const bars=[['they guessed',.5,COL.alex,.2],['actually noticed',.23,COL.ivy,.6]];bars.forEach(([lab,v,c,f],i)=>{const p=E(lt,at(3,f),.9);const x=1000+i*420;g.fillStyle=c;rr(x-100,880-560*v*p*1.6,200,560*v*p*1.6,16);g.fill();
-      txt(Math.round(v*100*p)+'%',x,880-560*v*p*1.6-50,{size:64,weight:700,alpha:p});txt(lab,x,940,{size:40,font:'Nunito',weight:800,alpha:p})});line(820,880,1700,880,8,COL.ink);
+    const bars=[['they guessed',.5,COL.alex,.2],['actually noticed',.25,COL.ivy,.6]];bars.forEach(([lab,v,c,f],i)=>{const p=E(lt,at(3,f),.9);const x=1000+i*420;g.fillStyle=c;rr(x-100,880-560*v*p*1.6,200,560*v*p*1.6,16);g.fill();
+      txt('~'+Math.round(v*100*p)+'%',x,880-560*v*p*1.6-50,{size:64,weight:700,alpha:p});txt(lab,x,940,{size:40,font:'Nunito',weight:800,alpha:p})});line(820,880,1700,880,8,COL.ink);
     source('Gilovich, Medvec & Savitsky (2000), embarrassing T-shirt study',E(lt,at(3,.3)))}
   if(idx===4){txt('If it\'s social anxiety',W/2,130,{size:72,weight:700,color:COL.alex});
     for(let i=0;i<5;i++){g.fillStyle=mix('#F2C4B5',COL.alex,i/6);g.fillRect(420+i*220,900-i*100,230,100+i*100)}

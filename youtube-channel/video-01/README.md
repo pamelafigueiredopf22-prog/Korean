@@ -14,13 +14,17 @@ An animated explainer, made entirely from code: original characters, no stock fo
 ## Make the video
 ```bash
 npm install                 # fonts (and playwright, if not installed)
-pip install piper-tts       # scratch AI voice (only needed for lines you haven't recorded)
+pip install kokoro-onnx soundfile   # free AI narrator voice (Kokoro, Apache-2.0)
 node build.js               # audio + timeline
 node render.js              # → build/video-01.mp4  (~6 min on 4 cores)
 node thumb.js               # → build/thumbnail.png (needs: python3 -m http.server 8765)
 ```
-The scratch voice model (`voices/en_US-ryan-medium.onnx`, about 60 MB) isn't in git. Download it from huggingface.co/rhasspy/piper-voices (en/en_US/ryan/medium).
+The voice model isn't in git. Download `kokoro-v1.0.onnx` and `voices-v1.0.bin` into `voices/` from github.com/thewh1teagle/kokoro-onnx/releases (model-files-v1.0).
+To change the voice: `VOICE=am_michael node build.js`. Good options: `af_heart` (default, best rated), `af_bella`, `am_michael`, `bf_emma`, `bm_george`. `SPEED=0.92` is the default.
 
 ## Use your own voice (recommended)
 1. Read `SCRIPT.md`. Record each numbered line as its own file in `voice/`, e.g. `voice/open_1.wav`, `voice/open_2.m4a`, … (wav, mp3, m4a or ogg).
 2. Run `node build.js && node render.js`. The animation re-times itself to your recording, and any line you haven't recorded falls back to the AI voice.
+
+## Fact-check notes
+Every claim was checked against its source. The hedged wording ("many introverts describe…", "popular estimates…", "about a quarter") is deliberate, because the evidence behind those points is softer. Keep it if you edit the script.

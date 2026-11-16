@@ -1,15 +1,14 @@
 // Step 1: narration -> audio clips -> timeline.
 // For each script line: use your own recording from voice/<sceneId>_<n>.(wav|mp3|m4a) if present,
-// otherwise generate a scratch AI voice with Piper TTS. Produces:
+// otherwise generate an AI narrator voice with Kokoro TTS (free, Apache-2.0; set VOICE=... to change). Produces:
 //   build/narration.wav, build/timeline.json, build/captions.srt, SCRIPT.md
 const fs = require('fs'), path = require('path'), crypto = require('crypto');
 const { execFileSync } = require('child_process');
 
 const ROOT = __dirname;
 const B = path.join(ROOT, 'build');
-const VOICE_MODEL = process.env.PIPER_MODEL || path.join(ROOT, 'voices', 'en_US-ryan-medium.onnx');
-const RATE = 22050;
-const LEAD = 0.35, GAP = 0.45, TAIL = 0.75;
+const RATE = 24000;
+const LEAD = 0.4, GAP = 0.55, TAIL = 0.9;
 
 fs.mkdirSync(path.join(B, 'tts'), { recursive: true });
 fs.mkdirSync(path.join(B, 'lines'), { recursive: true });
@@ -34,20 +33,22 @@ function wavHeader(n) {
 }
 const silence = s => Buffer.alloc(Math.round(s * RATE) * 2);
 
+const VOICE = process.env.VOICE || 'af_heart', SPEED = +(process.env.SPEED || 0.92);
+const ttsPath = text => path.join(B, 'tts', crypto.createHash('sha1').update(`${text}|${VOICE}|${SPEED}`).digest('hex').slice(0, 12) + '.wav');
+const ownPath = (id, i) => ['wav', 'mp3', 'm4a', 'ogg'].map(e => path.join(ROOT, 'voice', `${id}_${i + 1}.${e}`)).find(fs.existsSync);
+// generate all missing AI-voice clips in one batch (model loads once)
+const jobs = [];
+for (const sc of script.scenes) sc.lines.forEach((text, i) => { if (!ownPath(sc.id, i) && !fs.existsSync(ttsPath(text))) jobs.push({ text, out: ttsPath(text), voice: VOICE, speed: SPEED }); });
+if (jobs.length) { fs.writeFileSync(path.join(B, 'jobs.json'), JSON.stringify(jobs)); console.log(`generating ${jobs.length} clips with Kokoro voice ${VOICE}...`);
+  execFileSync('python3', [path.join(ROOT, 'kokoro_tts.py'), path.join(B, 'jobs.json')], { cwd: ROOT, stdio: ['ignore', 'ignore', 'inherit'] }); }
+
 function clipFor(sceneId, i, text) {
-  const own = ['wav', 'mp3', 'm4a', 'ogg'].map(e => path.join(ROOT, 'voice', `${sceneId}_${i + 1}.${e}`)).find(fs.existsSync);
-  let src = own;
-  if (!src) {
-    const hash = crypto.createHash('sha1').update(text + '|1.2').digest('hex').slice(0, 12);
-    src = path.join(B, 'tts', hash + '.wav');
-    if (!fs.existsSync(src)) {
-      execFileSync('python3', ['-m', 'piper', '-m', VOICE_MODEL, '--length-scale', '1.2', '-f', src], { input: text });
-    }
-  }
+  const own = ownPath(sceneId, i);
+  const src = own || ttsPath(text);
   const out = path.join(B, 'lines', `${sceneId}_${i + 1}.wav`);
   // normalise every clip: mono, 22.05 kHz, trim edge silence, consistent loudness
   execFileSync('ffmpeg', ['-y', '-v', 'error', '-i', src, '-af',
-    'silenceremove=start_periods=1:start_threshold=-50dB,areverse,silenceremove=start_periods=1:start_threshold=-50dB,areverse,loudnorm=I=-18:TP=-2',
+    'silenceremove=start_periods=1:start_threshold=-50dB,areverse,silenceremove=start_periods=1:start_threshold=-50dB,areverse,loudnorm=I=-16:TP=-1.5',
     '-ar', String(RATE), '-ac', '1', '-c:a', 'pcm_s16le', out]);
   return { pcm: readPcm(out), own: !!own };
 }

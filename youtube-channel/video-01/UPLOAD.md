@@ -3,7 +3,7 @@
 ## Title (pick one)
 1. **Introvert, Shy, or Socially Anxious? (They're NOT the Same)** ← recommended
 2. You're Probably Not an Introvert
-3. Introvert vs Shy vs Social Anxiety, Explained in 7 Minutes
+3. Introvert vs Shy vs Social Anxiety, Explained in 8 Minutes
 
 ## Thumbnail
 `build/thumbnail.png` (1280×720)
@@ -31,7 +31,8 @@ introvert, shyness, social anxiety, introvert vs shy, psychology explained, soci
 
 ## Settings
 - **Captions:** upload `build/captions.srt` (re-run `node build.js` after recording your voice so the timings match).
-- **Altered or synthetic content:** if you publish with the scratch AI voice, answer **Yes** in YouTube Studio. With your own voice, answer No.
+- **Narration:** the voice is Kokoro TTS (`af_heart`), an open-source model under the Apache-2.0 license, so commercial use is allowed. YouTube only *requires* the "altered or synthetic content" label for realistic content that could fool viewers, which an AI narrator over cartoons isn't. Ticking it anyway costs nothing and keeps you safe.
+- **Length:** about 8:10, so you can turn on mid-roll ads (that needs 8:00+).
 - **Audience:** Not made for kids.
 - **Music:** add a quiet background track from the YouTube Audio Library (Studio → Audio Library). It's free to use and safe for monetization.
 
