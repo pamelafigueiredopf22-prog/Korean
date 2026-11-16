@@ -43,7 +43,7 @@ const srv = http.createServer((q, r) => { const f = path.join(CH, decodeURICompo
     ff.stdin.end(); await new Promise(r => ff.on('close', r));
   }));
   clearInterval(tick); await b.close(); srv.close();
-  const list = [...Array(WORKERS).keys()].filter(w => fs.existsSync(path.join(SEG, `${w}.mp4`))).map(w => `file 'seg/${w}.mp4'`).join('\n');
+  const list = [...Array(WORKERS).keys()].filter(w => fs.existsSync(path.join(SEG, `${w}.mp4`))).map(w => `file '${w}.mp4'`).join('\n');
   fs.writeFileSync(path.join(SEG, 'segs.txt'), list);
   execFileSync('ffmpeg', ['-y', '-v', 'error', '-f', 'concat', '-safe', '0', '-i', path.join(SEG, 'segs.txt'), '-ss', String(T0), '-t', String(T1 - T0), '-i', path.join(VDIR, 'build/narration.wav'),
     '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-ar', '48000', '-shortest', '-movflags', '+faststart', OUT]);
