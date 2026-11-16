@@ -9,6 +9,7 @@ Animated explainers made entirely from code: original characters, no stock foota
 | `video-02/` | Why You Can't Forget That Embarrassing Moment |
 | `video-03/` | Why You Procrastinate (It's Not Laziness) |
 | `video-04/` | The Dark Triad: Narcissist vs Machiavellian vs Psychopath |
+| `video-05/` | Why You Can Feel Lonely in a Crowd |
 
 Each video folder has `script.json` (the narration, which you edit), `scenes.js` (its animation), `SCRIPT.md` (the generated recording sheet), `UPLOAD.md` (title, description, sources and settings) and `build/` (outputs, not in git).
 
