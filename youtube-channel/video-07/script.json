@@ -1,0 +1,111 @@
+{
+ "title": "Willpower Is a Myth (Sort Of)",
+ "scenes": [
+  {
+   "id": "open",
+   "type": "donutOpen",
+   "chapter": "The donut problem",
+   "note": "Office kitchen. A box of donuts. Alex resists all morning, then caves at 4 p.m. Coworker Ivy never even looks at the box.",
+   "lines": [
+    "It's Monday. Someone brought a box of donuts to the office. And Alex has promised, absolutely promised, to eat healthier this week.",
+    "Nine a.m. Alex walks past the box. Resists. Eleven a.m. Resists again. Two p.m. Stares at it for a full minute. Resists.",
+    "At four p.m., Alex eats two.",
+    "Meanwhile, Ivy, who sits on the other side of the office, never even noticed the donuts were there.",
+    "Most people would say Ivy simply has more willpower. But the science of self-control tells a much more surprising story."
+   ]
+  },
+  {
+   "id": "title",
+   "type": "title7",
+   "note": "Title card.",
+   "lines": [
+    "Is willpower a muscle that gets tired, a myth, or something else entirely? Let's find out."
+   ]
+  },
+  {
+   "id": "battery",
+   "type": "batteryTheory",
+   "chapter": "The willpower battery",
+   "note": "Baumeister's radish and cookie experiment. The battery model. Glucose and lemonade.",
+   "lines": [
+    "For a long time, the most popular theory said that willpower works like a battery.",
+    "In a famous 1998 experiment by Roy Baumeister and his colleagues, hungry students sat in front of a plate of fresh, warm cookies. Some were allowed to eat them. Others had to resist and eat radishes instead.",
+    "Then everyone tried to solve a puzzle that was secretly impossible. The radish eaters gave up much sooner.",
+    "The conclusion seemed clear. Resisting temptation drains a limited supply of willpower, and once it's used up, you're more likely to give in. Researchers called this ego depletion.",
+    "The idea spread everywhere. Some studies even suggested that a sugary drink could recharge your willpower, because your brain was literally running low on fuel.",
+    "It explained Alex's afternoon perfectly. Hours of resisting donuts, battery empty, and then, game over."
+   ]
+  },
+  {
+   "id": "crack",
+   "type": "crack",
+   "chapter": "Then the battery cracked",
+   "note": "Replication crisis. Two huge multi-lab tests: 23 labs, then 36 labs, effects near zero. The sugar idea. The mindset idea, contested.",
+   "lines": [
+    "But then, psychology went through what's called the replication crisis. Researchers started repeating famous experiments, carefully, with much bigger samples.",
+    "And it wasn't just willpower. In 2015, a huge project tried to repeat one hundred published psychology studies, and only about a third of them produced clear results the second time. Small samples and flexible statistics had made some effects look much bigger than they really were.",
+    "In 2016, a team led by Martin Hagger ran the same ego depletion test in twenty three labs around the world, with over two thousand participants. The effect they found was close to zero.",
+    "In 2021, another huge project, this time in thirty six labs, and with Baumeister's own colleague Kathleen Vohs among the leaders, also found no clear evidence for the effect.",
+    "The sugar idea didn't hold up well either. Critics pointed out that self-control uses only a tiny amount of the brain's energy, and later studies struggled to repeat the results.",
+    "Another popular idea said that depletion only happens if you believe your willpower is limited. But a careful replication in 2023 didn't find that effect either.",
+    "So, does that mean willpower doesn't exist? Not quite. People clearly do get tired, bored, and less motivated over a long day. But the simple battery story is, at best, much weaker than we thought."
+   ]
+  },
+  {
+   "id": "secret",
+   "type": "secret",
+   "chapter": "The real secret of self-control",
+   "note": "Hofmann's beeper study: 205 adults, 7,827 reports. High self-control people resist LESS. They avoid temptation.",
+   "lines": [
+    "So what's really going on with people like Ivy? A study led by Wilhelm Hofmann gave us a big clue.",
+    "Two hundred and five adults carried beepers for a week. Several times a day, they reported what they wanted right then, and whether they were trying to resist it. Almost eight thousand reports in total.",
+    "Here's what surprised everyone. People with high self-control didn't have fewer desires. But their desires tended to be weaker, they felt less conflicted, and they actually tried to resist temptations less often.",
+    "In other words, they weren't heroically fighting temptation all day. They seemed to arrange their lives so that they didn't have to.",
+    "Another study, by Marina Milyavskaya and Michael Inzlicht, followed students over a semester. What predicted whether they reached their goals wasn't how hard they fought temptation. It was how many temptations they ran into in the first place.",
+    "Ivy doesn't walk past the kitchen. She brings her own snack. She leaves her phone in her bag during work. Her self-control isn't a superpower. It's mostly good planning."
+   ]
+  },
+  {
+   "id": "marsh",
+   "type": "marsh",
+   "chapter": "The marshmallow test, revisited",
+   "note": "Mischel's marshmallow test. The children's tricks: covering eyes, singing, turning away. Watts 2018 replication.",
+   "lines": [
+    "You may have heard of the most famous self-control experiment of all: the marshmallow test.",
+    "In the late nineteen sixties and seventies, Walter Mischel offered young children a deal. One marshmallow now, or two if they could wait alone in a room for several minutes.",
+    "The fascinating part wasn't who waited. It was how. The kids who lasted longest covered their eyes, sang songs, turned their chairs around, or pretended the marshmallow was just a picture. They didn't stare it down. They changed what they were paying attention to.",
+    "Later follow-ups suggested that the kids who waited did better in life years afterwards. But in 2018, Tyler Watts and his colleagues repeated the study with a much larger and more diverse group of children. The link was much smaller, and shrank even more once they took the children's family background into account.",
+    "And here's a twist. In a 2013 study by Celeste Kidd and her colleagues, children who had just watched the adult break a promise waited far less than children who'd seen the adult keep their word. Waiting isn't only about self-control. It's also about whether you trust that the second marshmallow is really coming.",
+    "So, waiting for a marshmallow at age four isn't destiny. But the strategies those children used are still incredibly useful for adults."
+   ]
+  },
+  {
+   "id": "tips",
+   "type": "tips7",
+   "chapter": "How to have more self-control",
+   "note": "Five strategies: avoid the situation, distance and distraction, precommitment, habits, rest and kindness.",
+   "lines": [
+    "So, if willpower isn't a magic battery, how do you get better at self-control? Here are five strategies, backed by research.",
+    "One. Avoid the battle. Change your surroundings, so temptation doesn't reach you in the first place. Don't keep the snacks in your desk. Mute the notifications. Take a different route past the bakery. It's the strategy that people like Ivy seem to use naturally.",
+    "Two. Change your focus, like the marshmallow kids. Distract yourself, step away, or think about the temptation in a cooler way. It's not a delicious, warm donut. It's a ring of fried dough and sugar.",
+    "Three. Decide in advance. Psychologists call this precommitment. Like the sailor Ulysses, who asked to be tied to the mast so he couldn't follow the sirens' song. Put money in an account you can't easily touch. Ask a friend to hold you accountable. Book the gym class instead of just planning to go.",
+    "Four. Build habits. As we saw in our last video, good habits run on autopilot. Once healthy lunch becomes a routine, there's nothing left to resist.",
+    "And five. Take care of the basics. Being tired, hungry or stressed makes almost every temptation feel stronger. And when you slip, be kind to yourself. Harsh self-criticism tends to make the next slip more likely, not less.",
+    "And a bonus. Pick goals you genuinely want, not just ones you feel you should have. In research by Milyavskaya and her colleagues, people pursuing want to goals reported running into fewer temptations along the way."
+   ]
+  },
+  {
+   "id": "outro",
+   "type": "outro7",
+   "chapter": "Alex tries again",
+   "note": "Next Monday: Alex brings lunch, sits far from the kitchen, doesn't need to resist. Comment prompt. Thanks.",
+   "lines": [
+    "So, next Monday, Alex tries something different. Packs a lunch the night before. Moves to a desk far away from the kitchen. And when the donut box appears, Alex simply never walks past it.",
+    "No heroic battle, no willpower needed. Just a better setup.",
+    "So maybe willpower isn't a myth. It's just overrated. The real secret is making the right choice the easy one.",
+    "What's the temptation you fight every single day? Tell me in the comments, and let's design a way around it.",
+    "Thanks for watching. See you in the next one."
+   ]
+  }
+ ]
+}

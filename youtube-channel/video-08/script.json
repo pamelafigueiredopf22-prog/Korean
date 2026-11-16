@@ -1,0 +1,129 @@
+{
+ "title": "Why You Can't Stop Scrolling",
+ "scenes": [
+  {
+   "id": "open",
+   "type": "scrollOpen",
+   "chapter": "Just one more video",
+   "note": "Sam in bed at 11 p.m., phone glowing. Clock jumps to 1:30 a.m. 'Just one more.'",
+   "lines": [
+    "It's eleven p.m. Sam has an early start tomorrow, so he's going to bed. He just wants to check his phone for a minute.",
+    "One video. Then another. A funny cat. A cooking hack. Someone he went to school with is getting married. Another video.",
+    "He looks up. It's one thirty in the morning.",
+    "He didn't decide to spend two and a half hours scrolling. It just sort of happened. And tomorrow night, it'll probably happen again.",
+    "If you've ever felt like your phone has a strange pull on you, you're not imagining it. And it's not because you're weak."
+   ]
+  },
+  {
+   "id": "title",
+   "type": "title8",
+   "note": "Title card.",
+   "lines": [
+    "So why is it so hard to stop scrolling, and what actually helps? Let's find out."
+   ]
+  },
+  {
+   "id": "slot",
+   "type": "slot",
+   "chapter": "The slot machine in your pocket",
+   "note": "Skinner's pigeons. Fixed vs unpredictable rewards. Slot machines. The feed as an unpredictable reward machine.",
+   "lines": [
+    "To understand scrolling, we need to go back to the nineteen fifties, and the psychologist B. F. Skinner.",
+    "Skinner studied how animals learn from rewards. In his experiments, pigeons pecked a button to get food.",
+    "When food came every single time, the pigeons pecked when they were hungry, and stopped when they weren't. But when the food came unpredictably, sometimes after one peck, sometimes after fifty, the pigeons kept pecking, steadily, and for a long time.",
+    "That's called a variable reward schedule. And it's exactly how slot machines work. You never know which pull will pay out, so you keep pulling. And behavior learned this way is also the hardest to stop. When the food stopped coming altogether, the pigeons on unpredictable schedules kept on pecking the longest.",
+    "Now think about your feed. Most posts are just okay. But every so often, there's something hilarious, fascinating, or about someone you know. You never know which swipe will be the good one.",
+    "Many researchers and designers have compared the feed to a slot machine for exactly this reason. Every swipe is another pull of the lever."
+   ]
+  },
+  {
+   "id": "likes",
+   "type": "likes",
+   "chapter": "Likes are rewards, too",
+   "note": "Lindström et al. 2021: over a million posts, posting follows reward learning. Likes as treats.",
+   "lines": [
+    "And it's not just watching. Posting works the same way.",
+    "In 2021, a team led by Björn Lindström analyzed more than one million social media posts from over four thousand people.",
+    "They found that people's posting followed the same mathematical patterns that describe how animals learn to seek food. When people got more likes, they tended to post again sooner. Fewer likes, and they slowed down.",
+    "In an online experiment, the researchers showed that these social rewards really did change how often people posted. In a very real sense, likes work like little treats."
+   ]
+  },
+  {
+   "id": "dopa",
+   "type": "dopa",
+   "chapter": "The dopamine myth",
+   "note": "Dopamine as 'wanting' not 'liking'. Anticipation. 'Dopamine detox' isn't literal.",
+   "lines": [
+    "You've probably heard that scrolling gives you hits of dopamine, the so-called pleasure chemical. That's only partly right.",
+    "Researchers like Kent Berridge and Terry Robinson have shown that dopamine has more to do with wanting than with liking. It's tied to anticipation, to the feeling that something good might be just around the corner.",
+    "That's why scrolling can feel strangely compelling, even when you're not actually enjoying it very much. The wanting can keep going long after the liking has faded. It's also why little red notification badges are so hard to ignore. They're designed to make you wonder what's waiting for you.",
+    "And by the way, a dopamine detox isn't really a thing. You can't, and wouldn't want to, flush dopamine out of your brain. What people usually mean is simply taking a break from very stimulating activities, which can still be a perfectly good idea."
+   ]
+  },
+  {
+   "id": "stop",
+   "type": "stopcues",
+   "chapter": "No place to stop",
+   "note": "Infinite scroll and autoplay remove stopping cues. Aza Raskin. A book chapter vs an endless feed.",
+   "lines": [
+    "There's another reason it's hard to stop. Most of the time, we stop doing things when we hit a natural stopping point.",
+    "The end of a chapter. The end of an episode. The bottom of the newspaper page.",
+    "But feeds are designed without a bottom. Infinite scroll loads more content before you reach the end, and autoplay starts the next video before you've decided whether you want it. And critics like the former Google design ethicist Tristan Harris have pointed out that even pull to refresh, where you drag down and wait a moment to see what appears, works a little like pulling a slot machine lever.",
+    "Aza Raskin, the designer often credited with inventing infinite scroll, has said publicly that he regrets how it's being used, because it removes the moment where you'd naturally ask yourself: do I want to keep going?"
+   ]
+  },
+  {
+   "id": "bored",
+   "type": "bored",
+   "chapter": "Running from boredom",
+   "note": "Wilson et al. 2014 electric shock study. FOMO. Phones as an escape from boredom and bad feelings.",
+   "lines": [
+    "And sometimes, we're not reaching for our phones to find something. We're running away from something.",
+    "In a famous 2014 study by Timothy Wilson and his colleagues, people were asked to sit alone in a room with nothing to do but think, for about fifteen minutes. They also had a button that gave them a mild electric shock.",
+    "Many people, around two thirds of the men and a quarter of the women, chose to shock themselves at least once rather than just sit with their thoughts.",
+    "Boredom, stress, loneliness, and the fear of missing out can all push us toward the phone. Psychologist Andrew Przybylski and his colleagues found that people with a stronger fear of missing out tended to use social media more.",
+    "So the scroll isn't always about the content. Sometimes it's an escape hatch."
+   ]
+  },
+  {
+   "id": "matter",
+   "type": "matter",
+   "chapter": "Does it actually matter?",
+   "note": "Allcott et al. 2020: Facebook deactivation, small well-being gains. Hunt 2018. Notifications and attention.",
+   "lines": [
+    "So, is all this scrolling actually bad for us? The honest answer is: it depends, and the effects are often smaller than headlines suggest.",
+    "In a large experiment led by economist Hunt Allcott, nearly three thousand people were randomly assigned to either keep using Facebook or deactivate it for four weeks. The people who took a break reported small but real improvements in happiness and life satisfaction. And many of them kept using it less afterwards.",
+    "In a study by Kostadin Kushlev and his colleagues, people who kept their phone notifications on for a week reported more inattention than when they turned them off.",
+    "So the problem isn't that phones are evil. It's that many of us end up using them more, and less intentionally, than we actually want to.",
+    "And for teenagers, scientists are still debating how big the effects really are. In one large analysis by Amy Orben and Andrew Przybylski, the link between digital technology use and teenagers' well-being was real, but very small, about as small as the link with eating potatoes."
+   ]
+  },
+  {
+   "id": "tips",
+   "type": "tips8",
+   "chapter": "How to take back control",
+   "note": "Six tips: add stopping points, batch notifications, grayscale, phone out of the bedroom, replace not just remove, be kind.",
+   "lines": [
+    "So, how do you take back control, without throwing your phone into the sea? Here are six ideas.",
+    "One. Create your own stopping points. Set a timer before you open the app, or decide in advance: three videos, then I'm done. You're adding back the end of the chapter.",
+    "Two. Batch your notifications. In a study by Nicholas Fitz and his colleagues, people who got their notifications in batches, three times a day, felt more focused and less stressed than people who got them constantly.",
+    "Three. Make your phone a little more boring. In a small study, students who switched their screens to grayscale used their phones noticeably less. Without the bright colors, the slot machine loses some of its sparkle.",
+    "Four. Keep the phone out of reach at night. Charge it outside the bedroom, and use an old-fashioned alarm clock. It's one of the easiest ways to protect your sleep.",
+    "Five. Replace, don't just remove. If you scroll because you're bored or lonely, plan something else for those moments. A book by the bed. A message to a friend. A short walk.",
+    "And six. Be kind to yourself. These apps are designed by very smart people to be hard to put down. Struggling with them doesn't mean something is wrong with you."
+   ]
+  },
+  {
+   "id": "outro",
+   "type": "outro8",
+   "chapter": "Sam's new night",
+   "note": "Sam charges phone in the kitchen, reads a book, falls asleep. Comment prompt. Thanks.",
+   "lines": [
+    "So, back to Sam. Tonight, his phone is charging in the kitchen. There's a book on his pillow instead.",
+    "He reads eleven pages and falls asleep before midnight. And tomorrow, for once, he's not exhausted. Maybe tonight, you'll try it too.",
+    "How many hours did your phone tell you that you spent on it last week? Be honest, and share it in the comments.",
+    "And now that you've reached the end of this video, here's your natural stopping point. Thanks for watching. See you in the next one."
+   ]
+  }
+ ]
+}
