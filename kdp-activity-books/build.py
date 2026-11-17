@@ -15,6 +15,11 @@ BOOKS = {
     "book03": "books.book03_wordsearch_kids",
     "book04": "books.book04_wordsearch_teens",
     "book05": "books.book05_sudoku_kids",
+    "book06": "books.book06_sudoku_teens",
+    "book07": "books.book07_mandalas_teens",
+    "book08": "books.book08_geometric",
+    "book09": "books.book09_bold_shapes",
+    "book10": "books.book10_italian_wordsearch",
 }
 
 

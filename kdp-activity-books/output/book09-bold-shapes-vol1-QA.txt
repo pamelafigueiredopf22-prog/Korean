@@ -1,0 +1,14 @@
+QA REPORT - Bold & Easy Shapes Coloring Book (book09-bold-shapes-vol1.pdf)
+============================================================
+[PASS] 40 coloring pages  (12 shapes, 22 pictures, 6 patterns)
+[PASS] Every page different
+[PASS] No duplicate pages across other books/volumes  (522 items from other books checked)
+[PASS] Trim size 8.5 x 11 in  (8.50 x 11.00 in)
+[PASS] Page count even and within 60-100  (84 pages)
+[PASS] All fonts embedded  (Lato-Bold, Lato-Regular, Sniglet-ExtraBold, Sniglet-Regular)
+[PASS] Every coloring page backed by a blank page
+[PASS] Nothing inside the 0.5 in safe margin (rendered-pixel scan)  (84 pages scanned at 100 dpi)
+[PASS] Big spaces only: almost no area smaller than 3 x 3 mm  (4-34 areas per page; 5 small of 601; worst page 37 (2))
+[PASS] Thick lines for little hands  (main outlines 7 pt, patterns 5-6 pt)
+============================================================
+ALL CHECKS PASSED

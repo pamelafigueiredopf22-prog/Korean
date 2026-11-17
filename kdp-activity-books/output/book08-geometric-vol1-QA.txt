@@ -1,0 +1,13 @@
+QA REPORT - Geometric Pattern Coloring Book (book08-geometric-vol1.pdf)
+============================================================
+[PASS] 40 designs  (15 tessellation, 17 tiles, 8 optical; 18 pattern families)
+[PASS] Every design different (kind + parameters + seed fingerprint)
+[PASS] No duplicate designs across other books/volumes  (482 designs from other books checked)
+[PASS] Trim size 8.5 x 11 in  (8.50 x 11.00 in)
+[PASS] Page count even and within 60-100  (86 pages)
+[PASS] All fonts embedded  (Lato-Black, Lato-Bold, Lato-Regular)
+[PASS] Every coloring page backed by a blank page
+[PASS] Nothing inside the 0.5 in safe margin (rendered-pixel scan)  (86 pages scanned at 100 dpi)
+[PASS] Colorable areas: almost none too tiny to colour (< 1.2 mm)  (21-896 areas per page; 110 tiny of 11491 total; worst page 23: 25/606)
+============================================================
+ALL CHECKS PASSED

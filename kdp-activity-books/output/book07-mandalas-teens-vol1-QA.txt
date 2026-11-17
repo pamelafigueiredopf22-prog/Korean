@@ -1,0 +1,14 @@
+QA REPORT - Mandala Coloring Book for Teens (book07-mandalas-teens-vol1.pdf)
+============================================================
+[PASS] 40 mandalas
+[PASS] Varied symmetry  (12 different symmetries: 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 24-fold)
+[PASS] Every mandala different (exact recipe and motif-sequence skeleton both unique)
+[PASS] No duplicate designs across other books  (442 designs from other books checked)
+[PASS] Trim size 8.5 x 11 in  (8.50 x 11.00 in)
+[PASS] Page count even and within 60-100  (86 pages)
+[PASS] All fonts embedded  (Lato-Black, Lato-Bold, Lato-Regular)
+[PASS] Every coloring page backed by a blank page
+[PASS] Nothing inside the 0.5 in safe margin (rendered-pixel scan)  (86 pages scanned at 100 dpi)
+[PASS] Colorable areas: almost none too tiny to colour (< 1.2 mm)  (276-872 areas per page; 200 tiny of 21429 total)
+============================================================
+ALL CHECKS PASSED

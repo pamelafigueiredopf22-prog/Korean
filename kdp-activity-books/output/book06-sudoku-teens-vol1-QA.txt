@@ -1,0 +1,16 @@
+QA REPORT - Sudoku for Teens (book06-sudoku-teens-vol1.pdf)
+============================================================
+[PASS] 100 puzzles generated  (25 easy, 30 medium, 25 hard, 20 expert)
+[PASS] Every solution grid is a valid Sudoku
+[PASS] Every puzzle has exactly one solution (exhaustive search)
+[PASS] Every puzzle solvable by logic alone, no guessing
+[PASS] Each level needs the techniques it is labelled with (graded by the logic solver)  (easy: 33-38 clues, hardest step 'hidden single'; medium: 29-33 clues, hardest step 'pointing / box-line'; hard: 26-29 clues, hardest step 'hidden pair'; expert: 24-27 clues, hardest step 'x-wing')
+[PASS] Givens are rotationally symmetric (classic look)
+[PASS] No duplicate puzzles within this book or across other books (incl. digit-swapped and transposed copies)  (100 puzzles; 502 from other books checked)
+[PASS] Trim size 8.5 x 11 in  (8.50 x 11.00 in)
+[PASS] Page count even and within 60-100  (74 pages)
+[PASS] All fonts embedded  (Lato-Black, Lato-Bold, Lato-Regular)
+[PASS] Nothing inside the 0.5 in safe margin (rendered-pixel scan)  (74 pages scanned at 100 dpi)
+[PASS] Printed digits match the verified puzzles and answers (PDF text re-read cell by cell)  (67 pages checked)
+============================================================
+ALL CHECKS PASSED

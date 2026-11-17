@@ -1,0 +1,17 @@
+QA REPORT - Italian-English Word Search for Kids (book10-italian-wordsearch-vol1.pdf)
+============================================================
+[PASS] Word lists: no word hidden inside another, no palindromes, none blocklisted
+[PASS] 40 puzzles generated  (402 Italian words; glossary 401 entries)
+[PASS] Every listed word is in its grid
+[PASS] Every word appears exactly once (all 8 directions searched)
+[PASS] Words only run in the directions shown on the page
+[PASS] No rude/unsuitable words in English OR Italian anywhere in any grid  (118 blocked words screened (EN + IT))
+[PASS] Grid filler uses only the 21-letter Italian alphabet (no J K W X Y)
+[PASS] No duplicate puzzles within this book or across other books  (40 grids; 562 puzzles from other books checked)
+[PASS] Trim size 8.5 x 11 in  (8.50 x 11.00 in)
+[PASS] Page count even and within 60-100  (60 pages)
+[PASS] All fonts embedded  (Lato-Bold, Lato-Regular, Sniglet-ExtraBold)
+[PASS] Nothing inside the 0.5 in safe margin (rendered-pixel scan)  (60 pages scanned at 100 dpi)
+[PASS] Printed grids match generated grids (text extracted from PDF)  (40 puzzle pages checked)
+============================================================
+ALL CHECKS PASSED

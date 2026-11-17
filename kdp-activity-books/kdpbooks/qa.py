@@ -146,3 +146,23 @@ def audit_sudoku_print(path, page, placements, solution_shown=False):
             if (str(want) if want else None) != got:
                 bad += 1
     return bad
+
+
+def colorable_regions(img, dpi=DPI, tiny_mm=1.2, thresh=200, ignore_bottom_in=0.85):
+    """Label the white areas of a coloring page (8-connected background excluded).
+    Returns (number of regions, number of tiny regions, smallest region in mm^2).
+    A 'tiny' region is one smaller than tiny_mm x tiny_mm: too small to colour."""
+    from scipy import ndimage
+    white = img > thresh
+    white[-int(ignore_bottom_in * dpi):] = False      # page-number strip (holes in digits)
+    lab, n = ndimage.label(white)
+    if n == 0:
+        return 0, 0, 0.0
+    sizes = ndimage.sum(white, lab, range(1, n + 1))
+    # the page background is the region touching the border: ignore it
+    border = set(np.unique(np.concatenate([lab[0], lab[-1], lab[:, 0], lab[:, -1]]))) - {0}
+    px_mm = 25.4 / dpi
+    keep = [s for i, s in enumerate(sizes, 1) if i not in border and s > 2]   # >2px: ignore AA specks
+    tiny_px = (tiny_mm / px_mm) ** 2
+    tiny = sum(1 for s in keep if s < tiny_px)
+    return len(keep), tiny, (min(keep) * px_mm ** 2 if keep else 0.0)
