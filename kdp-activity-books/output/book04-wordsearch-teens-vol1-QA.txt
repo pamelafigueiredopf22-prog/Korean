@@ -1,0 +1,17 @@
+QA REPORT - Word Search for Teens (book04-wordsearch-teens-vol1.pdf)
+============================================================
+[PASS] Word lists: no word hidden inside another, no palindromes, none blocklisted
+[PASS] 60 puzzles generated  (1136 hidden words in total)
+[PASS] Every listed word is in its grid
+[PASS] Every word appears exactly once (all 8 directions searched)
+[PASS] Words only run in the directions shown on the page
+[PASS] Expert puzzles use all 8 directions, including backwards
+[PASS] No rude/unsuitable words anywhere in any grid (8 directions)  (82 blocked words screened)
+[PASS] No duplicate puzzles within this book or across other books  (60 grids; 182 puzzles from other books checked)
+[PASS] Trim size 8.5 x 11 in  (8.50 x 11.00 in)
+[PASS] Page count even and within 60-100  (80 pages)
+[PASS] All fonts embedded  (Lato-Black, Lato-Bold, Lato-Regular)
+[PASS] Nothing inside the 0.5 in safe margin (rendered-pixel scan)  (80 pages scanned at 100 dpi)
+[PASS] Printed grids match generated grids (text extracted from PDF)  (60 puzzle pages checked)
+============================================================
+ALL CHECKS PASSED

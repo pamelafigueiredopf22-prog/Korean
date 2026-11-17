@@ -2,13 +2,15 @@
 
 A standalone project, separate from the language-learning app in the rest of this repo.
 It generates print-ready KDP interiors with code only: no AI images, no clip art, and
-only OFL-licensed fonts (see `fonts/OFL-*.txt`).
+only OFL-licensed fonts (Sniglet, Lato) (see `fonts/OFL-*.txt`).
 
 ## Build
 ```bash
 pip install -r requirements.txt          # needs poppler-utils for QA
 python build.py book01                    # Vol. 1 -> output/book01-easy-mazes-vol1.pdf
 python build.py book02                    # Mazes ages 6-8 (square, circle, shape)
+python build.py book03                    # Word Search for Kids 6-9
+python build.py book04                    # Word Search for Teens
 python build.py book01 --volume 2         # a new volume with all-new puzzles
 python build.py book01 --previews 5,34,64 # also export 150-dpi PNG previews
 python tests/test_qa_catches_errors.py    # proves the QA checks can fail

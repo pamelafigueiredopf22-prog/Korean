@@ -19,13 +19,15 @@ CONTENT_W, CONTENT_H = CONTENT_R - CONTENT_L, CONTENT_T - CONTENT_B
 # --- Fonts (all SIL Open Font License, commercial use OK) -------------
 DISPLAY = "Sniglet-ExtraBold"
 DISPLAY_REG = "Sniglet"
-BODY = "Atkinson"
-BODY_BOLD = "Atkinson-Bold"
+BODY = "Lato"
+BODY_BOLD = "Lato-Bold"
+HEAVY = "Lato-Black"
 _FONTS = {
     DISPLAY: "Sniglet-ExtraBold.ttf",
     DISPLAY_REG: "Sniglet-Regular.ttf",
-    BODY: "AtkinsonHyperlegible-Regular.ttf",
-    BODY_BOLD: "AtkinsonHyperlegible-Bold.ttf",
+    BODY: "Lato-Regular.ttf",
+    BODY_BOLD: "Lato-Bold.ttf",
+    HEAVY: "Lato-Black.ttf",
 }
 for _name, _file in _FONTS.items():
     pdfmetrics.registerFont(TTFont(_name, os.path.join(FONT_DIR, _file)))
@@ -125,14 +127,14 @@ def rounded_frame(c, x, y, w, h, r=18, lw=3, dash=None):
 # ----------------------------------------------------------------------
 # Shared front matter
 # ----------------------------------------------------------------------
-def title_page(book, title, subtitle, tagline="", decorate=None):
+def title_page(book, title, subtitle, tagline="", decorate=None, font=DISPLAY):
     c = book.new_page(role="front", show_number=False)
-    size = fit_size(title, DISPLAY, 52, CONTENT_W)
-    lines = [title] if size >= 34 else wrap(title, DISPLAY, 46, CONTENT_W)
+    size = fit_size(title, font, 52, CONTENT_W)
+    lines = [title] if size >= 34 else wrap(title, font, 46, CONTENT_W)
     size = size if len(lines) == 1 else 46
     y = PAGE_H * 0.66
     for line in lines:
-        centred(c, line, y, DISPLAY, size)
+        centred(c, line, y, font, size)
         y -= size * 1.1
     y -= 10
     for line in wrap(subtitle, BODY_BOLD, 20, CONTENT_W - 40):
@@ -160,30 +162,31 @@ def copyright_page(book, title, year, extra=""):
         centred(c, line, y - i * 18, BODY_BOLD if i == 0 else BODY, 11, gray=0.2)
 
 
-def belongs_to_page(book, decorate=None, line_count=1):
+def belongs_to_page(book, decorate=None, line_count=1, font=DISPLAY):
     c = book.new_page(role="front", show_number=False)
     w, h = CONTENT_W - 0.5 * inch, 3.6 * inch
     x, y = (PAGE_W - w) / 2, PAGE_H / 2 - h / 2
     rounded_frame(c, x, y, w, h, r=30, lw=5)
     rounded_frame(c, x + 12, y + 12, w - 24, h - 24, r=22, lw=1.5, dash=(6, 5))
     label = "This book belongs to"
-    centred(c, label, y + h - 1.15 * inch, DISPLAY, fit_size(label, DISPLAY, 38, w - 0.9 * inch))
+    centred(c, label, y + h - 1.15 * inch, font, fit_size(label, font, 38, w - 0.9 * inch))
     c.setLineWidth(2.5)
     c.line(x + 0.6 * inch, y + 1.05 * inch, x + w - 0.6 * inch, y + 1.05 * inch)
     if decorate:
         decorate(c)
 
 
-def how_to_page(book, heading, bullets, tip=None, decorate=None, size=17):
+def how_to_page(book, heading, bullets, tip=None, decorate=None, size=17, font=DISPLAY,
+                tip_title="Grown-up tip"):
     c = book.new_page(role="front", show_number=False)
-    centred(c, heading, CONTENT_T - 0.9 * inch, DISPLAY, 40)
+    centred(c, heading, CONTENT_T - 0.9 * inch, font, 40)
     y = CONTENT_T - 1.9 * inch
     x = CONTENT_L + 0.55 * inch
     max_w = CONTENT_W - 1.0 * inch
     for i, b in enumerate(bullets, 1):
         c.setLineWidth(2.5)
         c.circle(x - 0.25 * inch, y + size * 0.33, 13, stroke=1, fill=0)
-        c.setFont(DISPLAY, 15)
+        c.setFont(font, 15)
         c.drawCentredString(x - 0.25 * inch, y + size * 0.33 - 5.5, str(i))
         y = paragraph(c, b, x + 0.12 * inch, y, max_w - 0.12 * inch, BODY, size) - 16
     if tip:
@@ -192,16 +195,16 @@ def how_to_page(book, heading, bullets, tip=None, decorate=None, size=17):
         bh = 0.85 * inch + n * 13 * 1.35
         by = max(CONTENT_B + 0.4 * inch, y - bh - 0.2 * inch)
         rounded_frame(c, CONTENT_L + 0.3 * inch, by, CONTENT_W - 0.6 * inch, bh, r=16, lw=2.5)
-        c.setFont(DISPLAY, 18)
-        c.drawString(CONTENT_L + 0.6 * inch, by + bh - 0.42 * inch, "Grown-up tip")
+        c.setFont(font, 18)
+        c.drawString(CONTENT_L + 0.6 * inch, by + bh - 0.42 * inch, tip_title)
         paragraph(c, tip, CONTENT_L + 0.6 * inch, by + bh - 0.72 * inch, tw, BODY, 13)
     if decorate:
         decorate(c)
 
 
-def section_page(book, heading, sub=""):
+def section_page(book, heading, sub="", font=DISPLAY):
     c = book.new_page(role="section")
-    centred(c, heading, PAGE_H / 2 + 20, DISPLAY, 48)
+    centred(c, heading, PAGE_H / 2 + 20, font, 48)
     if sub:
         centred(c, sub, PAGE_H / 2 - 30, BODY, 18, gray=0.2)
     return c
