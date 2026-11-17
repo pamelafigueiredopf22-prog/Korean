@@ -1,0 +1,34 @@
+{
+  "title": "The Dove and the Ant",
+  "source": "Aesop's Fables (public domain), gently retold for bedtime",
+  "lines": [
+    {"id": "n01", "scene": "s1_stream", "speaker": "narrator", "pause": 1.6, "text": "Once upon a time, on a warm summer's day, a little ant went down to the stream for a drink of cool water."},
+    {"id": "n02", "scene": "s1_stream", "speaker": "narrator", "pause": 1.2, "text": "She leaned over the edge to take a sip, when a little wave swept her right off her feet, and carried her away!"},
+    {"id": "a01", "scene": "s1_stream", "speaker": "ant", "speech": "[frightened, calling out] Help! Oh, help! I can't swim!", "pause": 1.2, "text": "Help! Oh, help! I can't swim!"},
+    {"id": "n03", "scene": "s1_stream", "speaker": "narrator", "pause": 1.2, "text": "High in a tree above the stream, a gentle dove heard her tiny cry."},
+    {"id": "d01", "scene": "s1_stream", "speaker": "dove", "speech": "[calm, kind, reassuring] Hold on, little one. I'm coming!", "pause": 1.2, "text": "Hold on, little one. I'm coming!"},
+    {"id": "n04", "scene": "s1_stream", "speaker": "narrator", "pause": 1.4, "text": "The dove plucked a leaf from the branch, and let it float down onto the water, right beside the ant."},
+    {"id": "n05", "scene": "s1_stream", "speaker": "narrator", "pause": 1.4, "text": "The ant climbed onto the leaf, and drifted safely to the bank, like a little boat."},
+    {"id": "a02", "scene": "s1_stream", "speaker": "ant", "speech": "[breathless, very grateful] Thank you, kind dove! I will never forget this.", "pause": 1.0, "text": "Thank you, kind dove! I will never forget this."},
+    {"id": "d02", "scene": "s1_stream", "speaker": "dove", "speech": "[warm, gentle] You are most welcome, little friend.", "pause": 2.0, "text": "You are most welcome, little friend."},
+
+    {"id": "n06", "scene": "s2_net", "speaker": "narrator", "pause": 1.4, "text": "A few days later, a young fox came creeping through the meadow, with a big net in his paws."},
+    {"id": "f01", "scene": "s2_net", "speaker": "fox", "speech": "[whispering, mischievous] What a pretty dove. I'll catch her, and keep her all for my very own.", "pause": 1.2, "text": "What a pretty dove. I'll catch her, and keep her all for my very own."},
+    {"id": "n07", "scene": "s2_net", "speaker": "narrator", "pause": 1.2, "text": "The dove was cooing happily in the sunshine, and did not see him tiptoeing closer, and closer."},
+    {"id": "n08", "scene": "s2_net", "speaker": "narrator", "pause": 1.0, "text": "But someone else did. The little ant!"},
+    {"id": "a03", "scene": "s2_net", "speaker": "ant", "speech": "[determined, brave] Oh no you don't!", "pause": 1.0, "text": "Oh no you don't!"},
+    {"id": "n09", "scene": "s2_net", "speaker": "narrator", "pause": 1.0, "text": "She ran as fast as her six little legs could carry her, and gave the fox a big pinch on his toe."},
+    {"id": "f02", "scene": "s2_net", "speaker": "fox", "speech": "[yelps, surprised] Ouch! Ow, ow, ow!", "pause": 1.0, "text": "Ouch! Ow, ow, ow!"},
+    {"id": "n10", "scene": "s2_net", "speaker": "narrator", "pause": 2.0, "text": "The fox hopped about and dropped his net, and the dove flew safely up into the sky."},
+
+    {"id": "d03", "scene": "s3_lesson", "speaker": "dove", "speech": "[grateful, warm] Thank you, little ant. You saved me, just as I saved you.", "pause": 1.0, "text": "Thank you, little ant. You saved me, just as I saved you."},
+    {"id": "a04", "scene": "s3_lesson", "speaker": "ant", "speech": "[happy, proud] One good turn deserves another!", "pause": 1.4, "text": "One good turn deserves another!"},
+    {"id": "n11", "scene": "s3_lesson", "speaker": "narrator", "pause": 1.4, "text": "And the fox? He rubbed his toe, and decided that doves are much nicer to watch, than to catch."},
+    {"id": "n12", "scene": "s3_lesson", "speaker": "narrator", "pause": 2.2, "text": "So remember, little one. No act of kindness is ever too small."},
+
+    {"id": "n13", "scene": "s4_goodnight", "speaker": "narrator", "pause": 2.0, "text": "That evening, the dove settled into her soft nest, high up in the tree."},
+    {"id": "n14", "scene": "s4_goodnight", "speaker": "narrator", "pause": 2.0, "text": "And down below, the little ant curled up in her cosy home among the roots."},
+    {"id": "n15", "scene": "s4_goodnight", "speaker": "narrator", "pause": 2.6, "text": "The stream sang its quiet song, the fireflies glowed, and the stars came out, one by one."},
+    {"id": "n16", "scene": "s4_goodnight", "speaker": "narrator", "voice": "whisper", "speech": "[whispers] Goodnight, little one... [softly] Sweet dreams.", "pause": 30.0, "text": "Goodnight, little one. Sweet dreams."}
+  ]
+}
