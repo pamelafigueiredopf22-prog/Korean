@@ -2,11 +2,18 @@
 // The mesh bag always hangs downward in the world: `world` is the total rotation already applied above us.
 import { rgba } from '../../engine/watercolor.js';
 export function net(g, len, a, o = {}) {
-  const { world = 0, sway = 0, r = 34 } = o;
+  const { world = 0, sway = 0, r = 34, flat = false } = o;
   g.save(); g.rotate(a); g.lineCap = 'round';
   g.strokeStyle = '#7a5a3a'; g.lineWidth = 6; g.beginPath(); g.moveTo(0, 0); g.lineTo(len, 0); g.stroke();
   g.strokeStyle = rgba('#3a2c24', 0.75); g.lineWidth = 1.2; g.beginPath(); g.moveTo(0, 3); g.lineTo(len, 3); g.stroke();
   g.translate(len + r * 0.9, 0);
+  if (flat) { // lying on the grass: the hoop flat, the mesh crumpled inside it
+    g.rotate(-a - world);
+    g.fillStyle = 'rgba(244,240,228,0.6)'; g.beginPath(); g.ellipse(4, 2, r * 1.05, r * 0.32, 0, 0, 7); g.fill();
+    g.strokeStyle = 'rgba(110,100,80,0.55)'; g.lineWidth = 0.9; for (let k = -3; k <= 3; k++) { g.beginPath(); g.moveTo(k * r * 0.28, -r * 0.25); g.lineTo(k * r * 0.22 + 6, r * 0.28); g.stroke(); }
+    g.strokeStyle = '#8a6a44'; g.lineWidth = 4; g.beginPath(); g.ellipse(0, 0, r, r * 0.3, 0, 0, 7); g.stroke();
+    g.restore(); return;
+  }
   g.rotate(-a - world + sway);                      // back to world-upright: the bag hangs straight down
   const rim = () => { g.beginPath(); g.ellipse(0, 0, r, r * 0.38, a + world - sway - Math.PI / 2 + 0.3, 0, 7); };
   // the bag
