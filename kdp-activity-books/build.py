@@ -12,6 +12,7 @@ sys.path.insert(0, ROOT)
 BOOKS = {
     "book01": "books.book01_easy_mazes",
     "book02": "books.book02_mazes",
+    "book03": "books.book03_wordsearch_kids",
 }
 
 

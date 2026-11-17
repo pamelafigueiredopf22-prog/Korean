@@ -1,0 +1,16 @@
+QA REPORT - Word Search for Kids Ages 6-9 (book03-wordsearch-kids-vol1.pdf)
+============================================================
+[PASS] Word lists: no word hidden inside another, no palindromes, none blocklisted
+[PASS] 50 puzzles generated
+[PASS] Every listed word is in its grid
+[PASS] Every word appears exactly once (all 8 directions searched)
+[PASS] Words only run in the directions shown on the page
+[PASS] No rude/unsuitable words anywhere in any grid (8 directions)  (82 blocked words screened)
+[PASS] No duplicate puzzles within this book or across other books  (50 grids; 132 puzzles from other books checked)
+[PASS] Trim size 8.5 x 11 in  (8.50 x 11.00 in)
+[PASS] Page count even and within 60-100  (70 pages)
+[PASS] All fonts embedded  (AtkinsonHyperlegible-Bold, AtkinsonHyperlegible-Regular, Sniglet-ExtraBold)
+[PASS] Nothing inside the 0.5 in safe margin (rendered-pixel scan)  (70 pages scanned at 100 dpi)
+[PASS] Printed grids match generated grids (text extracted from PDF)  (50 puzzle pages checked)
+============================================================
+ALL CHECKS PASSED

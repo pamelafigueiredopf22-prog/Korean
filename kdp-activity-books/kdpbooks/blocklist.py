@@ -1,0 +1,25 @@
+"""Words that must never appear by accident in a letter grid (any direction).
+
+Kept deliberately broad: some entries are harmless in adult contexts but not
+something a parent wants to find in a children's puzzle.  Matching is on the
+grid's letters only (accents removed)."""
+
+ENGLISH = """
+ASS ARSE ANUS ANAL BUTT BUM BITCH BASTARD BOOB BOOBS BONER BOLLOCK CRAP CUM CUNT COCK
+DAMN DICK DIKE DYKE DILDO FAG FAGGOT FART FUCK FUK FUCKER FCK GAY GOD HELL HOMO HOE HORNY
+JIZZ KILL KKK KUNT LSD METH NAZI NIGGA NIGGER NIGER NUDE ORGY PENIS PEE PISS POO POOP PORN PUBE
+PUSSY PUTO RAPE RAPED SEX SEXY SHAG SHIT SLUT SPERM SPIC SUCK TIT TITS TWAT VAGINA WANK
+WHORE WTF XXX DIE DEAD GUN DRUG DRUGS BOOZE WEED STD HIV
+"""
+ITALIAN = """
+CAZZO CAZZI MERDA FIGA FICA CULO TROIA PUTTANA PUTTANE STRONZO STRONZA VAFFA MINCHIA COGLIONE
+COGLIONI FROCIO TETTE PIRLA BASTARDO PORCO PORCA DIO MADONNA SESSO NUDO NUDA DROGA ORGIA
+SEGA FOTTI FOTTERE SCOPA SCOPARE PENE VAGINA PISCIA CACCA
+"""
+
+
+def blocklist(langs=("en",)):
+    words = set(ENGLISH.split())
+    if "it" in langs:
+        words |= set(ITALIAN.split())
+    return words
