@@ -113,3 +113,36 @@ def standard_checks(rep, path, page_roles, min_pages=60, max_pages=100,
     rep.check("Nothing inside the 0.5 in safe margin (rendered-pixel scan)", not violations,
               "; ".join(violations[:8]) or f"{pages} pages scanned at {DPI} dpi")
     return pages
+
+
+def pdf_words(path, page):
+    """Words on a page with their centres in PDF points (y up)."""
+    import html
+    out = subprocess.run(["pdftotext", "-bbox", "-f", str(page), "-l", str(page), path, "-"],
+                         capture_output=True, text=True, check=True).stdout
+    words = []
+    for m in re.finditer(r'<word xMin="([\d.]+)" yMin="([\d.]+)" xMax="([\d.]+)" yMax="([\d.]+)">(.*?)</word>', out):
+        x0, y0, x1, y1 = map(float, m.groups()[:4])
+        words.append(((x0 + x1) / 2, PAGE_H - (y0 + y1) / 2, html.unescape(m.group(5))))
+    return words
+
+
+def audit_sudoku_print(path, page, placements, solution_shown=False):
+    """placements: [(sudoku, x, y, size)]. Every given (and, on answer pages, every
+    solution digit) must be printed in its own cell, and nothing else inside the grid."""
+    words = pdf_words(path, page)
+    bad = 0
+    for s, x, y, size in placements:
+        n = s.n
+        cell = size / n
+        found = {}
+        for wx, wy, t in words:
+            if x < wx < x + size and y < wy < y + size:
+                col, row = int((wx - x) // cell), int((y + size - wy) // cell)
+                found[row * n + col] = t
+        for i in range(n * n):
+            want = s.givens[i] or (s.solution[i] if solution_shown else 0)
+            got = found.get(i)
+            if (str(want) if want else None) != got:
+                bad += 1
+    return bad

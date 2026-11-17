@@ -1,0 +1,15 @@
+QA REPORT - Sudoku for Kids (book05-sudoku-kids-vol1.pdf)
+============================================================
+[PASS] 100 puzzles generated  (36 of 4x4, 64 of 6x6)
+[PASS] Every solution grid is a valid Sudoku
+[PASS] Every puzzle has exactly one solution (exhaustive search)
+[PASS] Every puzzle solvable by logic alone, no guessing (step-by-step solver)
+[PASS] Gets harder: clues never increase within each section  (4x4: 11 -> 4 clues; 6x6: 22 -> 10 clues)
+[PASS] No duplicate puzzles within this book or across other books (incl. digit-swapped and mirrored copies)  (100 puzzles; 242 from other books checked)
+[PASS] Trim size 8.5 x 11 in  (8.50 x 11.00 in)
+[PASS] Page count even and within 60-100  (68 pages)
+[PASS] All fonts embedded  (Lato-Bold, Lato-Regular, Sniglet-ExtraBold)
+[PASS] Nothing inside the 0.5 in safe margin (rendered-pixel scan)  (68 pages scanned at 100 dpi)
+[PASS] Printed digits match the verified puzzles and answers (PDF text re-read cell by cell)  (59 pages checked)
+============================================================
+ALL CHECKS PASSED

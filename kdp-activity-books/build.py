@@ -14,6 +14,7 @@ BOOKS = {
     "book02": "books.book02_mazes",
     "book03": "books.book03_wordsearch_kids",
     "book04": "books.book04_wordsearch_teens",
+    "book05": "books.book05_sudoku_kids",
 }
 
 

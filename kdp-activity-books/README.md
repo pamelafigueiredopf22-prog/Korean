@@ -11,6 +11,7 @@ python build.py book01                    # Vol. 1 -> output/book01-easy-mazes-v
 python build.py book02                    # Mazes ages 6-8 (square, circle, shape)
 python build.py book03                    # Word Search for Kids 6-9
 python build.py book04                    # Word Search for Teens
+python build.py book05                    # Sudoku for Kids (4x4, 6x6)
 python build.py book01 --volume 2         # a new volume with all-new puzzles
 python build.py book01 --previews 5,34,64 # also export 150-dpi PNG previews
 python tests/test_qa_catches_errors.py    # proves the QA checks can fail
