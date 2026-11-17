@@ -203,21 +203,21 @@ export function makeAnt(res = 1, seed = 41) {
     };
     legs(true);
     g.save(); g.translate(0, 30); // the body sits low on its bent legs
-    // antennae: elbowed, curling forward
-    for (const [dx, ph] of [[-6, 0.8], [6, 0]]) {
-      const r0 = [14 + dx, -214 - bob], el = [24 + dx, -262 - bob + Math.sin(t * 2 + ph) * 3];
-      const tip = [60 + dx + Math.sin(t * 1.6 + ph) * 6, -280 - bob + Math.cos(t * 1.3 + ph) * 5];
-      penLine(g, [r0, el], { color: AC.dark, w: 2.6, alpha: 0.9 });
-      penLine(g, [el, [el[0] + 16, el[1] - 12], tip], { color: AC.dark, w: 2.2, alpha: 0.9, weight: (u) => 1 - u * 0.5 });
-      g.fillStyle = AC.dark; g.beginPath(); g.arc(tip[0], tip[1], 3.2, 0, 7); g.fill();
-    }
     g.save(); g.translate(0, -bob);
     drawSprite(g, gaster); drawSprite(g, thx);
     // far arm
     const carry = st.carry || 0;
     const armF = carry > 0.05 ? joint([4, -128], -1.75, 34, -1.55, 46) : st.arms === 'give' ? joint([4, -128], 0.4, 30, -0.3, 30) : joint([4, -128], 1.3, 30, 1.0, 26);
     limb(g, armF, 5, 3.5, shade(AC.leg, 0.2));
-    g.save(); g.rotate(st.headTilt || 0);
+    g.save(); g.translate(8, -142); g.rotate(st.headTilt || 0); g.translate(-8, 142); // the head (and its antennae) turn about the neck
+    // antennae: elbowed, curling forward
+    for (const [dx, ph] of [[-6, 0.8], [6, 0]]) {
+      const r0 = [14 + dx, -214], el = [24 + dx, -262 + Math.sin(t * 2 + ph) * 3];
+      const tip = [60 + dx + Math.sin(t * 1.6 + ph) * 6, -280 + Math.cos(t * 1.3 + ph) * 5];
+      penLine(g, [r0, el], { color: AC.dark, w: 2.6, alpha: 0.9 });
+      penLine(g, [el, [el[0] + 16, el[1] - 12], tip], { color: AC.dark, w: 2.2, alpha: 0.9, weight: (u) => 1 - u * 0.5 });
+      g.fillStyle = AC.dark; g.beginPath(); g.arc(tip[0], tip[1], 3.2, 0, 7); g.fill();
+    }
     drawSprite(g, head);
     buttonEye(g, A_EYE[0], A_EYE[1], st.eyes ?? 1, { R: 9, happy: st.happy });
     const bu = (st.browUp || 0) * 6;

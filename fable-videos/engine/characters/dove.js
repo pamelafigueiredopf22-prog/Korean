@@ -183,9 +183,9 @@ export function makeDove(res = 1, seed = 12) {
     const br = st.breath || 0;
     g.save();
     g.save(); g.translate(90, -40); g.rotate(-0.1); g.translate(-90, 40); drawSprite(g, tail); g.restore();
-    g.save(); g.translate(-30, -40); g.scale(1.04 + br * 0.012, 1.02 + br * 0.02); g.translate(30, 40); drawSprite(g, body); g.restore();
+    g.save(); g.translate(-30, -40); g.scale(1.05 + br * 0.012, 1.03 + br * 0.02); g.translate(30, 40); drawSprite(g, body); g.restore(); // fluffed up for the night
     g.save(); g.translate(-14, -84); g.rotate(0.05); g.translate(14, 84); drawSprite(g, wing); g.restore();
-    g.save(); g.translate(14, 18); head(g, { ...st, eye: 0, headTilt: 0.25 }, 0); g.restore();
+    head(g, { ...st, eye: 0, headTilt: 0 }, 0); // eyes closed; the face stays on the head (the head is part of the body painting)
     g.restore();
   }
   return { draw, drawFly, drawSleep };

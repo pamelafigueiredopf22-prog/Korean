@@ -11,8 +11,8 @@ export const MOOD = {
     grass: ['#9cb064', '#b4bc6c', '#86a058', '#c4bc70'], water: ['#8cb4b8', '#a8c8c4', '#78a0a8'], bank: ['#b8a478', '#a89068', '#c8b48c'], stone: ['#c8bca8', '#b4aca0', '#d4c8b0', '#a8a4a4'],
     flowers: ['#8cb0e0', '#f4ead0', '#f0c050', '#e89aa8'], reed: ['#7f9a52', '#6a8448', '#9aa85c'] },
 };
-export const STREAM = [[1600, 596], [1440, 604], [1250, 626], [1110, 664], [1080, 716], [1020, 780], [880, 846], [720, 912], [600, 990], [540, 1080], [520, 1200]];
-export const streamW = (y) => 18 + Math.pow(clamp((y - 596) / 600), 1.1) * 760;
+export const STREAM = [[2160, 566], [1980, 572], [1790, 586], [1600, 596], [1440, 604], [1250, 626], [1110, 664], [1080, 716], [1020, 780], [880, 846], [720, 912], [600, 990], [540, 1080], [520, 1200]];
+export const streamW = (y) => y < 596 ? Math.max(5, 18 - (596 - y) * 0.45) : 18 + Math.pow(clamp((y - 596) / 600), 1.1) * 760; // narrowing away into the distance
 export function streamPath() { return smooth(STREAM, false, 10); }
 export function streamEdges() {
   const P = streamPath(), A = [], B = [];
@@ -112,7 +112,7 @@ export function paintLand(g, m, seed = 21) {
 // reeds and forget-me-nots (live, so they can sway)
 export function reedSpots(seed = 41) {
   const { A, B } = streamEdges(), r = rng(seed), out = [];
-  for (const [E, i] of [[A, 40], [A, 70], [B, 30], [B, 62], [B, 88], [A, 95]]) { if (i >= E.length) continue; const [x, y] = E[i]; for (let k = 0; k < 3; k++) out.push({ x: x + r.gauss(0, 10), y: y + r.range(-4, 8), h: 30 + (y - 600) * 0.22, n: 3 + Math.floor(r() * 4), ph: r() * 6 }); }
+  for (const [E, i] of [[A, 70], [A, 100], [B, 60], [B, 92], [B, 118], [A, 125]]) { if (i >= E.length) continue; const [x, y] = E[i]; for (let k = 0; k < 3; k++) out.push({ x: x + r.gauss(0, 10), y: y + r.range(-4, 8), h: 30 + (y - 600) * 0.22, n: 3 + Math.floor(r() * 4), ph: r() * 6 }); }
   return out.sort((a, b) => a.y - b.y);
 }
 export function drawReeds(g, m, spots, t, sway = 0) {

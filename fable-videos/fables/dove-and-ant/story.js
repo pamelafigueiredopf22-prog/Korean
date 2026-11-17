@@ -180,26 +180,64 @@ function drawWalk(g, t) {
   grade(g);
 }
 
+// The wave: a swell that rolls in toward the bank (x falling), rises and curls over, washes across the bank top,
+// then draws back out (x rising) and flattens. Returns its crest point (where a passenger rides) and draws it.
+function waveAt(t, wT) {
+  let xc, A;
+  if (t < wT) { const u = clamp((t - (wT - 1.6)) / 1.6); xc = lerp(1300, 760, u); A = lerp(10, 150, u * u); }
+  else { const u = clamp((t - wT - 0.25) / 1.3); xc = lerp(760, 880, ease(u)); A = 150 * (1 - ease(u)) ** 1.5; }
+  const lip = t < wT ? clamp((t - (wT - 0.5)) / 0.5) : 1 - clamp((t - wT) / 0.6); // the crest pitches forward as it breaks
+  return { xc, A, lip, top: [xc - lip * 40, WL + 10 - A] };
+}
+function drawWave(g, t, wT) {
+  const w = waveAt(t, wT);
+  if (w.A < 2) return w;
+  const y = (x) => { const d = x - w.xc; return WL + 10 - w.A * Math.exp(-((d / (d < 0 ? 70 : 230)) ** 2)); };
+  const pts = [];
+  for (let x = w.xc + 520; x >= w.xc - 170; x -= 10) { let yy = y(x); if (x < w.xc) yy -= w.lip * w.A * 0.25 * Math.exp(-(((x - w.xc + 40) / 40) ** 2)); pts.push([x - w.lip * Math.max(0, 60 - Math.abs(x - w.xc)) * 0.7, yy]); }
+  const body = pts.concat([[w.xc - 170, WL + 70], [w.xc + 520, WL + 70]]);
+  g.save(); g.globalAlpha = Math.min(1, w.A / 45);
+  const grd = g.createLinearGradient(0, WL + 10 - w.A, 0, WL + 70);
+  grd.addColorStop(0, 'rgba(196,226,226,0.97)'); grd.addColorStop(0.45, 'rgba(140,184,190,0.92)'); grd.addColorStop(0.8, 'rgba(140,180,188,0.4)'); grd.addColorStop(1, 'rgba(140,180,188,0)');
+  g.fillStyle = grd; path(g, body); g.fill();
+  // streaks of light on the face of the wave
+  g.strokeStyle = 'rgba(255,255,255,0.35)'; g.lineWidth = 2; g.lineCap = 'round';
+  for (let k = 1; k < 4; k++) { g.beginPath(); for (let i = 0; i < pts.length; i += 2) { const [x, yy] = pts[i]; const v = yy + k * w.A * 0.18; i ? g.lineTo(x + k * 6, v) : g.moveTo(x + k * 6, v); } g.stroke(); }
+  g.restore();
+  // a foamy crest, with a curl at the front
+  ink(g, pts.filter(([x]) => x < w.xc + 200), { color: '#ffffff', width: 3.5, alpha: 0.9 * Math.min(1, w.A / 45), wobble: 0.6 });
+  const r0 = Math.max(4, w.A * 0.12 * w.lip);
+  if (w.lip > 0.1) { const cx = w.top[0] - 8, cy = w.top[1] + r0; const curl = []; for (let k = 0; k <= 16; k++) { const a = -Math.PI / 2 - k / 16 * Math.PI * 1.4; curl.push([cx + Math.cos(a) * r0 * (1 - k / 30), cy + Math.sin(a) * r0 * (1 - k / 30)]); } ink(g, curl, { color: '#ffffff', width: 3, alpha: 0.9 }); }
+  for (let k = 0; k < 14; k++) { // spray and foam bubbles
+    const ph = (noise1(k, 4) + 1) / 2, x = w.top[0] + (k - 7) * 9 - w.lip * ph * 50, yy = w.top[1] - w.lip * Math.sin(ph * Math.PI) * 30 + (k % 3) * 6;
+    g.fillStyle = `rgba(255,255,255,${0.85 * Math.min(1, w.A / 60)})`; g.beginPath(); g.arc(x, yy, 2 + (k % 3) * 1.5, 0, 7); g.fill();
+  }
+  return w;
+}
+// the thin sheet of water washing over the top of the bank, around the ant's feet
+function drawWash(g, t, wT) {
+  const k = span(t, wT - 0.15, wT + 0.2) * (1 - span(t, wT + 0.5, wT + 1.2));
+  if (k <= 0) return;
+  const reach = lerp(760, 560, span(t, wT - 0.15, wT + 0.4));
+  const sh = smooth([[780, 690], [756, 652], [reach + 30, 648], [reach, 654], [reach + 24, 662], [756, 664]]);
+  g.save(); g.globalAlpha = 0.45 * k; g.fillStyle = '#c8e4e4'; path(g, sh); g.fill(); g.restore();
+  ink(g, sh.slice(2, 16), { color: '#ffffff', width: 2, alpha: 0.8 * k });
+  for (let i = 0; i < 8; i++) { g.fillStyle = `rgba(255,255,255,${0.8 * k})`; g.beginPath(); g.arc(reach + 10 + i * 22, 650 + (i % 3) * 3, 2.5, 0, 7); g.fill(); }
+}
+
 // at the water's edge: the wave, the cry for help, the leaf, the rescue, the thank-yous
 function drawWater(g, t) {
   const n02 = line('n02'), n04 = line('n04'), n05 = line('n05'), a01 = line('a01'), a02 = line('a02'), d02 = line('d02');
-  const leanT = n02.start + 2.5, waveT = n02.start + 5.6, inT = waveT + 0.9;
+  const leanT = n02.start + 2.2, waveT = n02.start + 5.4, inT = waveT + 1.5;
   const dropT = n04.start + 5.0, landLeaf = dropT + 2.2, climb0 = n05.start + 0.4, climb1 = climb0 + 1.1, sail1 = n05.end - 0.4, offT = sail1 + 0.2;
   // where things are
-  const driftX = (tt) => lerp(800, 1000, clamp((tt - inT) / (landLeaf + 1 - inT)));
+  const driftX = (tt) => lerp(880, 1000, clamp((tt - inT) / (landLeaf + 1 - inT)));
   const leafX = t < climb1 ? 1040 : lerp(1040, 1250, ease(clamp((t - climb1) / (sail1 - climb1))));
   const c = { z: 1.06, x: lerp(-60, 120, ease(span(t, inT, offT))), y: 20 + Math.sin(t * 0.2) * 6 };
   S.paperBg(g); cam(g, c, 1); g.drawImage(P.water, -M, -MY);
   cam(g, c, 1); waterLife(g, t);
   const bob = Math.sin(t * 2.2) * 5;
-  // the little wave curling up and washing over the bank
-  const wv = span(t, waveT - 0.7, waveT + 0.1) * (1 - span(t, waveT + 0.4, waveT + 1.2));
-  if (wv > 0) {
-    const crest = smooth([[700, 760], [760, 760 - 120 * wv], [700 - 40 * wv, 700 - 150 * wv], [640 - 30 * wv, 690 - 110 * wv], [670, 720 - 40 * wv], [740, 790]]);
-    g.save(); g.globalAlpha = 0.85; g.fillStyle = '#9cc4c8'; path(g, crest); g.fill(); g.restore();
-    ink(g, crest.slice(0, 18), { color: '#ffffff', width: 2.5, alpha: 0.8 * wv });
-    for (let k = 0; k < 8; k++) { g.fillStyle = `rgba(255,255,255,${0.8 * wv})`; g.beginPath(); g.arc(660 + k * 14, 640 - 120 * wv + Math.sin(k) * 20, 4, 0, 7); g.fill(); }
-  }
+  const W0 = t > waveT - 1.7 && t < waveT + 1.8 ? drawWave(g, t, waveT) : waveAt(t, waveT);
   // the leaf: tumbling down from above, then a little boat
   const leafFall = clamp((t - dropT) / (landLeaf - dropT));
   if (t > dropT && t < landLeaf) {
@@ -215,11 +253,14 @@ function drawWater(g, t) {
   const stTalk = { t, mouth: Math.max(say('a01', t), say('a02', t)) * 0.9, eyes: 1 - S.blink(t, 5) };
   if (t < waveT - 0.1) { // on the bank, then leaning over for a sip
     const lean = span(t, leanT, leanT + 1.2) * (1 - span(t, waveT - 0.5, waveT - 0.1) * 0.5);
-    g.save(); g.translate(700, 655); g.rotate(lean * 0.35); ANT(g, 0, 0, 0.5, 1, { ...stTalk, headTilt: lean * 0.3, smile: 0.7, walk: t < n02.start + 1.5 ? t * 1.6 : null }); g.restore();
-  } else if (t < inT) { // swept off her feet!
-    const u = clamp((t - waveT + 0.1) / (inT - waveT + 0.1));
-    g.save(); g.translate(lerp(700, 800, u), lerp(655, WL, u) - Math.sin(u * Math.PI) * 70); g.rotate(u * Math.PI * 1.6);
-    ANT(g, 0, 40, 0.5, 1, { t, browUp: 1, mouth: 0.8, smile: -0.2 }); g.restore();
+    g.save(); g.translate(700, 655); g.rotate(lean * 0.45); ANT(g, 0, 0, 0.5, 1, { ...stTalk, headTilt: lean * 0.55, smile: 0.7, walk: t < n02.start + 1.5 ? t * 1.6 : null }); g.restore();
+  } else if (t < inT) { // swept off her feet: lifted on the crest and carried out as the wave draws back
+    const lift = ease(clamp((t - waveT + 0.1) / 0.4)), [cx, cy] = W0.top;
+    const x = lerp(700, cx + 6, lift), y = lerp(655, Math.max(cy, WL - 150) + 6, lift), set = span(t, inT - 0.5, inT);
+    if (set > 0) { g.save(); g.beginPath(); g.rect(x - 300, -2000, 600, 2000 + lerp(3000, WL + bob + 8, set)); g.clip(); }
+    g.save(); g.translate(x, lerp(y, WL + bob + 46, set)); g.rotate(Math.sin((t - waveT) * 7) * 0.3 * (1 - set));
+    ANT(g, 0, 0, 0.5, 1, { t, browUp: 1, mouth: 0.6, smile: -0.3, arms: 'wave', eyes: 1 }); g.restore();
+    if (set > 0) { g.restore(); g.save(); g.globalAlpha = set; g.fillStyle = 'rgba(255,255,255,0.35)'; g.beginPath(); g.ellipse(x, WL + bob + 8, 46, 7, 0, 0, 7); g.fill(); g.restore(); }
   } else if (t < climb0) { // floating, calling out, then paddling toward the leaf
     const x = t < landLeaf ? driftX(t) : lerp(driftX(landLeaf), 1000, clamp((t - landLeaf) / 1));
     floating(g, x, WL + bob, t, { ...stTalk, arms: fear > 0.3 || t > landLeaf ? 'wave' : 'hug', browUp: 0.6 + fear * 0.4, smile: 0.1 - fear * 0.3 + (t > landLeaf ? 0.6 : 0) });
@@ -233,6 +274,7 @@ function drawWater(g, t) {
     const u = ease(clamp((t - offT) / 1.2));
     ANT(g, lerp(1250, 1450, u), lerp(WL - 4, 726, u), 0.5, u < 0.9 ? 1 : -1, { ...stTalk, walk: u < 1 ? t * 1.8 : null, smile: 0.7 + glad * 0.3, arms: say('a02', t) > 0.1 ? 'wave' : 'rest', browUp: glad * 0.6 });
   }
+  drawWash(g, t, waveT);
   // the dove: swoops in from the oak with the leaf, lets it go, lands on the flat stone, and turns round
   if (t > n04.start + 3.4) {
     const t0 = n04.start + 3.6, flyEnd = landLeaf + 0.2;
@@ -274,10 +316,11 @@ function drawFox(g, t) {
   const stop1 = n06.end + 0.2, sitT = f01.start - 0.5, creepT = n07.start + 1.2, stop2 = n07.end - 0.4, raiseT = stop2 + 0.2;
   let fx = lerp(2200, 1560, ease(clamp((t - n06.start) / (stop1 - n06.start))));
   if (t > creepT) fx = lerp(1560, 1340, clamp((t - creepT) / (stop2 - creepT)));
-  const pinchT = n09.end - 1.0, jumpT = pinchT + 0.25, dropT = f02.start + 0.4, flyT = n10.start + 1.4;
-  const hopping = t > f02.start - 0.2 && t < n10.end + 1;
-  if (t > f02.end) fx = lerp(1340, 1560, ease(clamp((t - f02.end) / (n10.end - f02.end))));
-  const hop = hopping ? Math.abs(Math.sin((t - f02.start) * 6)) * 50 : t > jumpT && t < jumpT + 0.5 ? Math.sin((t - jumpT) / 0.5 * Math.PI) * 40 : 0;
+  // pinched! he leaps up onto all four paws (dropping the net), hops about yelping, then sits back down further off
+  const pinchT = n09.end - 1.0, jumpT = pinchT + 0.3, dropT = jumpT + 0.05, flyT = n10.start + 1.4, settleT = n10.end - 1.0;
+  const standK = span(t, jumpT, jumpT + 0.25) * (1 - span(t, settleT, settleT + 0.4));
+  if (t > jumpT) fx = lerp(1340, 1560, ease(clamp((t - jumpT - 0.6) / (settleT - jumpT - 0.6))));
+  const hop = t > jumpT && t < settleT ? Math.abs(Math.sin((t - jumpT) * 6.5)) * 45 * (1 - span(t, settleT - 0.5, settleT)) : 0;
   // the ant
   const runT = n09.start + 0.6, ax0 = 1190, paw = 1340 - 30;
   const ax = t < runT ? ax0 : lerp(ax0, paw, clamp((t - runT) / (pinchT - runT - 0.2)));
@@ -294,7 +337,7 @@ function drawFox(g, t) {
     else { const u = clamp((t - flyT) / 3.2); DOVE(g2, lerp(DX, 600, u), lerp(DY, -150, ease(u)) - Math.sin(u * 3) * 10, 0.55, -1, { beat: t * 2.8, pitch: -0.35 + u * 0.3 }, 'drawFly'); }
     // the net, once dropped
     const netK = clamp((t - dropT) / 0.7);
-    if (t > dropT) { g2.save(); g2.translate(1390, FY); g2.scale(-0.5, 0.5); g2.translate(lerp(60, 160, netK), lerp(-300, -6, netK * netK)); net(g2, 160, lerp(-1.2, 0.05, netK), { flat: netK >= 1, world: 0, sway: Math.sin(t * 8) * (1 - netK) }); g2.restore(); }
+    if (t > dropT) { g2.save(); g2.translate(1340, FY); g2.scale(-0.5, 0.5); g2.translate(lerp(120, 140, netK), lerp(-300, -6, netK * netK)); net(g2, 160, lerp(-1.2, 0.05, netK), { flat: netK >= 1, world: 0, sway: Math.sin(t * 8) * (1 - netK) }); g2.restore(); }
     // the fox
     const sly = 0.5, base = { t, eyes: 1 - S.blink(t, 3), sly, smile: 0.55, mouth: say('f01', t) * 0.7 };
     const ouch = S.mood(t, 'f02', 0.6, 4);
@@ -303,13 +346,18 @@ function drawFox(g, t) {
     const sit = (b) => {
       const raise = span(t, raiseT, raiseT + 0.8) * (1 - span(t, jumpT, jumpT + 0.3));
       const holdNet = t < dropT && t > sitT ? (gg, x, y) => { gg.save(); gg.translate(x, y); gg.rotate(lerp(0.9, 1.25, raise)); net(gg, 170, 0, { world: 0, sway: Math.sin(t * 3) * 0.1 }); gg.restore(); } : null;
-      b.save(); b.translate(0, -hop); if (hopping) { b.translate(fx, FY); b.rotate(Math.sin((t - f02.start) * 6) * 0.12); b.translate(-fx, -FY); }
-      FOX(b, fx, FY, 0.5, 'drawSit', { ...base, mouth: Math.max(say('f01', t) * 0.7, say('f02', t)), pawUp: t < dropT ? 0.35 + raise * 0.55 : 0.25 + Math.abs(Math.sin(t * 6)) * 0.3 * (hopping ? 1 : 0),
+      b.save();
+      FOX(b, fx, FY, 0.5, 'drawSit', { ...base, mouth: Math.max(say('f01', t) * 0.7, say('f02', t)), pawUp: t < dropT ? 0.35 + raise * 0.55 : 0.28 + 0.08 * Math.sin(t * 5), // afterwards: rubbing his sore toe
         pawHold: holdNet, browUp: ouch, eyes: ouch > 0.5 ? (Math.sin(t * 5) > 0 ? 0 : 1) : base.eyes, sly: sly * (1 - ouch), smile: 0.55 - ouch * 0.8 });
       b.restore();
     };
-    if (sitK <= 0) trot(g2); else if (sitK >= 1) sit(g2);
-    else { g2.save(); g2.globalAlpha = 1 - sitK; trot(g2); g2.restore(); g2.save(); g2.globalAlpha = sitK; sit(g2); g2.restore(); }
+    const hopTrot = (b) => { // up on all fours, hopping about
+      b.save(); b.translate(0, -hop); b.translate(fx, FY); b.rotate(Math.sin((t - jumpT) * 6.5) * 0.07); b.translate(-fx, -FY);
+      FOX(b, fx, FY, 0.5, 'drawTrot', { t, walk: t > jumpT + 0.6 && t < settleT ? t * 2.4 : null, mouth: Math.max(say('f02', t), 0.35 * ouch), browUp: ouch, eyes: Math.sin(t * 5) > 0 ? 0 : 1, smile: -0.3, sly: 0, tail: 1, headDY: -6 });
+      b.restore();
+    };
+    const blend = (k, A, B) => { if (k <= 0) A(g2); else if (k >= 1) B(g2); else { g2.save(); g2.globalAlpha = 1 - k; A(g2); g2.restore(); g2.save(); g2.globalAlpha = k; B(g2); g2.restore(); } };
+    if (t < jumpT) blend(sitK, trot, sit); else blend(standK, sit, hopTrot);
     // the ant
     const brave = S.mood(t, 'a03', 0.3, 1);
     if (t > n06.start + 2) ANT(g2, ax, FY + 18, 0.11, 1, { t, walk: t > runT && t < pinchT ? t * 4 : null, mouth: say('a03', t) * 0.9, eyes: 1 - S.blink(t, 5), browUp: t > n08.start && t < n08.end + 2 ? 1 : brave * 0.4, smile: 0.4 + brave * 0.3, arms: t > pinchT - 0.3 && t < pinchT + 0.6 ? 'give' : brave > 0.5 ? 'wave' : 'rest' });
@@ -327,7 +375,7 @@ function drawLesson(g, t) {
   c = mixv(c, view(960, 540, 1.0), ease(span(t, n12.start - 0.5, n12.end + 1.5)));
   const watch = span(t, n11.start + 4, n11.start + 5.2);
   meadow(g, t, c, { actors: (g2) => {
-    g2.save(); g2.translate(1390, 905); g2.scale(-0.5, 0.5); g2.translate(160, -6); net(g2, 160, 0.05, { flat: true }); g2.restore(); // the dropped net, still lying in the grass
+    g2.save(); g2.translate(1340, 905); g2.scale(-0.5, 0.5); g2.translate(140, -6); net(g2, 160, 0.05, { flat: true }); g2.restore(); // the dropped net, still lying in the grass
     if (t < landT) { const u = clamp((t - (landT - 2.4)) / 2.4); DOVE(g2, lerp(800, DX, ease(u)), lerp(500, DY, ease(u)), 0.55, 1, { beat: t * 2.6, legs: u, glide: u * 0.5 }, 'drawFly'); }
     else DOVE(g2, DX, DY, 0.55, 1, { t, beak: say('d03', t) * 0.8, coo: Math.max(0, Math.sin(t * 2)) * 0.3, eye: 1 - S.blink(t, 2), happy: S.mood(t, 'a04') > 0.5, headTilt: -0.1 + S.mood(t, 'd03') * 0.15 });
     const proud = S.mood(t, 'a04', 0.2, 2);
