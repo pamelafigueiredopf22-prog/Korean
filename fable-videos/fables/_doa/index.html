@@ -1,0 +1,64 @@
+<!doctype html><html><body style="margin:0"><canvas id="c" width="1920" height="1080"></canvas>
+<script type="module">
+import { paper, drawSprite, granulate, rgba, smooth, wash, penLine, ellipse, ink } from '../../engine/watercolor.js';
+import { makeDove } from '../../engine/characters/dove.js';
+import { makeAnt } from '../../engine/characters/insects.js';
+import { makeFox2 } from '../../engine/characters/fox2.js';
+import { MOOD, paintSky, paintLand, paintOak, reedSpots, drawReeds } from '../dove-and-ant/scene.js';
+const ctx = document.getElementById('c').getContext('2d');
+let P, dove, ant, fox, BG, OK, REEDS;
+// a butterfly-style net: wooden handle along +x from (0,0), hoop and mesh bag at the far end
+function net(g, len = 200, drop = 0) {
+  g.save();
+  g.strokeStyle = '#7a5a3a'; g.lineWidth = 6; g.lineCap = 'round'; g.beginPath(); g.moveTo(0, 0); g.lineTo(len, 0); g.stroke();
+  g.strokeStyle = rgba('#3a2c24', 0.7); g.lineWidth = 1.2; g.beginPath(); g.moveTo(0, 3); g.lineTo(len, 3); g.stroke();
+  const hx = len + 46;
+  const bag = smooth([[len + 6, -10], [hx, -36], [hx + 36, -10], [hx + 30, 40 + drop], [hx, 70 + drop], [hx - 26, 40 + drop]]);
+  g.fillStyle = 'rgba(240,236,224,0.55)'; g.beginPath(); bag.forEach((p, i) => i ? g.lineTo(...p) : g.moveTo(...p)); g.closePath(); g.fill();
+  g.strokeStyle = 'rgba(120,110,90,0.55)'; g.lineWidth = 0.8;
+  for (let k = -3; k <= 3; k++) { g.beginPath(); g.moveTo(hx + k * 10, -30); g.quadraticCurveTo(hx + k * 8, 20, hx + k * 3, 68 + drop); g.stroke(); }
+  for (let k = 0; k < 5; k++) { g.beginPath(); g.ellipse(hx + 2, -8 + k * 16, 34 - k * 5, 6, 0, 0, 7); g.stroke(); }
+  g.strokeStyle = '#8a6a44'; g.lineWidth = 4; g.beginPath(); g.ellipse(hx + 2, -10, 40, 14, 0, 0, 7); g.stroke();
+  g.restore();
+}
+function leafBoat(g, x, y, s = 1) {
+  g.save(); g.translate(x, y); g.scale(s, s);
+  const lf = smooth([[-80, 0], [-50, -14], [0, -18], [56, -12], [86, 2], [54, 14], [0, 18], [-50, 14]]);
+  wash(g, lf, { color: '#7f9a4a', opacity: 0.95, under: '#f4ead6', seed: 7 });
+  ink(g, [[-80, 0], [86, 2]], { color: '#4a5a2a', width: 1.2, alpha: 0.7 });
+  penLine(g, lf, { closed: true, w: 1.4, alpha: 0.75 });
+  g.restore();
+}
+window.FABLE = {
+  async setup() {
+    P = paper(); dove = makeDove(1.4); ant = makeAnt(1.4); fox = makeFox2(1.2);
+    BG = document.createElement('canvas'); BG.width = 1920; BG.height = 1080; const g = BG.getContext('2d');
+    paintSky(g, MOOD.day); paintLand(g, MOOD.day); OK = paintOak(g, MOOD.day); granulate(g, 1920, 1080, 0.2, 5);
+    REEDS = reedSpots();
+  },
+  frame(t) {
+    const g = ctx;
+    if (t < 10) {
+      g.drawImage(P, 0, 0);
+      g.save(); g.translate(260, 330); g.scale(1.3, 1.3); dove.draw(g, { t, coo: 0.4 }); g.restore();
+      g.save(); g.translate(620, 330); g.scale(1.3, 1.3); dove.drawFly(g, { t, beat: 0.15, leaf: true }); g.restore();
+      g.save(); g.translate(960, 330); g.scale(1.3, 1.3); dove.draw(g, { t, beak: 0.6, happy: true }); g.restore();
+      g.save(); g.translate(1360, 340); g.scale(0.8, 0.8); ant.draw(g, { t, arms: 'wave', smile: 0.7, mouth: 0.4 }); g.restore();
+      g.save(); g.translate(1700, 330); leafBoat(g, 0, 0, 1.6); g.translate(0, -18); g.scale(0.7, 0.7); ant.draw(g, { t, smile: 0.8, happy: true }); g.restore();
+      g.save(); g.translate(300, 960); g.scale(0.85, 0.85); fox.drawTrot(g, { t, walk: 0.3, headDY: 30, cheese: (g2, x, y) => { g2.save(); g2.translate(x - 4, y + 4); g2.rotate(Math.PI + 0.42); net(g2, 160); g2.restore(); } }); g.restore();
+      g.save(); g.translate(1000, 960); g.scale(0.85, 0.85); fox.drawSit(g, { t, pawUp: 0.9, smile: 0.5, sly: 0.5, pawHold: (g2, x, y) => { g2.save(); g2.translate(x, y); g2.rotate(-0.35); net(g2, 190); g2.restore(); } }); g.restore();
+      g.save(); g.translate(1500, 960); g.scale(0.85, 0.85); fox.drawSit(g, { t, mouth: 0.9, browUp: 1, pawUp: 0.5 }); g.restore();
+      return;
+    }
+    if (t > 20) { g.setTransform(2.2, 0, 0, 2.2, -1520, -1150); }
+    g.drawImage(BG, 0, 0);
+    drawReeds(g, MOOD.day, REEDS, t);
+    const [px, py] = OK.perch;
+    g.save(); g.translate(px, py); g.scale(0.55, 0.55); dove.draw(g, { t, coo: 0.3 }); g.restore();
+    if (t > 20) { leafBoat(g, 860, 880, 0.45); g.save(); g.translate(856, 874); g.scale(0.16, 0.16); ant.draw(g, { t, arms: 'wave', mouth: 0.5, browUp: 1 }); g.restore();
+      g.save(); g.translate(1010, 640); g.scale(0.5, 0.5); dove.drawFly(g, { t, beat: 0.6, leaf: false }); g.restore(); g.setTransform(1, 0, 0, 1, 0, 0); return; }
+    g.save(); g.translate(1000, 800); g.scale(0.16, 0.16); ant.draw(g, { t, walk: 0.3 }); g.restore();
+    g.save(); g.translate(1450, 760); g.scale(-0.4, 0.4); fox.drawTrot(g, { t, walk: 0.3, headDY: 30, cheese: (g2, x, y) => { g2.save(); g2.translate(x - 4, y + 4); g2.rotate(Math.PI + 0.42); net(g2, 160); g2.restore(); } }); g.restore();
+  }
+};
+</script></body></html>

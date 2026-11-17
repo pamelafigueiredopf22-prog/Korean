@@ -43,7 +43,7 @@ export function brushWash(g, shape, colors, o = {}) {
   g.restore();
 }
 // short dry-brush flecks (heather, grass texture, distant scrub)
-function flecks(g, shape, colors, o = {}) {
+export function flecks(g, shape, colors, o = {}) {
   const { seed = 3, count = 200, size = [3, 8], alpha = [0.2, 0.45], dy = 0.5 } = o;
   const r = rng(seed), b = bbox(shape);
   g.save(); path(g, shape); g.clip();
@@ -52,7 +52,7 @@ function flecks(g, shape, colors, o = {}) {
   g.restore();
 }
 // grass flicks in ink and colour, standing up from a base line
-function grassFlicks(g, x, y, h, o = {}) {
+export function grassFlicks(g, x, y, h, o = {}) {
   const { seed = 5, n = 9, colors = ['#7f9068'], inkA = 0.55, lean = 0 } = o;
   const r = rng(seed);
   g.save(); g.lineCap = 'round';
@@ -165,7 +165,7 @@ function wall(g, E, m, seed, o = {}) {
 }
 
 // ---------------------------------------------------------------- a pine wood
-function conifer(g, x, y, h, cols, seed) {
+export function conifer(g, x, y, h, cols, seed) {
   const r = rng(seed), w = h * r.range(0.2, 0.3), tiers = 9;
   g.save(); g.strokeStyle = rgba('#4a3a30', 0.7); g.lineWidth = Math.max(1, h * 0.03); g.beginPath(); g.moveTo(x, y); g.lineTo(x, y - h * 0.9); g.stroke(); g.restore();
   const L = [[x, y - h]], R = [[x, y - h]];
