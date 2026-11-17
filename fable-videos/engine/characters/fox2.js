@@ -113,6 +113,7 @@ export function makeFox2(res = 1, seed = 5) {
     g.save();
     g.rotate(st.headTilt || 0);
     const m = clamp(st.mouth || 0), sm = st.smile || 0;
+    if (st.inMouth) st.inMouth(g); // something held in the jaws: drawn under the head so it comes out of the mouth
     drawSprite(g, head);
     // ONE mouth: the lower jaw swings down from the corner of the mouth; the gap that opens between
     // the upper lip and the jaw is the inside of the mouth. Closed, it is just the smiling lip line.
@@ -125,7 +126,7 @@ export function makeFox2(res = 1, seed = 5) {
       g.save(); g.beginPath(); g.moveTo(...lip[0]);
       for (const p of lip) g.lineTo(...p);
       for (let k = jawTop.length - 1; k >= 0; k--) g.lineTo(...jawTop[k]);
-      g.closePath(); g.fillStyle = '#5c2622'; g.fill(); g.clip();
+      g.closePath(); g.fillStyle = '#5c2622'; g.fill(); g.clip(); if (st.inMouth) st.inMouth(g);
       const tip = rot([74, 14]); g.fillStyle = '#d8857c'; g.beginPath(); g.ellipse(tip[0] - 8, tip[1] - 1, 13, 3 + 4 * m, a * 0.8, 0, 7); g.fill();
       g.restore();
     }

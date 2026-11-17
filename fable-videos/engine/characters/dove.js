@@ -20,6 +20,9 @@ const BEAK_UP = smooth([[-84, -131], [-96, -130], [-105, -125], [-95, -122], [-8
 const BEAK_LO = smooth([[-84, -121], [-94, -120], [-101, -120], [-93, -116], [-84, -114]]);
 const BEAK_PIVOT = [-84, -122];
 export const DOVE_EYE = [-66, -133];
+const ARM = smooth([[-6, 8], [-14, -30], [-16, -66], [-8, -88], [14, -94], [38, -84], [46, -52], [32, -12], [12, 8]]);
+const HAND = smooth([[-12, 6], [-16, -30], [-10, -56], [2, -66], [18, -62], [30, -40], [32, -12], [22, 6]]);
+const HFING = [[-8, -50, -0.34, 54], [2, -58, -0.16, 70], [12, -60, 0.02, 76], [22, -56, 0.2, 68], [30, -44, 0.4, 54]];
 const FWING = smooth([[-14, 6], [-22, -60], [-20, -112], [-10, -146], [8, -156], [26, -152], [40, -136], [48, -96], [50, -50], [40, 6]]);
 const FINGERS = [[-8, -144, -0.34, 64], [4, -152, -0.16, 80], [16, -154, 0.02, 86], [28, -150, 0.2, 80], [38, -140, 0.38, 66]];
 // an oak leaf held by the stalk in the beak, hanging down-left
@@ -84,6 +87,24 @@ export function makeDove(res = 1, seed = 12) {
     soften(g, 0.9 * res);
     penLine(g, FWING, { closed: true, color: C.ink, w: 1.8, alpha: 0.8, seed: s(58), weight: (t) => 0.3 + 0.8 * Math.max(0, Math.sin(t * Math.PI * 2)) });
   }, { seed: s(59) });
+  const wingPart = (shape, fingers, sd) => sprite(bbox(shape.concat([[-50, -150], [90, -150]])), res, (g) => {
+    for (const [x, y, a, L] of fingers) {
+      const ca = Math.sin(a), tipx = x + ca * L, tipy = y - Math.cos(a) * L;
+      const f = smooth([[x - 6, y + 20], [x - 7 + ca * L * 0.5, y - L * 0.5], [tipx - 3, tipy + 8], [tipx, tipy], [tipx + 4, tipy + 9], [x + 8 + ca * L * 0.5, y - L * 0.45], [x + 7, y + 20]]);
+      wash(g, f, { under: C.paper, color: shade(C.wing, 0.12), opacity: 0.96, seed: s(sd) + x, bleed: 0.015, layers: 12 });
+      glaze(g, f, tipx, tipy + 12, 7, 14, C.bar, 0.45);
+      penLine(g, f, { closed: true, color: C.ink, w: 1.1, alpha: 0.7, seed: s(sd + 1) + x });
+    }
+    wash(g, shape, { under: C.paper, color: C.wing, opacity: 0.96, seed: s(sd + 2), bleed: 0.02 });
+    blooms(g, shape, SOFT, { n: 4, seed: s(sd + 3), alpha: 0.4 });
+    if (!fingers.length) for (let i = 0; i < 6; i++) { const y = -4 - i * 14, x = 30 + Math.sin(i * 0.5) * 12 - i * 1.5, e = ellipse(x, y, 13, 8, 12, 0.5); wash(g, e, { under: C.paper, color: shade(C.wing, 0.06), opacity: 0.95, seed: s(sd + 4) + i, layers: 8 }); penLine(g, e.slice(2, 10), { color: C.ink, w: 0.9, alpha: 0.5, seed: s(sd + 5) + i }); }
+    else penLine(g, [[-6, -10], [10, -30], [22, -48]], { color: C.ink, w: 0.8, alpha: 0.35, seed: s(sd + 4) });
+    if (!fingers.length) for (const [x0, y0] of [[-4, -30], [8, -52]]) for (let k = 0; k < 3; k++) wash(g, ellipse(x0 + k * 14, y0, 6, 3.5, 10), { color: C.bar, opacity: 0.7, seed: s(sd + 9) + x0 + k, layers: 8 });
+    shadeEdge(g, shape, { color: '#8e8aa0', alpha: 0.35, width: 12, dx: -5 });
+    soften(g, 0.9 * res);
+    penLine(g, shape, { closed: true, color: C.ink, w: 1.6, alpha: 0.8, seed: s(sd + 8), weight: (t) => 0.3 + 0.8 * Math.max(0, Math.sin(t * Math.PI * 2)) });
+  }, { seed: s(sd + 12) });
+  const arm = wingPart(ARM, [], 150), hand = wingPart(HAND, HFING, 170);
   const beakUp = sprite(bbox(BEAK_UP), res, (g) => { wash(g, BEAK_UP, { under: true, color: C.beak, opacity: 0.97, seed: s(60) }); pool(g, -90, -129, 4, 3, C.cere, 0.9); pencil(g, BEAK_UP, { closed: true, color: C.ink, seed: s(61), alpha: 0.55, width: 1 }); }, { seed: s(62) });
   const beakLo = sprite(bbox(BEAK_LO), res, (g) => { wash(g, BEAK_LO, { under: true, color: shade(C.beak, 0.08), opacity: 0.97, seed: s(63) }); pencil(g, BEAK_LO, { closed: true, color: C.ink, seed: s(64), alpha: 0.55, width: 1 }); }, { seed: s(65) });
   const leaf = sprite(bbox(LEAF), res, (g) => {
@@ -127,22 +148,34 @@ export function makeDove(res = 1, seed = 12) {
     g.restore();
   }
   // flying (facing left): st.beat (wingbeat phase, cycles), st.glide 0..1, st.pitch, st.legs 0..1, st.flare 0..1, st.leaf
+  // flying (facing left). st.beat: wingbeat phase (cycles); st.glide 0..1; st.pitch; st.legs 0..1; st.leaf.
+  // Each wing is an arm and a hand: the arm swings about the shoulder on a smooth sine, the hand follows a
+  // moment later, so the wing bends on the upstroke and spreads flat on the downstroke.
   function drawFly(g, st = {}) {
-    const ph = (st.beat || 0) * Math.PI * 2, glide = st.glide || 0, flare = st.flare || 0;
-    const beat = Math.cos(ph + 0.35 * Math.sin(ph));
-    const up = (1 - glide) * beat + glide * 0.18;
-    const sy = (up >= 0 ? 0.12 + 0.88 * up : 0.12 + 0.95 * up) * (1 - glide) + glide * 0.14;
-    const sweep = 0.32 - 0.2 * (1 - up) * (1 - glide) - flare * 0.7;
+    const ph = (st.beat || 0) * Math.PI * 2, glide = st.glide || 0;
+    const c = Math.cos(ph), sn = Math.sin(ph);
+    // angle of the arm from straight up (+ = swung back/down over the body side); hand lags behind
+    const armA = (1 - glide) * (0.85 + 1.15 * c) + glide * 0.5;              // 2.0: down past the belly, -0.3: high over the back
+    const handA = armA + (1 - glide) * (0.6 * Math.max(0, sn) - 0.12 * Math.max(0, -sn)) + glide * 0.2; // folds back on the upstroke
+    const k = 0.75 + 0.25 * Math.abs(c); // foreshortening: the wing looks shorter when it points at us
+    const lift = (1 - glide) * -c * 6;   // the body rises a little on each downstroke
     g.save();
+    g.translate(0, lift);
     g.translate(20, -60); g.rotate(st.pitch || 0); g.translate(-20, 60);
-    const wingAt = (dx, dy, k, far) => { g.save(); g.translate(dx, dy); g.rotate(sweep + (far ? 0.06 : 0)); g.scale(k, sy * k); if (far) g.filter = 'brightness(0.8)'; drawSprite(g, fwing); g.restore(); };
-    wingAt(30, -92, 0.9, true);
-    g.save(); g.translate(90, -40); g.rotate(-0.12 - glide * 0.1); g.translate(-90, 40); drawSprite(g, tail); g.restore();
+    const wingAt = (sx, sy, far) => {
+      g.save(); g.translate(sx, sy);
+      if (far) g.filter = 'brightness(0.82)';
+      g.rotate(armA * (far ? 0.85 : 1)); g.scale(1, k); drawSprite(g, arm);
+      g.translate(14, -86); g.rotate((handA - armA) * (far ? 0.85 : 1)); drawSprite(g, hand);
+      g.restore();
+    };
+    wingAt(26, -92, true);
+    g.save(); g.translate(90, -40); g.rotate(-0.12 - glide * 0.1 + sn * 0.04); g.translate(-90, 40); drawSprite(g, tail); g.restore();
     if (st.legs) { g.save(); g.globalAlpha *= st.legs; g.strokeStyle = C.leg; g.lineCap = 'round'; g.lineWidth = 4;
       for (const x of [-6, 14]) { g.beginPath(); g.moveTo(x, -24); g.lineTo(x - 8, -4); g.stroke(); } g.restore(); }
-    g.save(); g.translate(20, -40); g.scale(1.04, 0.92); g.translate(-20, 40); drawSprite(g, body); g.restore();
+    g.save(); g.translate(20, -40); g.scale(1.04, 0.94); g.translate(-20, 40); drawSprite(g, body); g.restore();
     head(g, st, clamp(st.beak || 0));
-    wingAt(18, -86, 1, false);
+    wingAt(14, -86, false);
     g.restore();
   }
   // asleep in the nest: head drawn down into the shoulders, eyes closed

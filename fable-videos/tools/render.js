@@ -33,7 +33,7 @@ async function openPage(browser, port, timeline) {
   const page = await browser.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
   page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') console.error('[page]', m.text()); });
   page.on('pageerror', (e) => console.error('[page error]', e.message));
-  await page.goto(`http://127.0.0.1:${port}/fables/${fable}/index.html`);
+  await page.goto(`http://127.0.0.1:${port}/fables/${fable}/${process.env.PAGE || 'index.html'}`);
   await page.waitForFunction(() => window.FABLE);
   const t0 = Date.now();
   await page.evaluate((tl) => window.FABLE.setup(tl), timeline);

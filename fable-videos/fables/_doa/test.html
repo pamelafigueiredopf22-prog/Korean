@@ -1,0 +1,26 @@
+<!doctype html><html><body style="margin:0"><canvas id="c" width="1920" height="1080"></canvas>
+<script type="module">
+import { paper } from '../../engine/watercolor.js';
+import { makeDove } from '../../engine/characters/dove.js';
+import { makeFox2 } from '../../engine/characters/fox2.js';
+import { net } from '../dove-and-ant/props.js';
+const ctx = document.getElementById('c').getContext('2d');
+let P, dove, fox;
+window.FABLE = {
+  async setup() { window.MOTION = true; P = paper(); dove = makeDove(1.4); fox = makeFox2(1.2); },
+  frame(t) {
+    const g = ctx; g.drawImage(P, 0, 0);
+    if (window.MOTION) {
+      const x = 2100 - ((t * 260) % 2500);
+      g.save(); g.translate(x, 330 + Math.sin(t * 1.3) * 30); g.scale(1.3, 1.3); dove.drawFly(g, { beat: t * 2.6, leaf: true }); g.restore();
+      const fx = 100 + ((t * 170) % 2400);
+      g.save(); g.translate(fx, 1010); g.scale(0.9, 0.9); fox.drawTrot(g, { t, walk: t * 1.4, mouth: 0.22, inMouth: (h) => { h.save(); h.translate(58, 20); net(h, 95, 0.75, { world: 0.12, sway: Math.sin(t * 1.4 * Math.PI * 2) * 0.18 }); h.restore(); } }); g.restore();
+      return;
+    }
+    for (let i = 0; i < 8; i++) { g.save(); g.translate(150 + i * 235, 330); g.scale(0.85, 0.85); dove.drawFly(g, { beat: i / 8 }); g.restore(); }
+    const carry = (g2) => net(g2, 95, 0.75, { world: 0.12, sway: Math.sin(t * 4) * 0.15 });
+    g.save(); g.translate(560, 1010); g.scale(1.1, 1.1); fox.drawTrot(g, { t, walk: 0.3, mouth: 0.22, inMouth: (h) => { h.save(); h.translate(58, 20); carry(h); h.restore(); } }); g.restore();
+    g.save(); g.translate(1420, 1010); g.scale(1.1, 1.1); fox.drawTrot(g, { t, walk: 0.7, mouth: 0.22, inMouth: (h) => { h.save(); h.translate(58, 20); net(h, 95, 0.75, { world: 0.12, sway: -0.2 }); h.restore(); } }); g.restore();
+  }
+};
+</script></body></html>
