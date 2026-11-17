@@ -327,6 +327,7 @@ function drawLesson(g, t) {
   c = mixv(c, view(960, 540, 1.0), ease(span(t, n12.start - 0.5, n12.end + 1.5)));
   const watch = span(t, n11.start + 4, n11.start + 5.2);
   meadow(g, t, c, { actors: (g2) => {
+    g2.save(); g2.translate(1390, 905); g2.scale(-0.5, 0.5); g2.translate(160, -6); net(g2, 160, 0.05, { flat: true }); g2.restore(); // the dropped net, still lying in the grass
     if (t < landT) { const u = clamp((t - (landT - 2.4)) / 2.4); DOVE(g2, lerp(800, DX, ease(u)), lerp(500, DY, ease(u)), 0.55, 1, { beat: t * 2.6, legs: u, glide: u * 0.5 }, 'drawFly'); }
     else DOVE(g2, DX, DY, 0.55, 1, { t, beak: say('d03', t) * 0.8, coo: Math.max(0, Math.sin(t * 2)) * 0.3, eye: 1 - S.blink(t, 2), happy: S.mood(t, 'a04') > 0.5, headTilt: -0.1 + S.mood(t, 'd03') * 0.15 });
     const proud = S.mood(t, 'a04', 0.2, 2);
