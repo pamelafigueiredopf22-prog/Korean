@@ -6,7 +6,7 @@ from reportlab.lib.units import inch
 from kdpbooks import layout as L
 from kdpbooks.icons import STORY_PAIRS, draw_icon, Pen, star
 from kdpbooks.mazes import make_grid_maze, draw_grid_maze
-from kdpbooks.qa import Report, standard_checks, audit_grid_maze_pixels
+from kdpbooks.qa import Report, standard_checks, audit_maze_pixels
 from kdpbooks.registry import Registry
 
 BOOK_ID = "book01-easy-mazes"
@@ -220,7 +220,7 @@ def build(volume=1, out_dir="output"):
     def hook(pno, img):
         if pno in geos:
             geo, m = geos[pno]
-            audits[pno] = audit_grid_maze_pixels(img, geo, m)
+            audits[pno] = audit_maze_pixels(img, m, geo)
 
     standard_checks(rep, path, roles, page_hook=hook)
     bad = {p: v for p, v in audits.items() if v}

@@ -74,46 +74,18 @@ def margin_violations(img, dpi=DPI, safe_in=SAFE / 72.0, thresh=200):
     return int(band.sum())
 
 
-def audit_grid_maze_pixels(img, geo, maze, dpi=DPI):
-    """Re-read the printed maze from pixels and compare with the maze data.
-    Samples the midpoint between every pair of neighbouring cell centres:
-    dark => wall.  Returns number of mismatches."""
+def audit_maze_pixels(img, maze, geo, dpi=DPI):
+    """Re-read the printed maze from pixels and compare with the verified data.
+    maze.probes(geo) gives the midpoint of every potential wall and whether a
+    wall must be there; a 3x3 pixel patch darker than 50% grey = wall printed.
+    Returns the number of mismatches (0 = the page shows exactly the maze we verified)."""
     s = dpi / 72.0
     H = img.shape[0]
-    cell = geo["cell"]
-
-    def px(xp, yp):
-        return int(round(xp * s)), int(round(H - yp * s))
-
-    def is_wall(xp, yp):
-        x, y = px(xp, yp)
-        patch = img[y - 1:y + 2, x - 1:x + 2]
-        return patch.min() < 128
-
     bad = 0
-    for r in range(maze.rows):
-        for col in range(maze.cols):
-            cx = geo["ox"] + (col + 0.5) * cell
-            cy = geo["oy_top"] - (r + 0.5) * cell
-            if col + 1 < maze.cols:
-                printed_open = not is_wall(cx + cell / 2, cy)
-                if printed_open != ((r, col + 1) in maze.open[(r, col)]):
-                    bad += 1
-            if r + 1 < maze.rows:
-                printed_open = not is_wall(cx, cy - cell / 2)
-                if printed_open != ((r + 1, col) in maze.open[(r, col)]):
-                    bad += 1
-    # border: openings only at start (top) and goal (bottom)
-    for col in range(maze.cols):
-        cx = geo["ox"] + (col + 0.5) * cell
-        top_open = not is_wall(cx, geo["oy_top"])
-        bot_open = not is_wall(cx, geo["oy_top"] - maze.rows * cell)
-        bad += top_open != ((0, col) == maze.start)
-        bad += bot_open != ((maze.rows - 1, col) == maze.goal)
-    for r in range(maze.rows):
-        cy = geo["oy_top"] - (r + 0.5) * cell
-        bad += not is_wall(geo["ox"], cy)
-        bad += not is_wall(geo["ox"] + maze.cols * cell, cy)
+    for xp, yp, expect_wall in maze.probes(geo):
+        x, y = int(round(xp * s)), int(round(H - yp * s))
+        printed_wall = img[y - 1:y + 2, x - 1:x + 2].min() < 128
+        bad += printed_wall != expect_wall
     return bad
 
 
