@@ -80,7 +80,7 @@ S.cycle = (lt, L, Le, D, at) => {
   source('Clance (1985), The Impostor Phenomenon', E(lt, L[0] + .8));
 };
 S.why10 = (lt, L, Le, D, at) => {
-  panels(lt, L, [0, 1, 2, 3, 5, 6, 4], [() => {
+  panels(lt, L, [0, 1, 2, 3, 4, 5, 6], [() => {
     paperBg('#F7EDD3'); chapter(3, 'Why does it happen?', lt); heading('5 INGREDIENTS', 380, COL.ink, 110);
     [1, 2, 3, 4, 5].forEach(i => { const p = B(lt, .6 + i * .2); g.fillStyle = COL.alex; g.beginPath(); g.arc(390 + i * 190, 600, 64 * p, 0, 7); g.fill(); txt(String(i), 390 + i * 190, 604, { size: 64 * p, weight: 700, color: '#fff' }); });
   }, () => {
@@ -95,6 +95,11 @@ S.why10 = (lt, L, Le, D, at) => {
     for (let i = 0; i < 7; i++) ch({ x: 300 + i * 200, y: 900, c: '#9AA0AE', s: .9, sd: i, expr: 'smile' }); ch(P_(IVY, { x: 1700, y: 900, s: .9, expr: 'worried' }));
     ['first in family at university', 'few people like you in your field'].forEach((s, i) => pill(s, W / 2, 300 + i * 120, { p: B(lt, at(3, .25 + i * .2)), bg: COL.ink, size: 44 }));
   }, () => {
+    paperBg('#E2EFEB'); tipTag10(3, 'The more you know...');
+    const base = 860; [['how well they did', .9, COL.ivy, .3], ['how well they THOUGHT they did', .7, COL.gray, .55]].forEach(([s, v, c, f], i) => { const x = 760 + i * 400, p = E(lt, at(4, f), .8); bar(x, base, 260, 560, c, v * p); wrap(s, x, base + 60, 320, 44, { size: 36, weight: 700 }); });
+    line(520, base, 1400, base, 8, COL.ink); txt('top performers (illustrative)', W / 2, 260, { size: 40, weight: 700 });
+    source('Kruger & Dunning (1999), JPSP', E(lt, at(4, .3)));
+  }, () => {
     paperBg('#F7EDD3'); tipTag10(4, 'Family labels');
     [['"the smart one"', EX[3], 760], ['"the sensitive one"', COL.ivy, 1160]].forEach(([s, c, x], i) => { ch({ x, y: 940, c: c.c || c, top: i ? 'bun' : null, s: 1.2, sd: i, expr: i ? 'worried' : 'smile' }); pill(s, x, 520, { p: B(lt, at(5, .15 + i * .2)), bg: i ? COL.ivy : COL.ink2, size: 44 }); });
     withA(E(lt, at(5, .6)), () => { card(W / 2, 220, 1100, 120); txt('...and the label stuck', W / 2, 222, { size: 52, weight: 700 }); });
@@ -103,11 +108,6 @@ S.why10 = (lt, L, Le, D, at) => {
     paperBg('#FBE3EE'); tipTag10(5, 'Perfectionism');
     const scores = [99, 97, 100, 95]; scores.forEach((n, i) => withA(E(lt, at(6, .1) + i * .12, .3), () => { card(360 + i * 400, 480, 300, 260); txt(n + '%', 360 + i * 400, 470, { size: 90, weight: 700, color: n < 100 ? COL.red : COL.ivy }); txt(n < 100 ? '= failure?' : 'phew', 360 + i * 400, 570, { size: 36, font: 'Nunito', weight: 800 }); }));
     ch(P_(IVY, { x: 960, y: 1020, s: .9, expr: 'nervous', sweat: true }));
-  }, () => {
-    paperBg('#E2EFEB'); tipTag10(3, 'The more you know...');
-    const base = 860; [['how well they did', .9, COL.ivy, .3], ['how well they THOUGHT they did', .7, COL.gray, .55]].forEach(([s, v, c, f], i) => { const x = 760 + i * 400, p = E(lt, at(4, f), .8); bar(x, base, 260, 560, c, v * p); wrap(s, x, base + 60, 320, 44, { size: 36, weight: 700 }); });
-    line(520, base, 1400, base, 8, COL.ink); txt('top performers (illustrative)', W / 2, 260, { size: 40, weight: 700 });
-    source('Kruger & Dunning (1999), JPSP', E(lt, at(4, .3)));
   }]);
 };
 S.cost = (lt, L, Le, D, at) => {

@@ -2,7 +2,7 @@
 
 Recording script. Record each numbered line as its own file in `voice/` (e.g. `voice/open_1.wav`) and rebuild (`node engine/build.js <video>`): the animation re-times itself to your voice.
 
-**1207 words** · scratch-voice length 7:42 · at a natural 150 words/min your read will be about 8:13
+**1284 words** · scratch-voice length 8:09 · at a natural 150 words/min your read will be about 8:44
 
 ## 1. `open` (0:00)
 *Visual: Sam asleep. Dream bubble: back in school, an exam he never studied for, the classroom melts. Sam wakes with a gasp.*
@@ -79,22 +79,24 @@ Recording script. Record each numbered line as its own file in `voice/` (e.g. `v
    ↳ `voice/forget_2.wav`
 3. So unless you wake up during or right after a dream, and think about it, it usually just fades away. Some people simply remember more dreams than others, and research suggests they tend to wake up briefly more often during the night.  
    ↳ `voice/forget_3.wav`
-4. If you want to remember more of your dreams, the best trick is simple. Keep a notebook by your bed, and write down whatever you can remember the moment you wake up, before you even check your phone.  
+4. And while we're busting myths: you may have heard that every face in your dreams belongs to someone you've seen in real life. It's a popular claim online, but there's no solid research showing it's true.  
    ↳ `voice/forget_4.wav`
+5. If you want to remember more of your dreams, the best trick is simple. Keep a notebook by your bed, and write down whatever you can remember the moment you wake up, before you even check your phone.  
+   ↳ `voice/forget_5.wav`
 
-## 7. `lucid` (5:25)
+## 7. `lucid` (5:37)
 *Visual: Lucid dreaming ~55%. Konkoly 2021 two-way communication. Sleep paralysis ~8%.*
 
 1. Now for the strangest part. Have you ever realized you were dreaming, while you were still in the dream?  
    ↳ `voice/lucid_1.wav`
-2. That's called a lucid dream. A review of studies found that around half of people have had at least one, and about a quarter have them regularly.  
+2. That's called a lucid dream. A review of studies found that around half of people have had at least one, and about a quarter have them regularly. Some people try to train it with techniques like doing reality checks during the day, asking themselves: am I dreaming right now? Reviews of the research suggest that some techniques may help, but results vary a lot from person to person.  
    ↳ `voice/lucid_2.wav`
 3. And in 2021, a team led by Karen Konkoly and Ken Paller did something incredible. They actually communicated with people while they were lucid dreaming. The researchers asked simple math questions, and the dreamers answered by moving their eyes in a pre-agreed pattern, while still asleep.  
    ↳ `voice/lucid_3.wav`
 4. There's also a scarier experience: sleep paralysis. You wake up, but your body is still in REM mode, so you can't move, and sometimes you feel like someone is in the room. It's frightening, but it's usually harmless, and it happens to roughly eight percent of people at some point.  
    ↳ `voice/lucid_4.wav`
 
-## 8. `night` (6:18)
+## 8. `night` (6:45)
 *Visual: Sleep well, imagery rehearsal for nightmares, dream journal, when to get help.*
 
 1. So, can you have better dreams? A few research-backed ideas.  
@@ -108,7 +110,7 @@ Recording script. Record each numbered line as its own file in `voice/` (e.g. `v
 5. And four. If nightmares are frequent, very distressing, or linked to a traumatic experience, talk to a doctor or a therapist. There are effective treatments.  
    ↳ `voice/night_5.wav`
 
-## 9. `outro` (7:14)
+## 9. `outro` (7:40)
 *Visual: Sam back in the dream exam, realizes it's a dream, turns the giraffe teacher into a pizza. Comment prompt. Thanks.*
 
 1. So, a few weeks later, Sam is back in the dream exam. The clock is melting. The giraffe is handing out papers.  

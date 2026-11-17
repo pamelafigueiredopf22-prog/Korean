@@ -69,7 +69,7 @@ S.rem = (lt, L, Le, D, at) => {
     withA(E(lt, at(3, .5)), () => { lying(P_(SAM, { x: 1220, y: 600, s: 1, expr: 'calm' })); g.fillStyle = '#6C8EBF'; rr(1300, 540, 420, 120, 40); g.fill(); txt('body: muscles paused', 1400, 860, { size: 46, weight: 700, color: COL.ivy }); });
   }, () => {
     paperBg('#ECE8F8'); heading('DREAMS OUTSIDE REM TOO', 120);
-    [['REM', 'long, vivid, wild', COL.max, .1], ['other stages', 'shorter, calmer', COL.ivy, .5]].forEach(([h, s, c, f], i) => { const x = 560 + i * 800; withA(E(lt, at(4, f), .4), () => { card(x, 560, 620, 460); txt(h, x, 400, { size: 64, weight: 700, color: c }); cloud(x, 560, i ? .6 : 1.1, false); txt(s, x, 720, { size: 42, font: 'Nunito', weight: 800 }); }); });
+    [['REM', 'long, vivid, wild', COL.max, .1], ['other stages', 'shorter, calmer', COL.ivy, .5]].forEach(([h, s, c, f], i) => { const x = 560 + i * 800; withA(E(lt, at(4, f), .4), () => { card(x, 560, 620, 460); txt(h, x, 400, { size: 64, weight: 700, color: c }); g.fillStyle = c; [[-50, 10, 42], [0, -10, 56], [52, 8, 44], [0, 24, 46]].forEach(([a, b, r]) => { g.beginPath(); g.arc(x + a * (i ? .6 : 1.1), 560 + b * (i ? .6 : 1.1), r * (i ? .6 : 1.1), 0, 7); g.fill(); }); txt(s, x, 720, { size: 42, font: 'Nunito', weight: 800 }); }); });
   }]);
 };
 S.themes = (lt, L, Le, D, at) => {
@@ -141,7 +141,7 @@ S.forget = (lt, L, Le, D, at) => {
     withA(E(lt, at(1, .4)), () => { card(1380, 520, 640, 300); wrap('memory-saving chemicals: lower in REM', 1380, 520, 560, 60, { size: 48, weight: 700, color: COL.max }); });
   }, () => {
     nightBed(); lying(P_(SAM, { x: 600, y: 700, s: 1, expr: lt > at(2, .3) ? 'o' : 'calm' })); blanket9();
-    withA(E(lt, at(2, .3)), () => { thought(1100, 360, 400, 140); cloud(1100, 360, .6, false); });
+    withA(E(lt, at(2, .3)), () => { thought(1100, 360, 400, 140); txt('a dream!', 1100, 362, { size: 44, weight: 700, color: COL.max }); });
     pill('woke up briefly → remembered more', 1100, 560, { p: B(lt, at(2, .65)), bg: COL.ink, size: 38 });
   }, () => {
     dreamSky(); for (let i = 0; i < 5; i++) ch({ x: 300 + i * 330, y: 900, c: EX[i], s: .9, sd: i, expr: 'smile', alpha: .7 });

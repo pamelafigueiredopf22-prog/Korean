@@ -11,6 +11,10 @@ Animated explainers made entirely from code: original characters, no stock foota
 | `video-04/` | The Dark Triad: Narcissist vs Machiavellian vs Psychopath |
 | `video-05/` | Why You Can Feel Lonely in a Crowd |
 | `video-06/` | Why New Year's Resolutions Fail (And How to Make Habits Stick) |
+| `video-07/` | Willpower Is a Myth (Sort Of) |
+| `video-08/` | Why You Can't Stop Scrolling |
+| `video-09/` | Why Do We Dream? |
+| `video-10/` | Impostor Syndrome |
 
 Each video folder has `script.json` (the narration, which you edit), `scenes.js` (its animation), `SCRIPT.md` (the generated recording sheet), `UPLOAD.md` (title, description, sources and settings) and `build/` (outputs, not in git).
 

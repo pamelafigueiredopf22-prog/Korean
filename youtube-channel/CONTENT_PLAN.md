@@ -15,10 +15,10 @@ everyday struggles 🧠 · relationships ❤️ · famous experiments & myths �
 | 4 | 14 Dec | ✅ The Dark Triad | Three charming new coworkers | Paulhus & Williams 2002; Kaufman 2019 |
 | 5 | 21 Dec | ✅ Why You Can Feel Lonely in a Crowd | Holidays: surrounded by family, still lonely | Cacioppo (loneliness ≠ being alone); Holt-Lunstad 2010 |
 | 6 | 28 Dec | ✅ Why New Year's Resolutions Fail (and How to Make Habits Stick) | "This year will be different" | Lally et al. 2010 (habits take ~66 days, range 18–254); Dai, Milkman & Riis 2014 (fresh-start effect) |
-| 7 | 4 Jan | 🔬 Willpower Is a Myth (Sort Of) | People with "great self-control" just avoid temptation | Ego-depletion replication failure (Hagger et al. 2016); Hofmann et al. 2012 |
-| 8 | 11 Jan | 🧠 Why You Can't Stop Scrolling | "Just one more video" | Variable rewards (Skinner); careful with "dopamine" myths |
-| 9 | 18 Jan | 🌞 Why Do We Dream? | Sam dreams he's back in school, naked | REM sleep; memory-consolidation and threat-simulation theories (all hedged) |
-| 10 | 25 Jan | 🧠 Impostor Syndrome: Why Successful People Feel Like Frauds | Ivy gets promoted and panics | Clance & Imes 1978; Bravata et al. 2020 review |
+| 7 | 4 Jan | ✅ Willpower Is a Myth (Sort Of) | People with "great self-control" just avoid temptation | Ego-depletion replication failure (Hagger et al. 2016); Hofmann et al. 2012 |
+| 8 | 11 Jan | ✅ Why You Can't Stop Scrolling | "Just one more video" | Variable rewards (Skinner); careful with "dopamine" myths |
+| 9 | 18 Jan | ✅ Why Do We Dream? | Sam dreams he's back in school, naked | REM sleep; memory-consolidation and threat-simulation theories (all hedged) |
+| 10 | 25 Jan | ✅ Impostor Syndrome: Why Successful People Feel Like Frauds | Ivy gets promoted and panics | Clance & Imes 1978; Bravata et al. 2020 review |
 | 11 | 1 Feb | 🧠 Overthinking: Why Your Brain Won't Switch Off | Replaying one text message 40 times | Nolen-Hoeksema (rumination); worry vs problem-solving |
 | 12 | 8 Feb | ❤️ Attachment Styles: Why You Love the Way You Do | Valentine's week | Bowlby; Ainsworth's Strange Situation; Hazan & Shaver 1987 |
 | 13 | 15 Feb | ❤️ The Science of Attraction: Why We Fall for Who We Fall For | Why you liked your neighbor | Festinger et al. 1950 (proximity); Zajonc (mere exposure); Aron et al. 1997 ("36 questions") |
