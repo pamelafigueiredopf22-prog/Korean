@@ -5,7 +5,7 @@ import { M, MY, LW, LH, INK, layer, cam, fireflies, motes, nightGrade, sunlight,
 import { makeDove } from '../../engine/characters/dove.js';
 import { makeAnt } from '../../engine/characters/insects.js';
 import { makeFox2 } from '../../engine/characters/fox2.js';
-import { MOOD, paintSky, paintLand, paintOak, reedSpots, drawReeds, DOOR } from './scene.js';
+import { MOOD, paintSky, paintLand, paintOak, reedSpots, drawReeds, DOOR, HOUSE_WIN } from './scene.js';
 import { brushWash, flecks, grassFlicks } from '../north-wind-and-sun/scene.js';
 import { net } from './props.js';
 
@@ -342,7 +342,7 @@ function drawNight(g, t) {
   const n13 = line('n13'), n14 = line('n14'), n15 = line('n15'), n16 = line('n16'), END = S.TL.duration;
   const NEST = [PERCH[0] - 150, PERCH[1] + 28];
   let c = view(NEST[0], NEST[1] - 20, 2.4);
-  c = mixv(c, view(DOOR[0] + 30, DOOR[1] - 40, 2.4), ease(span(t, n14.start - 1.2, n14.start + 1.5)));
+  c = mixv(c, view(DOOR[0] + 40, DOOR[1] - 50, 2.4), ease(span(t, n14.start - 1.2, n14.start + 1.5)));
   c = mixv(c, view(900, 560, 1.0), ease(span(t, n15.start - 0.5, n15.end + 2)));
   c = mixv(c, view(760, 640, 1.25), ease(span(t, n16.end + 1, END - 6)));
   const dusk = span(t, n13.start - 1, n13.end), night = span(t, n14.start, n15.start + 3);
@@ -361,7 +361,7 @@ function drawNight(g, t) {
   cam(g, c, 1);
   g.save(); g.globalCompositeOperation = 'lighter';
   const glow = span(t, n14.start + 3.4, n14.start + 4.4) * (0.85 + 0.15 * Math.sin(t * 3));
-  pool(g, DOOR[0] + 42, DOOR[1] - 34, 26, 26, '#ffcf80', 0.8 * glow);
+  pool(g, HOUSE_WIN[0], HOUSE_WIN[1], 40, 40, '#ffcf80', 0.85 * glow); pool(g, DOOR[0] - 64, DOOR[1] - 55, 22, 22, '#ffcf80', 0.7 * glow); // window and lantern
   g.restore();
   if (night > 0) {
     cam(g, c, 1); moon(g, 1620, lerp(320, 170, ease(span(t, n15.start - 3, n15.end + 4))), 34, night * span(t, n15.start - 3, n15.start));

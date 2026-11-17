@@ -26,6 +26,8 @@ export function streamEdges() {
 }
 export const OAK = { x: 330, ground: 790 };
 export const DOOR = [470, 806];
+export const HOUSE_K = 1.9;                                  // the ant's house is drawn this much bigger
+export const HOUSE_WIN = [DOOR[0] + 46 * HOUSE_K, DOOR[1] - 30 * HOUSE_K];
 
 export function paintSky(g, m, seed = 4) {
   const grd = g.createLinearGradient(0, -100, 0, 640);
@@ -174,19 +176,39 @@ export function paintOak(g, m) {
   for (const [i, [bx, by, rr]] of [[x + 290, gd - 420, 52], [x + 450, gd - 440, 44], [x + 560, gd - 420, 34]].entries()) clump(bx, by, rr, 900 + i * 7);
   for (let k = 0; k < 9; k++) { const ax = x + r.range(-300, 300), ay = r.range(300, 420); g.fillStyle = '#9a6a32'; g.beginPath(); g.ellipse(ax, ay + 6, 5, 7, 0, 0, 7); g.fill(); g.fillStyle = '#6a4a2a'; g.beginPath(); g.ellipse(ax, ay, 6, 4, 0, 0, 7); g.fill(); }
   const ok = { perch: [x + 520, gd - 398] };
-  // the little door
-  const [dx, dy] = DOOR;
-  for (let k = 0; k < 7; k++) { const a = Math.PI * (1 + k / 6), sx = dx + Math.cos(a) * 30, sy = dy - 26 + Math.sin(a) * 32 * (k === 0 || k === 6 ? 0.4 : 1);
-    const st = ellipse(sx, sy, 7, 5, 10, a + Math.PI / 2); wash(g, st, { color: '#b8ae9c', opacity: 0.97, seed: 80 + k, under: true, layers: 8 }); penLine(g, st, { closed: true, w: 0.9, alpha: 0.6 }); }
-  const door = smooth([[dx - 22, dy], [dx - 22, dy - 26], [dx - 12, dy - 42], [dx, dy - 46], [dx + 12, dy - 42], [dx + 22, dy - 26], [dx + 22, dy]]);
-  wash(g, door, { color: '#7a8a5a', opacity: 0.98, seed: 60, under: true });
-  for (let k = 1; k < 3; k++) penLine(g, [[dx - 22 + k * 15, dy], [dx - 22 + k * 15, dy - 40]], { w: 0.9, alpha: 0.5 });
-  penLine(g, door, { closed: true, w: 1.4, alpha: 0.85 });
-  g.fillStyle = '#e8c070'; g.beginPath(); g.arc(dx + 14, dy - 18, 2.4, 0, 7); g.fill();
-  const win = ellipse(dx + 42, dy - 34, 8, 8, 14); wash(g, win, { color: '#e8d090', opacity: 0.95, seed: 62, under: true }); penLine(g, win, { closed: true, w: 1.1, alpha: 0.8 }); penLine(g, [[dx + 34, dy - 34], [dx + 50, dy - 34]], { w: 0.8, alpha: 0.7 });
-  for (let k = 0; k < 3; k++) { const st = ellipse(dx - 10 + k * 14, dy + 6 + k * 3, 9, 4, 10); wash(g, st, { color: '#c8bca8', opacity: 0.97, seed: 90 + k, under: true, layers: 8 }); penLine(g, st, { closed: true, w: 0.8, alpha: 0.6 }); }
-  // a tiny mushroom and a lantern of a glow-worm
-  const cap = smooth([[dx - 64, dy - 10], [dx - 56, dy - 22], [dx - 44, dy - 22], [dx - 36, dy - 10]]); wash(g, smooth([[dx - 52, dy + 2], [dx - 52, dy - 10], [dx - 48, dy - 10], [dx - 48, dy + 2]]), { color: '#f0e6d4', opacity: 0.97, seed: 95, under: true });
-  wash(g, cap, { color: '#c05040', opacity: 0.97, seed: 96, under: true }); g.fillStyle = '#fff'; for (const [x, y] of [[dx - 54, dy - 16], [dx - 46, dy - 18]]) { g.beginPath(); g.arc(x, y, 1.6, 0, 7); g.fill(); } penLine(g, cap, { closed: true, w: 0.9, alpha: 0.7 });
+  // the ant's little house among the roots, drawn around the door's foot (0, 0) and scaled up so it reads at a glance
+  const [dx, dy] = DOOR, K = HOUSE_K;
+  g.save(); g.translate(dx, dy); g.scale(K, K);
+  // a mossy mound for a roof, tucked against the trunk
+  const mound = smooth([[-46, 4], [-44, -40], [-26, -66], [4, -74], [34, -66], [58, -46], [70, -16], [72, 4]]);
+  wash(g, mound, { color: '#8a7258', opacity: 0.98, seed: 70, under: true });
+  const moss = smooth([[-46, -34], [-30, -62], [4, -76], [36, -68], [60, -46], [64, -36], [36, -52], [4, -60], [-28, -50]]);
+  wash(g, moss, { color: '#7f9a4a', opacity: 0.97, seed: 71, under: true });
+  for (let k = 0; k < 14; k++) { g.fillStyle = rgba(k % 2 ? '#a8bc68' : '#5f7a3e', 0.85); g.beginPath(); g.arc(-36 + k * 7, -50 - Math.sin(k / 13 * Math.PI) * 22, 4, 0, 7); g.fill(); }
+  penLine(g, mound, { w: 1.4, alpha: 0.8 });
+  // the stone arch and the round red door
+  for (let k = 0; k < 9; k++) { const a = Math.PI * (1 + k / 8), sx = Math.cos(a) * 30, sy = -26 + Math.sin(a) * 32 * (k === 0 || k === 8 ? 0.4 : 1);
+    const st = ellipse(sx, sy, 7.5, 5.5, 10, a + Math.PI / 2); wash(g, st, { color: '#e8dcc4', opacity: 0.98, seed: 80 + k, under: true, layers: 8 }); penLine(g, st, { closed: true, w: 0.8, alpha: 0.7 }); }
+  const door = smooth([[-22, 0], [-22, -26], [-12, -42], [0, -46], [12, -42], [22, -26], [22, 0]]);
+  wash(g, door, { color: '#c0503a', opacity: 0.98, seed: 60, under: true });
+  glaze(g, door, -6, -30, 8, 10, '#f0a080', 0.5);
+  for (let k = 1; k < 3; k++) penLine(g, [[-22 + k * 15, 0], [-22 + k * 15, -40]], { w: 0.8, alpha: 0.5 });
+  penLine(g, door, { closed: true, w: 1.3, alpha: 0.9 });
+  g.fillStyle = '#e8c070'; g.beginPath(); g.arc(14, -18, 2.6, 0, 7); g.fill(); g.strokeStyle = rgba(INKC, 0.7); g.lineWidth = 0.6; g.stroke();
+  // a round window with a cross and little curtains
+  const win = ellipse(46, -30, 11, 11, 18); wash(g, win, { color: '#f2dc98', opacity: 0.98, seed: 62, under: true });
+  for (const sd of [-1, 1]) { g.fillStyle = 'rgba(200,90,80,0.8)'; g.beginPath(); g.moveTo(46 + sd * 11, -40); g.quadraticCurveTo(46 + sd * 4, -32, 46 + sd * 10, -22); g.lineTo(46 + sd * 11, -22); g.closePath(); g.fill(); }
+  penLine(g, [[35, -30], [57, -30]], { w: 0.8, alpha: 0.8 }); penLine(g, [[46, -41], [46, -19]], { w: 0.8, alpha: 0.8 }); penLine(g, win, { closed: true, w: 1.2, alpha: 0.9 });
+  // a lantern on a little hook by the door
+  penLine(g, [[-26, -40], [-34, -40], [-34, -34]], { w: 0.8, alpha: 0.8 });
+  wash(g, smooth([[-38, -34], [-30, -34], [-29, -24], [-39, -24]]), { color: '#f0c860', opacity: 0.97, seed: 64, under: true }); penLine(g, smooth([[-38, -34], [-30, -34], [-29, -24], [-39, -24]]), { closed: true, w: 0.7, alpha: 0.8 });
+  // the stepping-stone path and a pot of flowers
+  for (let k = 0; k < 4; k++) { const st = ellipse(-6 + k * 12, 6 + k * 5, 9 - k * 0.5, 3.6, 10); wash(g, st, { color: '#e0d4bc', opacity: 0.98, seed: 90 + k, under: true, layers: 8 }); penLine(g, st, { closed: true, w: 0.7, alpha: 0.7 }); }
+  const pot = smooth([[54, 0], [52, -10], [66, -10], [64, 0]]); wash(g, pot, { color: '#c07a50', opacity: 0.98, seed: 66, under: true }); penLine(g, pot, { closed: true, w: 0.7, alpha: 0.8 });
+  for (const [fx, fy, c] of [[56, -16, '#e8a0b0'], [60, -19, '#f0c050'], [64, -15, '#8cb0e0']]) { penLine(g, [[fx, -10], [fx, fy]], { color: '#5f7a3e', w: 0.7, alpha: 0.9 }); g.fillStyle = c; g.beginPath(); g.arc(fx, fy, 2.4, 0, 7); g.fill(); }
+  // a little red toadstool
+  const cap = smooth([[-62, -8], [-56, -18], [-46, -18], [-40, -8]]); wash(g, smooth([[-53, 2], [-53, -8], [-49, -8], [-49, 2]]), { color: '#f0e6d4', opacity: 0.97, seed: 95, under: true });
+  wash(g, cap, { color: '#c05040', opacity: 0.97, seed: 96, under: true }); g.fillStyle = '#fff'; for (const [x, y] of [[-54, -13], [-47, -14]]) { g.beginPath(); g.arc(x, y, 1.4, 0, 7); g.fill(); } penLine(g, cap, { closed: true, w: 0.8, alpha: 0.7 });
+  g.restore();
   return ok;
 }
