@@ -3,3 +3,4 @@ voices/
 */build/
 asmr/*/build/
 __pycache__/
+asmr/*.mp4
