@@ -2,7 +2,7 @@
 // Render a fable's animation frames with headless Chromium and encode them.
 //
 //   node tools/render.js lion-and-mouse --stills 5,30,62      # PNG stills for checking
-//   node tools/render.js lion-and-mouse --video [--from 0 --to 60] [--fps 24] [--workers 3]
+//   node tools/render.js lion-and-mouse --video [--from 0 --to 60] [--fps 24] [--workers 3] [--blur 3]   (blur: motion-blur samples per frame)
 //
 // The fable page (fables/<name>/index.html) must define
 //   window.FABLE = { async setup(timeline), frame(t) }   drawing into <canvas id="c">.
@@ -41,18 +41,31 @@ async function openPage(browser, port, timeline) {
   return page;
 }
 
-async function grab(page, t) {
-  const b64 = await page.evaluate((t) => { window.FABLE.frame(t); return document.getElementById('c').toDataURL('image/jpeg', 0.94).split(',')[1]; }, t);
+// One frame. With blur > 1, the frame is the average of `blur` moments spread over a half-frame shutter
+// (like a film camera's 180-degree shutter), which gives moving things a soft, natural motion blur.
+async function grab(page, t, blur = 1, shutter = 0) {
+  const b64 = await page.evaluate(([t, n, dt]) => {
+    const c = document.getElementById('c');
+    if (n <= 1) { window.FABLE.frame(t); return c.toDataURL('image/jpeg', 0.94).split(',')[1]; }
+    if (!window.__acc) { window.__acc = document.createElement('canvas'); window.__acc.width = c.width; window.__acc.height = c.height; }
+    const a = window.__acc.getContext('2d');
+    for (let k = 0; k < n; k++) {
+      window.FABLE.frame(t + (k / (n - 1) - 0.5) * dt);
+      a.globalAlpha = 1 / (k + 1); a.drawImage(c, 0, 0); // running average
+    }
+    a.globalAlpha = 1;
+    return window.__acc.toDataURL('image/jpeg', 0.94).split(',')[1];
+  }, [t, blur, shutter]);
   return Buffer.from(b64, 'base64');
 }
 
-async function renderRange(browser, port, timeline, fps, f0, f1, outFile) {
+async function renderRange(browser, port, timeline, fps, f0, f1, outFile, blur = 1) {
   const page = await openPage(browser, port, timeline);
   const ff = spawn('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(fps), '-c:v', 'mjpeg', '-i', '-',
     '-c:v', 'libx264', '-preset', 'medium', '-crf', '17', '-pix_fmt', 'yuv420p', '-tune', 'film', outFile], { stdio: ['pipe', 'inherit', 'inherit'] });
   const t0 = Date.now();
   for (let f = f0; f < f1; f++) {
-    const buf = await grab(page, f / fps);
+    const buf = await grab(page, f / fps, blur, 0.5 / fps);
     if (!ff.stdin.write(buf)) await new Promise((r) => ff.stdin.once('drain', r));
     if ((f - f0) % 240 === 0) console.error(`${path.basename(outFile)} frame ${f - f0}/${f1 - f0} (${((Date.now() - t0) / 1000).toFixed(0)}s)`);
   }
@@ -77,7 +90,7 @@ async function renderRange(browser, port, timeline, fps, f0, f1, outFile) {
         console.log(f);
       }
     } else {
-      const fps = Number(opt('fps', 24));
+      const fps = Number(opt('fps', 24)), blur = Number(opt('blur', 1));
       const from = Number(opt('from', 0)), to = Number(opt('to', timeline.duration));
       const workers = Number(opt('workers', 3));
       const F0 = Math.round(from * fps), F1 = Math.round(to * fps);
@@ -88,7 +101,7 @@ async function renderRange(browser, port, timeline, fps, f0, f1, outFile) {
         const a = F0 + w * per, b = Math.min(F1, a + per);
         if (a >= b) break;
         const out = path.join(build, `seg${w}.mp4`); segs.push(out);
-        jobs.push(renderRange(browser, port, timeline, fps, a, b, out));
+        jobs.push(renderRange(browser, port, timeline, fps, a, b, out, blur));
       }
       await Promise.all(jobs);
       const list = path.join(build, 'segs.txt');

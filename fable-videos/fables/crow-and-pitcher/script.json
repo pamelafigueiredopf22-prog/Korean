@@ -1,0 +1,33 @@
+{
+  "title": "The Crow and the Pitcher",
+  "source": "Aesop's Fables (public domain), gently retold for bedtime",
+  "lines": [
+    {"id": "n01", "scene": "s1_thirsty", "speaker": "narrator", "pause": 1.6, "text": "Once upon a time, on a long, hot summer's day, the fields were dry, and the little streams had shrunk away to nothing."},
+    {"id": "n02", "scene": "s1_thirsty", "speaker": "narrator", "pause": 1.2, "text": "A little crow had been flying for hours and hours, and she was very, very thirsty."},
+    {"id": "c01", "scene": "s1_thirsty", "speaker": "crow", "speech": "[weary, a little hoarse] Oh, I'm so thirsty. If only I could find a drop of water.", "pause": 1.2, "text": "Oh, I'm so thirsty. If only I could find a drop of water."},
+    {"id": "n03", "scene": "s1_thirsty", "speaker": "narrator", "pause": 1.8, "text": "Just then, she spotted something in a cottage garden below. A tall clay pitcher, standing by the garden wall."},
+
+    {"id": "n04", "scene": "s2_pitcher", "speaker": "narrator", "pause": 1.2, "text": "She flew down, and peeked inside. There was water! But only a little, right at the very bottom."},
+    {"id": "c02", "scene": "s2_pitcher", "speaker": "crow", "speech": "[hopeful, then dismayed] Water! Oh... but it's so far down.", "pause": 1.2, "text": "Water! Oh... but it's so far down."},
+    {"id": "n05", "scene": "s2_pitcher", "speaker": "narrator", "pause": 1.2, "text": "She pushed her beak in as far as it would go. But she could not reach it."},
+    {"id": "n06", "scene": "s2_pitcher", "speaker": "narrator", "pause": 1.2, "text": "She tried to tip the pitcher over. But it was far too heavy."},
+    {"id": "c03", "scene": "s2_pitcher", "speaker": "crow", "speech": "[thinking, determined] Hmm. There must be a way. Let me think.", "pause": 1.8, "text": "Hmm. There must be a way. Let me think."},
+
+    {"id": "n07", "scene": "s3_pebbles", "speaker": "narrator", "pause": 1.0, "text": "Then she noticed the little pebbles lying on the garden path. And she had an idea!"},
+    {"id": "c04", "scene": "s3_pebbles", "speaker": "crow", "speech": "[excited] I know!", "pause": 1.2, "text": "I know!"},
+    {"id": "n08", "scene": "s3_pebbles", "speaker": "narrator", "pause": 1.0, "text": "She picked up a pebble in her beak, and dropped it into the pitcher. Plip!"},
+    {"id": "n09", "scene": "s3_pebbles", "speaker": "narrator", "pause": 1.2, "text": "Then another. Plop! And another, and another."},
+    {"id": "n10", "scene": "s3_pebbles", "speaker": "narrator", "pause": 1.0, "text": "Pebble by pebble, the water rose higher, and higher."},
+    {"id": "c05", "scene": "s3_pebbles", "speaker": "crow", "speech": "[delighted] It's working! Just a few more...", "pause": 1.2, "text": "It's working! Just a few more..."},
+    {"id": "n11", "scene": "s3_pebbles", "speaker": "narrator", "pause": 1.6, "text": "Until at last, the cool water came right up to the top."},
+
+    {"id": "n12", "scene": "s4_drink", "speaker": "narrator", "pause": 1.2, "text": "The crow dipped her beak, and drank, and drank, until she was not thirsty any more."},
+    {"id": "c06", "scene": "s4_drink", "speaker": "crow", "speech": "[happy, satisfied sigh] Ahh. Little by little does the trick!", "pause": 1.6, "text": "Ahh. Little by little does the trick!"},
+    {"id": "n13", "scene": "s4_drink", "speaker": "narrator", "pause": 2.2, "text": "And so, when something seems too hard, remember. A little patience, and a clever idea, can always find a way."},
+
+    {"id": "n14", "scene": "s5_goodnight", "speaker": "narrator", "pause": 2.0, "text": "As the sun went down, the crow flew home to her nest in the old elm tree."},
+    {"id": "n15", "scene": "s5_goodnight", "speaker": "narrator", "pause": 2.0, "text": "She tucked her head beneath her soft black wing, and the evening breeze sang her to sleep."},
+    {"id": "n16", "scene": "s5_goodnight", "speaker": "narrator", "pause": 2.6, "text": "The moon rose over the quiet garden, and the stars came out to keep watch."},
+    {"id": "n17", "scene": "s5_goodnight", "speaker": "narrator", "voice": "whisper", "speech": "[whispers] Goodnight, little one... [softly] Sweet dreams.", "pause": 30.0, "text": "Goodnight, little one. Sweet dreams."}
+  ]
+}
