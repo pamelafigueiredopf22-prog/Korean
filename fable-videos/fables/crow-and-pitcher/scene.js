@@ -66,8 +66,8 @@ export const MOODS = {
   hot: {
     name: 'hot', sky: ['#bcd2d8', '#ece6cc', '#f8ecc6'], cloud: '#fdf8ea', cloudShade: '#dccab0',
     hills: ['#c8b8b4', '#d4c4a8', '#bcb0b4'], far: ['#d8c088', '#ccb27a', '#e0cc96'],
-    field: ['#dcbc6c', '#cfa556', '#e4c886', '#c09a5c', '#d8c890', '#b8a070'], hedge: ['#6f7448', '#5f6840', '#7d8050'],
-    lawn: ['#c8b46e', '#bcae6a', '#d4c07c', '#a8a464', '#c0a868'], earth: ['#c8a47a', '#b8946a', '#d2b088'],
+    field: ['#d8b05a', '#c99440', '#e0bc6c', '#b8864c', '#d4bc78', '#ae8c5c'], hedge: ['#5f6a38', '#4f5a34', '#6f7642'],
+    lawn: ['#c8b46e', '#bcae6a', '#d4c07c', '#a8a464', '#c0a868'], earth: ['#c49a6c', '#a87e56', '#d0a878'],
     gravel: ['#e2d4b8', '#d4c6aa', '#cbbca4', '#dccab0'], stone: ['#dccfb2', '#cfc0a0', '#c4b8a8', '#d8c6a2', '#bfb2a0'],
     leaf: ['#7f8a50', '#6f7a46', '#94985a', '#a89a58'], elm: ['#64703e', '#738048', '#58663a', '#86884e'],
     clay: '#c4683e', clayLight: '#e09868', clayDark: '#7a3a24', slip: '#f2e2c4',
@@ -101,15 +101,15 @@ const MD = (mood) => (typeof mood === 'object' ? mood : MOODS[mood] || MOODS.hot
 
 // ---------------------------------------------------------------- staging constants (page coordinates)
 export const PITCHER = { x: 1140, y: 790, h: 210, rimY: 580, mouthW: 72 };   // y: base of the pitcher on the ground
-export const COTTAGE = { x: 330, ground: 652, S: 0.8 };
+export const COTTAGE = { x: 345, ground: 652, S: 0.92 };
 export const WALL = { x0: 500, x1: 2080, y0: 698, y1: 708, h: 92 };          // the garden wall's foot runs from (x0,y0) to (x1,y1)
 export const ELM = { x: 1712, ground: 676 };
 export const NEST = [1700, 318];                                               // the middle of the nest's rim, in the elm's fork
 export const BIRDBATH = { x: 760, y: 752 };
 export const CAN = { x: 1420, y: 812 };                                        // the empty watering can, lying on its side
-export const MOON = [470, 150];                                                // where to hang the moon at night
-export const WINDOW = { x: 414, y: 543, w: 104, h: 96 };                       // the cottage window (centre, size) for glows and moths
-export const DOOR = [218, 652];
+export const MOON = [660, 118];                                                // where to hang the moon at night
+export const WINDOW = { x: 442, y: 527, w: 120, h: 110 };                       // the cottage window (centre, size) for glows and moths
+export const DOOR = [216, 652];
 
 // a camera looking at (cx, cy) with zoom z, kept inside the painted page (same as the other fables)
 export function view(cx, cy, z) {
@@ -162,7 +162,7 @@ export function moodGlaze(c, mood, res = 1, seed = 5, o = {}) {
     // hot: bleached, warm and dusty
     t.fillStyle = 'rgba(255,214,140,1)'; t.fillRect(0, 0, w, h); strokesOf(['#ffe0a0', '#f8c880', '#fff0c8'], 30, 90, 0.5, 0.02);
     apply('soft-light', 0.45);
-    t.fillStyle = '#fbf1d8'; t.fillRect(0, 0, w, h); apply('source-atop', 0.1);
+    if (o.bleach !== false) { t.fillStyle = '#fbf1d8'; t.fillRect(0, 0, w, h); apply('source-atop', 0.1); }
   }
 }
 
@@ -276,6 +276,9 @@ export function pitcherSprite(mood = 'hot') {
   const { x, y, h } = PITCHER;
   const s = sprite({ x0: x - h * 0.42, y0: y - h * 1.08, x1: x + h * 0.48, y1: y + h * 0.08, w: h * 0.9, h: h * 1.16 }, 3, (g) => paintPitcher(g, x, y, h, m), { seed: 9, grain: 0.16 });
   if (m.name !== 'hot') moodGlaze(s.c, m, 3, 21);
+  if (m.name === 'night') { const g = s.c.getContext('2d'); g.save(); g.setTransform(3, 0, 0, 3, -s.x0 * 3, -s.y0 * 3); g.globalCompositeOperation = 'source-atop';
+    shadeEdge(g, pitcherOutline(x, y, h), { color: '#c8d4f8', alpha: 0.55, width: h * 0.09, dx: h * 0.045, dy: 0, blend: 'screen' });
+    shadeEdge(g, ellipse(x, y - h, profW(1) * h, profW(1) * h * RIM_RY, 30), { color: '#c8d4f8', alpha: 0.5, width: h * 0.05, dx: 0, dy: h * 0.02, blend: 'screen' }); g.restore(); }
   PSPR[m.name] = s;
   return s;
 }
@@ -345,7 +348,7 @@ export function paintSky(g, mood, o = {}) {
   grd.addColorStop(0, m.sky[0]); grd.addColorStop(0.62, m.sky[1]); grd.addColorStop(1, m.sky[2]);
   g.globalAlpha = 0.9; g.fillStyle = grd; g.fillRect(-M - 10, -MY - 10, LW + 20, LH + 20); g.globalAlpha = 1;
   const box = [[-M - 40, -MY - 40], [W + M + 40, -MY - 40], [W + M + 40, hz + 60], [-M - 40, hz + 60]];
-  brushWash(g, box, [m.sky[0], tint(m.sky[0], 0.3), m.sky[1], shade(m.sky[0], 0.08)], { seed, count: 70, width: [30, 90], len: [200, 640], alpha: [0.1, 0.26], base: 0.04, blur: 3, angle: () => -0.03, lifts: 0.18 });
+  brushWash(g, box, [m.sky[0], tint(m.sky[0], 0.3), m.sky[1], shade(m.sky[0], 0.08)], { seed, count: 70, width: [30, 90], len: [200, 640], alpha: [0.1, 0.26], base: 0.04, blur: 3, angle: () => -0.03, lifts: m.name === 'night' ? 0 : 0.18 });
   if (m.name === 'hot') {
     // a bleached white sun high up on the left, its glare washing out the sky round it
     if (sun) { pool(g, 300, 40, 620, 520, '#fffbea', 0.75); pool(g, 300, 40, 220, 220, '#ffffff', 0.7);
@@ -383,10 +386,10 @@ export function paintSky(g, mood, o = {}) {
 const FZ = { hz: 318, f: 860 };
 const fproj = (X, Z) => [960 + FZ.f * X / Z, FZ.hz + FZ.f / Z];
 // where the little cottage garden lies in the opening shot (zoom toward it), and its pitcher
-export const FIELDS_COTTAGE = fproj(0.42, 2.38);
-export const FIELDS_PITCHER = fproj(0.47, 2.3);
+export const FIELDS_COTTAGE = fproj(0.45, 2.45);
+export const FIELDS_PITCHER = fproj(0.5, 2.66);
 // the dried-up stream's course on the ground plane
-const streamX = (Z) => -0.63 + 0.45 * Math.sin(Z * 0.55 + 0.6) + 0.06 * Z - 0.2 * Math.sin(Z * 1.7);
+const streamX = (Z) => -0.74 + 0.45 * Math.sin(Z * 0.55 + 0.6) + 0.06 * Z - 0.2 * Math.sin(Z * 1.7);
 export function paintDryFields(g, mood = 'hot', o = {}) {
   const m = MD(mood), seed = o.seed || 61, r = rng(seed);
   paintSky(g, m, { hz: FZ.hz, seed: seed + 1, clouds: false });
@@ -453,18 +456,37 @@ export function paintDryFields(g, mood = 'hot', o = {}) {
   const bank = sP.map(([X, Z]) => fproj(X - half(Z) * 1.8, Z)).concat(sP.map(([X, Z]) => fproj(X + half(Z) * 1.8, Z)).reverse());
   brushWash(g, bank, [mix(m.hedge[2], m.earth[1], 0.5), mix(m.lawn[3], m.earth[0], 0.4), m.earth[1]], { seed: seed + 500, count: 90, width: [3, 12], len: [20, 70], alpha: [0.2, 0.4], base: 0.55, lifts: 0.1 });
   const bed = sL.concat(sR.slice().reverse());
-  brushWash(g, bed, [mix(m.gravel[0], m.earth[2], 0.3), m.gravel[1], tint(m.earth[2], 0.3)], { seed: seed + 501, count: 120, width: [4, 18], len: [20, 90], angle: () => 0.0, alpha: [0.2, 0.4], base: 0.75, under: '#efe4cc', lifts: 0.3 });
+  brushWash(g, bed, [mix(m.earth[2], m.gravel[1], 0.35), m.earth[2], tint(m.earth[0], 0.15), mix(m.earth[1], m.gravel[0], 0.3)], { seed: seed + 501, count: 140, width: [4, 16], len: [30, 120], angle: () => 0.0, alpha: [0.18, 0.36], base: 0.8, under: '#efe4cc', lifts: 0.12 });
   g.save(); path(g, bed); g.clip();
-  for (let i = 0; i < 14; i++) { const [X, Z] = sP[Math.floor(r.range(0.3, 1) * sP.length)], [x, y] = fproj(X + r.gauss(0, 0.01), Z), s = 30 / Z; pool(g, x, y, s * 1.4, s * 0.35, m.earth[1], 0.45); } // damp patches
-  for (let i = 0; i < 900; i++) { // the cracks: little polygons, bigger and bolder nearer
-    const k = Math.floor(Math.pow(r(), 0.6) * sP.length), [X, Z] = sP[Math.min(sP.length - 1, sP.length - 1 - k)];
-    const [x, y] = fproj(X + r.range(-1, 1) * half(Z), Z * r.range(0.98, 1.02)), s = 24 / Z;
-    if (s < 1.4) continue;
-    const pts = []; for (let q = 0; q < 6; q++) { const a = q / 6 * TAU + r.gauss(0, 0.25); pts.push([x + Math.cos(a) * s * r.range(0.6, 1.1), y + Math.sin(a) * s * 0.42 * r.range(0.6, 1.1)]); }
-    ink(g, pts, { closed: true, color: '#6a4a30', width: Math.max(0.4, s * 0.07), alpha: 0.5, wobble: 0.2, seed: seed + 600 + i, taper: false });
+  // the last of the damp along the bottom of the bed: a darker winding line
+  for (let i = 1; i < sP.length; i++) { const [X0, Z0] = sP[i - 1], [X1, Z1] = sP[i], A = fproj(X0 + 0.012 * Math.sin(Z0 * 4), Z0), B = fproj(X1 + 0.012 * Math.sin(Z1 * 4), Z1);
+    g.strokeStyle = rgba(shade(m.earth[1], 0.25), 0.35); g.lineWidth = 34 / Z1; g.lineCap = 'round'; g.beginPath(); g.moveTo(...A); g.lineTo(...B); g.stroke(); }
+  // mud plates: a jittered grid across and along the bed; every plate curls up a little (lit top edge, shaded foot),
+  // and the cracks between them are shared dark lines, so it reads as one dried, cracked skin of mud
+  const NU = 6, grid = sP.map(([X, Z], i) => { const row = []; for (let j = 0; j <= NU; j++) { const u = -1 + 2 * j / NU, jit = j === 0 || j === NU ? 0 : r.gauss(0, 0.22) / NU * 2; row.push(fproj(X + (u + jit) * half(Z) * 1.05, Z * (1 + r.gauss(0, 0.008)))); } return row; });
+  for (let i = 1; i < grid.length; i++) {
+    const Z = sP[i][1], px = 34 / Z; if (px < 2.5) continue;
+    for (let j = 0; j < NU; j++) {
+      const q = [grid[i - 1][j], grid[i - 1][j + 1], grid[i][j + 1], grid[i][j]];
+      g.fillStyle = rgba(r.pick([m.earth[2], tint(m.earth[2], 0.2), mix(m.earth[0], m.gravel[0], 0.4), shade(m.earth[2], 0.08)]), 0.55); path(g, q); g.fill();
+      if (px > 5) { g.strokeStyle = rgba('#fff4e0', 0.45); g.lineWidth = Math.max(0.6, px * 0.05); g.beginPath(); g.moveTo(...q[0]); g.lineTo(...q[1]); g.stroke(); // the curled, lit lip of each plate
+        g.strokeStyle = rgba(shade(m.earth[1], 0.45), 0.35); g.lineWidth = Math.max(0.6, px * 0.08); g.beginPath(); g.moveTo(...q[3]); g.lineTo(...q[2]); g.stroke(); }
+    }
   }
+  g.strokeStyle = rgba('#5a3a24', 0.7); g.lineCap = 'round'; g.lineJoin = 'round';
+  for (let i = 1; i < grid.length; i++) { const Z = sP[i][1], px = 34 / Z; if (px < 1.6) continue; g.lineWidth = Math.max(0.5, px * 0.045);
+    g.beginPath(); for (let j = 0; j <= NU; j++) { const [x, y] = grid[i][j]; j ? g.lineTo(x, y) : g.moveTo(x, y); } g.stroke();
+    for (let j = 1; j < NU; j++) { g.beginPath(); g.moveTo(...grid[i - 1][j]); g.lineTo(...grid[i][j]); g.stroke(); } }
+  // a few stones the water left behind
+  for (let i = 0; i < 40; i++) { const k = Math.floor(Math.pow(r(), 0.5) * (sP.length - 1)), [X, Z] = sP[sP.length - 1 - k], [x, y] = fproj(X + r.range(-0.7, 0.7) * half(Z), Z), s0 = (9 / Z) * r.range(0.6, 1.3); if (s0 < 1.2) continue;
+    g.fillStyle = rgba(m.shadow, 0.35); g.beginPath(); g.ellipse(x + s0 * 0.3, y + s0 * 0.35, s0 * 1.3, s0 * 0.4, 0, 0, TAU); g.fill();
+    g.fillStyle = rgba(r.pick(m.stone), 1); g.beginPath(); g.ellipse(x, y, s0 * 1.25, s0 * 0.75, r.gauss(0, 0.3), 0, TAU); g.fill();
+    g.fillStyle = 'rgba(255,250,240,0.6)'; g.beginPath(); g.ellipse(x - s0 * 0.3, y - s0 * 0.25, s0 * 0.5, s0 * 0.22, 0, 0, TAU); g.fill();
+    if (s0 > 2.5) ink(g, ellipse(x, y, s0 * 1.25, s0 * 0.75, 12), { closed: true, width: 0.8, alpha: 0.65, wobble: 0.2 }); }
   g.restore();
-  ink(g, sL.filter((_, i) => i % 2 === 0), { width: 1.3, alpha: 0.55, gaps: 0.8, seed: seed + 510 }); ink(g, sR.filter((_, i) => i % 2 === 0), { width: 1.3, alpha: 0.55, gaps: 0.8, seed: seed + 511 });
+  ink(g, sL.filter((_, i) => i % 2 === 0), { width: 1.4, alpha: 0.6, gaps: 0.8, seed: seed + 510 }); ink(g, sR.filter((_, i) => i % 2 === 0), { width: 1.4, alpha: 0.6, gaps: 0.8, seed: seed + 511 });
+  // dry reeds and grass tufts along the banks nearby
+  for (let i = 0; i < sP.length; i += 2) { const [X, Z] = sP[i]; if (Z > 6) continue; for (const sd of [-1, 1]) if (r() < 0.6) { const [x, y] = fproj(X + sd * half(Z) * 1.25, Z); grassFlicks(g, x, y, 60 / Z, { seed: seed + 5000 + i * 2 + sd, n: 5, colors: [mix(m.hedge[2], m.lawn[3], 0.5), m.lawn[3]], inkA: 0.45 }); } }
   // hedgerows, copses and the stream's dusty willows: all far to near
   const trees = [];
   const tree = (x, y, R, sd, hz, willow) => {
@@ -511,37 +533,75 @@ export function paintDryFields(g, mood = 'hot', o = {}) {
   paintTinyGarden(g, m, seed + 1200);
   // a soft heat haze lying over the distance
   const hg = g.createLinearGradient(0, FZ.hz - 60, 0, FZ.hz + 200);
-  hg.addColorStop(0, rgba(m.sky[2], 0)); hg.addColorStop(0.3, rgba(m.sky[2], m.name === 'night' ? 0.2 : 0.5)); hg.addColorStop(1, rgba(m.sky[2], 0));
+  hg.addColorStop(0, rgba(m.sky[2], 0)); hg.addColorStop(0.3, rgba(m.sky[2], m.name === 'night' ? 0.15 : 0.32)); hg.addColorStop(1, rgba(m.sky[2], 0));
   g.fillStyle = hg; g.fillRect(-M, FZ.hz - 60, LW, 260);
-}
-// the cottage garden as the crow first sees it, far below: plot, wall, cottage, the elm, a dot of a pitcher
-function paintTinyGarden(g, m, seed) {
-  const r = rng(seed), q = (X, Z) => fproj(X, Z);
-  const plot = [q(0.24, 2.62), q(0.66, 2.62), q(0.66, 2.16), q(0.24, 2.16)];
-  wash(g, plot, { color: mix(m.lawn[3], m.leaf[0], 0.35), opacity: 0.85, seed, bleed: 0.01, layers: 12, under: '#efe4cc' });
-  // a path and beds of flowers
-  const pth = []; for (let k = 0; k <= 10; k++) pth.push(q(0.3 + k * 0.03, 2.56 - k * 0.035));
-  g.save(); g.strokeStyle = rgba(m.gravel[0], 0.95); g.lineCap = 'round'; g.lineWidth = 7; path(g, pth, false); g.stroke(); g.restore();
-  for (let i = 0; i < 40; i++) { const [x, y] = q(r.range(0.26, 0.64), r.range(2.18, 2.6)); g.fillStyle = rgba(r.pick(['#d88a9a', '#e8c050', '#f2e6d0', '#8f9a5b']), 0.8); g.beginPath(); g.arc(x, y, r.range(1, 2.2), 0, TAU); g.fill(); }
-  // the wall round it
-  const wl = [q(0.24, 2.62), q(0.24, 2.16), q(0.66, 2.16), q(0.66, 2.62)];
-  g.save(); g.strokeStyle = rgba(m.stone[1], 1); g.lineWidth = 5; g.lineJoin = 'round'; path(g, wl, false); g.stroke();
+  g.save(); g.globalCompositeOperation = 'multiply';
+  const dg = g.createLinearGradient(0, FZ.hz + 40, 0, H + MY); dg.addColorStop(0, 'rgba(255,255,255,0)'); dg.addColorStop(0.45, 'rgba(236,200,150,0.35)'); dg.addColorStop(1, 'rgba(200,150,100,0.55)');
+  g.fillStyle = dg; g.fillRect(-M, FZ.hz + 40, LW, LH);
   g.restore();
-  ink(g, wl.map(([x, y]) => [x, y - 2.5]), { width: 0.9, alpha: 0.6, gaps: 0.5, seed: seed + 1 });
-  // the old elm at the back corner
-  const [ex, ey] = q(0.69, 2.66); castShadow(g, ex, ey, 20, 30, m, { seed: seed + 4 });
-  g.save(); g.strokeStyle = rgba('#5a4636', 1); g.lineWidth = 4; g.beginPath(); g.moveTo(ex, ey); g.lineTo(ex - 1, ey - 40); g.stroke(); g.restore();
-  for (const [dx, dy, rr, k] of [[0, -62, 26, 0], [-14, -46, 18, 1], [14, -48, 18, 2], [0, -82, 18, 3]]) { const sh = fluffy(ex + dx, ey + dy, rr, rr * 0.85, 8, 0.2, seed + 10 + k);
-    wash(g, sh, { color: m.elm[k], opacity: 0.95, seed: seed + 20 + k, layers: 10, under: '#ece2c8' }); glaze(g, sh, ex + dx - rr * 0.3, ey + dy - rr * 0.3, rr * 0.6, rr * 0.4, tint(m.leaf[3], 0.4), 0.5); ink(g, sh.filter(([, py]) => py < ey + dy), { width: 0.7, alpha: 0.5, gaps: 1, seed: seed + 30 + k }); }
-  // the cottage (the same one as in the garden, far away)
-  const [cx, cy] = q(0.33, 2.56);
-  castShadow(g, cx + 6, cy + 2, 30, 40, m, { seed: seed + 5 });
-  stoneCottage(g, cx, cy, 0.105, m, { far: true, seed: 7 });
-  // the pitcher: a little terracotta shape by the wall
-  const [px, py] = FIELDS_PITCHER;
-  paintPitcher(g, px, py, 26, m);
 }
-
+// the cottage garden as the crow first sees it, far below: the cottage and the wall along the back (as in the
+// garden set), the elm beyond it, a lawn, a path to the gate, flower beds and a vegetable patch, and the pitcher
+const TG = { X0: 0.2, X1: 0.72, Zf: 2.74, Zn: 2.14 };
+function paintTinyGarden(g, m, seed) {
+  const r = rng(seed), q = (X, Z) => fproj(X, Z), { X0, X1, Zf, Zn } = TG;
+  const quad = (a, b, c, d) => [q(a, c), q(b, c), q(b, d), q(a, d)];
+  const plot = quad(X0, X1, Zf, Zn);
+  brushWash(g, plot, [mix(m.lawn[3], m.leaf[0], 0.45), m.lawn[0], mix(m.leaf[2], m.lawn[2], 0.5)], { seed, count: 40, width: [3, 10], len: [10, 40], alpha: [0.2, 0.4], base: 0.85, under: '#efe4cc', lifts: 0.1 });
+  flecks(g, plot, [shade(m.leaf[1], 0.2), tint(m.lawn[2], 0.3)], { seed: seed + 1, count: 500, size: [0.6, 1.6], alpha: [0.2, 0.45], dy: 0.6 });
+  // a vegetable patch: rows of greens on brown earth
+  const veg = quad(0.56, 0.69, 2.5, 2.3);
+  wash(g, veg, { color: m.earth[1], opacity: 0.9, seed: seed + 2, layers: 8, under: true });
+  for (let k = 0; k < 6; k++) { const Z = lerp(2.48, 2.32, k / 5); const [ax, ay] = q(0.57, Z), [bx, by] = q(0.68, Z); for (let u = 0; u < 9; u++) { g.fillStyle = rgba(m.leaf[(k + u) % 4], 0.95); g.beginPath(); g.arc(lerp(ax, bx, u / 8), lerp(ay, by, u / 8) - 0.8, 1.4, 0, TAU); g.fill(); } }
+  ink(g, veg, { closed: true, width: 0.5, alpha: 0.5 });
+  // flower beds along the back wall and down the left side: green mounds dotted with colour
+  const bedPts = [];
+  for (let i = 0; i < 70; i++) bedPts.push([r.range(X0 + 0.05, X1 - 0.02), r.range(Zf - 0.06, Zf - 0.015)]);
+  for (let i = 0; i < 30; i++) bedPts.push([r.range(X0 + 0.01, X0 + 0.045), r.range(Zn + 0.05, Zf - 0.05)]);
+  bedPts.sort((a, b) => b[1] - a[1]);
+  for (const [X, Z] of bedPts) { const [x, y] = q(X, Z); g.fillStyle = rgba(m.leaf[Math.floor(r() * 4)], 0.95); g.beginPath(); g.ellipse(x, y - 1, 2.4, 1.6, 0, 0, TAU); g.fill();
+    if (r() < 0.75) { g.fillStyle = rgba(r.pick(['#e098a8', '#f4e8d8', '#f0c040', '#a890c8', '#d86a5a']), 1); g.beginPath(); g.arc(x + r.gauss(0, 1), y - 2.2, 1.1, 0, TAU); g.fill(); } }
+  // tall hollyhocks and sunflowers against the back wall
+  for (const [X, c] of [[0.43, '#e098a8'], [0.45, '#f2e0cc'], [0.61, '#f0c040'], [0.63, '#f0c040']]) { const [x, y] = q(X, Zf - 0.02); g.strokeStyle = rgba(m.leaf[1], 1); g.lineWidth = 0.8; g.beginPath(); g.moveTo(x, y); g.lineTo(x, y - 9); g.stroke(); g.fillStyle = c; g.beginPath(); g.arc(x, y - 9, 1.6, 0, TAU); g.fill(); }
+  // the gravel path from the door, past the pitcher, to a little gate in the front wall
+  const pth = []; for (let k = 0; k <= 14; k++) { const u = k / 14; pth.push(q(lerp(0.3, 0.52, u) + 0.05 * Math.sin(u * Math.PI), lerp(Zf - 0.03, Zn, u))); }
+  g.save(); g.lineCap = 'round'; g.strokeStyle = rgba(shade(m.gravel[2], 0.15), 0.9); g.lineWidth = 7; path(g, pth, false); g.stroke(); g.strokeStyle = rgba(m.gravel[0], 1); g.lineWidth = 5; path(g, pth, false); g.stroke(); g.restore();
+  for (let i = 0; i < 40; i++) { const [x, y] = pth[Math.floor(r() * pth.length)]; g.fillStyle = rgba(r.pick(m.stone), 0.9); g.beginPath(); g.arc(x + r.gauss(0, 1.4), y + r.gauss(0, 0.8), 0.6, 0, TAU); g.fill(); }
+  // the dry-stone wall all round: a band of little inked stones with coping, shadow on the inside
+  const wallEdge = (a, b) => { const n = Math.ceil(Math.hypot(a[0] - b[0], a[1] - b[1]) / 2.6); for (let k = 0; k <= n; k++) { const x = lerp(a[0], b[0], k / n), y = lerp(a[1], b[1], k / n);
+      g.fillStyle = rgba(m.shadow, 0.3); g.beginPath(); g.ellipse(x + 1.5, y + 1.5, 2, 1, 0, 0, TAU); g.fill();
+      g.fillStyle = rgba(m.stone[k % m.stone.length], 1); g.beginPath(); g.ellipse(x, y - 1.6, 1.8, 1.5, 0, 0, TAU); g.fill(); g.beginPath(); g.ellipse(x + 0.6, y - 3.2, 1.3, 1, 0, 0, TAU); g.fill(); }
+    ink(g, [[a[0], a[1] - 4.4], [b[0], b[1] - 4.4]], { width: 0.6, alpha: 0.55, gaps: 0.6 }); ink(g, [[a[0], a[1] + 0.2], [b[0], b[1] + 0.2]], { width: 0.5, alpha: 0.4, gaps: 1 }); };
+  const [A, B, C, D] = [q(X0, Zf), q(X1, Zf), q(X1, Zn), q(X0, Zn)], gateA = lerp(D[0], C[0], 0.6), gateB = gateA + 9;
+  // the elm beyond the back wall, then the back wall, the cottage in line with it, the sides and the front with its gate
+  const [ex, ey] = q(0.66, 2.86); miniElm(g, ex, ey, 128, m, seed + 40);
+  wallEdge(A, B);
+  const [cx, cy] = q(0.27, Zf + 0.02);
+  castShadow(g, cx + 8, cy + 2, 44, 50, m, { seed: seed + 5 });
+  stoneCottage(g, cx, cy, 0.15, m, { far: true, seed: 7 });
+  wallEdge(B, C); wallEdge(A, D);
+  wallEdge(D, [gateA, lerp(D[1], C[1], 0.6)]); wallEdge([gateB, lerp(D[1], C[1], 0.6) + (C[1] - D[1]) * 9 / (C[0] - D[0])], C);
+  // the pitcher by the back wall (as in the garden), small and tall, with its shadow
+  const [px, py] = FIELDS_PITCHER;
+  castShadow(g, px, py, 5, 16, m, { seed: seed + 6 });
+  paintPitcher(g, px, py, 20, m);
+}
+// a small old elm for the distant views: a tall trunk dividing high into a vase of limbs, crown in clumps
+function miniElm(g, x, y, H, m, seed) {
+  const r = rng(seed), split = y - H * 0.38;
+  castShadow(g, x, y, H * 0.22, H * 0.4, m, { seed: seed + 1 });
+  g.save(); g.lineCap = 'round'; g.strokeStyle = '#5a4636';
+  g.lineWidth = H * 0.06; g.beginPath(); g.moveTo(x, y); g.lineTo(x - H * 0.01, split); g.stroke();
+  const tips = [];
+  for (const a of [-0.55, -0.22, 0.08, 0.38, 0.6]) { const tx = x + Math.sin(a) * H * 0.42, ty = split - Math.cos(a) * H * 0.48; tips.push([tx, ty]); g.lineWidth = H * 0.028; g.beginPath(); g.moveTo(x, split); g.quadraticCurveTo(x + Math.sin(a) * H * 0.1, split - H * 0.2, tx, ty); g.stroke(); }
+  g.restore();
+  const cl = [];
+  for (const [tx, ty] of tips) for (let k = 0; k < 4; k++) cl.push([tx + r.gauss(0, H * 0.05), ty + r.range(-H * 0.06, H * 0.3) * (Math.abs(tx - x) / (H * 0.3)), H * r.range(0.09, 0.14)]);
+  cl.sort((a, b) => b[1] - a[1]);
+  for (const [i, [cx, cy, rr]] of cl.entries()) { const sh = fluffy(cx, cy, rr, rr * 0.8, 9, 0.25, seed + 10 + i);
+    wash(g, sh, { color: m.elm[i % 4], opacity: 0.95, seed: seed + 30 + i, layers: 8, under: '#ece2c8' }); glaze(g, sh, cx - rr * 0.3, cy - rr * 0.3, rr * 0.6, rr * 0.4, tint(m.leaf[3], 0.4), 0.5);
+    ink(g, sh.filter(([, py]) => py < cy), { width: 0.6, alpha: 0.5, gaps: 1, seed: seed + 50 + i }); }
+}
 // ---------------------------------------------------------------- the stone cottage
 // After engine/scenery.js cottage() (the approved one), but built of honey-coloured stone, every stone washed
 // and inked, under the same thick thatch. Shutters, an arched door, a window box gone limp in the heat.
@@ -652,9 +712,40 @@ export function stoneCottage(g, x, ground, S, mood, o = {}) {
       wash(g, sh, { color: m.leaf[k % 4], opacity: 0.9, seed: seed + 310 + k, layers: 10 }); ink(g, sh.filter((_, i) => i % 3 === 0), { width: lw(0.8), alpha: 0.4, gaps: 1.4, seed: seed + 320 + k }); }
     for (let k = 0; k < 10; k++) { const [fx, fy] = P(-half + r.range(-14, 24), r.range(30, 220)); g.fillStyle = rgba(k % 3 ? '#d88080' : '#e8b0a8', 0.9); g.beginPath(); g.arc(fx, fy, 7 * S, 0, TAU); g.fill(); g.strokeStyle = rgba('#8a3a3a', 0.5); g.lineWidth = lw(0.9); g.beginPath(); g.arc(fx, fy, 3.5 * S, 0, 5); g.stroke(); }
   }
-  return { window: { x: x + (wx0 + wx1) / 2 * S, y: ground - (wy0 + wy1) / 2 * S, w: (wx1 - wx0) * S, h: (wy1 - wy0) * S }, door: P(-140, 0), chimney: P(178, 484) };
+  return { roof, window: { x: x + (wx0 + wx1) / 2 * S, y: ground - (wy0 + wy1) / 2 * S, w: (wx1 - wx0) * S, h: (wy1 - wy0) * S }, door: P(-140, 0), chimney: P(178, 484) };
 }
 // the cottage window lit from inside (night), painted after the night glaze
+// Night only, painted over the glaze: cool moonlight catching the edges that face the moon (upper left) - the wall's
+// coping, the thatch, the bird bath, the elm's trunk - and the shadows on the far sides deepened.
+function moonlight(g, ck) {
+  const ml = 'rgba(200,214,250,', soft = (w) => `blur(${w}px)`;
+  g.save();
+  // deeper night toward the bottom and the right, lighter in the moon's quarter
+  g.globalCompositeOperation = 'multiply';
+  const dg = g.createLinearGradient(0, 400, 0, H + MY); dg.addColorStop(0, 'rgba(255,255,255,0)'); dg.addColorStop(1, 'rgba(70,80,130,0.55)'); g.fillStyle = dg; g.fillRect(-M, 400, LW, LH);
+  g.globalCompositeOperation = 'screen';
+  pool(g, MOON[0], MOON[1] + 200, 900, 500, '#8090c0', 0.22);
+  g.lineCap = 'round'; g.lineJoin = 'round';
+  const glint = (pts, w, a) => { g.filter = soft(w * 0.4); g.strokeStyle = ml + a + ')'; g.lineWidth = w; path(g, pts, false); g.stroke(); g.filter = 'none'; };
+  // the wall: moonlight on the top of every coping stone
+  { const { x0, x1, y0, y1, h } = WALL, r = rng(41); g.filter = soft(1.5);
+    for (let x = x0 + 4; x < x1; x += r.range(15, 23)) { const y = y0 + (y1 - y0) * (x - x0) / (x1 - x0) - (h - 14) - r.range(11, 14); g.fillStyle = ml + r.range(0.25, 0.45) + ')'; g.beginPath(); g.ellipse(x + 5, y, 5.5, 2, -0.1, 0, TAU); g.fill(); }
+    g.filter = 'none'; }
+  // the thatch, along its upper left slope, and the chimney's left side
+  const roof = ck.roof, n = roof.length; glint(roof.slice(Math.floor(n * 0.02), Math.floor(n * 0.36)), 9, 0.4);
+  // the bird bath's rim, the elm's trunk and the watering can
+  glint(ellipse(BIRDBATH.x, BIRDBATH.y - 114, 62, 12, 30).slice(14, 26), 4, 0.5);
+  // the elm's trunk: a soft cool light down its moonward side
+  g.filter = soft(10); g.fillStyle = ml + '0.22)'; g.beginPath(); g.ellipse(ELM.x - 40, (ELM.ground + NEST[1]) / 2 + 40, 16, (ELM.ground - NEST[1]) / 2 - 40, 0.02, 0, TAU); g.fill(); g.filter = 'none';
+  // the window's warm light falling out across the ground in front of the cottage
+  g.globalCompositeOperation = 'lighter';
+  const { x, y, w } = ck.window, gy = COTTAGE.ground;
+  g.filter = soft(14); g.fillStyle = 'rgba(255,170,80,0.22)';
+  g.beginPath(); g.moveTo(x - w * 0.6, gy + 6); g.lineTo(x + w * 0.6, gy + 6); g.lineTo(x + w * 1.6, gy + 120); g.lineTo(x - w * 0.2, gy + 130); g.closePath(); g.fill();
+  g.fillStyle = 'rgba(255,190,100,0.16)'; for (const [dx, dy] of [[-0.25, 0.3], [0.45, 0.3], [-0.05, 0.75], [0.75, 0.75]]) { g.beginPath(); g.ellipse(x + w * dx + w * 0.35, gy + 30 + dy * 80, w * 0.32, 18, 0.1, 0, TAU); g.fill(); }
+  g.filter = 'none';
+  g.restore();
+}
 function paintLitWindow(g, wnd) {
   const { x, y, w, h } = wnd;
   g.save();
@@ -747,20 +838,57 @@ function leafClump(g, cx, cy, rr, sd, cols, o = {}) {
   ink(g, sh.slice(Math.floor(sh.length * 0.55)).concat(sh.slice(0, Math.floor(sh.length * 0.05))), { width: 1.1, alpha: 0.6, gaps: 1, seed: sd + 4 });
   return sh;
 }
+// fine twigs fanning out from a crown clump's edge (above and to the sides), with a few leaves at their tips
+function twigs(g, cx, cy, rr, sd, cols) {
+  const r = rng(sd); g.save(); g.lineCap = 'round';
+  for (let k = 0; k < rr / 4; k++) {
+    const a = Math.PI * r.range(0.95, 2.05), x0 = cx + Math.cos(a) * rr * 0.8, y0 = cy + Math.sin(a) * rr * 0.62, L = rr * r.range(0.25, 0.5);
+    const x1 = x0 + Math.cos(a) * L, y1 = y0 + Math.sin(a) * L * 0.8 - L * 0.15;
+    g.strokeStyle = rgba(INKC, 0.55); g.lineWidth = 0.8; g.beginPath(); g.moveTo(x0, y0); g.quadraticCurveTo((x0 + x1) / 2 + r.gauss(0, 3), (y0 + y1) / 2 + r.gauss(0, 3), x1, y1); g.stroke();
+    for (let q = 0; q < 2; q++) { const u = r.range(0.4, 1), bx = lerp(x0, x1, u), by = lerp(y0, y1, u), ba = a + r.gauss(0, 0.7); g.lineWidth = 0.5; g.beginPath(); g.moveTo(bx, by); g.lineTo(bx + Math.cos(ba) * L * 0.3, by + Math.sin(ba) * L * 0.3); g.stroke(); }
+    for (let q = 0; q < 4; q++) { g.fillStyle = rgba(cols[(k + q) % cols.length], 0.85); g.beginPath(); g.ellipse(x1 + r.gauss(0, 4), y1 + r.gauss(0, 4), 3.4, 2.2, r() * 3, 0, TAU); g.fill(); }
+  }
+  g.restore();
+}
+const along = (pts, t) => { const f = t * (pts.length - 1), i = Math.min(pts.length - 2, Math.floor(f)), k = f - i; return [lerp(pts[i][0], pts[i + 1][0], k), lerp(pts[i][1], pts[i + 1][1], k)]; };
+// The old elm beyond the wall: a tall, strong trunk dividing high (the nest sits in the fork) into a vase of
+// steep limbs, which branch and vanish into a fine, dense crown of clumps; the crown is broad at the top and
+// ragged underneath, never flat-bottomed.
 function elmTree(g, m) {
-  const { x, ground: gd } = ELM, r = rng(311), [nx, ny] = NEST;
-  // the shadowed inside of the crown, behind everything
-  wash(g, fluffy(x - 20, 120, 360, 200, 12, 0.2, 312), { color: shade(m.elm[2], 0.4), opacity: 0.95, seed: 313, under: true, bleed: 0.03 });
-  limb(g, [[x + 4, gd + 10], [x - 8, gd - 120], [x + 8, gd - 240], [x - 6, ny + 30]], 116, 84, 320);
-  limb(g, [[x - 10, ny + 40], [x - 70, ny - 60], [x - 150, 150], [x - 260, 60]], 58, 20, 321);
-  limb(g, [[x + 6, ny + 40], [x + 70, ny - 50], [x + 120, 160], [x + 210, 50]], 56, 18, 322);
-  limb(g, [[x - 2, ny + 30], [x + 14, ny - 90], [x - 10, 130], [x + 4, 30]], 44, 16, 323);
-  for (const [bx, by, ex, ey, w] of [[x - 120, 190, x - 220, 210, 12], [x + 100, 190, x + 190, 214, 12], [x - 190, 110, x - 300, 160, 10], [x + 170, 120, x + 300, 150, 10]]) limb(g, [[bx, by], [(bx + ex) / 2, (by + ey) / 2 - 10], [ex, ey]], w, 4, 330 + bx);
-  // the crown: tall English elm, in billowing lobes; nothing over the nest
-  const spots = [[-330, 210, 92], [330, 200, 96], [-240, 120, 110], [250, 110, 110], [-120, 60, 120], [120, 50, 120], [0, -20, 130], [-280, 20, 100], [290, 10, 100], [-160, -60, 110], [170, -70, 110],
-    [0, 110, 90], [-380, 120, 80], [390, 110, 80], [-60, -110, 110], [80, -120, 110], [-220, 230, 60], [230, 236, 64]];
-  spots.sort((a, b) => a[1] - b[1]);
-  for (const [i, [dx, cy, rr]] of spots.entries()) leafClump(g, x + dx, cy, rr, 400 + i * 7, m.elm);
+  const { x, ground: gd } = ELM, r = rng(311), [nx, ny] = NEST, fy = ny + 30;
+  const L = [
+    [[x - 18, fy + 10], [x - 80, fy - 120], [x - 170, fy - 270], [x - 250, fy - 420]],
+    [[x - 6, fy + 6], [x - 34, fy - 150], [x - 60, fy - 300], [x - 70, fy - 460]],
+    [[x + 10, fy + 6], [x + 46, fy - 150], [x + 100, fy - 300], [x + 150, fy - 450]],
+    [[x + 22, fy + 10], [x + 110, fy - 100], [x + 230, fy - 220], [x + 340, fy - 310]],
+  ];
+  const W0 = [56, 46, 48, 50];
+  const branches = [];
+  L.forEach((pts, i) => { const out = i < 2 ? -1 : 1;
+    for (const t of [0.42, 0.62, 0.8]) { const [bx, by] = along(pts, t), ang = -Math.PI / 2 + out * r.range(0.5, 0.95) + (r() - 0.5) * 0.3, len = r.range(90, 150) * (1.1 - t * 0.4);
+      branches.push([[bx, by], [bx + Math.cos(ang) * len * 0.5, by + Math.sin(ang) * len * 0.5 - 10], [bx + Math.cos(ang) * len, by + Math.sin(ang) * len], W0[i] * 0.42 * (1 - t * 0.5)]); } });
+  // clumps: inner ones (darker, behind the limbs) and outer ones (in front, swallowing the limb and branch ends)
+  const back = [], front = [];
+  L.forEach((pts, i) => { for (const t of [0.5, 0.68, 0.86, 1.02]) { const [cx, cy] = along(pts, Math.min(1, t)); back.push([cx + r.gauss(0, 30), cy - (t > 1 ? 50 : 0) + r.gauss(0, 20), r.range(80, 115)]); }
+    const [ex, ey] = pts[3]; front.push([ex + r.gauss(0, 20), ey + 10, r.range(95, 125)]); });
+  for (const [, , [bx, by], w] of branches) front.push([bx + r.gauss(0, 12), by + r.gauss(0, 10), r.range(62, 92) * (0.8 + w / 30)]);
+  for (let k = 0; k < 6; k++) front.push([x + r.range(-260, 300), r.range(-110, -30), r.range(100, 130)]);  // the high, broad top of the vase
+  // the trunk and the four limbs, then the branches
+  limb(g, [[x + 4, gd + 10], [x - 6, gd - 110], [x + 8, gd - 230], [x - 2, fy + 20]], 124, 96, 320);
+  for (const [i, pts] of L.entries()) back.filter((_, k) => Math.floor(k / 4) === i && k % 4 >= 2).forEach(([cx, cy, rr], k) => leafClump(g, cx, cy, rr * 0.9, 390 + i * 9 + k, m.elm.map((c) => shade(c, 0.28)), {}));
+  L.forEach((pts, i) => limb(g, pts, W0[i], 12, 321 + i));
+  for (const [a, b, c, w] of branches) limb(g, [a, b, c], w, 4, 340 + Math.round(a[0]));
+  for (const [i, [cx, cy, rr]] of back.filter((_, k) => k % 4 < 2).entries()) leafClump(g, cx, cy, rr * 0.85, 360 + i * 7, m.elm.map((c) => shade(c, 0.2)), {});
+  // leafy sprays climbing the limbs (old elms are full of them), so the limbs run up into the crown with no bare gap;
+  // they thicken toward the top, and none sit over the nest
+  const sprays = [];
+  L.forEach((pts, i) => { for (let t = 0.12; t < 0.75; t += r.range(0.07, 0.11)) { const [lx, ly] = along(pts, t), side = (Math.round(t * 30) % 2 ? 1 : -1) * (i < 2 ? 1 : -1);
+    const sx = lx + side * r.range(16, 34), sy = ly + r.gauss(0, 8); if (Math.hypot(sx - nx, sy - ny) < 95) continue; sprays.push([sx, sy, r.range(26, 40) + t * 50]); } });
+  sprays.sort((a, b) => a[1] - b[1]);
+  for (const [i, [cx, cy, rr]] of sprays.entries()) { leafClump(g, cx, cy, rr, 700 + i * 5, m.elm); twigs(g, cx, cy, rr * 1.2, 800 + i, m.elm); }
+  // the outer crown, top first so the lower clumps overlap it; twigs at every clump's edge
+  front.sort((a, b) => a[1] - b[1]);
+  for (const [i, [cx, cy, rr]] of front.entries()) { leafClump(g, cx, cy, rr, 400 + i * 7, m.elm); twigs(g, cx, cy, rr, 600 + i, m.elm); }
   // the nest in the fork: a bowl of twigs (the front rim is drawNestFront, so a crow can sit in it)
   nestBack(g, nx, ny, m);
 }
@@ -1121,18 +1249,31 @@ function limpLeaf(g, x, y, ang, L, w, col, seed, m) {
 }
 function paintFront(g, m, seed = 700) {
   const r = rng(seed);
-  // bottom left: a clump of big wilting leaves (a thirsty rhubarb) and dry seed grasses
-  pool(g, 60, 1080, 260, 50, m.shadow, 0.25);
-  for (let i = 0; i < 26; i++) { const x = r.range(-90, 330), y = r.range(1010, 1130); grassFlicks(g, x, y, r.range(40, 90), { seed: seed + i, n: 6, colors: [m.lawn[3], m.lawn[0], shade(m.lawn[1], 0.2)], inkA: 0.45, lean: 0.15 }); }
-  for (const [i, [x, y, a, L]] of [[-70, 1030, -1.75, 170], [-40, 1040, -1.3, 200], [10, 1052, -0.9, 220], [80, 1062, -0.5, 200], [150, 1070, -0.2, 150], [40, 1046, -1.1, 190]].entries())
-    limpLeaf(g, x, y, a, L, L * 0.62, m.leaf[i % 4], seed + 50 + i * 7, m);
-  for (let k = 0; k < 9; k++) { const x = r.range(150, 330), L = r.range(140, 230), lean = r.range(0.05, 0.3), tip = [x + lean * L, 1100 - L];
-    ink(g, [[x, 1110], [x + lean * L * 0.4, 1110 - L * 0.5], tip], { color: shade(m.lawn[3], 0.3), width: 1.2, alpha: 0.7 });
+  // bottom left: a clump of foxgloves, their tips bowed in the heat, among big limp leaves and seed grasses
+  pool(g, 200, 1040, 280, 46, m.shadow, 0.3);
+  for (let i = 0; i < 22; i++) { const x = r.range(-90, 330), y = r.range(1010, 1110); grassFlicks(g, x, y, r.range(40, 90), { seed: seed + i, n: 6, colors: [m.lawn[3], m.lawn[0], shade(m.lawn[1], 0.2)], inkA: 0.45, lean: 0.15 }); }
+  for (let k = 0; k < 7; k++) { const x = r.range(230, 340), L = r.range(140, 230), lean = r.range(0.05, 0.3), tip = [x + lean * L, 1050 - L];
+    ink(g, [[x, 1060], [x + lean * L * 0.4, 1060 - L * 0.5], tip], { color: shade(m.lawn[3], 0.3), width: 1.2, alpha: 0.7 });
     for (let q = 0; q < 6; q++) { g.fillStyle = rgba(r() < 0.5 ? '#c8a868' : '#b8945a', 0.85); g.beginPath(); g.ellipse(tip[0] - lean * q * 4, tip[1] + q * 5, 2.4, 5, lean - 0.2 + (q % 2) * 0.4, 0, TAU); g.fill(); } }
+  for (const [fx, fy, H, lean, cols] of [[180, 1012, 260, -0.16, ['#c86a9a', '#d888b0', '#b85888']], [246, 1020, 210, 0.16, ['#e0a0c0', '#d080a8', '#ecc0d4']], [126, 1016, 170, -0.25, ['#c86a9a', '#d888b0']]]) {
+    // the stem rises, its top bowing over; bells hang along one side, biggest at the bottom, buds at the tip
+    const pts = []; for (let k = 0; k <= 12; k++) { const t = k / 12, bow = Math.max(0, t - 0.6) / 0.4; pts.push([fx + lean * H * t + Math.sign(lean || 1) * bow * bow * 30, fy - H * t + bow * bow * 26]); }
+    g.save(); g.strokeStyle = rgba(shade(m.leaf[1], 0.1), 0.95); g.lineWidth = 3.4; g.lineCap = 'round'; path(g, smooth(pts, false, 4), false); g.stroke(); g.restore();
+    ink(g, pts, { width: 0.9, alpha: 0.55 });
+    for (let k = 2; k <= 12; k++) { const [x, y] = pts[k], t = k / 12, R = (1 - t) * 10 + 4, c = cols[k % cols.length], side = Math.sign(lean || 1);
+      if (t > 0.85) { g.fillStyle = rgba(mix(c, m.leaf[2], 0.4), 0.95); g.beginPath(); g.ellipse(x + side * 3, y + 2, 2.6, 4, 0.3, 0, TAU); g.fill(); continue; }
+      const bx = x + side * R * 0.7, by = y + R * 0.5, bell = smooth([[bx - R * 0.45, by - R * 0.6], [bx + R * 0.45, by - R * 0.6], [bx + R * 0.7, by + R * 0.7], [bx, by + R * 0.9], [bx - R * 0.7, by + R * 0.7]]);
+      wash(g, bell, { color: c, opacity: 0.96, seed: seed + 900 + k + Math.round(fx), under: '#f4e6ec', layers: 8, edge: 0.4 });
+      g.fillStyle = rgba(shade(c, 0.45), 0.8); g.beginPath(); g.ellipse(bx, by + R * 0.62, R * 0.5, R * 0.22, 0, 0, TAU); g.fill();
+      for (let q = 0; q < 3; q++) { g.fillStyle = 'rgba(250,240,245,0.85)'; g.beginPath(); g.arc(bx + (q - 1) * R * 0.22, by + R * 0.4, R * 0.08, 0, TAU); g.fill(); }
+      ink(g, bell, { closed: true, width: 0.8, alpha: 0.6, gaps: 0.4, seed: seed + 950 + k }); }
+  }
+  for (const [i, [x, y, a, L]] of [[150, 1018, -2.75, 160], [170, 1022, -2.3, 180], [200, 1026, -1.85, 150], [210, 1026, -1.2, 170], [240, 1028, -0.75, 180], [260, 1030, -0.35, 150], [120, 1024, -3.0, 130]].entries())
+    limpLeaf(g, x, y, a, L, L * 0.6, m.leaf[i % 4], seed + 50 + i * 7, m);
   // bottom right: an old pot of geraniums gone limp, and long dry grass
-  pool(g, 1830, 1060, 220, 40, m.shadow, 0.3);
+  pool(g, 1770, 1022, 200, 34, m.shadow, 0.35);
   for (let i = 0; i < 26; i++) { const x = r.range(1640, 2010), y = r.range(1010, 1130); grassFlicks(g, x, y, r.range(40, 100), { seed: seed + 200 + i, n: 6, colors: [m.lawn[3], m.lawn[0], shade(m.lawn[1], 0.2)], inkA: 0.45, lean: -0.15 }); }
-  const px = 1790, py = 1052;
+  const px = 1764, py = 1012;
   const pot = smooth([[px - 74, py - 120], [px + 74, py - 120], [px + 60, py + 10], [px - 60, py + 10]]);
   for (let k = 0; k < 9; k++) { const a = -Math.PI / 2 + (k - 4) * 0.36, L = r.range(60, 90); limpLeaf(g, px + (k - 4) * 9, py - 128, a + (k - 4) * 0.12, L, L * 0.75, m.leaf[k % 4], seed + 300 + k * 5, m); }
   for (let k = 0; k < 5; k++) { const fx = px - 40 + k * 22 + r.gauss(0, 5), fy = py - 196 + Math.abs(k - 2) * 18; ink(g, [[px - 10 + k * 5, py - 124], [fx, fy - 10], [fx + 6, fy]], { color: shade(m.leaf[0], 0.2), width: 1.6, alpha: 0.8 });
@@ -1171,13 +1312,13 @@ export function gardenLayers(mood = 'hot') {
     ck = tm('cottage', () => stoneCottage(g, COTTAGE.x, COTTAGE.ground, COTTAGE.S, m, { seed: 3 }));
     tm('props', () => { paintBirdBath(g, m); paintWateringCan(g, m); drawNestFront(g, 'hot'); });
   }, res);
-  tm('glaze', () => moodGlaze(land, m, res, 9));
+  tm('glaze', () => moodGlaze(land, m, res, 9, { k: m.name === 'night' ? 1 : 1 }));
   // where the sky shows (for stars and the moon at night)
   const skyMask = canvas(LW, LH, false);
   { const sg = skyMask.getContext('2d'); sg.fillStyle = '#fff'; sg.fillRect(0, 0, LW, LH); sg.globalCompositeOperation = 'destination-out'; sg.drawImage(land, 0, 0, LW, LH); }
   const bg = back.getContext('2d');
   bg.save(); bg.setTransform(1, 0, 0, 1, 0, 0); bg.drawImage(land, 0, 0); bg.restore();
-  if (m.name === 'night') paintLitWindow(bg, ck.window);
+  if (m.name === 'night') { bg.save(); bg.setTransform(res, 0, 0, res, M * res, MY * res); moonlight(bg, ck); paintLitWindow(bg, ck.window); bg.restore(); }
   bg.save(); bg.setTransform(1, 0, 0, 1, 0, 0); tm('granulate', () => granulate(bg, back.width, back.height, 0.2, 5)); bg.restore();
   const front = tm('front', () => hlayer((g) => paintFront(g, m), res));
   moodGlaze(front, m, res, 13);
@@ -1268,7 +1409,11 @@ function closeupSprites(mood) {
     for (let q = 0; q < 26; q++) { const a = Math.PI + (q + 0.5) / 26 * Math.PI, k = 0.74; g.fillStyle = rgba(m.slip, 0.8); g.beginPath(); g.arc(SC[0] + Math.cos(a) * SC[2] * k, SC[1] + Math.sin(a) * SC[3] * k, 6, 0, TAU); g.fill(); }
     hatch(g, sh, { color: INKC, count: 600, len: 18, width: 1, alpha: 0.35, seed: 178, dir: () => 1.9, curve: 0.3, density: (x) => clamp((x - cx - 300) / 700) });
     g.restore();
+    // broken colour over the shoulder, strokes following its curve, with bits of paper lifted out
+    const tang = (cx0, cy0, rx, ry) => (x, y) => { const th = Math.atan2((y - cy0) / ry, (x - cx0) / rx); return Math.atan2(ry * Math.cos(th), -rx * Math.sin(th)); };
+    brushWash(g, sh, [m.clay, m.clayLight, shade(m.clay, 0.15), '#d88858'], { seed: 190, count: 160, width: [14, 40], len: [120, 360], angle: tang(SC[0], SC[1], SC[2], SC[3]), alpha: [0.1, 0.24], base: 0.08, lifts: 0.03 });
     penLine(g, sh.slice(60, 120), { w: 3.2, alpha: 0.75, seed: 179 });
+    sketch(g, sh.slice(62, 118).map(([x, y]) => [x, y + 3]), { alpha: 0.35, width: 1.2, seed: 191 });
     // the lip's outer face (the rim is thick and rolled), then the rounded top of the rim catching the light
     const lip = potEllipse(cx, cy + 40, orx * 0.995, ory, 6);
     wash(g, lip, { color: shade(m.clay, 0.05), opacity: 0.97, seed: 181, under: '#f0e0cc', bleed: 0.004, layers: 12 });
@@ -1285,6 +1430,9 @@ function closeupSprites(mood) {
     g.strokeStyle = rgba('#fbe0c0', 0.35); g.lineWidth = 9; g.filter = 'blur(3px)'; g.beginPath(); g.ellipse(cx, (cy + icy) / 2, orx * 0.91, ory * 0.91, 0, Math.PI * 1.05, Math.PI * 1.75); g.stroke(); g.filter = 'none';
     for (let i = 0; i < 80; i++) { const a = r() * TAU, k = r.range(0.84, 0.99); g.fillStyle = rgba(r() < 0.5 ? m.slip : m.clayDark, r.range(0.2, 0.5)); g.beginPath(); g.arc(cx + Math.cos(a) * orx * k, (cy + icy) / 2 + Math.sin(a) * ory * k, r.range(1, 3), 0, TAU); g.fill(); }
     g.restore();
+    brushWash(g, outerE, [tint(m.clay, 0.12), m.clayLight, m.clay, shade(m.clay, 0.12)], { seed: 192, count: 120, width: [6, 18], len: [80, 240], angle: tang(cx, (cy + icy) / 2, orx, ory), alpha: [0.12, 0.28], base: 0.05, lifts: 0.06 });
+    brushWash(g, lip, [m.clay, shade(m.clay, 0.2), m.clayDark], { seed: 193, count: 80, width: [6, 16], len: [80, 220], angle: tang(cx, cy + 40, orx, ory), alpha: [0.12, 0.26], base: 0.04, lifts: 0.1 });
+    hatch(g, lip, { color: INKC, count: 260, len: 10, width: 0.9, alpha: 0.35, seed: 194, dir: () => 1.75, curve: 0.2, density: (x, y) => clamp((x - cx) / orx + 0.3) * clamp((y - cy) / ory) });
     // a chip out of the lip, front left: an old, much-loved pot
     const chip = smooth([[cx - 476, cy + 240], [cx - 452, cy + 262], [cx - 410, cy + 270], [cx - 386, cy + 254]]);
     g.fillStyle = rgba(m.clayDark, 0.55); path(g, chip); g.fill(); ink(g, chip, { width: 1.4, alpha: 0.6 });
@@ -1295,6 +1443,8 @@ function closeupSprites(mood) {
     ink(g, innerE.slice(8, 52).map(([x, y]) => [x, y + 7]), { color: '#f8d0a8', width: 2.4, alpha: 0.45, seed: 184 });
     penLine(g, outerE, { closed: true, w: 2.4, alpha: 0.75, seed: 185, weight: (t) => 0.4 + 0.6 * Math.max(0, Math.sin(TAU * t + 0.4)) });
     penLine(g, lip.slice(4, 58), { w: 3, alpha: 0.85, seed: 186 });
+    sketch(g, outerE.slice(62, 120).map(([x, y]) => [x + 2, y - 2]), { alpha: 0.4, width: 1.3, seed: 195 });
+    sketch(g, lip.slice(6, 56).map(([x, y]) => [x, y + 3]), { alpha: 0.35, width: 1.2, seed: 196 });
     granulate(g, g.canvas.width, g.canvas.height, 0.18, 187);
     // cut the opening again (granulation and the lines leave a faint veil in it), keeping the inked edge
     g.save(); g.globalCompositeOperation = 'destination-out'; path(g, potEllipse(cx, icy, irx * 0.985, iry * 0.975, 3)); g.fill(); g.restore();
@@ -1335,7 +1485,7 @@ export function drawPitcherCloseup(g, level, t, o = {}) {
   const refl = []; for (let i = 0; i < 64; i++) { const a = i / 64 * TAU, k = 1 + 0.018 * Math.sin(a * 6 + t * 1.6) + 0.01 * Math.sin(a * 11 - t * 2.3); refl.push([rcx + Math.cos(a) * rrx * k, rcy + Math.sin(a) * rry * k]); }
   const rg = g.createRadialGradient(rcx - rrx * 0.15, rcy - rry * 0.1, rrx * 0.05, rcx, rcy, rrx);
   const ra = lerp(0.85, 0.62, level);
-  rg.addColorStop(0, rgba(sky[0], ra)); rg.addColorStop(0.7, rgba(sky[0], ra * 0.8)); rg.addColorStop(0.93, rgba(sky[1], ra * 0.55)); rg.addColorStop(1, rgba(sky[1], 0));
+  rg.addColorStop(0, rgba(sky[0], ra)); rg.addColorStop(0.4, rgba(sky[0], ra * 0.85)); rg.addColorStop(0.72, rgba(sky[1], ra * 0.45)); rg.addColorStop(1, rgba(sky[1], 0));
   g.fillStyle = rg; path(g, refl); g.fill();
   // slow rings on the surface
   g.lineWidth = 1.2 + level * 1.8;
@@ -1547,6 +1697,22 @@ export function windowGlow(g, t, k = 1, at = WINDOW) {
   pool(g, at.x - 20, at.y + 160, 220, 50, '#ffb060', 0.06 * k * f); // a little light spilling on the lawn below
   g.restore();
 }
+// stars: bigger and softer than the stage's, each with a halo; the brightest have a little four-point glint.
+// They come out one by one after `appear` (seconds) and twinkle slowly.
+const STARS2 = (() => { const r = rng(4243), out = []; for (let i = 0; i < 90; i++) out.push({ x: r.range(60, 1860), y: Math.pow(r(), 1.3) * 400 + 30, s: Math.pow(r(), 2.2) * 2.2 + 0.9, ph: r() * TAU, sp: r.range(0.3, 0.8) }); return out; })();
+export function softStars(g, t, k = 1, appear = -99) {
+  if (k <= 0) return;
+  g.save(); g.globalCompositeOperation = 'lighter';
+  STARS2.forEach((st, i) => {
+    const a = k * clamp((t - appear - i * 0.1) / 1.2) * (0.68 + 0.32 * Math.sin(t * st.sp + st.ph));
+    if (a <= 0.02) return;
+    const R = 7 * st.s, grd = g.createRadialGradient(st.x, st.y, 0, st.x, st.y, R);
+    grd.addColorStop(0, `rgba(255,250,228,${a})`); grd.addColorStop(0.18, `rgba(240,240,255,${a * 0.55})`); grd.addColorStop(1, 'rgba(200,210,255,0)');
+    g.fillStyle = grd; g.fillRect(st.x - R, st.y - R, 2 * R, 2 * R);
+    if (st.s > 2) { g.fillStyle = `rgba(255,250,230,${a * 0.6})`; g.beginPath(); g.ellipse(st.x, st.y, R * 1.3, R * 0.07, 0, 0, TAU); g.fill(); g.beginPath(); g.ellipse(st.x, st.y, R * 0.07, R * 1.3, 0, 0, TAU); g.fill(); }
+  });
+  g.restore();
+}
 // the night sky for the garden: stars and the moon, kept behind the cottage, the elm and everything else
 let SKYBUF = null;
 export function nightSky(g, t, c, L, k = 1, starsAppear = -99, moonK = 1) {
@@ -1555,7 +1721,7 @@ export function nightSky(g, t, c, L, k = 1, starsAppear = -99, moonK = 1) {
   const b = SKYBUF.getContext('2d');
   b.setTransform(1, 0, 0, 1, 0, 0); b.clearRect(0, 0, W, H);
   cam(b, c, 1);
-  stars(b, t, k, starsAppear, { x0: 120, x1: 1800, y0: 40, y1: 400 });
+  softStars(b, t, k, starsAppear);
   moon(b, MOON[0], MOON[1], 40, moonK * k);
   b.globalCompositeOperation = 'destination-in'; b.drawImage(L.skyMask, -M, -MY, LW, LH); b.globalCompositeOperation = 'source-over';
   g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.drawImage(SKYBUF, 0, 0); g.restore();
@@ -1594,7 +1760,7 @@ export function fieldsLayer(mood = 'hot') {
   const m = MD(mood);
   if (FIELDS[m.name]) return FIELDS[m.name];
   const c = hlayer((g) => paintDryFields(g, m));
-  moodGlaze(c, m, 2, 15, { k: 0.85 });
+  moodGlaze(c, m, 2, 15, { k: 0.85, bleach: false });
   { const g = c.getContext('2d'); g.save(); g.setTransform(1, 0, 0, 1, 0, 0); granulate(g, c.width, c.height, 0.2, 7); g.restore(); }
   return (FIELDS[m.name] = to8(c));
 }
