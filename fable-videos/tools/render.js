@@ -2,7 +2,7 @@
 // Render a fable's animation frames with headless Chromium and encode them.
 //
 //   node tools/render.js lion-and-mouse --stills 5,30,62      # PNG stills for checking
-//   node tools/render.js lion-and-mouse --video [--from 0 --to 60] [--fps 24] [--workers 3] [--blur 3]   (blur: motion-blur samples per frame)
+//   node tools/render.js lion-and-mouse --video [--from 0 --to 60] [--fps 24] [--workers 3] [--blur 5 --shutter 0.4]   (blur: motion-blur samples per frame; shutter: fraction of a frame)
 //
 // The fable page (fables/<name>/index.html) must define
 //   window.FABLE = { async setup(timeline), frame(t) }   drawing into <canvas id="c">.
@@ -15,6 +15,7 @@ const { chromium } = require('playwright');
 const ROOT = path.resolve(__dirname, '..');
 const args = process.argv.slice(2);
 const fable = args[0];
+const SHUTTER_DEFAULT = 0.4;
 const opt = (k, d) => { const i = args.indexOf('--' + k); return i < 0 ? d : (args[i + 1] && !args[i + 1].startsWith('--') ? args[i + 1] : true); };
 
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.woff2': 'font/woff2', '.png': 'image/png' };
@@ -59,13 +60,15 @@ async function grab(page, t, blur = 1, shutter = 0) {
   return Buffer.from(b64, 'base64');
 }
 
+// shutter: the fraction of a frame the blur spans (0.4 = a 144-degree shutter); more samples = smoother, no ghost copies
+let SHUTTER = SHUTTER_DEFAULT;
 async function renderRange(browser, port, timeline, fps, f0, f1, outFile, blur = 1) {
   const page = await openPage(browser, port, timeline);
   const ff = spawn('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(fps), '-c:v', 'mjpeg', '-i', '-',
     '-c:v', 'libx264', '-preset', 'medium', '-crf', '17', '-pix_fmt', 'yuv420p', '-tune', 'film', outFile], { stdio: ['pipe', 'inherit', 'inherit'] });
   const t0 = Date.now();
   for (let f = f0; f < f1; f++) {
-    const buf = await grab(page, f / fps, blur, 0.5 / fps);
+    const buf = await grab(page, f / fps, blur, SHUTTER / fps);
     if (!ff.stdin.write(buf)) await new Promise((r) => ff.stdin.once('drain', r));
     if ((f - f0) % 240 === 0) console.error(`${path.basename(outFile)} frame ${f - f0}/${f1 - f0} (${((Date.now() - t0) / 1000).toFixed(0)}s)`);
   }
@@ -90,7 +93,7 @@ async function renderRange(browser, port, timeline, fps, f0, f1, outFile, blur =
         console.log(f);
       }
     } else {
-      const fps = Number(opt('fps', 24)), blur = Number(opt('blur', 1));
+      const fps = Number(opt('fps', 24)), blur = Number(opt('blur', 1)); SHUTTER = Number(opt('shutter', SHUTTER_DEFAULT));
       const from = Number(opt('from', 0)), to = Number(opt('to', timeline.duration));
       const workers = Number(opt('workers', 3));
       const F0 = Math.round(from * fps), F1 = Math.round(to * fps);
