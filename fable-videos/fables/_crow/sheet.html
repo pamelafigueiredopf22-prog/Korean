@@ -1,0 +1,36 @@
+<!doctype html><html><body style="margin:0"><canvas id="c" width="1920" height="1080"></canvas>
+<script type="module">
+// a pose sheet for tuning crow3 (stills only)
+import { paper } from '../../engine/watercolor.js';
+import { makeCrow3 } from '../../engine/characters/crow3.js';
+import { makeCrow } from '../../engine/characters/crow.js';
+const ctx = document.getElementById('c').getContext('2d');
+let P, crow, old;
+const POSES = [
+  ['old crow.js', null], ['rest', {}], ['crouch', { crouch: 1 }], ['peck', { peck: 1, beak: 0.6 }],
+  ['aim rim', { aim: 1, aimX: -110, aimY: 10 }], ['peer', { peer: 1 }], ['reach', { reach: 1, aimX: -100, aimY: 60 }], ['push+strain', { push: 1, strain: 1 }],
+  ['drink up', { drink: 1, drinkPhase: 0.5 }], ['think', { think: 1 }], ['weary', { weary: 1 }], ['happy', { happy: 1 }],
+  ['hop air', { hop: 0.5 }], ['fly up', { fly: 1, beat: 0.5 }], ['fly down', { fly: 1, beat: 0 }], ['sleep', { sleep: 1 }],
+];
+window.FABLE = {
+  async setup() { P = paper(); crow = makeCrow3(1.2); old = makeCrow(1.2); },
+  frame(t) {
+    const g = ctx; g.drawImage(P, 0, 0);
+    const z = new URLSearchParams(location.search).get('z');
+    const list = z ? POSES.filter(([n]) => z.split(',').includes(n.split(' ')[0])) : POSES;
+    const Z = z ? 2.3 : 1.05, cols = z ? 2 : 4;
+    list.forEach(([name, st], i) => {
+      const x = z ? 480 + (i % 2) * 960 : 260 + (i % 4) * 460, y = z ? 440 + Math.floor(i / 2) * 520 : 230 + Math.floor(i / 4) * 270;
+      g.save(); g.translate(x, y); g.scale(Z, Z);
+      if (st) {
+        const s = { t: 0.3, noBlink: true, life: 0, ...st };
+        crow.shadow(g, s); crow.draw(g, s);
+        const tp = crow.beakTip(s); g.fillStyle = 'red'; g.fillRect(tp.x - 2, tp.y - 2, 4, 4);
+      } else old.draw(g, { t: 0 });
+      g.strokeStyle = 'rgba(0,0,0,0.2)'; g.beginPath(); g.moveTo(-200, 0); g.lineTo(220, 0); g.stroke();
+      g.restore();
+      g.fillStyle = '#5a4a3a'; g.font = '22px serif'; g.fillText(name, x - 180, y + 30);
+    });
+  }
+};
+</script></body></html>
