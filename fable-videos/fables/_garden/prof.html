@@ -1,0 +1,18 @@
+<!doctype html><html><body><canvas id="c" width="1920" height="1080"></canvas>
+<script type="module">
+// set-up timing check for scene.js:  PAGE=prof.html node tools/render.js _garden --stills 0
+import * as SC from '../crow-and-pitcher/scene.js';
+const T = (k, fn) => { const t0 = performance.now(); fn(); console.warn(k, Math.round(performance.now() - t0), 'ms'); };
+window.FABLE = { async setup() {
+  const g = document.getElementById('c').getContext('2d');
+  T('garden hot', () => SC.gardenLayers('hot'));
+  console.warn(JSON.stringify(Object.fromEntries(Object.entries(SC.TIMING).map(([k, v]) => [k, Math.round(v)]))));
+  T('fields', () => SC.fieldsLayer('hot'));
+  T('closeup', () => SC.drawPitcherCloseup(g, 0, 0));
+  T('flowers+pitcher+pebbles', () => { SC.drawGardenFlowers(g, 0, 'hot'); SC.drawPitcher(g, 'hot'); SC.PEBBLES.forEach((p) => SC.drawPebble(g, p)); });
+  T('cutaway', () => SC.drawPitcherCutaway(g, 0.2, 1, 0));
+  T('frame garden', () => SC.drawGarden(g, 1, { z: 1, x: 0, y: 0 }, 'hot'));
+  T('frame garden 2', () => SC.drawGarden(g, 1.1, { z: 1, x: 0, y: 0 }, 'hot'));
+  T('frame closeup', () => SC.drawPitcherCloseup(g, 0.5, 1, { stones: 5, splashT: 0.3 }));
+}, frame() {} };
+</script></body></html>

@@ -1,0 +1,65 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>The Crow and the Pitcher: garden test</title>
+<style>html,body{margin:0;background:#222}canvas{display:block;max-width:100vw;height:auto}</style></head>
+<body><canvas id="c" width="1920" height="1080"></canvas>
+<script type="module">
+// Scenery test page for The Crow and the Pitcher: cycles through every place and mood in scene.js.
+//   node tools/render.js _garden --stills 5,13,19,25,31,37,41.3,49,55,61   (needs build/_garden/timeline.json)
+import { W, H, clamp, lerp, ease, span } from '../../engine/watercolor.js';
+import { M, MY, LW, LH, cam, makeStage } from '../../engine/stage.js';
+import { makeCrow } from '../../engine/characters/crow.js';
+import { PITCHER, NEST, PEBBLES, FIELDS_COTTAGE, SHIMMER_FIELDS, view, drawH, fieldsLayer, gardenLayers, drawGarden, drawPebble, drawNestFront,
+  drawPitcherCloseup, drawPitcherCutaway, heatShimmer, swifts, dustMotes } from '../crow-and-pitcher/scene.js';
+
+const SHOW_CROW = new URLSearchParams(location.search).has('crow') || window.SHOW_CROW; // a stand-in crow, only to judge scale
+let S, crow;
+const mixv = (a, b, k) => ({ z: lerp(a.z, b.z, k), x: lerp(a.x, b.x, k), y: lerp(a.y, b.y, k) });
+
+function fields(g, t) { // the opening: a slow push down toward the little cottage garden
+  const L = fieldsLayer('hot');
+  const c = mixv(view(960, 540, 1), view(FIELDS_COTTAGE[0], FIELDS_COTTAGE[1] - 40, 2.6), ease(clamp(t / 9.5)));
+  S.paperBg(g); drawH(g, c, L);
+  heatShimmer(g, L, c, t, SHIMMER_FIELDS, 1.2);
+  cam(g, c, 1); dustMotes(g, t, 20, { x0: 0, x1: 1920, y0: 300, y1: 1000 }, 3);
+}
+const wide = (mood) => (g, t) => { S.paperBg(g); drawGarden(g, t, { z: 1.02, x: Math.sin(t * 0.05) * 14, y: 0 }, mood); };
+function closer(g, t) { // the pitcher by the wall, the pebbles on the path
+  const c = mixv(view(PITCHER.x, 690, 2.0), view(PITCHER.x + 30, 700, 2.3), ease(span(t, 28, 34)));
+  S.paperBg(g);
+  drawGarden(g, t, c, 'hot', { pebbles: PEBBLES.slice(1), actors: (h) => {
+    if (SHOW_CROW) { h.save(); h.translate(PITCHER.x - 8, PITCHER.rimY + 4); h.scale(0.55, 0.55); crow.draw(h, { t }); h.restore(); }
+    drawPebble(h, PEBBLES[0], { x: 1300, y: 760 - Math.abs(Math.sin(t * 1.3)) * 30, shadow: false });
+  } });
+}
+const closeup = (level, stones, splashAt = -1) => (g, t) => {
+  S.paperBg(g); cam(g, { z: 1 + (t % 6) * 0.004, x: 0, y: 0 }, 1);
+  drawPitcherCloseup(g, level, t, { stones, splashT: splashAt >= 0 ? t - splashAt : -1 });
+};
+function cutaway(g, t) {
+  const k = clamp((t - 52) / 6), stones = lerp(3, 9.5, k);
+  S.paperBg(g); cam(g, { z: 1, x: 0, y: 0 }, 1);
+  drawPitcherCutaway(g, lerp(0.15, 0.62, k), stones, t);
+}
+function nest(g, t) {
+  S.paperBg(g);
+  const c = mixv(view(1500, 420, 1.3), view(NEST[0] - 40, NEST[1] + 80, 2.3), ease(span(t, 58, 63)));
+  drawGarden(g, t, c, 'night', { actors: (h) => { if (SHOW_CROW) { h.save(); h.translate(NEST[0] + 10, NEST[1] + 4); h.scale(0.36, 0.36); crow.draw(h, { t, eye: 0 }); h.restore(); drawNestFront(h, 'night'); } } });
+}
+function sunsetSky(g, t) { S.paperBg(g); const c = { z: 1.02, x: 0, y: 0 }; drawGarden(g, t, c, 'sunset'); }
+
+const SCENES = [[0, fields], [10, wide('hot')], [16, sunsetSky], [22, wide('night')], [28, closer],
+  [34, closeup(0, 0)], [40, closeup(0.5, 6, 41)], [46, closeup(1, 12, 47.2)], [52, cutaway], [58, nest]];
+
+window.FABLE = {
+  async setup(timeline) {
+    S = makeStage(timeline); await S.setup(document.getElementById('c'));
+    if (SHOW_CROW) crow = makeCrow(1);
+    const t0 = performance.now();
+    fieldsLayer('hot'); for (const m of ['hot', 'sunset', 'night']) gardenLayers(m);
+    const g = document.createElement('canvas').getContext('2d');
+    drawPitcherCloseup(g, 0, 0); drawPitcherCutaway(g, 0.2, 1, 0);
+    console.warn('painted in', ((performance.now() - t0) / 1000).toFixed(1), 's');
+  },
+  frame(t) { S.frame(t, SCENES, 1.4); },
+};
+</script></body></html>
