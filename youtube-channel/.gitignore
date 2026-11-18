@@ -1,3 +1,5 @@
 node_modules/
 voices/
 */build/
+asmr/*/build/
+__pycache__/
