@@ -10,7 +10,7 @@ const types = { '.html': 'text/html', '.js': 'text/javascript', '.woff2': 'font/
 const srv = http.createServer((q, r) => { const f = path.join(CH, decodeURIComponent(q.url.split('?')[0])); fs.readFile(f, (e, d) => { if (e) { r.writeHead(404); r.end(); return; } r.writeHead(200, { 'Content-Type': types[path.extname(f)] || 'application/octet-stream' }); r.end(d); }); }).listen(0);
 (async () => {
   const URL = `http://localhost:${srv.address().port}/${path.relative(CH, DIR)}/short.html?headless`;
-  const b = await chromium.launch(); fs.mkdirSync(SEG, { recursive: true });
+  const b = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] }); fs.mkdirSync(SEG, { recursive: true });
   const page = async () => { const p = await b.newPage({ viewport: { width: 1080, height: 1920 } }); p.on('pageerror', e => console.error('page error:', e.message)); await p.goto(URL); await p.evaluate(() => window.ready); return p; };
   if (opt('snap')) {
     const p = await page(), dir = path.join(DIR, 'build/snaps'); fs.mkdirSync(dir, { recursive: true });

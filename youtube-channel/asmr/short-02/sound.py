@@ -1,5 +1,11 @@
-"""Soundtrack for short-02, built from events.json (written by plan.py).
-Every crush, snap, pop and every fragment landing is placed at the exact time the animation shows it."""
+"""ASMR soundtrack for short-02 (3D), built from events.json (written by plan.py).
+
+Sound design aims for "close-mic ASMR" rather than "action movie":
+- dry and intimate (tiny room, no big reverb, no booming thumps)
+- detail over loudness: dense micro-crackles, wet clicks, grains, crisp snaps
+- binaural placement: every sound gets an interaural time delay + head shadow,
+  and textures are generated independently for each ear, so they feel like they're around your head
+Every event is placed at the exact time the animation shows it."""
 import json, os, sys
 import numpy as np
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
@@ -7,157 +13,157 @@ from synth import *  # noqa
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ev = json.load(open(os.path.join(HERE, 'events.json')))
-FPS, S, R = ev['fps'], ev['S'], ev['R']
-track = np.array(ev['track']); lift = np.array(ev['lift'])
+FPS, R, G = ev['fps'], ev['R'], ev['G']
+track = np.array(ev['track'])
 mix = Mix(ev['duration'])
 U = rng.uniform
 
-def bx_at(t): return float(np.interp(t * FPS, np.arange(len(track)), track))
-def camx(t): return min(bx_at(t) - ev['ballSX'] / S, ev['camStop'])
-def pan_x(wx, t):  # world x -> stereo position from where it is on screen
-    return float(np.clip(((wx - camx(t)) * S - 540) / 540 * 0.85, -1, 1))
+def bz_at(t): return float(np.interp(t * FPS, np.arange(len(track)), track))
+def pan_of(x, z, t):
+    """where a point appears on screen -> stereo position (camera sits right of the row, looking back at the ball)."""
+    cx, cz = 1.2 + .25 * np.sin(t * .23), bz_at(t) + 5.6
+    return float(np.clip((x - cx) / max(.6, cz - z) / .23 * .9 + .25, -1, 1))
 
-# ---------- material sounds ----------
-def wet_squish(dur, amp=1.0, lo=200, hi=1600, bub_rate=30):
-    n = secs(dur); t = t_axis(n)
-    am = lp(np.abs(noise(n)), 12) * 6
-    x = bp(noise(n), lo, hi) * am * np.minimum(1, t / .15) * (0.4 + 0.6 * t / dur)
-    out = x * 0.5
-    k = 0.0
+def binaural(x, pan):
+    """mono -> (L, R) with level difference, up to 0.6 ms time difference and head-shadow on the far ear."""
+    p = float(np.clip(pan, -1, 1)); ang = (p + 1) * np.pi / 4
+    gl, gr = np.cos(ang) * 1.2, np.sin(ang) * 1.2
+    d = int(abs(p) * 0.0006 * SR)
+    far = lp(x, 9000 - 5000 * abs(p), 2) if abs(p) > .05 else x
+    near = x
+    if p >= 0: L, Rr = np.concatenate([np.zeros(d, np.float32), far]), np.concatenate([near, np.zeros(d, np.float32)])
+    else: L, Rr = np.concatenate([near, np.zeros(d, np.float32)]), np.concatenate([np.zeros(d, np.float32), far])
+    return (L * gl).astype(np.float32), (Rr * gr).astype(np.float32)
+
+def place(x, at, pan, gain=1.0):
+    L, Rr = binaural(x * gain, pan); mix.add_stereo(L, Rr, at)
+
+def place_wide(make, at, pan, gain=1.0, width=.35):
+    """a texture generated separately for each ear (decorrelated = wide and immersive)."""
+    a, b = make(), make()
+    La, Ra = binaural(a * gain, pan - width); Lb, Rb = binaural(b * gain, pan + width)
+    n = max(len(La), len(Lb)); pad = lambda v: np.pad(v, (0, n - len(v)))
+    mix.add_stereo(pad(La) + pad(Lb), pad(Ra) + pad(Rb), at)
+
+# ---------- textures ----------
+def micro(dur, rate, lo, hi, tau=(.0004, .002), amp=.3, shape=None):
+    """dense micro-crackle; shape(u) 0..1 sets density and level over the duration."""
+    n = secs(dur); out = np.zeros(n + secs(.03), np.float32); k = 0.0
     while k < dur:
-        k += rng.exponential(1 / bub_rate)
-        b = bubble(U(160, 520), U(.01, .03), amp=U(.2, .6)); i = secs(k)
-        if i < n: out[i:i + len(b)] += b[:n - i]
-    return (out * amp).astype(np.float32)
-
-def splat(amp=1.0):
-    n = secs(.35); t = t_axis(n)
-    x = lp(noise(n), 1400) * np.exp(-t / .06) * 1.2
-    th = thump(95, 40, .12, .8); x[:len(th)] += th
-    for _ in range(14):
-        b = bubble(U(180, 600), U(.01, .035), amp=U(.2, .5)); i = secs(U(0, .18)); x[i:i + len(b)] += b[:n - i]
-    return (x * amp).astype(np.float32)
-
-def plop(amp=.5):
-    b = bubble(U(220, 420), .025, amp=1); c = lp(click(.004, 200, 2500), 2500)
-    m = min(len(b), len(c)); b[:m] += c[:m] * .6; return (b * amp).astype(np.float32)
-
-def snap(amp=1.0):  # crayon: woody/waxy crack
-    n = secs(.12); x = np.zeros(n, np.float32)
-    for f, tau, a in [(U(2100, 2700), .012, .7), (U(3600, 4300), .008, .45), (U(1100, 1400), .02, .35)]:
-        r = ring(f, tau, a); x[:len(r)] += r[:n]
-    c = click(.002, 1200, 10000, 1.3); x[:len(c)] += c
-    nb = bp(noise(n), 900, 6000) * np.exp(-t_axis(n) / .015) * .8; x += nb
-    return (x * amp).astype(np.float32)
-
-def tick(lo, hi, amp=.25, tau=.01):
-    r = ring(U(lo, hi), tau, 1); c = click(.0015, lo, hi * 1.5, .6); m = min(len(r), len(c)); r[:m] += c[:m]; return (r * amp).astype(np.float32)
-
-def bubble_pop(amp=1.0):
-    n = secs(.08); t = t_axis(n)
-    x = hp(noise(n), 1500) * np.exp(-t / .0025) * 1.6
-    x += bp(noise(n), 400, 2500) * np.exp(-t / .02) * .35
-    r = ring(U(900, 1300), .006, .5); x[:len(r)] += r[:n]
-    return (x * amp).astype(np.float32)
-
-def creak(dur, rate_from, rate_to, lo, hi, amp=.25, tau=.004):
-    """stick-slip pressure ticks that speed up: the build-up before something gives."""
-    n = secs(dur); out = np.zeros(n + secs(tau * 8), np.float32); k = 0.0
-    while k < dur:
-        r = rate_from + (rate_to - rate_from) * (k / dur) ** 1.5; k += rng.exponential(1 / r)
+        s = shape(k / dur) if shape else 1.0
+        k += rng.exponential(1 / max(rate * s, 1))
         if k >= dur: break
-        g = amp * (0.3 + 0.7 * k / dur) * U(.4, 1)
-        b = ring(U(lo, hi), tau, g); i = secs(k); out[i:i + len(b)] += b
+        r = ring(U(lo, hi), U(*tau), amp * s * U(.2, 1)); c = click(.0006, lo * .8, min(hi * 1.4, 20000), amp * s * U(.1, .4))
+        m = min(len(r), len(c)); r[:m] += c[:m]; i = secs(k); out[i:i + len(r)] += r[:len(out) - i]
     return out[:n]
 
-def shatter(amp=1.0):
-    n = secs(1.0); t = t_axis(n)
-    x = hp(noise(n), 1500) * np.exp(-t / .07) * .9
-    for _ in range(55):
-        r = ring(U(2500, 11000), U(.02, .25), U(.05, .3), partials=((1, 1), (2.76, .4))); i = secs(U(0, .12) ** 1.5 * 2)
-        x[i:i + len(r)] += r[:n - i]
-    th = thump(85, 38, .14, .9); x[:len(th)] += th
-    return (x * amp).astype(np.float32)
-
-def tinkle(amp=.2):
-    r = ring(U(3500, 9000), U(.05, .14), 1, partials=((1, 1), (2.4, .3))); return (r * amp).astype(np.float32)
-
-def crumble(dur, amp=.6):  # kinetic sand: soft granular "shhh"
-    n = secs(dur); t = t_axis(n)
-    grains = np.zeros(n, np.float32); k = 0.0
+def wet_clicks(dur, rate, shape):
+    """sticky, wet micro-sounds: tiny high bubbles and lip-like clicks."""
+    n = secs(dur); out = np.zeros(n + secs(.05), np.float32); k = 0.0
     while k < dur:
-        k += rng.exponential(1 / 900); i = secs(k)
-        if i < n: grains[i] += U(.2, 1)
-    tex = lp(grains, 6000) * 1.5 + bp(noise(n), 1200, 6500) * .25
-    env_ = np.minimum(1, t / .3) * np.minimum(1, (dur - t) / .4)
-    return (tex * env_ * amp).astype(np.float32)
+        s = shape(k / dur); k += rng.exponential(1 / max(rate * s, 1))
+        if k >= dur: break
+        if U() < .7: b = bubble(U(900, 3200), U(.002, .006), amp=U(.15, .5) * s)
+        else: b = bubble(U(250, 700), U(.008, .02), amp=U(.2, .5) * s)
+        i = secs(k); out[i:i + len(b)] += b[:len(out) - i]
+    body = bp(noise(n), 150, 1000) * lp(np.abs(noise(n)), 8) * 4 * np.array([shape(u) for u in np.linspace(0, 1, n)], np.float32)
+    return out[:n] + body * .25
 
-def crunch(amp=1.0):  # wafer layer
-    x = crackle(.09, 500, 150, .5, 1500, 9000)
-    nb = bp(noise(len(x)), 500, 4500) * np.exp(-t_axis(len(x)) / .03) * .7; x += nb
-    th = thump(140, 70, .04, .4); x[:len(th)] += th
-    return (x * amp).astype(np.float32)
+def grains(dur, rate, shape, amp=.12):
+    """kinetic sand: soft dense granular 'shhh' with tiny crunches."""
+    n = secs(dur); g = np.zeros(n, np.float32); k = 0.0
+    while k < dur:
+        s = shape(k / dur); k += rng.exponential(1 / max(rate * s, 1)); i = secs(k)
+        if i < n: g[i] += U(-1, 1) * s
+    tex = bp(g, 1500, 9000) * 2.2 + lp(g, 1200) * 1.2
+    crunch = micro(dur, 90, 500, 2600, (.001, .004), .3, shape)
+    return (tex * amp * 2.5 + crunch * .9).astype(np.float32)
 
-def paper_crinkle(dur, amp=.3):
-    return crackle(dur, 40, 90, amp, 2500, 11000, (.0004, .0015))
+def wax_snap():
+    n = secs(.09); x = np.zeros(n, np.float32)
+    c = click(.0015, 1500, 12000, 1.0); x[:len(c)] += c
+    for f, tau, a in [(U(2200, 2800), .007, .55), (U(3800, 4600), .005, .35), (U(1300, 1600), .012, .3)]:
+        r = ring(f, tau, a); x[:len(r)] += r[:n]
+    x += bp(noise(n), 1200, 7000) * np.exp(-t_axis(n) / .01) * .5
+    tail = micro(.08, 300, 2500, 8000, amp=.18, shape=lambda u: 1 - u); m = min(n - secs(.006), len(tail)); x[secs(.006):secs(.006) + m] += tail[:m]
+    return lp(x, 11000)
 
-# ---------- 1. the ball rolling: low rumble + grit when crushing over debris ----------
-n = secs(ev['duration']); tt = t_axis(n); fr = tt * FPS
-v = np.gradient(track) * FPS; v_s = np.interp(fr, np.arange(len(v)), v).astype(np.float32)
-lf = np.interp(fr, np.arange(len(lift)), lift).astype(np.float32)
-sp = np.clip(v_s / 400, 0, 1.3)
-rumble = lp(noise(n, 'pink'), 220) * 3.0 * sp ** .8
-grit_a = np.clip(lf / 10, 0, 1) * sp
-grit = crackle(ev['duration'], 120, 120, .25, 900, 5000) * grit_a
-roll = rumble + bp(noise(n), 300, 1200) * .05 * sp + grit
-ball_pan = np.array([pan_x(bx_at(x), x) for x in tt[::480]])
-mix.add(roll, 0, pan=np.interp(np.arange(n), np.arange(0, n, 480)[:len(ball_pan)], ball_pan).astype(np.float32), gain=.9)
+def wrap_pop():
+    n = secs(.06); t = t_axis(n)
+    x = hp(noise(n), 1200) * np.exp(-t / .0018) * 1.0 + bp(noise(n), 300, 1600) * np.exp(-t / .012) * .4
+    r = ring(U(1500, 2600), .004, .3); x[:len(r)] += r[:n]
+    return lp(x, 12000)
+
+def ice_crack():
+    n = secs(.6); t = t_axis(n)
+    x = hp(noise(n), 2500) * np.exp(-t / .006) * .8
+    for _ in range(26):
+        r = ring(U(2500, 9500), U(.01, .09), U(.05, .22), partials=((1, 1), (2.6, .35))); i = secs(U(0, .05) ** 1.3 * 3)
+        x[i:i + len(r)] += r[:n - i]
+    m = micro(.25, 600, 3000, 9000, amp=.12, shape=lambda u: 1 - u); x[:len(m)] += m
+    return lp(x, 13000)
+
+def tinkle(a):
+    return ring(U(3500, 8500), U(.04, .12), a, partials=((1, 1), (2.45, .3), (4.1, .1)))
+
+def wafer_crunch():
+    x = micro(.14, 2600, 1200, 9000, (.0003, .0015), .45, lambda u: (1 - u) ** 1.5)
+    x += bp(noise(len(x)), 400, 2500) * np.exp(-t_axis(len(x)) / .03) * .3
+    return lp(x, 12000)
+
+def tiny_tick(lo, hi, a, tau=.004):
+    r = ring(U(lo, hi), tau, a); c = click(.0008, lo, min(hi * 1.5, 20000), a * .5); m = min(len(r), len(c)); r[:m] += c[:m]; return r
+
+# ---------- 1. the ball: a soft, close wooden roll, quiet enough to sit under the textures ----------
+n = secs(ev['duration']); fr = t_axis(n) * FPS
+v = np.gradient(track) * FPS; sp = np.clip(np.interp(fr, np.arange(len(v)), v) / 1.1, 0, 1.2).astype(np.float32)
+for side in (-1, 1):
+    roll = bp(noise(n, 'pink'), 90, 900) * 2.2 * sp + micro(ev['duration'], 25, 1800, 6000, amp=.05) * sp
+    place(roll, 0, -.15 + side * .2, .3)
 
 # ---------- 2. each object ----------
 for o in ev['objects']:
     ty, tc, tb, th = o['type'], o['tc'], o['tb'], o.get('th')
-    cx = o['x0'] + o['w'] / 2; P = lambda t: pan_x(cx, t)
+    zc = o['z0'] + o['d'] / 2; P = lambda t, x=0.0: pan_of(x, zc, t)
     if ty == 'jelly':
-        mix.add(wet_squish(tb - tc, 1.0), tc, P(tc), .4); mix.add(splat(1.0), tb, P(tb), .55)
-    if ty == 'cupcake':
-        mix.add(wet_squish(tb - tc, .8, 150, 1100, 18), tc, P(tc), .35); mix.add(paper_crinkle(tb - tc + .2), tc, P(tc), .5); mix.add(splat(.8), tb, P(tb), .5)
-    if ty == 'crayons':
-        mix.add(creak(o['tb'] - th + .2, 25, 90, 500, 1100, .35), th, P(th), .9)
-        for j, h in enumerate(o['hits']): mix.add(snap(U(.85, 1)), h, pan_x(o['cx'][j], h), .9)
-    if ty == 'wrap':
-        for j, h in enumerate(o['hits']): mix.add(bubble_pop(U(.85, 1)), h, pan_x(o['bx'][j], h), .9)
-    if ty == 'crystal':
-        mix.add(creak(tb - th, 4, 70, 4000, 8000, .3, .003), th, P(th), .8)
-        mix.add(creak(tb - th, 2, 12, 250, 500, .25, .03), th, P(th), .7)  # low groan underneath
-        mix.add(shatter(1.0), tb, P(tb), .9)
+        d = tb - tc + .9
+        place_wide(lambda: wet_clicks(d, 180, lambda u: np.sin(np.pi * min(1, u * 1.15)) ** .6), tc, P(tc), .3)
+        for k in range(6): place(bubble(U(300, 520), .02, amp=.35), tb + .1 + k * .07, P(tb) + U(-.3, .3))  # soft "shlorp" tail
     if ty == 'sand':
-        mix.add(crumble(tb - tc + .6), tc, P(tc), .9)
+        d = tb - tc + .7
+        place_wide(lambda: grains(d, 700, lambda u: min(1, u / .15) * (1 - max(0, u - .8) / .2)), tc, P(tc), .85)
+    if ty == 'crayons':
+        for j, h in o['hits'].items(): place(wax_snap(), h, P(h) + U(-.1, .1), 1.25)
+    if ty == 'wrap':
+        place_wide(lambda: micro(tb - tc + .3, 60, 3000, 11000, amp=.07), tc, P(tc), 1.0)  # the plastic sheet crinkling
+        for j, h in o['hits'].items():
+            x = o['bub'][int(j)][0]; place(wrap_pop(), h, P(h, x * 3), U(1.1, 1.4))
+    if ty == 'ice':
+        place_wide(lambda: micro(tb - th, 160, 3500, 9500, (.0008, .003), .22, lambda u: .1 + .9 * u ** 2), th, P(th), .8)
+        place(ice_crack(), tb, P(tb), .9)
     if ty == 'wafers':
-        mix.add(creak(tb - th, 10, 45, 1500, 5000, .2, .002), th, P(th), .8)
-        for h in o['hits']: mix.add(crunch(U(.8, 1)), h, P(h), .85)
-    if th:  # the heavy ball lurching forward when something gives way
-        mix.add(thump(70, 32, .18, .9), tb + .03, P(tb), .7)
+        place_wide(lambda: micro(tb - th, 70, 1500, 7000, (.0004, .0015), .16, lambda u: .2 + .8 * u), th, P(th), .8)
+        for L, h in o['hits'].items(): place(wafer_crunch(), h, P(h) + U(-.15, .15), 1.2)
 
-# ---------- 3. every fragment landing (and its little bounce) ----------
-G = ev['G']
+# ---------- 3. every piece landing ----------
 for f in ev['frags']:
     t1 = f['t0'] + f['t1']
     if t1 >= ev['duration'] - .05: continue
-    x_land = f['x'] + f['vx'] * f['t1']; p = pan_x(x_land, t1); k = f['k']
-    vy1 = f['vy'] + G * f['t1']; t2 = t1 + 2 * f['e'] * vy1 / G
-    if k == 'blob': mix.add(plop(U(.25, .5)), t1, p)
-    elif k == 'shard':
-        mix.add(tinkle(U(.12, .3)), t1, p)
-        if f['e'] > 0: mix.add(tinkle(U(.04, .1)), t2, p)
-    elif k in ('ctip', 'crect', 'wchunk'):
-        mix.add(tick(1400, 2600, U(.2, .35)), t1, p)
-        if f['e'] > 0: mix.add(tick(1600, 2800, .1), t2, p)
-    elif k == 'cherry':
-        mix.add(tick(500, 800, .5, .03), t1, p); mix.add(thump(160, 90, .05, .4), t1, p); mix.add(tick(600, 900, .25, .03), t2, p)
-    elif k in ('spr', 'crumb'): mix.add(tick(3000, 7000, U(.05, .12), .004), t1, p)
-    elif k == 'grain': mix.add(lp(click(.002, 800, 5000, U(.05, .12)), 4000), t1, p)
+    x = f['p'][0] + f['v'][0] * f['t1']; z = f['p'][2] + f['v'][2] * f['t1']; p = pan_of(x, z, t1); k = f['k']
+    vy1 = f['v'][1] - G * f['t1']; t2 = t1 + 2 * f['e'] * abs(vy1) / G
+    if k in ('shard', 'glint'):
+        a = .14 if k == 'shard' else .05; place(tinkle(a * U(.6, 1.2)), t1, p)
+        if f['e'] > 0: place(tinkle(a * .35), t2, p)
+    elif k == 'chalf': place(tiny_tick(1600, 2800, .22, .008), t1, p); place(tiny_tick(1800, 3000, .08, .006), t2, p)
+    elif k == 'wchunk': place(micro(.04, 900, 1500, 7000, amp=.2, shape=lambda u: 1 - u), t1, p)
+    elif k in ('chip', 'crumb'): place(tiny_tick(3000, 8000, U(.04, .09)), t1, p)
+    elif k == 'grain': place(tiny_tick(2500, 7000, U(.015, .035), .002), t1, p)
+    elif k == 'blob': place(bubble(U(380, 650), .012, amp=.25), t1, p)
 
-mix.reverb(mix=.12, tau=.08)
+# tiny dry room + gentle close-mic warmth
+mix.reverb(mix=.05, tau=.025, length=.25)
+for ch in ('L', 'R'):
+    x = getattr(mix, ch); setattr(mix, ch, (x + lp(x, 250, 2) * .35).astype(np.float32))
 os.makedirs(os.path.join(HERE, 'build'), exist_ok=True)
 mix.write(os.path.join(HERE, 'build', 'raw.wav'))
 print('wrote build/raw.wav')
