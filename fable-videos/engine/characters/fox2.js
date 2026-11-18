@@ -249,7 +249,7 @@ export function makeFox2(res = 1, seed = 5) {
     const bob = moving ? Math.abs(Math.sin(ph)) * 5 : 0;
     g.save();
     pool(g, 0, 2, 230, 16, '#3a2a1a', 0.22);
-    const limb = (spr, x, o) => { g.save(); g.translate(x, -LEG - DROP - bob * 0.3 - (moving ? Math.max(0, Math.cos(ph + o)) * 9 : 0)); g.rotate(swing(o)); drawSprite(g, spr); g.restore(); };
+    const limb = (spr, x, o) => { g.save(); g.translate(x, -LEG - DROP - bob * 0.3 - (moving ? Math.max(0, -Math.cos(ph + o)) * 9 : 0)); g.rotate(swing(o)); drawSprite(g, spr); g.restore(); };
     g.save(); g.translate(0, DROP);
     limb(fF, 162, Math.PI); limb(hF, -86, 0);
     g.save(); g.translate(0, -bob); drawBent(g, tTail, [-136, -202], -356, (st.tail || 0) * 0.32 + (moving ? Math.sin(ph * 2) * 0.12 : 0)); g.restore();

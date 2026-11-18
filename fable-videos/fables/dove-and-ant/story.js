@@ -27,7 +27,8 @@ const drawH = (g, c, img) => { cam(g, c, 1); g.drawImage(img, -M, -MY, LW, LH); 
 
 const DOVE = (g, x, y, sc, face, st, mode = 'draw') => { g.save(); g.translate(x, y); g.scale(sc * -face, sc); dove[mode](g, st); g.restore(); }; // face: -1 left (her own way), +1 right
 const ANT = (g, x, y, sc, face, st) => { g.save(); g.translate(x, y); g.scale(sc * face, sc); ant.draw(g, st); g.restore(); };
-const FOX = (g, x, y, sc, mode, st) => { g.save(); g.translate(x, y); g.scale(-sc, sc); fox[mode](g, st); g.restore(); };             // the fox always faces left here
+const FOX = (g, x, y, sc, mode, st, face = -1) => { g.save(); g.translate(x, y); g.scale(sc * -face * -1, sc); fox[mode](g, st); g.restore(); }; // face -1: left (default), +1: right
+const STRIDE = 184; // ground covered per step cycle by the trotting fox at scale 1: each paw is planted for half a cycle and sweeps 92 units, so his paws never slide
 const inMouthNet = (t) => (h) => { h.save(); h.translate(58, 20); net(h, 95, 0.75, { world: 0.12, sway: Math.sin(t * 9) * 0.18 }); h.restore(); };
 
 function nestBack(g, x, y, s = 1) {
@@ -272,7 +273,7 @@ function drawWater(g, t) {
     ANT(g, leafX - 10, WL - 4 + bob * 0.6, 0.5, 1, { t, smile: 0.85, happy: Math.sin(t * 1.4) > 0.3, arms: t < climb1 + 2 ? 'wave' : 'rest' });
   } else { // ashore on the pebbles
     const u = ease(clamp((t - offT) / 1.2));
-    ANT(g, lerp(1250, 1450, u), lerp(WL - 4, 726, u), 0.5, u < 0.9 ? 1 : -1, { ...stTalk, walk: u < 1 ? t * 1.8 : null, smile: 0.7 + glad * 0.3, arms: say('a02', t) > 0.1 ? 'wave' : 'rest', browUp: glad * 0.6 });
+    ANT(g, lerp(1250, 1450, u), lerp(WL - 4, 726, u), 0.5, 1, { ...stTalk, walk: u < 1 ? t * 1.8 : null, smile: 0.7 + glad * 0.3, arms: say('a02', t) > 0.1 ? 'wave' : 'rest', browUp: glad * 0.6 });
   }
   drawWash(g, t, waveT);
   // the dove: swoops in from the oak with the leaf, lets it go, lands on the flat stone, and turns round
@@ -342,7 +343,7 @@ function drawFox(g, t) {
     const sly = 0.5, base = { t, eyes: 1 - S.blink(t, 3), sly, smile: 0.55, mouth: say('f01', t) * 0.7 };
     const ouch = S.mood(t, 'f02', 0.6, 4);
     const sitK = span(t, sitT, sitT + 0.5) * (1 - span(t, creepT - 0.4, creepT)) + span(t, stop2, stop2 + 0.4);
-    const trot = (b) => FOX(b, fx, FY, 0.5, 'drawTrot', { ...base, walk: (t < stop1 || (t > creepT && t < stop2)) ? t * (t > creepT ? 0.7 : 1.3) : null, mouth: 0.22, inMouth: inMouthNet(t), headDY: t > creepT ? 26 : 10 });
+    const trot = (b) => FOX(b, fx, FY, 0.5, 'drawTrot', { ...base, walk: (t < stop1 || (t > creepT && t < stop2)) ? (2200 - fx) / (STRIDE * 0.5) : null, mouth: 0.22, inMouth: inMouthNet(t), headDY: t > creepT ? 26 : 10 });
     const sit = (b) => {
       const raise = span(t, raiseT, raiseT + 0.8) * (1 - span(t, jumpT, jumpT + 0.3));
       const holdNet = t < dropT && t > sitT ? (gg, x, y) => { gg.save(); gg.translate(x, y); gg.rotate(lerp(0.9, 1.25, raise)); net(gg, 170, 0, { world: 0, sway: Math.sin(t * 3) * 0.1 }); gg.restore(); } : null;
@@ -353,7 +354,7 @@ function drawFox(g, t) {
     };
     const hopTrot = (b) => { // up on all fours, hopping about
       b.save(); b.translate(0, -hop); b.translate(fx, FY); b.rotate(Math.sin((t - jumpT) * 6.5) * 0.07); b.translate(-fx, -FY);
-      FOX(b, fx, FY, 0.5, 'drawTrot', { t, walk: t > jumpT + 0.6 && t < settleT ? t * 2.4 : null, mouth: Math.max(say('f02', t), 0.35 * ouch), browUp: ouch, eyes: Math.sin(t * 5) > 0 ? 0 : 1, smile: -0.3, sly: 0, tail: 1, headDY: -6 });
+      FOX(b, fx, FY, 0.5, 'drawTrot', { t, walk: t > jumpT + 0.6 && t < settleT ? (fx - 1340) / (STRIDE * 0.5) : null, mouth: Math.max(say('f02', t), 0.35 * ouch), browUp: ouch, eyes: Math.sin(t * 5) > 0 ? 0 : 1, smile: -0.3, sly: 0, tail: 1, headDY: -6 }, 1); // he turns and hops away to the right, facing the way he goes
       b.restore();
     };
     const blend = (k, A, B) => { if (k <= 0) A(g2); else if (k >= 1) B(g2); else { g2.save(); g2.globalAlpha = 1 - k; A(g2); g2.restore(); g2.save(); g2.globalAlpha = k; B(g2); g2.restore(); } };
