@@ -14,10 +14,15 @@
 //                                      a held pebble sits. Use it to place pebbles exactly (e.g. the moment one is
 //                                      released, start its fall from grip).
 //   crow.drawPebble(g, x, y, rot)      the same little grey pebble that `pebble: true` puts in the beak.
+//   crow.feet(st) / crow.feetAt(poseFn, t, o)  -> [far, near] ankle positions {x, y} (y = -3 when planted).
 //   crow.shadow(g, st, height)         a soft ground shadow (draw it before the crow); height = root above ground.
 //   STRIDE, hopX(u), takeoffLift(u), landDrop(u), walkRest(phase)  helpers, see "moving the root" below.
 //
 // ---- state parameters (all optional; numbers ease smoothly - never switch them in steps) ----
+// Blend weights (peck, think, sleep, ...) are 0..1 and are eased by the stager. Event PHASES (hop, idea, takeoff,
+// land) run 0 -> 1 once; any value <= 0 or >= 1 means 'not happening', so it is fine to drop them back to 0 after
+// they end. Cycles (walk, beat, drinkPhase) are unwrapped and keep counting up. drawAt delays phases per body part
+// instead of averaging them, so a part never sees a bogus mid-hop.
 //   t            time in seconds (drives breathing, blinks, glances, wing beats of effort, ...)
 //   life   0..1  idle life (default 1): breathing, blinks, saccadic head glances, an occasional feather shake
 //                and tail flick. It is reduced automatically while an action is busy.
