@@ -88,17 +88,19 @@ const HP = [6, -38];            // body pivot (hips)
 const N0 = [-40, -98];          // neck base on the body
 const NV0 = [-18, -26];         // rest head centre relative to the neck base -> head at (-58, -124)
 const T0 = [92, -46];           // tail root
-const SH_N = [-20, -88], SH_F = [-8, -97]; // wing shoulders (near, far)
+const SH_N = [-20, -88], SH_F = [-8, -97], SH_F2 = [10, -100]; // wing shoulders (near, far folded, far open)
 const HIP_N = [-2, -36], HIP_F = [12, -38];
 const LEG_A = 24, LEG_B = 31;   // tibia (feathered) and tarsus
 const TAIL = smooth([[86, -52], [150, -46], [188, -28], [178, -16], [140, -22], [90, -32]]);
 // head-local: centre (0, 0), facing left
 const HEAD = smooth([[-36, 6], [-33, -15], [-19, -30], [2, -35], [23, -28], [34, -10], [35, 12], [24, 29], [2, 35], [-20, 30]]);
-const BEAK_UP = smooth([[-30, -7], [-50, -7], [-70, -1], [-86, 7], [-70, 8], [-50, 10], [-30, 11]]);
+const BEAK_UP = smooth([[-30, -9], [-50, -8], [-70, -1], [-86, 7], [-70, 8], [-50, 10], [-30, 11]]);
 const BEAK_LO = smooth([[-30, 10], [-50, 11], [-74, 10], [-56, 16], [-30, 19]]);
 const BEAK_PIV = [-30, 10], BEAK_TIP = [-84, 8], GRIP = [-70, 11];
-const EYE = [-12, -7], EYE_R = 7.5;
-const NECK = smooth([[-32, -20], [0, -23], [32, -20], [38, 0], [32, 20], [0, 23], [-32, 20], [-38, 0]]);
+const EYE = [-12, -7], EYE_R = 7.6;
+const NECK = smooth([[-32, -24], [0, -27], [32, -24], [40, 0], [32, 24], [0, 27], [-32, 24], [-40, 0]]);
+// crow.js' folded wing, moved onto this body's shoulder (SH_N)
+const WING = smooth([[-36, -100], [24, -104], [78, -76], [140, -38], [88, -44], [24, -50], [-20, -62]]);
 // the two-part flight wing, built pointing straight up from the shoulder at (0, 0)
 const ARM = smooth([[-8, 10], [-16, -30], [-17, -68], [-8, -92], [16, -98], [40, -86], [50, -52], [36, -12], [14, 10]]);
 const WRIST = [14, -88];
@@ -338,13 +340,13 @@ function solve(st, dl = 0) {
     P.tuck = [lerp(26, 14, clamp((u - 0.5) / 0.4)), lerp(26, 12, clamp((u - 0.5) / 0.4))];
     // the wings: lift, rise high above the back, one big first downstroke, then into the stager's beat
     const iph = key(u, [[0, 0.5], [0.3, 0.5], [0.42, 0.5], [0.62, 1.0], [0.8, 1.5], [1, 2.0]]);
-    const scripted = mixW(FOLD, beatWing(iph), key(u, [[0, 0], [0.3, 0.45], [0.42, 1]]));
-    wcfg = mixW(scripted, beatWing(v('beat'), v('glide')), clamp((u - 0.75) / 0.25));
-    fly = Math.max(fly, key(u, [[0, 0], [0.42, 1]]));
+    // the folded wings stay folded through the crouch, then unfold fast as she springs (a few frames)
+    wcfg = mixW(beatWing(iph), beatWing(v('beat'), v('glide')), clamp((u - 0.75) / 0.25));
+    fly = Math.max(fly, key(u, [[0, 0], [0.26, 0], [0.42, 1]]));
   } else if (takeoff >= 1) fly = Math.max(fly, 1);
   if (land > 0 && land < 1) {
     const u = land;
-    const fw = key(u, [[0, 1], [0.55, 1], [0.66, 0.85], [0.88, 0]]);
+    const fw = key(u, [[0, 1], [0.6, 1], [0.74, 0]]); // a quick fold after touchdown
     fly = fw;
     P.lean += key(u, [[0, 0], [0.35, -0.42], [0.55, -0.32], [0.63, 0.22], [0.8, 0.06], [1, 0]]);
     P.c += key(u, [[0.55, 0], [0.63, 0.9], [0.8, 0.18], [1, 0]]);
@@ -365,7 +367,8 @@ function solve(st, dl = 0) {
     const c = Math.cos(v('beat') * TAU) * (1 - v('glide'));
     P.by += fly * c * -6 * (land > 0 ? 1 - clamp((land - 0.4) / 0.2) : 1);
     P.lean += fly * (0.24 - v('pitch') - v('flare') * 0.35);
-    P.sq += fly * 0.35; P.nvx -= fly * 8; P.nvy += fly * 8; P.ha -= fly * 0.06;
+    P.sq += fly * 0.35; P.nvx -= fly * 10; P.nvy += fly * 8; P.ha -= fly * 0.06; P.stretch = fly;
+    P.lean += fly * 0.05 * Math.sin(v('beat') * TAU) * (1 - v('glide')); // the body pitches a little with each beat
     P.air = Math.max(P.air, fly * (takeoff > 0 && takeoff < 1 ? 0 : 1) * (land > 0 && land < 1 ? 0 : 1));
     P.tail += fly * (-0.1 + 0.04 * Math.sin(v('beat') * TAU - 1));
     P.fan += fly * (0.3 + v('flare') * 0.7);
@@ -388,7 +391,7 @@ function solve(st, dl = 0) {
     P.sleepK = key(s, [[0.25, 0], [0.9, 1]]);
     P.eye *= 1 - key(s, [[0, 0], [0.4, 1]]);
     P.beak *= 1 - s; P.happy *= 1 - s; P.look *= 1 - s; P.big *= 1 - s;
-    P.wLift = lerp(P.wLift, 0.1, s); P.wDroop = lerp(P.wDroop, 0, s); P.wFlap *= 1 - s;
+    P.wLift = lerp(P.wLift, 0, s); P.wDroop = lerp(P.wDroop, 0, s); P.wFlap *= 1 - s;
     P.tail = lerp(P.tail, -0.1, s); P.air = lerp(P.air, 1, s); P.tuck = [lerp(P.tuck[0], 4, s), lerp(P.tuck[1], 8, s)];
     P.footUp *= 1 - s; P.breathA = lerp(P.breathA, 1.8, s); P.breath = lerp(P.breath, 1.8 * Math.sin(t * TAU * 0.2), s);
   }
@@ -397,13 +400,13 @@ function solve(st, dl = 0) {
   const fl = clamp(P.fl, 0, 1.5);
   P.rot = -P.lean;
   P.dx = P.bx - P.c * 2; P.dy = P.by + P.c * 19 - 9; // standing: the body rides 9 units above the painted pose
-  P.sx = 1 + fl * 0.06 + P.sq * 0.08 + P.breath * 0.006;
-  P.sy = 1 + fl * 0.09 - P.sq * 0.1 + P.breath * 0.013;
+  P.sx = 1 + fl * 0.06 + P.sq * 0.08 + P.breath * 0.006 + (P.stretch || 0) * 0.1;
+  P.sy = 1 + fl * 0.09 - P.sq * 0.1 + P.breath * 0.013 - (P.stretch || 0) * 0.12;
   const M = bodyMat(P);
   P.N = M(N0);
   // the head: neck offset, or (aiming) solved so the beak tip lands on the target
   let H = add(P.N, [NV0[0] + P.nvx, NV0[1] + P.nvy + fl * -3]);
-  if (P.sleepK) { const B = M([12, -104]); H = [lerp(H[0], B[0], P.sleepK), lerp(H[1], B[1], P.sleepK)]; }
+  if (P.sleepK) { const B = M([14, -118]); H = [lerp(H[0], B[0], P.sleepK), lerp(H[1], B[1], P.sleepK)]; }
   let ha = P.ha;
   if (tgt) {
     const hk = -tilt; // nose down
@@ -498,31 +501,52 @@ export function makeCrow3(res = 1, seed = 4) {
     penLine(g, BODY.slice(52, 80).concat(BODY.slice(0, 4)), { color: C.line, w: 1.8, alpha: 0.6, seed: s(17), weight: (t) => 0.2 + 0.8 * Math.sin(t * Math.PI) });
   }, { seed: s(18) });
 
-  const neck = sprite(bbox(NECK), res, (g) => {
-    wash(g, NECK, { under: true, color: C.body, opacity: 0.96, seed: s(110) });
-    blooms(g, NECK, SHEEN, { n: 3, seed: s(111), alpha: 0.35 });
-    feathered(g, NECK, 112, () => 0, 0.3);
-    soften(g, 1.6 * res);
-    furEdge(g, NECK, { color: C.body, count: 50, len: 6, width: 2.2, alpha: 0.9, seed: s(113), lean: 0.3, inner: 0.5 });
-    penLine(g, NECK.slice(4, 20), { color: C.line, w: 1.3, alpha: 0.35, seed: s(114), weight: (t) => 0.2 + 0.8 * Math.sin(t * Math.PI) });
-    penLine(g, NECK.slice(36, 52), { color: C.line, w: 1.3, alpha: 0.35, seed: s(115), weight: (t) => 0.2 + 0.8 * Math.sin(t * Math.PI) });
+  // the neck: the same washes, sheen and hatching as the body, NO ink, soft feathered edges, so head, neck and
+  // body read as one continuous bird (the neck only shows where the head moves away from the body)
+  const neck0 = sprite(bbox(NECK), res, (g) => {
+    wash(g, NECK, { under: true, color: C.body, opacity: 0.96, seed: s(110), edge: 0 });
+    blooms(g, NECK, SHEEN, { n: 4, seed: s(111), alpha: 0.4 });
+    feathered(g, NECK, 112, () => 0.2, 0.4);
+    soften(g, 1.8 * res);
+    furEdge(g, NECK, { color: C.body, count: 70, len: 7, width: 2.4, alpha: 0.9, seed: s(113), lean: 0.6, inner: 0.4 });
+    hatch(g, NECK, { color: '#0c0d12', count: 60, len: 8, width: 0.8, alpha: 0.5, seed: s(114), dir: () => 0.1, curve: 0.35 });
   }, { seed: s(116) });
+  const neck = darker(neck0, 0.9); // a touch darker: it sits in the shade under the head
 
+  // the head: crow.js' head painting, but inked only along its OUTER arc (forehead, crown, nape); the throat
+  // and the underside where it meets the neck have soft feathers and no line
+  const HEAD_OUTER = HEAD.slice(74).concat(HEAD.slice(0, 50));
   const head = sprite(bbox(HEAD.concat([[-48, 0]])), res, (g) => {
-    wash(g, HEAD, { under: true, color: C.body, opacity: 0.96, seed: s(13) });
+    wash(g, HEAD, { under: true, color: C.body, opacity: 0.96, seed: s(13), edge: 0.1 });
     blooms(g, HEAD, SHEEN, { n: 4, seed: s(15), alpha: 0.4 });
-    shadeEdge(g, HEAD, { color: C.sheen, alpha: 0.5, width: 14, dy: 6, dx: 0 });
-    feathered(g, HEAD, 14, (x, y) => Math.atan2(y, x), 0.5);
+    shadeEdge(g, HEAD, { color: C.sheen, alpha: 0.5, width: 14, dy: 6, dx: 3 });
+    glaze(g, HEAD, -12, -6, 14, 11, '#4a5470', 0.22); // the barest soft eye patch
+    feathered(g, HEAD, 14, (x, y) => Math.atan2(y + 4, x + 4), 0.5);
     soften(g, 1.8 * res);
     furEdge(g, HEAD, { color: C.body, count: 70, len: 5, width: 2, alpha: 0.9, seed: s(44), lean: 0.5, inner: 0.4, skip: (x) => x < -30 });
+    furEdge(g, HEAD, { color: C.body, count: 50, len: 7, width: 2.4, alpha: 0.9, seed: s(45), lean: 0.6, inner: 0.5, skip: (x, y) => y < 10 });
     hatch(g, HEAD, { color: '#0c0d12', count: 90, len: 6, width: 0.7, alpha: 0.5, seed: s(52), dir: (x, y) => Math.atan2(y, x) + 1.4 });
     // the bristly feathers over the nostrils, reaching onto the beak
     for (let i = 0; i < 7; i++) {
       const y = -8 + i * 2.4, x = -30 - (i % 3);
       ink(g, [[x + 4, y], [x - 6, y - 0.5], [x - 13 + (i % 2) * 2, y + 0.8]], { color: '#191b26', width: 2.2, alpha: 0.85, seed: s(120 + i), taper: true, wobble: 0.3 });
     }
-    penLine(g, HEAD, { closed: true, color: C.line, w: 2, alpha: 0.8, seed: s(17), weight: (t) => 0.3 + 0.8 * Math.max(0, Math.sin(t * Math.PI * 2 + 1)) });
+    penLine(g, HEAD_OUTER, { color: C.line, w: 2, alpha: 0.8, seed: s(17), weight: (t) => 0.15 + 0.9 * Math.sin(Math.PI * t) ** 0.7 });
   }, { seed: s(19) });
+
+  // the folded wing: crow.js' sleek layered WING (long, tapering, feather rows, primaries past the rump)
+  const wingFold = sprite(bbox(WING), res, (g) => {
+    wash(g, WING, { under: true, color: shade(C.body, 0.05), opacity: 0.96, seed: s(20) });
+    blooms(g, WING, SHEEN, { n: 6, seed: s(46), alpha: 0.5 });
+    shadeEdge(g, WING, { color: C.sheen, alpha: 0.5, width: 12, dy: 6 });
+    for (let i = 0; i < 6; i++) ink(g, [[4 + i * 18, -54 - i * 3], [64 + i * 14, -44 - i * 4]], { color: C.sheen, alpha: 0.45, width: 1.1, seed: s(21 + i) });
+    soften(g, 1.5 * res);
+    furEdge(g, WING, { color: shade(C.body, 0.05), count: 16, len: 22, width: 6, alpha: 0.95, seed: s(47), lean: 0.9, inner: 0.25, skip: (x) => x < 54 });
+    furEdge(g, WING, { color: C.sheen, count: 14, len: 14, width: 1, alpha: 0.4, seed: s(48), lean: 0.9, skip: (x) => x < 34 });
+    for (let i = 0; i < 7; i++) penLine(g, [[-6 + i * 16, -90 + i * 5], [34 + i * 14, -70 + i * 3], [74 + i * 10, -50]], { color: C.line, w: 1.3, alpha: 0.55, seed: s(53 + i) });
+    penLine(g, WING, { closed: true, color: C.line, w: 2, alpha: 0.8, seed: s(28), weight: (t) => 0.3 + 0.9 * Math.max(0, Math.sin(t * Math.PI * 2)) });
+  }, { seed: s(29) });
+  const wingFoldFar = darker(wingFold, 0.62);
 
   const beakUp = sprite(bbox(BEAK_UP), res, (g) => { wash(g, BEAK_UP, { under: true, color: C.beak, opacity: 0.97, seed: s(30) }); shadeEdge(g, BEAK_UP, { color: C.beakLight, alpha: 0.6, width: 5, dy: 3 }); pencil(g, BEAK_UP, { closed: true, color: C.ink, seed: s(31), alpha: 0.6, width: 1.1 }); }, { seed: s(32) });
   const beakLo = sprite(bbox(BEAK_LO), res, (g) => { wash(g, BEAK_LO, { under: true, color: shade(C.beak, 0.1), opacity: 0.97, seed: s(33) }); pencil(g, BEAK_LO, { closed: true, color: C.ink, seed: s(34), alpha: 0.6, width: 1.1 }); }, { seed: s(35) });
@@ -563,7 +587,7 @@ export function makeCrow3(res = 1, seed = 4) {
   // ---- drawing pieces ----
   function drawWing(g, parts, sh, baseRot, cfg, far) {
     const k = far ? 0.88 : 1;
-    g.save(); g.translate(sh[0], sh[1]); g.rotate(baseRot + cfg.a * k + (far ? 0.05 : 0));
+    g.save(); g.translate(sh[0], sh[1]); g.rotate(baseRot + cfg.a * k + (far ? -0.16 : 0));
     // primaries first (under the hand), fanned by `sp`
     const wr = [WRIST[0] * cfg.w, WRIST[1] * cfg.ak];
     const drawHand = () => {
@@ -614,11 +638,10 @@ export function makeCrow3(res = 1, seed = 4) {
     g.restore();
   }
   function drawEye(g, x, y, open, happy, R) {
-    // a soft blue-grey patch so the dark button reads on the black head
-    pool(g, x + 1, y + 1, R * 2.1, R * 1.9, '#5a6688', 0.55);
+    // the kit.js button eye on a thin warm-light rim (as crow.js' eye reads on the black head)
     if (open > 0.12 && happy < 0.5) {
-      g.fillStyle = 'rgba(214,218,228,0.9)';
-      g.beginPath(); g.ellipse(x, y, R + 2, R * 0.95 * open + 2, 0, 0, 7); g.fill();
+      g.fillStyle = 'rgba(228,221,207,0.95)';
+      g.beginPath(); g.ellipse(x, y, R + 2.4, R * 0.95 * open + 2.4, 0, 0, 7); g.fill();
       buttonEye(g, x, y, open, { R });
     } else {
       g.save(); g.strokeStyle = 'rgba(232,228,220,0.9)'; g.lineWidth = 2.4; g.lineCap = 'round'; g.beginPath();
@@ -660,10 +683,17 @@ export function makeCrow3(res = 1, seed = 4) {
     R.head = { H: add(ph.H, rd), ha: ph.ha, turn: ph.turn, beak: ph.beak, eye: ph.eye, happy: ph.happy, look: ph.look, big: ph.big, blush: ph.blush };
     R.N = M(N0); R.sleepK = ph.sleepK || 0;
     // wings
-    let cfg = mixW(FOLD, { a: FOLD.a + 0.16, h: -0.04, ak: 0.82, hk: 0.5, fk: 0.92, sp: 0.03, w: 0.85 }, clamp(pw.wDroop));
-    cfg = mixW(cfg, RAISED, clamp(pw.wLift));
-    if (pw.wFlap > 0) { const f = 0.5 - 0.5 * Math.cos(((raw.t || 0) - LAG.wing) * pw.flapRate * TAU); cfg = mixW(cfg, RAISED, clamp(pw.wFlap) * (0.15 + 0.55 * f)); }
-    if (pw.fly > 0) cfg = mixW(cfg, pw.wingCfg || beatWing(0), clamp(pw.fly));
+    // Folded, the wing is crow.js' sleek folded-wing painting; small lifts, droops and effort flicks just turn it
+    // about the shoulder. When it really opens (hop, idea, flight) it becomes the two-part arm + hand rig: the swap
+    // happens at the folded configuration, halfway through a fast unfold (3-5 frames), never as a cross-fade.
+    const liftRot = -0.42 * clamp(pw.wLift / 0.35);
+    const flick = pw.wFlap > 0 ? -clamp(pw.wFlap) * (0.08 + 0.42 * (0.5 - 0.5 * Math.cos(((raw.t || 0) - LAG.wing) * pw.flapRate * TAU))) : 0;
+    R.foldRot = liftRot + flick + 0.16 * clamp(pw.wDroop);
+    R.open = Math.max(clamp(pw.fly), ease((pw.wLift - 0.35) / 0.25));
+    let T = mixW(FOLD, RAISED, clamp((pw.wLift - 0.35) / 0.65));
+    if (pw.fly > 0) T = mixW(T, pw.wingCfg || beatWing(0), clamp(pw.fly));
+    const cfg = mixW(FOLD, T, clamp((R.open - 0.5) / 0.35));
+    cfg.a += liftRot;
     R.wing = cfg; R.wingDrop = pw.wDroop * 4;
     R.tail = { a: pb.rot + pt.tail, fan: pt.fan };
     // legs: planted feet come from the walk phase (exact), tucked feet ride along with the hips
@@ -701,15 +731,19 @@ export function makeCrow3(res = 1, seed = 4) {
     const b = R.body;
     g.save();
     // far wing, tail, legs, body, neck, head, near wing
-    drawWing(g, W_FAR, add(R.M(SH_F), [0, R.wingDrop]), b.rot, R.wing, true);
+    const folded = R.open < 0.5;
+    const foldAt = (sp, sh, rot) => { g.save(); g.translate(sh[0], sh[1]); g.rotate(b.rot + rot); g.translate(-SH_N[0], -SH_N[1]); drawSprite(g, sp); g.restore(); };
+    if (folded) foldAt(wingFoldFar, add(R.M(SH_F), [0, R.wingDrop]), R.foldRot * 0.8 + 0.07);
+    else drawWing(g, W_FAR, add(R.M(SH_F2), [0, R.wingDrop]), b.rot, R.wing, true);
     g.save(); const tp = R.M(T0); g.translate(tp[0], tp[1]); g.rotate(R.tail.a); g.scale(1, 1 + R.tail.fan * 0.35); g.translate(-T0[0], -T0[1]); drawSprite(g, tail); g.restore();
     if (st.legs !== false) for (const f of R.feet) drawLeg(g, f.hip, f.foot, f.curl, f.far);
-    g.save(); const hp = R.M(HP); g.translate(hp[0], hp[1]); g.rotate(b.rot); g.scale(b.sx, b.sy); g.translate(-HP[0], -HP[1]); drawSprite(g, body); g.restore();
-    // neck: stretched between the neck base on the body and the head
+    // neck: stretched between the neck base on the body and the head; drawn BEHIND the body so it only shows where the head moves out
     const N = R.N, H = R.head.H, dx = H[0] - N[0], dy = H[1] - N[1], L = Math.hypot(dx, dy);
     g.save(); g.translate((N[0] + H[0]) / 2, (N[1] + H[1]) / 2); g.rotate(Math.atan2(dy, dx)); g.scale(Math.max(0.8, (L + 40) / 70), 1 + 0.05 * clamp(b.fl)); drawSprite(g, neck, 1 - clamp(R.sleepK)); g.restore();
+    g.save(); const hp = R.M(HP); g.translate(hp[0], hp[1]); g.rotate(b.rot); g.scale(b.sx, b.sy); g.translate(-HP[0], -HP[1]); drawSprite(g, body); g.restore();
     drawHead(g, R, st);
-    drawWing(g, W_NEAR, add(R.M(SH_N), [0, R.wingDrop]), b.rot, R.wing, false);
+    if (folded) foldAt(wingFold, add(R.M(SH_N), [0, R.wingDrop]), R.foldRot);
+    else drawWing(g, W_NEAR, add(R.M(SH_N), [0, R.wingDrop]), b.rot, R.wing, false);
     g.restore();
   }
   const tipOf = (R) => {

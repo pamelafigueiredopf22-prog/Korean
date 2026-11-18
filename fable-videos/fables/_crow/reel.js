@@ -55,6 +55,10 @@ seg(5, 'Idle, then talking', (t, t0) => {
   const k = t - t0;
   return { x: 1180, y: GROUND, st: { t, beak: k > 2.4 && k < 4.6 ? talk(k) * span(k, 2.4, 2.6) * (1 - span(k, 4.4, 4.6)) : 0 } };
 });
+seg(2.6, 'Close-up: idle and talking', (t, t0) => {
+  const k = t - t0;
+  return { x: 860, y: 990, s: 2.5, st: { t, beak: k > 0.5 && k < 2.3 ? talk(k) * span(k, 0.5, 0.7) * (1 - span(k, 2.1, 2.3)) : 0 } };
+});
 seg(4.6, 'Walking (feet planted, head bob)', (t, t0) => {
   // distance eases in and out; walk phase = distance / STRIDE; 4 full strides
   const k = t - t0, D = 4 * STRIDE, u = clamp((k - 0.3) / 3.9);
@@ -176,12 +180,12 @@ export const REEL = {
     const r = fn(t, t0), s = r.s || S;
     const poseFn = r.fn || ((tt) => fn(tt, t0).st);
     // ground line
-    if (!r.jug && !r.nest) { g.save(); g.strokeStyle = 'rgba(90,70,50,0.25)'; g.lineWidth = 2; g.beginPath(); g.moveTo(80, GROUND + 2); g.lineTo(1840, GROUND + 2); g.stroke(); g.restore(); }
+    if (!r.jug && !r.nest && r.y === GROUND || r.s === 1.25) { g.save(); g.strokeStyle = 'rgba(90,70,50,0.25)'; g.lineWidth = 2; g.beginPath(); g.moveTo(80, GROUND + 2); g.lineTo(1840, GROUND + 2); g.stroke(); g.restore(); }
     g.save(); g.translate(r.x, r.y); g.scale(s, s);
     if (r.jug) { drawSprite2(g, JUG_BACK); if (r.water) { g.save(); g.fillStyle = 'rgba(120,160,190,0.75)'; g.beginPath(); g.ellipse(MOUTH.x, 16, MOUTH.irx * 0.92, MOUTH.iry * 0.8, 0, 0, 7); g.fill(); g.restore(); } }
     if (r.side) { g.save(); g.translate(-86, -270); g.scale(0.56, 0.56); drawSprite2(g, JUG_BACK); g.restore(); }
     if (r.nest) drawSprite2(g, NEST_BACK);
-    if (!r.jug && !r.nest) crow.shadow(g, r.st, (GROUND - r.y) / s);
+    if (!r.jug && !r.nest) crow.shadow(g, r.st, Math.max(0, GROUND - r.y) / s);
     if (r.loosePebble) crow.drawPebble(g, r.loosePebble[0], r.loosePebble[1]);
     crow.drawAt(g, poseFn, t, { since: t0 });
     if (r.drop && t > r.drop) { // the released pebble falls into the jug
