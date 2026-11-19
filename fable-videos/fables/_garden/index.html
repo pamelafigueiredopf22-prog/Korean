@@ -8,18 +8,17 @@
 import { W, H, clamp, lerp, ease, span } from '../../engine/watercolor.js';
 import { M, MY, LW, LH, cam, makeStage } from '../../engine/stage.js';
 import { makeCrow } from '../../engine/characters/crow.js';
-import { PITCHER, NEST, PEBBLES, FIELDS_COTTAGE, SHIMMER_FIELDS, view, drawH, fieldsLayer, gardenLayers, drawGarden, drawPebble, drawNestFront,
+import { PITCHER, NEST, PEBBLES, FIELDS_COTTAGE, SHIMMER_FIELDS, FIELDS_PAN, view, drawH, fieldsLayer, fieldsParallax, drawFieldsParallax, fieldsGardenAt, drawPitcher, gardenLayers, drawGarden, drawPebble, drawNestFront,
   drawPitcherCloseup, drawPitcherCutaway, heatShimmer, swifts, dustMotes } from '../crow-and-pitcher/scene.js';
 
 const SHOW_CROW = new URLSearchParams(location.search).has('crow') || window.SHOW_CROW; // a stand-in crow, only to judge scale
 let S, crow;
 const mixv = (a, b, k) => ({ z: lerp(a.z, b.z, k), x: lerp(a.x, b.x, k), y: lerp(a.y, b.y, k) });
 
-function fields(g, t) { // the opening: a slow push down toward the little cottage garden
-  const L = fieldsLayer('hot');
-  const c = mixv(view(960, 540, 1), view(FIELDS_COTTAGE[0], FIELDS_COTTAGE[1] - 40, 2.6), ease(clamp(t / 9.5)));
-  S.paperBg(g); drawH(g, c, L);
-  heatShimmer(g, L, c, t, SHIMMER_FIELDS, 1.2);
+function fields(g, t) { // the opening: a travelling shot over the fields (multiplane), then down toward the garden
+  const P = fieldsParallax('hot'), scroll = FIELDS_PAN.max * Math.min(1, t / 7), [gx, gy] = fieldsGardenAt(FIELDS_PAN.max).pitcher;
+  const c = mixv(view(960, 540, 1.04), view(gx, gy - 20, 2.6), ease(span(t, 7, 9.8)));
+  S.paperBg(g); drawFieldsParallax(g, P, c, scroll, { t });
   cam(g, c, 1); dustMotes(g, t, 20, { x0: 0, x1: 1920, y0: 300, y1: 1000 }, 3);
 }
 const wide = (mood) => (g, t) => { S.paperBg(g); drawGarden(g, t, { z: 1.02, x: Math.sin(t * 0.05) * 14, y: 0 }, mood); };
@@ -55,7 +54,7 @@ window.FABLE = {
     S = makeStage(timeline); await S.setup(document.getElementById('c'));
     if (SHOW_CROW) crow = makeCrow(1);
     const t0 = performance.now();
-    fieldsLayer('hot'); for (const m of ['hot', 'sunset', 'night']) gardenLayers(m);
+    fieldsParallax('hot'); for (const m of ['hot', 'sunset', 'night']) gardenLayers(m);
     const g = document.createElement('canvas').getContext('2d');
     drawPitcherCloseup(g, 0, 0); drawPitcherCutaway(g, 0.2, 1, 0);
     console.warn('painted in', ((performance.now() - t0) / 1000).toFixed(1), 's');

@@ -101,6 +101,8 @@ const MD = (mood) => (typeof mood === 'object' ? mood : MOODS[mood] || MOODS.hot
 
 // ---------------------------------------------------------------- staging constants (page coordinates)
 export const PITCHER = { x: 1140, y: 790, h: 210, rimY: 580, mouthW: 72 };   // y: base of the pitcher on the ground
+// the opening inside the rim (as painted): centre, radii
+PITCHER.mouth = { cx: PITCHER.x, cy: PITCHER.rimY + 0.172 * 0.3 * 0.12 * PITCHER.h, rx: 0.172 * 0.8 * PITCHER.h, ry: 0.172 * 0.3 * 0.68 * PITCHER.h };
 export const COTTAGE = { x: 345, ground: 652, S: 0.92 };
 export const WALL = { x0: 500, x1: 2080, y0: 698, y1: 708, h: 92 };          // the garden wall's foot runs from (x0,y0) to (x1,y1)
 export const ELM = { x: 1712, ground: 676 };
@@ -131,6 +133,7 @@ export function moodGlaze(c, mood, res = 1, seed = 5, o = {}) {
   const w = c.width, h = c.height, q = 4, small = canvas(Math.ceil(w / q), Math.ceil(h / q)), t = small.getContext('2d'), r = rng(seed);
   t.setTransform(1 / q, 0, 0, 1 / q, 0, 0);
   const tmp = canvas(w, h), tf = tmp.getContext('2d');
+  const keep = canvas(w, h); keep.getContext('2d').drawImage(c, 0, 0); // the painting's own shape, restored at the end
   const strokesOf = (cols, n, wid, alpha, ang = 0) => {
     t.lineCap = 'round'; t.filter = `blur(${(wid * 0.25 * res / q).toFixed(1)}px)`;
     for (let i = 0; i < n; i++) {
@@ -164,6 +167,7 @@ export function moodGlaze(c, mood, res = 1, seed = 5, o = {}) {
     apply('soft-light', 0.45);
     if (o.bleach !== false) { t.fillStyle = '#fbf1d8'; t.fillRect(0, 0, w, h); apply('source-atop', 0.1); }
   }
+  const g = c.getContext('2d'); g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'destination-in'; g.drawImage(keep, 0, 0); g.restore();
 }
 
 // a soft painted cast shadow on the ground for an object with foot (x, y), half-width hw and height hgt
@@ -274,11 +278,23 @@ export function pitcherSprite(mood = 'hot') {
   const m = MD(mood);
   if (PSPR[m.name]) return PSPR[m.name];
   const { x, y, h } = PITCHER;
-  const s = sprite({ x0: x - h * 0.42, y0: y - h * 1.08, x1: x + h * 0.48, y1: y + h * 0.08, w: h * 0.9, h: h * 1.16 }, 3, (g) => paintPitcher(g, x, y, h, m), { seed: 9, grain: 0.16 });
-  if (m.name !== 'hot') moodGlaze(s.c, m, 3, 21);
-  if (m.name === 'night') { const g = s.c.getContext('2d'); g.save(); g.setTransform(3, 0, 0, 3, -s.x0 * 3, -s.y0 * 3); g.globalCompositeOperation = 'source-atop';
-    shadeEdge(g, pitcherOutline(x, y, h), { color: '#c8d4f8', alpha: 0.55, width: h * 0.09, dx: h * 0.045, dy: 0, blend: 'screen' });
-    shadeEdge(g, ellipse(x, y - h, profW(1) * h, profW(1) * h * RIM_RY, 30), { color: '#c8d4f8', alpha: 0.5, width: h * 0.05, dx: 0, dy: h * 0.02, blend: 'screen' }); g.restore(); }
+  const pm = m.name === 'night' ? { ...m, clay: '#9a6448', clayLight: '#b88466', clayDark: '#4a2c20', slip: '#d8d0c0' } : m;
+  const s = sprite({ x0: x - h * 0.42, y0: y - h * 1.08, x1: x + h * 0.48, y1: y + h * 0.08, w: h * 0.9, h: h * 1.16 }, 3, (g) => paintPitcher(g, x, y, h, pm), { seed: 9, grain: 0.16 });
+  if (m.name === 'night') { // cool and dark, but still clay: a lighter blue glaze, then most of the purple taken back out
+    moodGlaze(s.c, m, 3, 21, { k: 0.7 });
+    const g = s.c.getContext('2d'); g.save(); g.setTransform(1, 0, 0, 1, 0, 0);
+    g.globalCompositeOperation = 'saturation'; g.globalAlpha = 0.3; g.fillStyle = '#808080'; g.fillRect(0, 0, s.c.width, s.c.height);
+    g.globalCompositeOperation = 'multiply'; g.globalAlpha = 0.3; g.fillStyle = '#b08870'; g.fillRect(0, 0, s.c.width, s.c.height);
+    g.globalCompositeOperation = 'destination-in'; g.globalAlpha = 1; const k2 = sprite({ x0: x - h * 0.42, y0: y - h * 1.08, x1: x + h * 0.48, y1: y + h * 0.08, w: h * 0.9, h: h * 1.16 }, 3, (g2) => { g2.fillStyle = '#000'; path(g2, pitcherOutline(x, y, h)); g2.fill(); g2.lineWidth = 0.05 * h * 1.1; g2.lineCap = 'round'; g2.strokeStyle = '#000'; path(g2, smooth(handleLine(x, y, h), false, 6), false); g2.stroke(); g2.beginPath(); g2.ellipse(x, y - h, profW(1) * h + 3, profW(1) * h * RIM_RY + 3, 0, 0, TAU); g2.fill(); g2.beginPath(); g2.ellipse(x, y, profW(0) * h + 2, profW(0) * h * RIM_RY + 3, 0, 0, TAU); g2.fill(); }, { granulate: false });
+    g.drawImage(k2.c, 0, 0); g.restore();
+  }
+  if (m.name === 'sunset') moodGlaze(s.c, m, 3, 21);
+  if (m.name === 'night') { // moonlight from the upper left: a cool sheen down the left of the belly and on the rim
+    const g = s.c.getContext('2d'); g.save(); g.setTransform(3, 0, 0, 3, -s.x0 * 3, -s.y0 * 3); g.globalCompositeOperation = 'source-atop';
+    g.save(); path(g, pitcherOutline(x, y, h)); g.clip(); g.globalCompositeOperation = 'screen';
+    pool(g, x - h * 0.17, y - h * 0.42, h * 0.08, h * 0.3, '#8a9cc8', 0.55); pool(g, x - h * 0.08, y - h * 0.76, h * 0.06, h * 0.08, '#8a9cc8', 0.35); g.restore();
+    g.globalCompositeOperation = 'screen'; g.beginPath(); g.ellipse(x - h * 0.03, y - h - 1, profW(1) * h * 0.95, profW(1) * h * RIM_RY * 0.9, 0, Math.PI * 1.05, Math.PI * 1.7); g.strokeStyle = 'rgba(150,165,205,0.6)'; g.lineWidth = 1.6; g.stroke();
+    g.restore(); }
   PSPR[m.name] = s;
   return s;
 }
@@ -290,13 +306,15 @@ function pitcherShadowSprite(mood) {
   return (SHSPR[m.name] = sprite({ x0: x - 120, y0: y - 60, x1: x + 560, y1: y + 90, w: 680, h: 150 }, 2, (g) => castShadow(g, x, y + 2, h * 0.3, h, m, { len: 1.5, seed: 31 }), { granulate: false }));
 }
 // Draw the pitcher where it stands (PITCHER). o.tilt: rocking angle (radians, + leans right) about the edge of its foot;
-// o.dx/o.dy: nudge; o.shadow (default true) draws its cast shadow.
+// o.dx/o.dy: nudge; o.shadow (default true) draws its cast shadow. o.lipOnly: draw only what is in front of the
+// mouth (the near half of the rim and the body below it, no shadow), so a beak dipping into the mouth sits behind it.
 export function drawPitcher(g, mood = 'hot', o = {}) {
-  const { tilt = 0, dx = 0, dy = 0, shadow = true } = o;
-  const { x, y, h } = PITCHER;
-  if (shadow) drawSprite(g, pitcherShadowSprite(mood));
+  const { tilt = 0, dx = 0, dy = 0, shadow = true, lipOnly = false } = o;
+  const { x, y, h } = PITCHER, mo = PITCHER.mouth;
+  if (shadow && !lipOnly) drawSprite(g, pitcherShadowSprite(mood));
   g.save(); g.translate(dx, dy);
   if (tilt) { const px = x + Math.sign(tilt) * profW(0) * h; g.translate(px, y); g.rotate(tilt); g.translate(-px, -y); }
+  if (lipOnly) { g.beginPath(); g.ellipse(mo.cx, mo.cy, mo.rx, mo.ry, 0, 0, Math.PI); g.lineTo(x - h * 0.6, mo.cy); g.lineTo(x - h * 0.6, y + h * 0.1); g.lineTo(x + h * 0.6, y + h * 0.1); g.lineTo(x + h * 0.6, mo.cy); g.closePath(); g.clip(); }
   drawSprite(g, pitcherSprite(mood));
   g.restore();
 }
@@ -342,12 +360,12 @@ export function drawPebble(g, p, o = {}) {
 // ---------------------------------------------------------------- skies
 // hz: where the land starts (the sky is brightest there). Paints the whole layer.
 export function paintSky(g, mood, o = {}) {
-  const m = MD(mood), { hz = 450, seed = 3, sun = true } = o, r = rng(seed);
-  g.fillStyle = '#f4ecdc'; g.fillRect(-M - 10, -MY - 10, LW + 20, LH + 20);
+  const m = MD(mood), { hz = 450, seed = 3, sun = true, x1 = W + M } = o, r = rng(seed), SW = x1 + M + 20;
+  g.fillStyle = '#f4ecdc'; g.fillRect(-M - 10, -MY - 10, SW, LH + 20);
   const grd = g.createLinearGradient(0, -MY, 0, hz + 40);
   grd.addColorStop(0, m.sky[0]); grd.addColorStop(0.62, m.sky[1]); grd.addColorStop(1, m.sky[2]);
-  g.globalAlpha = 0.9; g.fillStyle = grd; g.fillRect(-M - 10, -MY - 10, LW + 20, LH + 20); g.globalAlpha = 1;
-  const box = [[-M - 40, -MY - 40], [W + M + 40, -MY - 40], [W + M + 40, hz + 60], [-M - 40, hz + 60]];
+  g.globalAlpha = 0.9; g.fillStyle = grd; g.fillRect(-M - 10, -MY - 10, SW, LH + 20); g.globalAlpha = 1;
+  const box = [[-M - 40, -MY - 40], [x1 + 40, -MY - 40], [x1 + 40, hz + 60], [-M - 40, hz + 60]];
   brushWash(g, box, [m.sky[0], tint(m.sky[0], 0.3), m.sky[1], shade(m.sky[0], 0.08)], { seed, count: 70, width: [30, 90], len: [200, 640], alpha: [0.1, 0.26], base: 0.04, blur: 3, angle: () => -0.03, lifts: m.name === 'night' ? 0 : 0.18 });
   if (m.name === 'hot') {
     // a bleached white sun high up on the left, its glare washing out the sky round it
@@ -390,25 +408,32 @@ export const FIELDS_COTTAGE = fproj(0.45, 2.45);
 export const FIELDS_PITCHER = fproj(0.5, 2.66);
 // the dried-up stream's course on the ground plane
 const streamX = (Z) => -0.74 + 0.45 * Math.sin(Z * 0.55 + 0.6) + 0.06 * Z - 0.2 * Math.sin(Z * 1.7);
+// o (all optional, for the parallax set): rows [k0, k1) of the patchwork to paint (default all), x1 (right edge to
+// paint to, default the page's), sky (sky and hills, default true), garden (the little cottage garden, default true),
+// gardenDX (move the garden sideways, in ground units), edge (a hedgerow of trees along the band's far edge).
 export function paintDryFields(g, mood = 'hot', o = {}) {
   const m = MD(mood), seed = o.seed || 61, r = rng(seed);
-  paintSky(g, m, { hz: FZ.hz, seed: seed + 1, clouds: false });
+  const { x1 = W + M, sky = true, garden = true, gardenDX = 0, gardenPX = 0, edge = false } = o, band = !!o.rows;
+  if (sky) {
+  paintSky(g, m, { hz: FZ.hz, seed: seed + 1, clouds: false, x1 });
   // hazy hills on the horizon, two ranges
-  const hill = (y0, amp, sd) => { const pts = []; for (let x = -M - 40; x <= W + M + 40; x += 40) pts.push([x, y0 - amp * (0.5 + 0.5 * Math.sin(x * 0.0021 + sd) * Math.sin(x * 0.0009 + sd * 2)) - amp * 0.25 * noise1(x * 0.01, sd)]); return smooth(pts, false, 4); };
+  const hill = (y0, amp, sd) => { const pts = []; for (let x = -M - 40; x <= x1 + 40; x += 40) pts.push([x, y0 - amp * (0.5 + 0.5 * Math.sin(x * 0.0021 + sd) * Math.sin(x * 0.0009 + sd * 2)) - amp * 0.25 * noise1(x * 0.01, sd)]); return smooth(pts, false, 4); };
   const h1 = hill(FZ.hz - 8, 90, 2);
-  brushWash(g, h1.concat([[W + M + 40, FZ.hz + 40], [-M - 40, FZ.hz + 40]]), m.hills.map((c) => mix(c, m.sky[2], 0.35)), { seed: seed + 2, count: 70, width: [20, 50], angle: () => 0.05, alpha: [0.1, 0.22], base: 0.45, under: true });
+  brushWash(g, h1.concat([[x1 + 40, FZ.hz + 40], [-M - 40, FZ.hz + 40]]), m.hills.map((c) => mix(c, m.sky[2], 0.35)), { seed: seed + 2, count: 70, width: [20, 50], angle: () => 0.05, alpha: [0.1, 0.22], base: 0.45, under: true });
   sketch(g, h1, { alpha: 0.3, width: 1, seed: seed + 3 });
   const h2 = hill(FZ.hz + 6, 46, 5);
-  brushWash(g, h2.concat([[W + M + 40, FZ.hz + 60], [-M - 40, FZ.hz + 60]]), m.hills.map((c) => mix(c, m.far[0], 0.4)), { seed: seed + 4, count: 60, width: [16, 40], angle: () => -0.03, alpha: [0.12, 0.26], base: 0.5, under: true });
+  brushWash(g, h2.concat([[x1 + 40, FZ.hz + 60], [-M - 40, FZ.hz + 60]]), m.hills.map((c) => mix(c, m.far[0], 0.4)), { seed: seed + 4, count: 60, width: [16, 40], angle: () => -0.03, alpha: [0.12, 0.26], base: 0.5, under: true });
   sketch(g, h2, { alpha: 0.35, width: 1, seed: seed + 5 });
+  }
   // the patchwork: rows of fields from the horizon down; row boundaries wander and field sides are skewed,
   // so it reads as old fields bounded by hedges, not a grid
   const zs = []; for (let z = 34; z > 0.7; z /= 1.32) zs.push(z);
   const rowZ = (k, X) => zs[k] * (1 + 0.075 * Math.sin(X * 0.8 + k * 1.7) + 0.045 * Math.sin(X * 2.3 + k * 0.6));
-  const rows = zs.map((Z) => { const sp = 0.45 + Z * 0.08, xs = []; const lim = (1250 + M) * Z / FZ.f + sp * 2;
-    for (let X = -lim - r() * sp; X < lim + sp; X += sp * r.range(0.6, 1.45)) xs.push([X, r.range(-0.12, 0.12)]); return xs; });
+  const rows = zs.map((Z) => { const sp = 0.45 + Z * 0.08, xs = []; const lim = (1250 + M) * Z / FZ.f + sp * 2, limR = (x1 - 960 + 290) * Z / FZ.f + sp * 2;
+    for (let X = -lim - r() * sp; X < limR + sp; X += sp * r.range(0.6, 1.45)) xs.push([X, r.range(-0.12, 0.12)]); return xs; });
+  const k0 = o.rows ? o.rows[0] : 0, k1 = Math.min(o.rows ? o.rows[1] : zs.length - 1, zs.length - 1), zFar = zs[k0], zNear = zs[k1];
   const hedges = [], copses = [];
-  for (let k = 0; k < zs.length - 1; k++) {
+  for (let k = k0; k < Math.min(k1, zs.length - 1); k++) {
     const xs = rows[k + 1];
     for (let j = 0; j < xs.length - 1; j++) {
       const [X0, s0] = xs[j], [X1, s1] = xs[j + 1];
@@ -419,7 +444,7 @@ export function paintDryFields(g, mood = 'hot', o = {}) {
       for (let q = 0; q <= 6; q++) { const u = q / 6, X = lerp(L[4][0], R[4][0], u); near.push([X, rowZ(k + 1, X)]); }
       const plane = far.concat(R.slice(1), near.slice().reverse().slice(1), L.slice().reverse().slice(1, -1));
       const shp = plane.map(([X, Z]) => fproj(X, Z)), b = bbox(shp);
-      if (b.x1 < -M - 50 || b.x0 > W + M + 50) continue;
+      if (b.x1 < -M - 50 || b.x0 > x1 + 50) continue;
       const Za = zs[k], nearCell = (b.y1 - b.y0) > 40;
       const roll = r(), kind = roll < 0.38 ? 'stubble' : roll < 0.58 ? 'plough' : roll < 0.8 ? 'pasture' : roll < 0.93 ? 'hay' : 'copse';
       const base = kind === 'plough' ? m.earth : kind === 'pasture' || kind === 'copse' ? [mix(m.lawn[3], m.field[4], 0.4), m.lawn[0], m.field[4]] : [m.field[j % m.field.length], m.field[(j + 2) % m.field.length], m.field[(k + 1) % m.field.length]];
@@ -450,7 +475,7 @@ export function paintDryFields(g, mood = 'hot', o = {}) {
     }
   }
   // the dried-up stream: a pale bed of cracked mud between dusty banks, winding toward us
-  const sP = []; for (let Z = 30; Z > 0.75; Z /= 1.035) sP.push([streamX(Z), Z]);
+  const sP = []; for (let Z = Math.min(30, zFar * 1.03); Z > Math.max(0.75, zNear * 0.97); Z /= 1.035) sP.push([streamX(Z), Z]);
   const half = (Z) => 0.06 + 0.015 * Math.sin(Z * 3);
   const sL = sP.map(([X, Z]) => fproj(X - half(Z), Z)), sR = sP.map(([X, Z]) => fproj(X + half(Z), Z));
   const bank = sP.map(([X, Z]) => fproj(X - half(Z) * 1.8, Z)).concat(sP.map(([X, Z]) => fproj(X + half(Z) * 1.8, Z)).reverse());
@@ -500,6 +525,7 @@ export function paintDryFields(g, mood = 'hot', o = {}) {
   };
   const items = [];
   for (const hp of hedges) items.push([Math.min(...hp.map((p) => p[1])), 'hedge', hp]);
+  if (edge) { const pts = [], lim = (1250 + M) * zFar / FZ.f, limR = (x1 - 960 + 290) * zFar / FZ.f; for (let X = -lim; X <= limR; X += 0.02 * zFar) pts.push([X, rowZ(k0, X)]); pts.edge = true; items.push([zFar * 1.01, 'hedge', pts]); }
   for (const c of copses) items.push([c[1], 'copse', c]);
   for (let i = 4; i < sP.length; i += 5) if (r() < 0.45) { const [X, Z] = sP[i]; items.push([Z, 'willow', [X + (r() < 0.5 ? -1 : 1) * half(Z) * 2.2, Z]]); }
   items.sort((a, b) => b[0] - a[0]);
@@ -508,43 +534,47 @@ export function paintDryFields(g, mood = 'hot', o = {}) {
     if (kind === 'willow') { const [X, Z] = d, [x, y] = fproj(X, Z); if (Z < 18) tree(x, y, 30 / Z, seed + 3000 + Math.round(Z * 100), clamp((Z - 6) / 30) * 0.5, true); continue; }
     // a hedge: dusty bushes of uneven size along the edge, with gaps, and a tree now and then
     const pts = d, dense = []; for (let i = 0; i < pts.length - 1; i++) { const A = fproj(...pts[i]), B = fproj(...pts[i + 1]), zm = (pts[i][1] + pts[i + 1][1]) / 2, n = Math.max(1, Math.round(Math.hypot(A[0] - B[0], A[1] - B[1]) / Math.max(2.5, 11 / zm))); for (let q = 0; q < n; q++) dense.push([lerp(pts[i][0], pts[i + 1][0], q / n), lerp(pts[i][1], pts[i + 1][1], q / n)]); }
-    if (dense.length > 900) continue;
+    if (dense.length > (d.edge ? 4000 : 900)) continue;
     let gap = 0;
     for (let q = 0; q < dense.length; q++) {
-      const [X, Z] = dense[q], [x, y] = fproj(X, Z), s = (10 / Z) * r.range(0.65, 1.45);
-      if (x < -M - 30 || x > W + M + 30) continue;
-      if (gap > 0) { gap--; continue; } if (r() < 0.03) { gap = 2 + Math.floor(r() * 5); continue; }
+      const [X, Z] = dense[q], [x, y] = fproj(X, Z), s = (10 / Z) * r.range(0.65, 1.45) * (d.edge ? 1.25 : 1);
+      if (x < -M - 30 || x > x1 + 30) continue;
+      if (gap > 0) { gap--; continue; } if (!d.edge && r() < 0.03) { gap = 2 + Math.floor(r() * 5); continue; }
       const hz = clamp((Z - 6) / 30) * 0.5, c = mix(m.hedge[Math.floor(r() * 3)], m.sky[2], hz);
       g.fillStyle = rgba(m.shadow, 0.22 * (1 - hz)); g.beginPath(); g.ellipse(x + s * 0.5, y + s * 0.2, s * 1.1, s * 0.35, 0, 0, TAU); g.fill();
       g.fillStyle = rgba(c, 0.9); g.beginPath(); g.ellipse(x, y - s * 0.55, s * r.range(0.8, 1.2), s * r.range(0.6, 0.95), 0, 0, TAU); g.fill();
       g.fillStyle = rgba(tint(c, 0.3), 0.5); g.beginPath(); g.ellipse(x - s * 0.25, y - s * 0.8, s * 0.5, s * 0.3, 0, 0, TAU); g.fill();
-      if (r() < 0.05 && Z < 16) tree(x, y, (10 / Z) * r.range(2.4, 3.8), seed + 700 + q + Math.round(Z * 37), hz, false);
+      if (r() < (d.edge ? 0.09 : 0.05) && Z < 16) tree(x, y, (10 / Z) * r.range(2.4, 3.8), seed + 700 + q + Math.round(Z * 37), hz, false);
     }
     if (pts[0][1] < 16 && pts[pts.length - 1][1] < 16) ink(g, pts.map(([X, Z]) => { const [x, y] = fproj(X, Z); return [x, y - 9 / Z]; }), { width: Math.max(0.5, 1.4 / Math.min(pts[0][1], pts[pts.length - 1][1])), alpha: 0.3, gaps: 1.8, seed: seed + 1000 + Math.round(pts[0][0] * 100) });
   }
   // a farm far off: a barn and a house with red roofs among trees
   for (const [X, Z, w, h, roof] of [[-1.6, 7.5, 0.16, 0.07, '#a8584a'], [-1.38, 7.8, 0.1, 0.08, '#b86a50']]) {
+    if (Z > zFar || Z < zNear) continue;
     const [x, y] = fproj(X, Z), pw = FZ.f * w / Z, ph = FZ.f * h / Z, hz = clamp((Z - 6) / 30) * 0.5;
     const wallS = [[x - pw / 2, y], [x + pw / 2, y], [x + pw / 2, y - ph], [x - pw / 2, y - ph]], rf = [[x - pw / 2 - 2, y - ph], [x + pw / 2 + 2, y - ph], [x + pw / 2 - pw * 0.15, y - ph * 1.7], [x - pw / 2 + pw * 0.15, y - ph * 1.7]];
     wash(g, wallS, { color: mix('#e8dcc0', m.sky[2], hz), opacity: 0.95, seed: seed + 4000 + X * 10, under: true, layers: 8 });
     wash(g, rf, { color: mix(roof, m.sky[2], hz), opacity: 0.95, seed: seed + 4001 + X * 10, under: true, layers: 8 });
     ink(g, wallS, { closed: true, width: 0.8, alpha: 0.6 }); ink(g, rf, { closed: true, width: 0.8, alpha: 0.6 });
   }
-  paintTinyGarden(g, m, seed + 1200);
-  // a soft heat haze lying over the distance
+  if (garden && TG.Zn > zNear && TG.Zf < zFar) { g.save(); g.translate(gardenPX, 0); paintTinyGarden(g, m, seed + 1200, gardenDX); g.restore(); }
+  // a soft heat haze lying over the distance (on a band of the parallax set, only over what is painted)
   const hg = g.createLinearGradient(0, FZ.hz - 60, 0, FZ.hz + 200);
   hg.addColorStop(0, rgba(m.sky[2], 0)); hg.addColorStop(0.3, rgba(m.sky[2], m.name === 'night' ? 0.15 : 0.32)); hg.addColorStop(1, rgba(m.sky[2], 0));
-  g.fillStyle = hg; g.fillRect(-M, FZ.hz - 60, LW, 260);
-  g.save(); g.globalCompositeOperation = 'multiply';
-  const dg = g.createLinearGradient(0, FZ.hz + 40, 0, H + MY); dg.addColorStop(0, 'rgba(255,255,255,0)'); dg.addColorStop(0.45, 'rgba(236,200,150,0.35)'); dg.addColorStop(1, 'rgba(200,150,100,0.55)');
-  g.fillStyle = dg; g.fillRect(-M, FZ.hz + 40, LW, LH);
+  g.save(); if (band) g.globalCompositeOperation = 'source-atop';
+  g.fillStyle = hg; g.fillRect(-M, FZ.hz - 60, x1 + M, 260); g.restore();
+  g.save(); g.globalCompositeOperation = band ? 'source-atop' : 'multiply';
+  const dg = g.createLinearGradient(0, FZ.hz + 40, 0, H + MY);
+  if (band) { dg.addColorStop(0, 'rgba(150,100,50,0)'); dg.addColorStop(0.45, 'rgba(150,100,50,0.1)'); dg.addColorStop(1, 'rgba(130,80,40,0.2)'); }
+  else { dg.addColorStop(0, 'rgba(255,255,255,0)'); dg.addColorStop(0.45, 'rgba(236,200,150,0.35)'); dg.addColorStop(1, 'rgba(200,150,100,0.55)'); }
+  g.fillStyle = dg; g.fillRect(-M, FZ.hz + 40, x1 + M, LH);
   g.restore();
 }
 // the cottage garden as the crow first sees it, far below: the cottage and the wall along the back (as in the
 // garden set), the elm beyond it, a lawn, a path to the gate, flower beds and a vegetable patch, and the pitcher
 const TG = { X0: 0.2, X1: 0.72, Zf: 2.74, Zn: 2.14 };
-function paintTinyGarden(g, m, seed) {
-  const r = rng(seed), q = (X, Z) => fproj(X, Z), { X0, X1, Zf, Zn } = TG;
+function paintTinyGarden(g, m, seed, dX = 0) {
+  const r = rng(seed), q = (X, Z) => fproj(X + dX, Z), { X0, X1, Zf, Zn } = TG;
   const quad = (a, b, c, d) => [q(a, c), q(b, c), q(b, d), q(a, d)];
   const plot = quad(X0, X1, Zf, Zn);
   brushWash(g, plot, [mix(m.lawn[3], m.leaf[0], 0.45), m.lawn[0], mix(m.leaf[2], m.lawn[2], 0.5)], { seed, count: 40, width: [3, 10], len: [10, 40], alpha: [0.2, 0.4], base: 0.85, under: '#efe4cc', lifts: 0.1 });
@@ -582,7 +612,7 @@ function paintTinyGarden(g, m, seed) {
   wallEdge(B, C); wallEdge(A, D);
   wallEdge(D, [gateA, lerp(D[1], C[1], 0.6)]); wallEdge([gateB, lerp(D[1], C[1], 0.6) + (C[1] - D[1]) * 9 / (C[0] - D[0])], C);
   // the pitcher by the back wall (as in the garden), small and tall, with its shadow
-  const [px, py] = FIELDS_PITCHER;
+  const [px, py] = q(0.5, 2.66);
   castShadow(g, px, py, 5, 16, m, { seed: seed + 6 });
   paintPitcher(g, px, py, 20, m);
 }
@@ -1763,4 +1793,56 @@ export function fieldsLayer(mood = 'hot') {
   moodGlaze(c, m, 2, 15, { k: 0.85, bleach: false });
   { const g = c.getContext('2d'); g.save(); g.setTransform(1, 0, 0, 1, 0, 0); granulate(g, c.width, c.height, 0.2, 7); g.restore(); }
   return (FIELDS[m.name] = to8(c));
+}
+
+// ---------------------------------------------------------------- the fields as a multiplane set, for a travelling shot
+// Four planes of the same patchwork, painted wide and drawn far to near, each sliding left by scroll * k (the near
+// one fastest), so the ground streams past under a flying crow with real depth. Each plane ends at its far edge
+// in a hedgerow of trees that hides the seam with the plane behind. The little garden is on the third plane and
+// arrives at x 1120 on the page (FIELDS_PITCHER's spot) when scroll reaches FIELDS_PAN.max.
+//   fieldsParallax(mood)                     -> the planes (cached); painted at 2x, so the end push-in stays crisp
+//   drawFieldsParallax(g, P, c, scroll, o)   draws them with camera c (o.t: heat shimmer over the far plane)
+//   fieldsGardenAt(scroll)                   -> where the garden is on the page at that scroll: { pitcher, cottage, centre }
+const PAN = 1500;
+const PLANES = [ // rows of the patchwork, speed k, page band y0..y1, the garden on it, a hedgerow along its far edge
+  { name: 'far', rows: [0, 6], k: 0.086, y0: -MY, y1: 480, sky: true },
+  { name: 'mid', rows: [5, 9], k: 0.24, y0: 372, y1: 640, edge: true },
+  { name: 'garden', rows: [8, 12], k: 0.5, y0: 466, y1: 1036, edge: true, garden: true },
+  { name: 'near', rows: [11, 13], k: 1, y0: 762, y1: H + MY, edge: true },
+];
+// the garden is painted as seen from straight above it (as in the still shot), slid sideways so its pitcher lands at x 1120
+const GARDEN_PX = 1120 + PAN * 0.5 - fproj(0.5, 2.66)[0];
+export const FIELDS_PAN = { max: PAN, planes: PLANES.map((p) => ({ name: p.name, k: p.k })), gardenK: 0.5 };
+export function fieldsGardenAt(scroll = PAN) {
+  const at = (X, Z) => { const [x, y] = fproj(X, Z); return [x + GARDEN_PX - scroll * 0.5, y]; };
+  return { pitcher: at(0.5, 2.66), cottage: at(0.27, TG.Zf + 0.02), centre: at(0.45, 2.45) };
+}
+const PAR = {};
+export function fieldsParallax(mood = 'hot') {
+  const m = MD(mood);
+  if (PAR[m.name]) return PAR[m.name];
+  const res = 2;
+  return (PAR[m.name] = PLANES.map((P) => {
+    const x1 = W + M + Math.ceil(PAN * P.k) + 60, w = x1 + M, h = P.y1 - P.y0;
+    const c = canvas(w * res, h * res), g = c.getContext('2d');
+    g.scale(res, res); g.translate(M, -P.y0);
+    paintDryFields(g, m, { rows: P.rows, x1, sky: !!P.sky, garden: !!P.garden, gardenPX: GARDEN_PX, edge: !!P.edge });
+    moodGlaze(c, m, res, 15, { k: 0.85, bleach: false });
+    const cg = c.getContext('2d'); cg.setTransform(1, 0, 0, 1, 0, 0); granulate(cg, c.width, c.height, 0.2, 7);
+    return { img: to8(c), k: P.k, x0: -M, y0: P.y0, w, h, name: P.name };
+  }));
+}
+export function drawFieldsParallax(g, P, c, scroll = 0, o = {}) {
+  cam(g, c, 1);
+  for (const L of P) {
+    const dx = L.x0 - scroll * L.k;
+    g.drawImage(L.img, dx, L.y0, L.w, L.h);
+    if (L.name === 'far' && o.t !== undefined) { // heat shimmer over the far fields and hills
+      const res = L.img.height / L.h, y0 = 230, y1 = 470, step = 3;
+      for (let y = y0; y < y1; y += step) {
+        const e = Math.sin(Math.PI * (y - y0) / (y1 - y0)), ox = 1.2 * e * (Math.sin(o.t * 2.3 + y * 0.19) * 0.6 + Math.sin(o.t * 1.3 - y * 0.071 + 1.3) * 0.4);
+        g.drawImage(L.img, 0, (y - L.y0) * res, L.img.width, step * res, dx + ox, y, L.w, step + 0.5);
+      }
+    }
+  }
 }
