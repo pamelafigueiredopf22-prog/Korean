@@ -109,6 +109,9 @@ const BEAK_PIV = [-30, 10], BEAK_TIP = [-84, 8], GRIP = [-70, 11];
 const EYE = [-12, -7], EYE_R = 7.6;
 const EYE_AZ = Math.PI / 3, EYE_RAD = 24; // the eyes sit 60 degrees either side of the beak on a sphere: profile x = -12
 const NECK = smooth([[-32, -24], [0, -27], [32, -24], [40, 0], [32, 24], [0, 27], [-32, 24], [-40, 0]]);
+// seen front-on (the middle of a turn): a plump round chest, and a folded wing as a dark shoulder at each side
+const CHEST = smooth([[0, -54], [30, -47], [45, -14], [42, 22], [24, 46], [0, 53], [-24, 46], [-42, 22], [-45, -14], [-30, -47]]);
+const SHOULDER = smooth([[-5, -46], [9, -43], [15, -18], [13, 16], [5, 46], [-3, 42], [-11, 8], [-13, -28]]);
 // crow.js' folded wing, moved onto this body's shoulder (SH_N)
 const WING = smooth([[-36, -100], [24, -104], [78, -76], [140, -38], [88, -44], [24, -50], [-20, -62]]);
 // the two-part flight wing, built pointing straight up from the shoulder at (0, 0)
@@ -582,6 +585,27 @@ export function makeCrow3(res = 1, seed = 4) {
     penLine(g, WING, { closed: true, color: C.line, w: 2, alpha: 0.8, seed: s(28), weight: (t) => 0.3 + 0.9 * Math.max(0, Math.sin(t * Math.PI * 2)) });
   }, { seed: s(29) });
   const wingFoldFar = darker(wingFold, 0.62);
+  const chest = sprite(bbox(CHEST), res, (g) => {
+    wash(g, CHEST, { under: true, color: C.body, opacity: 0.95, seed: s(130) });
+    blooms(g, CHEST, SHEEN, { n: 6, seed: s(131), alpha: 0.45 });
+    glaze(g, CHEST, 0, 22, 34, 26, C.belly, 0.6);
+    shadeEdge(g, CHEST, { color: C.sheen, alpha: 0.45, width: 16, dy: 7 });
+    feathered(g, CHEST, 132, (x) => Math.PI / 2 + x * 0.01, 0.6);
+    soften(g, 1.8 * res);
+    furEdge(g, CHEST, { color: C.body, count: 90, len: 7, width: 2.4, alpha: 0.9, seed: s(133), lean: 0.2, inner: 0.4 });
+    hatch(g, CHEST, { color: '#0c0d12', count: 150, len: 8, width: 0.8, alpha: 0.5, seed: s(134), dir: () => Math.PI / 2, curve: 0.4,
+      density: (x, y) => 0.3 + 0.7 * clamp((y + 10) / 50) });
+    penLine(g, CHEST.slice(14, 68), { color: C.line, w: 2, alpha: 0.8, seed: s(135), weight: (t) => 0.25 + 0.9 * Math.sin(Math.PI * t) });
+  }, { seed: s(136) });
+  const shoulder = sprite(bbox(SHOULDER), res, (g) => {
+    wash(g, SHOULDER, { under: true, color: shade(C.body, 0.05), opacity: 0.96, seed: s(140) });
+    blooms(g, SHOULDER, SHEEN, { n: 3, seed: s(141), alpha: 0.5 });
+    shadeEdge(g, SHOULDER, { color: C.sheen, alpha: 0.5, width: 10, dx: -4, dy: 4 });
+    for (let i = 0; i < 4; i++) penLine(g, [[-8, -26 + i * 15], [2, -20 + i * 15], [11, -24 + i * 15]], { color: C.line, w: 1, alpha: 0.5, seed: s(142 + i) });
+    soften(g, 1.4 * res);
+    furEdge(g, SHOULDER, { color: C.body, count: 20, len: 9, width: 3, alpha: 0.9, seed: s(147), lean: 0.6, skip: (x, y) => y < 20 });
+    penLine(g, SHOULDER, { closed: true, color: C.line, w: 1.8, alpha: 0.8, seed: s(148), weight: (t) => 0.3 + 0.8 * Math.max(0, Math.sin(t * Math.PI * 2 + 0.5)) });
+  }, { seed: s(149) });
 
   const beakUp = sprite(bbox(BEAK_UP), res, (g) => { wash(g, BEAK_UP, { under: true, color: C.beak, opacity: 0.97, seed: s(30) }); shadeEdge(g, BEAK_UP, { color: C.beakLight, alpha: 0.6, width: 5, dy: 3 }); pencil(g, BEAK_UP, { closed: true, color: C.ink, seed: s(31), alpha: 0.6, width: 1.1 }); }, { seed: s(32) });
   const beakLo = sprite(bbox(BEAK_LO), res, (g) => { wash(g, BEAK_LO, { under: true, color: shade(C.beak, 0.1), opacity: 0.97, seed: s(33) }); pencil(g, BEAK_LO, { closed: true, color: C.ink, seed: s(34), alpha: 0.6, width: 1.1 }); }, { seed: s(35) });
@@ -688,38 +712,56 @@ export function makeCrow3(res = 1, seed = 4) {
   }
   function drawHead(g, R, st) {
     const { H, ha, turn, sO } = R.head, { c, sx } = headTurnK(turn);
+    // k3: 0 = the original profile/headTurn drawing (exactly as before), 1 = the turning-round face model
+    const k3 = clamp((R.head.turnH || 0) / 0.15);
+    const pivX = lerp(BEAK_PIV[0] * sx, BEAK_PIV[0] * c, k3); // the beak's root comes round to the middle of the face
     g.save(); g.translate(H[0], H[1]); g.scale(sO, 1); g.rotate(ha);
     // beak (under the head feathers): foreshortened as the head turns
     const open = clamp(R.head.beak);
-    g.save(); g.translate(BEAK_PIV[0] * sx, BEAK_PIV[1]); g.scale(c, 1); g.translate(-BEAK_PIV[0], -BEAK_PIV[1]);
+    g.save(); g.translate(pivX, BEAK_PIV[1]); g.scale(c, 1); g.translate(-BEAK_PIV[0], -BEAK_PIV[1]);
     g.save(); g.translate(BEAK_PIV[0], BEAK_PIV[1]); g.rotate(open * 0.28); g.translate(-BEAK_PIV[0], -BEAK_PIV[1]); drawSprite(g, beakUp); g.restore();
     g.save(); g.translate(BEAK_PIV[0], BEAK_PIV[1]); g.rotate(-open * 0.42); g.translate(-BEAK_PIV[0], -BEAK_PIV[1]); drawSprite(g, beakLo); g.restore();
     if (st.pebble) { const gp = rot([GRIP[0] - BEAK_PIV[0], GRIP[1] - BEAK_PIV[1]], -open * 0.12); g.save(); g.translate(BEAK_PIV[0] + gp[0], BEAK_PIV[1] + gp[1]); g.scale(1 / Math.max(0.3, Math.abs(c)), 1); drawSprite(g, pebble); g.restore(); }
     g.restore();
     g.save(); g.scale(sx, 1); drawSprite(g, head); g.restore();
-    if (Math.abs(c) < 0.4) { // the beak seen end-on as the head turns through the front
-      g.save(); g.globalAlpha *= 1 - Math.abs(c) / 0.4; g.fillStyle = C.beak; g.beginPath(); g.ellipse(BEAK_PIV[0] * sx * 0.95, 8, 7, 8, 0, 0, 7); g.fill();
+    if (Math.abs(c) < 0.4 && k3 < 1) { // (headTurn only, e.g. the sleep tuck) the beak seen end-on
+      g.save(); g.globalAlpha *= (1 - Math.abs(c) / 0.4) * (1 - k3); g.fillStyle = C.beak; g.beginPath(); g.ellipse(BEAK_PIV[0] * sx * 0.95, 8, 7, 8, 0, 0, 7); g.fill();
       g.fillStyle = 'rgba(160,156,170,0.6)'; g.beginPath(); g.arc(BEAK_PIV[0] * sx * 0.95 - 1, 5, 2.2, 0, 7); g.fill(); g.restore();
     }
-    // eyes and cheeks sit on the sides of a round head: each is drawn where it is on the sphere, narrowed as it
-    // turns away, so the profile shows one eye and the front-on view shows both
-    const e = R.head, yaw = Math.PI * clamp(turn);
+    const e = R.head;
     const R0 = EYE_R * (1 + 0.15 * clamp(e.big));
     const eo = clamp(e.eye * (1 + 0.15 * clamp(e.big)), 0, 1.15) * (1 - clamp((e.happy - 0.4) / 0.5));
-    // (with `turn` at 0 this is exactly the old single-eye placement used by headTurn glances and the sleep tuck)
-    const k3 = clamp((R.head.turnH || 0) / 0.15);
-    for (const side of [-1, 1]) {
-      const al = yaw + side * EYE_AZ, ez = Math.sin(al);
-      let ex = -Math.cos(al) * EYE_RAD, ws = clamp(ez / Math.sin(EYE_AZ)), fade = clamp((ez - 0.06) / 0.2);
-      if (side > 0) { ex = lerp(EYE[0] * c, ex, k3); ws = lerp(0.55 + 0.45 * Math.abs(c), ws, k3); fade = lerp(1, fade, k3); }
-      else fade *= k3;
-      if (fade <= 0.001) continue;
-      g.save(); g.globalAlpha *= fade;
-      const wb = side > 0 ? lerp(Math.abs(c), clamp(ez / Math.sin(EYE_AZ)), k3) : ws, bx = side > 0 && k3 === 0 ? -14 * c : ex * 1.17;
-      pool(g, bx, 13, 9 * (0.5 + 0.5 * wb), 6, '#d08a96', 0.42 * e.blush);
-      g.translate(ex, EYE[1] - e.look * 1.5); g.scale(ws, 1);
+    if (k3 === 0) { // the original single eye and cheek (profile, headTurn glances, the sleep tuck)
+      pool(g, -14 * c, 13, 9 * (0.5 + 0.5 * Math.abs(c)), 6, '#d08a96', 0.42 * e.blush);
+      g.save(); g.translate(EYE[0] * c, EYE[1] - e.look * 1.5); g.scale(0.55 + 0.45 * Math.abs(c), 1);
       drawEye(g, 0, 0, eo, e.happy, R0);
       g.restore();
+    } else {
+      // turning round: the near eye slides from the side of the face (x = -12) to the right of the front (+17);
+      // the far eye comes into view past the head's edge (clipped by it, never faded) to the left of the front.
+      // At front-on the pair is symmetric, so the mirror swap at the middle of the turn does not jump.
+      const yawP = Math.PI * clamp(turn), q = Math.min(yawP, Math.PI - yawP), sq = Math.sin(q), sg = c < 0 ? -1 : 1;
+      const lerpK = (a, b) => lerp(a, b, k3);
+      const near = { x: sg * lerpK(EYE[0] * Math.cos(q), lerp(-12, 17, sq)), w: lerpK(0.55 + 0.45 * Math.cos(q), lerp(1, 0.8, sq)) };
+      const far = { x: sg * lerp(-37, -17, sq), w: lerp(0.35, 0.8, sq) };
+      const eyeAt = (E) => {
+        pool(g, E.x * 1.1, 13, 8 * E.w, 6, '#d08a96', 0.42 * e.blush);
+        g.save(); g.translate(E.x, EYE[1] - e.look * 1.5); g.scale(E.w, 1); drawEye(g, 0, 0, eo, e.happy, R0); g.restore();
+      };
+      if (sq > 0.05) { // the far eye, inside the head's outline only
+        g.save(); g.beginPath(); g.ellipse(0, 0, 34 * Math.abs(sx), 34, 0, 0, 7); g.clip(); eyeAt(far); g.restore();
+      }
+      eyeAt(near);
+      // the beak pointing at us: a short, opaque, foreshortened wedge that grows as the profile beak shortens
+      const fb = ease(1 - Math.abs(c) / 0.75);
+      if (fb > 0.001) {
+        g.save(); g.translate(pivX, 7); g.scale(fb * 1.7, fb * 1.7);
+        g.fillStyle = shade(C.beak, 0.12); g.beginPath(); g.moveTo(-7, -5); g.quadraticCurveTo(0, -8, 7, -5); g.quadraticCurveTo(5, 6, 0, 15); g.quadraticCurveTo(-5, 6, -7, -5); g.fill();
+        g.strokeStyle = rgba(C.ink, 0.7); g.lineWidth = 1.1; g.stroke();
+        g.strokeStyle = rgba(C.beakLight, 0.8); g.lineWidth = 1.4; g.beginPath(); g.moveTo(-1.5, -4); g.lineTo(-0.8, 6); g.stroke(); // a tiny highlight on the ridge
+        g.strokeStyle = rgba(C.ink, 0.6); g.lineWidth = 1; g.beginPath(); g.moveTo(-5.5, 3); g.quadraticCurveTo(0, 5 + open * 6, 5.5, 3); g.stroke(); // the gape
+        g.restore();
+      }
     }
     g.restore();
   }
@@ -728,9 +770,11 @@ export function makeCrow3(res = 1, seed = 4) {
   function rig(raw, ph, pb, pw, pt) {
     const rd = [raw.rdx, raw.rdy];
     // turning round: body shapes (body, wings, hips, tail root) and points through the middle (neck, head)
-    const yB = yawOf(pb.turnB || 0, 0.42), yT = yawOf(pt.turnT || 0, 0.3);
+    const yB = yawOf(pb.turnB || 0, 0.42), yT = yawOf(pt.turnT || 0, 0); // the tail points away (zero length) rather than flipping
     const Mb = bodyMat(pb), M = (p) => add(yB.shape(Mb(p)), rd);
-    const R = { rd, body: pb, M, Mb, yB, yT };
+    // front: how front-on she is (0 in profile, 1 facing us); the chest, shoulders and spread wings come in with it
+    const front = ease(1 - Math.abs(yB.c) / 0.5);
+    const R = { rd, body: pb, M, Mb, yB, yT, front, chestAt: M(BC) };
     const hy = headYaw(ph.turnH || 0, ph.turn);
     R.head = { H: add(yB.point(ph.H), rd), ha: ph.ha, turn: hy.yaw, sO: hy.sO, turnH: ph.turnH || 0, beak: ph.beak, eye: ph.eye, happy: ph.happy, look: ph.look, big: ph.big, blush: ph.blush };
     R.N = add(yB.point(Mb(N0)), rd); R.sleepK = ph.sleepK || 0;
@@ -754,13 +798,19 @@ export function makeCrow3(res = 1, seed = 4) {
     const trn = clamp(raw.turnRaw || 0);
     for (const [hip, off, isNear] of [[HIP_F, 0.5, false], [HIP_N, 0, true]]) {
       let [fx, fy, curl] = walkFoot(ph0 + off + 0.05);
-      if (trn > 0) { // turning round on the spot: one foot steps round, then the other (planted in between)
-        const u = clamp((trn - (isNear ? 0.12 : 0.45)) / 0.33), e = easeInOut(u), lift = Math.sin(Math.PI * u);
-        fx = lerp(fx, -fx, e); fy -= 11 * lift; curl = Math.max(curl, 0.7 * lift);
+      if (trn > 0) { // turning round on the spot: four little steps, one foot at a time (the other stays planted):
+        // each foot first steps to its place in the front-on stance (feet apart), then on to the mirrored spot
+        const mid = isNear ? 9 : -9, w1 = isNear ? [0.08, 0.3] : [0.3, 0.52], w2 = isNear ? [0.55, 0.72] : [0.72, 0.9];
+        const u1 = clamp((trn - w1[0]) / (w1[1] - w1[0])), u2 = clamp((trn - w2[0]) / (w2[1] - w2[0]));
+        const x0 = fx;
+        fx = lerp(lerp(x0, mid, easeInOut(u1)), -x0, easeInOut(u2));
+        const lift = Math.sin(Math.PI * u1) + Math.sin(Math.PI * u2);
+        fy -= 10 * lift; curl = Math.max(curl, 0.7 * lift);
       }
       let f = [fx + rd[0], fy + rd[1]], cu = curl;
       if (isNear && raw.footUp > 0) { const u = clamp(raw.footUp); f = [lerp(f[0], 0, u * 0.6), f[1] - 15 * u]; cu = Math.max(cu, u * 0.85); }
-      const hw = M(hip);
+      let hw = M(hip);
+      if (front > 0) hw = [lerp(hw[0], R.chestAt[0] + (isNear ? 9 : -9), front), hw[1]]; // front-on, the hips sit apart
       if (air > 0) {
         const tk = add(hw, rot([raw.tuck[0] + (isNear ? 0 : 6), raw.tuck[1]], pb.rot * 0.5));
         f = [lerp(f[0], tk[0], air), lerp(f[1], tk[1], air)]; cu = lerp(cu, raw.tuckCurl, air);
@@ -790,10 +840,26 @@ export function makeCrow3(res = 1, seed = 4) {
     const bodySpace = () => { g.translate(R.rd[0], R.rd[1]); g.translate((R.yB.c - R.yB.k) * BC[0], 0); g.scale(R.yB.k, 1); };
     g.save();
     // far wing, tail, legs, neck, body, head, near wing
-    const folded = R.open < 0.5;
-    const foldAt = (sp, sh, rot) => { g.save(); bodySpace(); g.translate(sh[0], sh[1]); g.rotate(b.rot + rot); g.translate(-SH_N[0], -SH_N[1]); drawSprite(g, sp); g.restore(); };
+    const folded = R.open < 0.5, F = R.front, turning = R.yB.c < 0.999;
+    // (coming front-on, the folded side wings fold in to the shoulders, which the front view draws)
+    const foldAt = (sp, sh, rot) => { g.save(); bodySpace(); g.translate(sh[0], sh[1]); if (F > 0) g.scale(Math.max(0.02, 1 - F), 1); g.rotate(b.rot + rot); g.translate(-SH_N[0], -SH_N[1]); drawSprite(g, sp); g.restore(); };
     const wingAt = (parts, sh, far) => { g.save(); bodySpace(); drawWing(g, parts, sh, b.rot, R.wing, far); g.restore(); };
+    // turning in flight: each open wing swings from its side-view pose to its front-view pose (spread out to one
+    // side, beating up in a V and down, chord seen edge-on): one wing each, always opaque, no second set
+    const turnWing = (isFar) => {
+      const [cx, cy] = R.chestAt, sy = 0.7 + 0.3 * F, sdN = R.yB.k < 0 ? -1 : 1, sd = isFar ? -sdN : sdN;
+      const sSide = R.M(isFar ? SH_F2 : SH_N), sFront = [cx + sd * 30, cy - 22 * sy];
+      const S = [lerp(sSide[0], sFront[0], F), lerp(sSide[1] + R.wingDrop, sFront[1], F)];
+      const thSide = b.rot + R.wing.a * (isFar ? 0.88 : 1) + (isFar ? -0.16 : 0);
+      const thFront = Math.PI / 2 - lerp(1.15, -0.75, clamp((R.wing.a + 0.35) / 2.8));
+      const cfg = { ...R.wing, w: R.wing.w * lerp(1, 0.5, F), h: R.wing.h * lerp(isFar ? 0.88 : 1, 0.5, F) };
+      g.save(); g.translate(S[0], S[1]); g.scale(lerp(R.yB.k, sd, F), 1);
+      if (isFar) g.filter = `brightness(${lerp(0.7, 1, F).toFixed(3)})`;
+      drawWing(g, W_NEAR, [0, 0], lerp(thSide, thFront, F) - cfg.a, cfg, false);
+      g.restore();
+    };
     if (folded) foldAt(wingFoldFar, add(Mb(SH_F), [0, R.wingDrop]), R.foldRot * 0.8 + 0.07);
+    else if (turning) turnWing(true);
     else wingAt(W_FAR, add(Mb(SH_F2), [0, R.wingDrop]), true);
     g.save(); bodySpace(); const tp = Mb(T0); g.translate(tp[0], tp[1]); g.scale(R.yT.k / R.yB.k, 1); g.rotate(R.tail.a); g.scale(1, 1 + R.tail.fan * 0.35); g.translate(-T0[0], -T0[1]); drawSprite(g, tail); g.restore();
     if (st.legs !== false) for (const f of R.feet) drawLeg(g, f.hip, f.foot, f.curl, f.far, f.dir);
@@ -801,9 +867,19 @@ export function makeCrow3(res = 1, seed = 4) {
     const N = R.N, H = R.head.H, dx = H[0] - N[0], dy = H[1] - N[1], L = Math.hypot(dx, dy);
     g.save(); g.translate((N[0] + H[0]) / 2, (N[1] + H[1]) / 2); g.rotate(Math.atan2(dy, dx)); g.scale(Math.max(0.8, (L + 40) / 70), 1 + 0.05 * clamp(b.fl)); drawSprite(g, neck, 1 - clamp(R.sleepK)); g.restore();
     g.save(); bodySpace(); const hp = Mb(HP); g.translate(hp[0], hp[1]); g.rotate(b.rot); g.scale(b.sx, b.sy); g.translate(-HP[0], -HP[1]); drawSprite(g, body); g.restore();
+    // while turning, the near folded wing lies on the body under the chest and head (it would cross the face)
+    if (folded && turning) foldAt(wingFold, add(Mb(SH_N), [0, R.wingDrop]), R.foldRot);
+    if (!folded && turning) turnWing(false); // behind the chest and the head
+    if (F > 0.001) { // front-on: a plump chest, and (wings folded) a dark shoulder at each side
+      const [cx, cy] = R.chestAt, sy = 0.7 + 0.3 * F;
+      g.save(); g.translate(cx, cy); g.scale(F * 1.12 * (1 + 0.06 * clamp(b.fl)), sy * b.sy); drawSprite(g, chest); g.restore();
+      if (folded) for (const sd of [-1, 1]) {
+        g.save(); g.translate(cx + sd * 35 * F, cy - 6 * sy); g.scale(sd * F, sy); g.rotate(-0.12 + R.foldRot * 0.5); drawSprite(g, shoulder); g.restore();
+      }
+    }
     drawHead(g, R, st);
-    if (folded) foldAt(wingFold, add(Mb(SH_N), [0, R.wingDrop]), R.foldRot);
-    else wingAt(W_NEAR, add(Mb(SH_N), [0, R.wingDrop]), false);
+    if (folded && !turning) foldAt(wingFold, add(Mb(SH_N), [0, R.wingDrop]), R.foldRot);
+    else if (!folded && !turning) wingAt(W_NEAR, add(Mb(SH_N), [0, R.wingDrop]), false);
     g.restore();
   }
   // o (optional): { x, y, scale, face } = the stager's own transform, translate(x, y) scale(face * scale, scale);

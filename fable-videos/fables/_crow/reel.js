@@ -173,7 +173,7 @@ function sleepPose(t, t0) {
 // turning round: turn 0 -> 1, then the stager swaps to a mirrored transform with turn 0 (and a fresh `since`)
 function turnStand(t, t0) {
   const k = t - t0, swap = 2.4;
-  if (k < swap) return { face: 1, since: t0, st: { t, turn: span(k, 0.5, 1.9) } };
+  if (k < swap) return { face: 1, since: t0, st: { t, turn: span(k, 0.4, 2.1) } };
   return { face: -1, since: t0 + swap, st: { t, turn: span(k, 3.0, 4.4) } };
 }
 seg(5.2, 'Turn round (standing), swap to mirrored, turn back', (t, t0) => {
