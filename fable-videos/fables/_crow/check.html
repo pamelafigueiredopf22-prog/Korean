@@ -11,7 +11,7 @@ window.FABLE = {
       let prev = null, worst = 0, at = 0, n = 0;
       for (let t = t0; t < t1 - 1e-6; t += 1 / fps) {
         const r = fn(t, t0), s = r.s || 1.75, poseFn = r.fn || ((tt) => fn(tt, t0).st);
-        const f = crow.feetAt(poseFn, t, { since: t0 }).map((p) => ({ x: r.x + p.x * s, y: r.y + p.y * s, ground: Math.abs(p.y + 3) < 0.05 }));
+        const f = crow.feetAt(poseFn, t, { since: r.since ?? t0 }).map((p) => ({ x: r.x + (r.face || 1) * p.x * s, y: r.y + p.y * s, ground: Math.abs(p.y + 3) < 0.05 }));
         if (prev) for (let i = 0; i < 2; i++) if (f[i].ground && prev[i].ground) { const d = Math.hypot(f[i].x - prev[i].x, f[i].y - prev[i].y); n++; if (d > worst) { worst = d; at = t - t0; } }
         prev = f;
       }
