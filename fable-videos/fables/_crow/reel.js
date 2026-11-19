@@ -115,6 +115,13 @@ function pushPose(t, t0) {
   return { t, push, strain, weary: slump, beak: slump * 0.1 };
 }
 seg(5.2, 'Push (too heavy!), tired slump', (t, t0) => ({ x: 1350, y: GROUND, side: true, st: pushPose(t, t0), fn: (tt) => pushPose(tt, t0) }));
+function chestPose(t, t0) {
+  const k = t - t0;
+  const push = span(k, 0.5, 1.2) * (1 - span(k, 3.6, 4.1));
+  const strain = span(k, 1.1, 1.4) * (1 - span(k, 3.4, 3.7)) * 0.8;
+  return { t, pushChest: push, strain, weary: span(k, 3.8, 4.4) * 0.8 };
+}
+seg(5.2, 'Push with the chest (pushChest)', (t, t0) => ({ x: 1350, y: GROUND, side: true, st: chestPose(t, t0), fn: (tt) => chestPose(tt, t0) }));
 function drinkPose(t, t0) {
   const k = t - t0;
   const on = span(k, 0.4, 0.9) * (1 - span(k, 4.4, 4.9));
@@ -163,6 +170,27 @@ function sleepPose(t, t0) {
   const k = t - t0;
   return { t, sleep: span(k, 0.6, 3.2), legs: false };
 }
+// turning round: turn 0 -> 1, then the stager swaps to a mirrored transform with turn 0 (and a fresh `since`)
+function turnStand(t, t0) {
+  const k = t - t0, swap = 2.4;
+  if (k < swap) return { face: 1, since: t0, st: { t, turn: span(k, 0.5, 1.9) } };
+  return { face: -1, since: t0 + swap, st: { t, turn: span(k, 3.0, 4.4) } };
+}
+seg(5.2, 'Turn round (standing), swap to mirrored, turn back', (t, t0) => {
+  const r = turnStand(t, t0);
+  return { x: 960, y: GROUND, face: r.face, since: r.since, tip: true, st: r.st, fn: (tt) => turnStand(tt, t0).face === r.face ? turnStand(tt, t0).st : r.st };
+});
+function turnFly(t, t0) {
+  const k = t - t0, swap = 3.2;
+  const st = { t, fly: 1, beat: k * 2.9, turn: span(k, 1.5, 2.9), pitch: 0.05 };
+  if (k < swap) return { face: 1, since: t0, st };
+  return { face: -1, since: t0 + swap, st: { ...st, turn: 0 } };
+}
+seg(4.6, 'Turn round in flight', (t, t0) => {
+  const k = t - t0, r = turnFly(t, t0);
+  return { x: 960 - 380 * Math.sin(Math.PI * k / 4.4), y: 520 + 14 * Math.sin(k * 2.1), s: 1.25, air: true, face: r.face, since: r.since, tip: true, st: r.st,
+    fn: (tt) => turnFly(tt, t0).face === r.face ? turnFly(tt, t0).st : r.st };
+});
 seg(6.2, 'Asleep in the nest', (t, t0) => ({ x: 980, y: 760, nest: true, st: sleepPose(t, t0), fn: (tt) => sleepPose(tt, t0) }));
 // (segments are laid end to end)
 export const DURATION = SEGS[SEGS.length - 1][1];
@@ -180,14 +208,17 @@ export const REEL = {
     const r = fn(t, t0), s = r.s || S;
     const poseFn = r.fn || ((tt) => fn(tt, t0).st);
     // ground line
-    if (!r.jug && !r.nest && r.y === GROUND || r.s === 1.25) { g.save(); g.strokeStyle = 'rgba(90,70,50,0.25)'; g.lineWidth = 2; g.beginPath(); g.moveTo(80, GROUND + 2); g.lineTo(1840, GROUND + 2); g.stroke(); g.restore(); }
+    if (!r.jug && !r.nest && r.y === GROUND || r.s === 1.25 && !r.air) { g.save(); g.strokeStyle = 'rgba(90,70,50,0.25)'; g.lineWidth = 2; g.beginPath(); g.moveTo(80, GROUND + 2); g.lineTo(1840, GROUND + 2); g.stroke(); g.restore(); }
     g.save(); g.translate(r.x, r.y); g.scale(s, s);
     if (r.jug) { drawSprite2(g, JUG_BACK); if (r.water) { g.save(); g.fillStyle = 'rgba(120,160,190,0.75)'; g.beginPath(); g.ellipse(MOUTH.x, 16, MOUTH.irx * 0.92, MOUTH.iry * 0.8, 0, 0, 7); g.fill(); g.restore(); } }
     if (r.side) { g.save(); g.translate(-86, -270); g.scale(0.56, 0.56); drawSprite2(g, JUG_BACK); g.restore(); }
     if (r.nest) drawSprite2(g, NEST_BACK);
     if (!r.jug && !r.nest) crow.shadow(g, r.st, Math.max(0, GROUND - r.y) / s);
     if (r.loosePebble) crow.drawPebble(g, r.loosePebble[0], r.loosePebble[1]);
-    crow.drawAt(g, poseFn, t, { since: t0 });
+    const face = r.face || 1, since = r.since ?? t0;
+    g.save(); g.scale(face, 1);
+    crow.drawAt(g, poseFn, t, { since });
+    g.restore();
     if (r.drop && t > r.drop) { // the released pebble falls into the jug
       const p = crow.beakTipAt(poseFn, r.drop, { since: t0 }), dt = t - r.drop;
       const y = p.gripY + 0.5 * 900 * dt * dt;
@@ -202,6 +233,10 @@ export const REEL = {
     }
     if (r.nest) drawSprite2(g, NEST_FRONT);
     g.restore();
+    if (r.tip) { // beakTipAt in page coordinates (the stager's transform passed in): a tiny dot on the tip
+      const p = crow.beakTipAt(poseFn, t, { since: r.since ?? t0, x: r.x, y: r.y, scale: s, face: r.face || 1 });
+      g.save(); g.fillStyle = 'rgba(200,40,30,0.8)'; g.beginPath(); g.arc(p.x, p.y, 3, 0, 7); g.fill(); g.restore();
+    }
     // label
     const a = span(t, t0, t0 + 0.4) * (1 - span(t, t1 - 0.3, t1));
     g.save(); g.globalAlpha = a; g.fillStyle = '#4a3a2c'; g.font = 'italic 54px Fell, serif'; g.fillText(label, 90, 110);

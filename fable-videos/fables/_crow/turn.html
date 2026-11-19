@@ -1,0 +1,30 @@
+<!doctype html><html><body style="margin:0"><canvas id="c" width="1920" height="1080"></canvas>
+<script type="module">
+// stills of the turn (standing and flying), and turn = 1 beside the mirrored turn = 0 picture
+//   PAGE=turn.html node tools/render.js _crow --stills 0
+import { paper } from '../../engine/watercolor.js';
+import { makeCrow3 } from '../../engine/characters/crow3.js';
+const ctx = document.getElementById('c').getContext('2d');
+let P, crow;
+const T = [0, 0.15, 0.3, 0.42, 0.5, 0.58, 0.7, 0.85, 1];
+window.FABLE = {
+  async setup() { P = paper(); crow = makeCrow3(1.2); },
+  frame() {
+    const g = ctx; g.drawImage(P, 0, 0);
+    const extra = JSON.parse(new URLSearchParams(location.search).get('st') || '{}');
+    T.forEach((tu, i) => {
+      g.save(); g.translate(130 + i * 205, 330); g.scale(0.85, 0.85);
+      crow.draw(g, { t: 0.3, life: 0, noBlink: true, ...extra, turn: tu }); g.restore();
+      g.fillStyle = '#5a4a3a'; g.font = '22px serif'; g.fillText(`turn ${tu}`, 80 + i * 205, 370);
+    });
+    T.forEach((tu, i) => {
+      g.save(); g.translate(130 + i * 205, 700); g.scale(0.85, 0.85);
+      crow.draw(g, { t: 0.3, life: 0, noBlink: true, fly: 1, beat: 0.45, ...extra, turn: tu }); g.restore();
+    });
+    // turn = 1 vs mirrored turn = 0
+    g.save(); g.translate(700, 1000); g.scale(0.85, 0.85); crow.draw(g, { t: 0.3, life: 0, noBlink: true, ...extra, turn: 1 }); g.restore();
+    g.save(); g.translate(1200, 1000); g.scale(-0.85, 0.85); crow.draw(g, { t: 0.3, life: 0, noBlink: true, ...extra, turn: 0 }); g.restore();
+    g.fillStyle = '#5a4a3a'; g.fillText('turn 1', 600, 1040); g.fillText('turn 0, scale(-1, 1)', 1100, 1040);
+  }
+};
+</script></body></html>

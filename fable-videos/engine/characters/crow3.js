@@ -8,11 +8,13 @@
 //                                      the body follows, and the wings and tail settle last (with a little overshoot).
 //                                      o.since: earliest time to sample (use the shot's start time at a cut).
 //                                      Root and feet are never delayed, so planted feet stay planted.
-//   crow.beakTip(st) / crow.beakTipAt(poseFn, t, o)
+//   crow.beakTip(st, o) / crow.beakTipAt(poseFn, t, o)
 //                                      -> { x, y, angle, gripX, gripY } in local crow space (before the stager's
 //                                      own translate/scale): the tip of the closed beak, its direction, and where
 //                                      a held pebble sits. Use it to place pebbles exactly (e.g. the moment one is
-//                                      released, start its fall from grip).
+//                                      released, start its fall from grip). Pass o = { x, y, scale, face } (your
+//                                      transform translate(x, y) scale(face * scale, scale); face 1 = as drawn,
+//                                      facing left, -1 = mirrored) to get page coordinates instead.
 //   crow.drawPebble(g, x, y, rot)      the same little grey pebble that `pebble: true` puts in the beak.
 //   crow.feet(st) / crow.feetAt(poseFn, t, o)  -> [far, near] ankle positions {x, y} (y = -3 when planted).
 //   crow.shadow(g, st, height)         a soft ground shadow (draw it before the crow); height = root above ground.
@@ -54,6 +56,8 @@
 //   reach  0..1  push the beak in as far as it goes toward (aimX, aimY): long neck, deep lean, tail up for
 //                balance, little wing flaps of effort (combine with strain for wriggling)
 //   push   0..1  brace the legs and lean the chest forward into something (to the left)
+//   pushChest 0..1  push with the CHEST and shoulder leading into the object (to the left): head turned away
+//                (toward us) and up, legs braced back, tail down. Combine with strain for the effort.
 //   strain 0..1  effort: trembling, eyes squeezed, wings beating a little, beak clenched
 //   drink  0..1  drinking, with drinkPhase (cycles): at whole numbers the beak dips to (aimX, aimY) (the water),
 //                at .5 the head is tipped back to swallow. Drive drinkPhase at ~0.4-0.5 cycles per second.
@@ -72,6 +76,11 @@
 //                (squash), wings fold, settle by 1 (set fly = 0 after it ends). Bring the root down by
 //                landDrop(u) * height: it reaches the ground exactly at u = 0.55 and must stay there.
 //   legs   bool  draw the legs (default true)
+//   turn   0..1  turn round to face the other way: the head leads, the body follows, the tail comes last. Near
+//                0.5 she is seen front-on (narrow body, both eyes). At 1 the picture is exactly drawing her with
+//                scale(-1, 1) at turn 0, so swap to the mirrored transform with turn 0 (and a fresh `since` for
+//                drawAt) once it reaches 1: no pop. Standing, the feet step round one at a time (no sliding);
+//                in flight the wings keep beating. Ease it over about 1-1.5 s. Aim/peck with turn at 0.
 //
 // Moving the root: the stager translates to the root point (between the feet) and scales; the crow never
 // moves its root by itself except for the vertical arcs of hop and idea.
@@ -98,6 +107,7 @@ const BEAK_UP = smooth([[-30, -9], [-50, -8], [-70, -1], [-86, 7], [-70, 8], [-5
 const BEAK_LO = smooth([[-30, 10], [-50, 11], [-74, 10], [-56, 16], [-30, 19]]);
 const BEAK_PIV = [-30, 10], BEAK_TIP = [-84, 8], GRIP = [-70, 11];
 const EYE = [-12, -7], EYE_R = 7.6;
+const EYE_AZ = Math.PI / 3, EYE_RAD = 24; // the eyes sit 60 degrees either side of the beak on a sphere: profile x = -12
 const NECK = smooth([[-32, -24], [0, -27], [32, -24], [40, 0], [32, 24], [0, 27], [-32, 24], [-40, 0]]);
 // crow.js' folded wing, moved onto this body's shoulder (SH_N)
 const WING = smooth([[-36, -100], [24, -104], [78, -76], [140, -38], [88, -44], [24, -50], [-20, -62]]);
@@ -202,7 +212,7 @@ function solve(st, dl = 0) {
   const drink = v('drink'), think = v('think'), idea = v('idea'), weary = v('weary'), happy = v('happy'), sleep = v('sleep');
   const takeoff = v('takeoff'), land = v('land'), wa = clamp(v('walkAmt'));
   const hopOn = hop > 0 && hop < 1 ? 1 : 0, ideaOn = idea > 0 && idea < 1 ? 1 : 0;
-  const busy = clamp(Math.max(peck, aim, peer, reach, push, strain, drink, sleep, P.fly, think * 0.6, hopOn, ideaOn * 0.7, (takeoff > 0 && takeoff < 1) ? 1 : 0, (land > 0 && land < 1) ? 1 : 0, wa * 0.6));
+  const busy = clamp(Math.max(peck, aim, peer, reach, push, v('pushChest'), strain, v('turn') > 0 && v('turn') < 1 ? 1 : 0, drink, sleep, P.fly, think * 0.6, hopOn, ideaOn * 0.7, (takeoff > 0 && takeoff < 1) ? 1 : 0, (land > 0 && land < 1) ? 1 : 0, wa * 0.6));
   const life = clamp(v('life')) * (1 - busy);
 
   // -- idle life
@@ -285,6 +295,13 @@ function solve(st, dl = 0) {
     P.tail += w * 0.08 * Math.sin(t * TAU * 1.5 - 1); P.wLift += w * 0.08 * b;
   }
 
+  // -- push with the chest: chest and shoulder lead, head turned away and up, legs braced back, tail down
+  const pushC = v('pushChest');
+  if (pushC > 0) {
+    const w = pushC;
+    P.bx -= w * 17; P.lean -= w * 0.04; P.c += w * 0.28; P.fl += w * 0.18; P.sq -= w * 0.06;
+    P.nvx += w * 17; P.nvy -= w * 2; P.ha += w * 0.3; P.turn += w * 0.42; P.tail -= w * 0.16;
+  }
   // -- push / strain
   if (push > 0) {
     const w = push;
@@ -396,6 +413,10 @@ function solve(st, dl = 0) {
     P.footUp *= 1 - s; P.breathA = lerp(P.breathA, 1.8, s); P.breath = lerp(P.breath, 1.8 * Math.sin(t * TAU * 0.2), s);
   }
 
+  // -- turning round: the head leads, the body follows, the tail comes last
+  const tr = clamp(v('turn'));
+  P.turnH = ease(tr / 0.7); P.turnB = ease((tr - 0.12) / 0.76); P.turnT = ease((tr - 0.18) / 0.76);
+
   // ---- derived transforms ----
   const fl = clamp(P.fl, 0, 1.5);
   P.rot = -P.lean;
@@ -432,6 +453,20 @@ function bodyMat(P) {
 function headTurnK(turn) {
   const c = Math.cos(Math.PI * clamp(turn)); const sg = c < 0 ? -1 : 1;
   return { c, sx: sg * (0.86 + 0.14 * Math.abs(c)) };
+}
+// the head's facing: the new `turn` swings it from profile-left (0) through front-on (0.5) to profile-right (1);
+// past the middle it is drawn mirrored (sO = -1), so at 1 it is exactly the scale(-1, 1) picture. headTurn
+// (glances, the sleep tuck) adds on top, inside that mirror.
+function headYaw(turnH, headTurn) {
+  const sO = turnH > 0.5 ? -1 : 1;
+  return { sO, yaw: clamp(0.5 - Math.abs(0.5 - turnH) + headTurn) };
+}
+// yaw maps for a part turned by tu (0..1): points through the middle (cosine, continuous) and painted shapes
+// (never thinner than `minW` of their width, mirrored past the middle, about the body's centre BC)
+const BC = [10, -64];
+function yawOf(tu, minW) {
+  const c = Math.cos(Math.PI * tu), k = (c < 0 ? -1 : 1) * Math.max(Math.abs(c), minW);
+  return { c, k, shape: (p) => [k * (p[0] - BC[0]) + c * BC[0], p[1]], point: (p) => [c * p[0], p[1]] };
 }
 function headTipLocal(turn) {
   const { c, sx } = headTurnK(turn);
@@ -607,12 +642,12 @@ export function makeCrow3(res = 1, seed = 4) {
     g.restore();
   }
   // two-bone leg from hip to foot, heel bending backward; toes curled by `curl`
-  function drawLeg(g, hip, foot, curl, far) {
+  function drawLeg(g, hip, foot, curl, far, dir = 1) {
     let dx = foot[0] - hip[0], dy = foot[1] - hip[1]; const d = Math.hypot(dx, dy) || 1;
     const sc = Math.max(1, d / (LEG_A + LEG_B) * 1.0001), a = LEG_A * sc, b = LEG_B * sc;
     const ux = dx / d, uy = dy / d, px = uy, py = -ux;
     const x = (a * a - b * b + d * d) / (2 * d), h = Math.sqrt(Math.max(0, a * a - x * x));
-    const heel = [hip[0] + ux * x + px * h, hip[1] + uy * x + py * h];
+    const heel = [hip[0] + ux * x + px * h * dir, hip[1] + uy * x + py * h * Math.abs(dir)];
     g.save(); g.lineCap = 'round'; g.lineJoin = 'round';
     const legC = far ? '#24232a' : C.leg;
     // feathered thigh ("trousers"), blending into the belly
@@ -632,7 +667,9 @@ export function makeCrow3(res = 1, seed = 4) {
       const e = [m[0] + Math.cos(a1 + (a1 - ang) * 0.8) * len * 0.5 * (1 - curl * 0.3), m[1] + Math.sin(a1 + (a1 - ang) * 0.8) * len * 0.5 * (1 - curl * 0.3)];
       g.beginPath(); g.moveTo(foot[0], foot[1]); g.quadraticCurveTo(m[0], m[1], e[0], e[1]); g.stroke();
     };
-    // flat toes sit on the ground (y = 0 when the foot is planted at FOOT_Y)
+    // flat toes sit on the ground (y = 0 when the foot is planted at FOOT_Y); they point round as she turns
+    const td = (dir < 0 ? -1 : 1) * Math.max(Math.abs(dir), 0.3);
+    g.translate(foot[0], foot[1]); g.scale(td, 1); g.translate(-foot[0], -foot[1]);
     toe(foot, 15, Math.PI - 0.2); toe(foot, 13, Math.PI - 0.05); toe(foot, 11, Math.PI - 0.32);
     g.lineWidth = 2.6; toe(foot, 10, 0.25);
     g.restore();
@@ -650,8 +687,8 @@ export function makeCrow3(res = 1, seed = 4) {
     }
   }
   function drawHead(g, R, st) {
-    const { H, ha, turn } = R.head, { c, sx } = headTurnK(turn);
-    g.save(); g.translate(H[0], H[1]); g.rotate(ha);
+    const { H, ha, turn, sO } = R.head, { c, sx } = headTurnK(turn);
+    g.save(); g.translate(H[0], H[1]); g.scale(sO, 1); g.rotate(ha);
     // beak (under the head feathers): foreshortened as the head turns
     const open = clamp(R.head.beak);
     g.save(); g.translate(BEAK_PIV[0] * sx, BEAK_PIV[1]); g.scale(c, 1); g.translate(-BEAK_PIV[0], -BEAK_PIV[1]);
@@ -664,24 +701,39 @@ export function makeCrow3(res = 1, seed = 4) {
       g.save(); g.globalAlpha *= 1 - Math.abs(c) / 0.4; g.fillStyle = C.beak; g.beginPath(); g.ellipse(BEAK_PIV[0] * sx * 0.95, 8, 7, 8, 0, 0, 7); g.fill();
       g.fillStyle = 'rgba(160,156,170,0.6)'; g.beginPath(); g.arc(BEAK_PIV[0] * sx * 0.95 - 1, 5, 2.2, 0, 7); g.fill(); g.restore();
     }
-    // blush and eye move round with the turn
-    const e = R.head;
-    pool(g, -14 * c, 13, 9 * (0.5 + 0.5 * Math.abs(c)), 6, '#d08a96', 0.42 * e.blush);
+    // eyes and cheeks sit on the sides of a round head: each is drawn where it is on the sphere, narrowed as it
+    // turns away, so the profile shows one eye and the front-on view shows both
+    const e = R.head, yaw = Math.PI * clamp(turn);
     const R0 = EYE_R * (1 + 0.15 * clamp(e.big));
     const eo = clamp(e.eye * (1 + 0.15 * clamp(e.big)), 0, 1.15) * (1 - clamp((e.happy - 0.4) / 0.5));
-    g.save(); g.translate(EYE[0] * c, EYE[1] - e.look * 1.5); g.scale(0.55 + 0.45 * Math.abs(c), 1);
-    drawEye(g, 0, 0, eo, e.happy, R0);
-    g.restore();
+    // (with `turn` at 0 this is exactly the old single-eye placement used by headTurn glances and the sleep tuck)
+    const k3 = clamp((R.head.turnH || 0) / 0.15);
+    for (const side of [-1, 1]) {
+      const al = yaw + side * EYE_AZ, ez = Math.sin(al);
+      let ex = -Math.cos(al) * EYE_RAD, ws = clamp(ez / Math.sin(EYE_AZ)), fade = clamp((ez - 0.06) / 0.2);
+      if (side > 0) { ex = lerp(EYE[0] * c, ex, k3); ws = lerp(0.55 + 0.45 * Math.abs(c), ws, k3); fade = lerp(1, fade, k3); }
+      else fade *= k3;
+      if (fade <= 0.001) continue;
+      g.save(); g.globalAlpha *= fade;
+      const wb = side > 0 ? lerp(Math.abs(c), clamp(ez / Math.sin(EYE_AZ)), k3) : ws, bx = side > 0 && k3 === 0 ? -14 * c : ex * 1.17;
+      pool(g, bx, 13, 9 * (0.5 + 0.5 * wb), 6, '#d08a96', 0.42 * e.blush);
+      g.translate(ex, EYE[1] - e.look * 1.5); g.scale(ws, 1);
+      drawEye(g, 0, 0, eo, e.happy, R0);
+      g.restore();
+    }
     g.restore();
   }
 
   // ---- assemble a rig from the per-part postures
   function rig(raw, ph, pb, pw, pt) {
     const rd = [raw.rdx, raw.rdy];
-    const Mb = bodyMat(pb), M = (p) => add(Mb(p), rd);
-    const R = { rd, body: pb, M };
-    R.head = { H: add(ph.H, rd), ha: ph.ha, turn: ph.turn, beak: ph.beak, eye: ph.eye, happy: ph.happy, look: ph.look, big: ph.big, blush: ph.blush };
-    R.N = M(N0); R.sleepK = ph.sleepK || 0;
+    // turning round: body shapes (body, wings, hips, tail root) and points through the middle (neck, head)
+    const yB = yawOf(pb.turnB || 0, 0.42), yT = yawOf(pt.turnT || 0, 0.3);
+    const Mb = bodyMat(pb), M = (p) => add(yB.shape(Mb(p)), rd);
+    const R = { rd, body: pb, M, Mb, yB, yT };
+    const hy = headYaw(ph.turnH || 0, ph.turn);
+    R.head = { H: add(yB.point(ph.H), rd), ha: ph.ha, turn: hy.yaw, sO: hy.sO, turnH: ph.turnH || 0, beak: ph.beak, eye: ph.eye, happy: ph.happy, look: ph.look, big: ph.big, blush: ph.blush };
+    R.N = add(yB.point(Mb(N0)), rd); R.sleepK = ph.sleepK || 0;
     // wings
     // Folded, the wing is crow.js' sleek folded-wing painting; small lifts, droops and effort flicks just turn it
     // about the shoulder. When it really opens (hop, idea, flight) it becomes the two-part arm + hand rig: the swap
@@ -699,8 +751,13 @@ export function makeCrow3(res = 1, seed = 4) {
     // legs: planted feet come from the walk phase (exact), tucked feet ride along with the hips
     const ph0 = raw.walkPhase, air = clamp(raw.air);
     const feet = [];
+    const trn = clamp(raw.turnRaw || 0);
     for (const [hip, off, isNear] of [[HIP_F, 0.5, false], [HIP_N, 0, true]]) {
-      const [fx, fy, curl] = walkFoot(ph0 + off + 0.05);
+      let [fx, fy, curl] = walkFoot(ph0 + off + 0.05);
+      if (trn > 0) { // turning round on the spot: one foot steps round, then the other (planted in between)
+        const u = clamp((trn - (isNear ? 0.12 : 0.45)) / 0.33), e = easeInOut(u), lift = Math.sin(Math.PI * u);
+        fx = lerp(fx, -fx, e); fy -= 11 * lift; curl = Math.max(curl, 0.7 * lift);
+      }
       let f = [fx + rd[0], fy + rd[1]], cu = curl;
       if (isNear && raw.footUp > 0) { const u = clamp(raw.footUp); f = [lerp(f[0], 0, u * 0.6), f[1] - 15 * u]; cu = Math.max(cu, u * 0.85); }
       const hw = M(hip);
@@ -708,58 +765,68 @@ export function makeCrow3(res = 1, seed = 4) {
         const tk = add(hw, rot([raw.tuck[0] + (isNear ? 0 : 6), raw.tuck[1]], pb.rot * 0.5));
         f = [lerp(f[0], tk[0], air), lerp(f[1], tk[1], air)]; cu = lerp(cu, raw.tuckCurl, air);
       }
-      feet.push({ hip: hw, foot: f, curl: cu, far: !isNear });
+      feet.push({ hip: hw, foot: f, curl: cu, far: !isNear, dir: yB.c });
     }
     R.feet = feet;
     return R;
   }
   function postures(st) {
-    const raw = solve(st, 0); raw.walkPhase = st.walk || 0; raw.t = st.t || 0;
+    const raw = solve(st, 0); raw.walkPhase = st.walk || 0; raw.t = st.t || 0; raw.turnRaw = st.turn || 0;
     return raw;
   }
   function rigFromState(st) { const p = postures(st); return rig(p, p, p, p, p); }
   function rigAt(poseFn, t, o = {}) {
     const since = o.since ?? -1e9, cache = new Map();
     const cur = poseFn(t); cache.set(t, cur);
-    const raw = solve(cur, 0); raw.walkPhase = cur.walk || 0; raw.t = t;
+    const raw = solve(cur, 0); raw.walkPhase = cur.walk || 0; raw.t = t; raw.turnRaw = cur.turn || 0;
     const f = (k) => ({ ...cur, ...filtered(poseFn, t, K[k], since, cache), t });
     const ph = solve(f('head'), LAG.head), pb = solve(f('body'), LAG.body), pw = solve(f('wing'), LAG.wing), pt = solve(f('tail'), LAG.tail);
     return { R: rig(raw, ph, pb, pw, pt), st: cur };
   }
 
   function paint(g, R, st) {
-    const b = R.body;
+    const b = R.body, Mb = R.Mb;
+    // the body's own space (profile coordinates), with the turn's yaw applied: body, wings and tail draw in here
+    const bodySpace = () => { g.translate(R.rd[0], R.rd[1]); g.translate((R.yB.c - R.yB.k) * BC[0], 0); g.scale(R.yB.k, 1); };
     g.save();
-    // far wing, tail, legs, body, neck, head, near wing
+    // far wing, tail, legs, neck, body, head, near wing
     const folded = R.open < 0.5;
-    const foldAt = (sp, sh, rot) => { g.save(); g.translate(sh[0], sh[1]); g.rotate(b.rot + rot); g.translate(-SH_N[0], -SH_N[1]); drawSprite(g, sp); g.restore(); };
-    if (folded) foldAt(wingFoldFar, add(R.M(SH_F), [0, R.wingDrop]), R.foldRot * 0.8 + 0.07);
-    else drawWing(g, W_FAR, add(R.M(SH_F2), [0, R.wingDrop]), b.rot, R.wing, true);
-    g.save(); const tp = R.M(T0); g.translate(tp[0], tp[1]); g.rotate(R.tail.a); g.scale(1, 1 + R.tail.fan * 0.35); g.translate(-T0[0], -T0[1]); drawSprite(g, tail); g.restore();
-    if (st.legs !== false) for (const f of R.feet) drawLeg(g, f.hip, f.foot, f.curl, f.far);
+    const foldAt = (sp, sh, rot) => { g.save(); bodySpace(); g.translate(sh[0], sh[1]); g.rotate(b.rot + rot); g.translate(-SH_N[0], -SH_N[1]); drawSprite(g, sp); g.restore(); };
+    const wingAt = (parts, sh, far) => { g.save(); bodySpace(); drawWing(g, parts, sh, b.rot, R.wing, far); g.restore(); };
+    if (folded) foldAt(wingFoldFar, add(Mb(SH_F), [0, R.wingDrop]), R.foldRot * 0.8 + 0.07);
+    else wingAt(W_FAR, add(Mb(SH_F2), [0, R.wingDrop]), true);
+    g.save(); bodySpace(); const tp = Mb(T0); g.translate(tp[0], tp[1]); g.scale(R.yT.k / R.yB.k, 1); g.rotate(R.tail.a); g.scale(1, 1 + R.tail.fan * 0.35); g.translate(-T0[0], -T0[1]); drawSprite(g, tail); g.restore();
+    if (st.legs !== false) for (const f of R.feet) drawLeg(g, f.hip, f.foot, f.curl, f.far, f.dir);
     // neck: stretched between the neck base on the body and the head; drawn BEHIND the body so it only shows where the head moves out
     const N = R.N, H = R.head.H, dx = H[0] - N[0], dy = H[1] - N[1], L = Math.hypot(dx, dy);
     g.save(); g.translate((N[0] + H[0]) / 2, (N[1] + H[1]) / 2); g.rotate(Math.atan2(dy, dx)); g.scale(Math.max(0.8, (L + 40) / 70), 1 + 0.05 * clamp(b.fl)); drawSprite(g, neck, 1 - clamp(R.sleepK)); g.restore();
-    g.save(); const hp = R.M(HP); g.translate(hp[0], hp[1]); g.rotate(b.rot); g.scale(b.sx, b.sy); g.translate(-HP[0], -HP[1]); drawSprite(g, body); g.restore();
+    g.save(); bodySpace(); const hp = Mb(HP); g.translate(hp[0], hp[1]); g.rotate(b.rot); g.scale(b.sx, b.sy); g.translate(-HP[0], -HP[1]); drawSprite(g, body); g.restore();
     drawHead(g, R, st);
-    if (folded) foldAt(wingFold, add(R.M(SH_N), [0, R.wingDrop]), R.foldRot);
-    else drawWing(g, W_NEAR, add(R.M(SH_N), [0, R.wingDrop]), b.rot, R.wing, false);
+    if (folded) foldAt(wingFold, add(Mb(SH_N), [0, R.wingDrop]), R.foldRot);
+    else wingAt(W_NEAR, add(Mb(SH_N), [0, R.wingDrop]), false);
     g.restore();
   }
-  const tipOf = (R) => {
-    const { H, ha, turn, beak } = R.head;
+  // o (optional): { x, y, scale, face } = the stager's own transform, translate(x, y) scale(face * scale, scale);
+  // with any of them given, the result is in that (world/page) space instead of the crow's local space
+  const tipOf = (R, o = {}) => {
+    const { H, ha, turn, sO } = R.head;
     const tl = headTipLocal(turn), { c, sx } = headTurnK(turn);
     const gl = [BEAK_PIV[0] * sx + (GRIP[0] - BEAK_PIV[0]) * c, GRIP[1]];
-    const p = add(H, rot(tl, ha)), q = add(H, rot(gl, ha));
-    return { x: p[0], y: p[1], angle: ha + (c < 0 ? 0 : Math.PI), gripX: q[0], gripY: q[1] };
+    const m = (p) => { const r = rot(p, ha); return add(H, [sO * r[0], r[1]]); };
+    const p = m(tl), q = m(gl);
+    let angle = ha + (c < 0 ? 0 : Math.PI); if (sO < 0) angle = Math.PI - angle;
+    const out = { x: p[0], y: p[1], angle, gripX: q[0], gripY: q[1] };
+    if (o.x === undefined && o.y === undefined && o.scale === undefined && o.face === undefined) return out;
+    const f = o.face ?? 1, k = o.scale ?? 1, X = o.x ?? 0, Y = o.y ?? 0;
+    return { x: X + f * k * out.x, y: Y + k * out.y, angle: f < 0 ? Math.PI - out.angle : out.angle, gripX: X + f * k * out.gripX, gripY: Y + k * out.gripY };
   };
 
   return {
     STRIDE,
     draw(g, st = {}) { paint(g, rigFromState(st), st); },
     drawAt(g, poseFn, t, o = {}) { const { R, st } = rigAt(poseFn, t, o); paint(g, R, st); },
-    beakTip(st = {}) { return tipOf(rigFromState(st)); },
-    beakTipAt(poseFn, t, o = {}) { return tipOf(rigAt(poseFn, t, o).R); },
+    beakTip(st = {}, o = {}) { return tipOf(rigFromState(st), o); },
+    beakTipAt(poseFn, t, o = {}) { return tipOf(rigAt(poseFn, t, o).R, o); },
     // where the feet (ankles) are, [far, near], in local space: footprints, perches, checks
     feet(st = {}) { return rigFromState(st).feet.map((f) => ({ x: f.foot[0], y: f.foot[1] })); },
     feetAt(poseFn, t, o = {}) { return rigAt(poseFn, t, o).R.feet.map((f) => ({ x: f.foot[0], y: f.foot[1] })); },
