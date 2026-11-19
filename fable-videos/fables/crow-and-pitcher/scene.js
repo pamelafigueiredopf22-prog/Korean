@@ -617,20 +617,30 @@ function paintTinyGarden(g, m, seed, dX = 0) {
   paintPitcher(g, px, py, 20, m);
 }
 // a small old elm for the distant views: a tall trunk dividing high into a vase of limbs, crown in clumps
+// A small old elm for the distant views, built like the big one: a tall trunk dividing high into a vase of limbs,
+// with a dark inner crown behind the limbs and leafy clumps in front, so the limbs vanish into the foliage.
 function miniElm(g, x, y, H, m, seed) {
-  const r = rng(seed), split = y - H * 0.38;
+  const r = rng(seed), split = y - H * 0.36, top = y - H * 1.05;
   castShadow(g, x, y, H * 0.22, H * 0.4, m, { seed: seed + 1 });
+  const limbs = [-0.5, -0.2, 0.12, 0.45].map((a) => { const tx = x + Math.sin(a) * H * 0.42, ty = split - Math.cos(a) * H * 0.55; return { a, tx, ty, P: (t) => [lerp(x, tx, t) + Math.sin(a) * H * 0.06 * Math.sin(Math.PI * t), lerp(split, ty, t)] }; });
+  const clump = (cx, cy, rr, i, dark) => { const sh = fluffy(cx, cy, rr, rr * 0.8, 9, 0.25, seed + 10 + i);
+    wash(g, sh, { color: dark ? shade(m.elm[i % 4], 0.35) : m.elm[i % 4], opacity: 0.96, seed: seed + 30 + i, layers: 8, under: dark ? shade(m.elm[2], 0.4) : '#ece2c8' });
+    if (!dark) { glaze(g, sh, cx - rr * 0.3, cy - rr * 0.3, rr * 0.6, rr * 0.4, tint(m.leaf[3], 0.4), 0.5); ink(g, sh.filter(([, py]) => py < cy), { width: 0.6, alpha: 0.5, gaps: 1, seed: seed + 50 + i }); } };
+  // the dark inside of the crown: a vase, wide at the top, narrowing down toward the fork
+  let n = 0;
+  for (let k = 0; k < 14; k++) { const v = r(), cy = lerp(top + H * 0.12, split - H * 0.22, v), half = lerp(H * 0.42, H * 0.16, v); clump(x + r.range(-half, half), cy, H * r.range(0.1, 0.14), n++, true); }
+  // trunk and limbs
   g.save(); g.lineCap = 'round'; g.strokeStyle = '#5a4636';
-  g.lineWidth = H * 0.06; g.beginPath(); g.moveTo(x, y); g.lineTo(x - H * 0.01, split); g.stroke();
-  const tips = [];
-  for (const a of [-0.55, -0.22, 0.08, 0.38, 0.6]) { const tx = x + Math.sin(a) * H * 0.42, ty = split - Math.cos(a) * H * 0.48; tips.push([tx, ty]); g.lineWidth = H * 0.028; g.beginPath(); g.moveTo(x, split); g.quadraticCurveTo(x + Math.sin(a) * H * 0.1, split - H * 0.2, tx, ty); g.stroke(); }
+  g.lineWidth = H * 0.065; g.beginPath(); g.moveTo(x, y); g.lineTo(x - H * 0.01, split + H * 0.02); g.stroke();
+  for (const L of limbs) { g.lineWidth = H * 0.03; g.beginPath(); g.moveTo(x, split + H * 0.03); for (let t = 0.1; t <= 1.001; t += 0.1) g.lineTo(...L.P(t)); g.stroke(); }
   g.restore();
+  ink(g, [[x - H * 0.032, y], [x - H * 0.04, split + H * 0.03]], { width: 0.6, alpha: 0.55 });
+  // the outer crown: clumps over the upper two thirds of every limb and across the top, so no limb ends in the air
   const cl = [];
-  for (const [tx, ty] of tips) for (let k = 0; k < 4; k++) cl.push([tx + r.gauss(0, H * 0.05), ty + r.range(-H * 0.06, H * 0.3) * (Math.abs(tx - x) / (H * 0.3)), H * r.range(0.09, 0.14)]);
-  cl.sort((a, b) => b[1] - a[1]);
-  for (const [i, [cx, cy, rr]] of cl.entries()) { const sh = fluffy(cx, cy, rr, rr * 0.8, 9, 0.25, seed + 10 + i);
-    wash(g, sh, { color: m.elm[i % 4], opacity: 0.95, seed: seed + 30 + i, layers: 8, under: '#ece2c8' }); glaze(g, sh, cx - rr * 0.3, cy - rr * 0.3, rr * 0.6, rr * 0.4, tint(m.leaf[3], 0.4), 0.5);
-    ink(g, sh.filter(([, py]) => py < cy), { width: 0.6, alpha: 0.5, gaps: 1, seed: seed + 50 + i }); }
+  for (const L of limbs) for (const t of [0.42, 0.62, 0.8, 0.98]) { const [cx, cy] = L.P(t); cl.push([cx + r.gauss(0, H * 0.03), cy + r.gauss(0, H * 0.03), H * r.range(0.09, 0.13) * (0.75 + t * 0.4)]); }
+  for (let k = 0; k < 5; k++) cl.push([x + r.range(-H * 0.32, H * 0.36), top + r.range(H * 0.04, H * 0.16), H * r.range(0.11, 0.15)]);
+  cl.sort((a, b) => a[1] - b[1]);
+  for (const [cx, cy, rr] of cl) clump(cx, cy, rr, n++, false);
 }
 // ---------------------------------------------------------------- the stone cottage
 // After engine/scenery.js cottage() (the approved one), but built of honey-coloured stone, every stone washed
