@@ -9,7 +9,7 @@
 import { W, H, canvas, clamp, lerp, span, drawSprite, rgba, pool, noise1 } from '../../engine/watercolor.js';
 import { M, MY, LW, LH, INK, cam, sunlight, zzz, moon, makeStage } from '../../engine/stage.js';
 import { makeCrow3, hopX, STRIDE } from '../../engine/characters/crow3.js';
-import { PITCHER, NEST, MOON, PEBBLES, FIELDS_PITCHER, SHIMMER_FIELDS, CLOSEUP, view, drawH, fieldsLayer, gardenLayers,
+import { PITCHER, NEST, MOON, PEBBLES, FIELDS_PAN, CLOSEUP, view, fieldsParallax, drawFieldsParallax, fieldsGardenAt, gardenLayers,
   drawGarden, drawPitcher, drawPebble, drawPitcherCloseup, drawPitcherCutaway, drawNestFront, heatShimmer, dustMotes,
   pitcherSprite, softStars } from './scene.js';
 
@@ -36,14 +36,18 @@ function keys(u, ks) {
   const s = (u - u0) / h, s2 = s * s, s3 = s2 * s;
   return (2 * s3 - 3 * s2 + 1) * v0 + (s3 - 2 * s2 + s) * m0 + (-2 * s3 + 3 * s2) * v1 + (s3 - s2) * m1;
 }
-// a turn-round in the air: face goes from `from` (+1 right, -1 left) to -from, through a narrow side-on moment
-const flip = (t, a, b, from) => { const f = from * Math.cos(Math.PI * s5((t - a) / (b - a))); return Math.sign(f || from) * Math.max(0.07, Math.abs(f)); };
+// Turning round (crow3's `turn`: head leads, body and tail follow; in flight the wings keep beating). It runs 0 -> 1,
+// holds at 1 a moment so the follow-through springs settle, then at `swap` we change to the mirrored transform with
+// turn 0 and restart the follow-through there (the two pictures are identical).
+const TURNS = [{ a: 59.15, b: 60.6, swap: 60.9, from: 1 }, { a: 130.15, b: 131.55, swap: 131.85, from: -1 }];
+function turning(t) {
+  for (const T of TURNS) if (t >= T.a - 0.5 && t < T.swap + 0.01) return { turn: t < T.swap ? sm(t, T.a, T.b) : 0, face: t < T.swap ? T.from : -T.from };
+  return null;
+}
+const lastSwap = (t) => TURNS.reduce((a, T) => (t >= T.swap ? Math.max(a, T.swap) : a), -1e9);
 
 // Word onsets measured from the voice envelope (build/crow-and-pitcher/timeline.json, 24 Hz)
-const WORD = {
-  plip: 84.66, plop: 87.40, another1: 88.55, another2: 89.25,
-  drank1: 107.6, drank2: 108.5,
-};
+const WORD = { plip: 84.66, plop: 87.40, drank1: 107.6, drank2: 108.5 };
 
 // distance profile of a walk: speeds up, cruises, slows down (C1-continuous), 0..1 -> 0..1
 function walkDist(u) {
@@ -56,12 +60,13 @@ function walkDist(u) {
 // ---------------------------------------------------------------- staging places (page coordinates)
 const RIM_L = { x: PITCHER.x - 25, y: PITCHER.rimY - 5 };  // standing on the back lip, left of the mouth (facing right)
 const RIM_R = { x: PITCHER.x + 25, y: PITCHER.rimY - 5 };  // ... right of the mouth (facing left)
-const MOUTH = { x: PITCHER.x, y: PITCHER.rimY + 1.3, rx: 28.9, ry: 7.4 }; // the opening inside the rim
+const MOUTH = { x: PITCHER.mouth.cx, y: PITCHER.mouth.cy, rx: PITCHER.mouth.rx, ry: PITCHER.mouth.ry }; // the opening inside the rim
 const PUSH = { x: PITCHER.x + 78, y: PITCHER.y + 16 };     // braced against the pitcher's right side
-const PEB1 = PEBBLES[3], PEB2 = PEBBLES[5];                // the pebble she picks on screen, and the one she brings later
+const PEB1 = PEBBLES[3], PEB3 = PEBBLES[9];                // the pebbles she picks up on screen (n08, and the last one)
 const WALK = { t0: 79.1, t1: 80.45, from: { x: PUSH.x, y: PEB1.y }, D: 1.5 * STRIDE * CS }; // 3 steps: both feet down at the end
 const PICK = { x: WALK.from.x - WALK.D, y: PEB1.y };
-const PICK2 = { x: PEB2.x + 48, y: PEB2.y };
+const PICK3 = { x: PITCHER.x + 25, y: PITCHER.y + 60 };    // straight below RIM_R, on the path
+const PEB3_AT = { x: PICK3.x - 48, y: PICK3.y };          // where that last pebble lies (drawn by us)
 const NEST_ROOT = { x: NEST[0] + 4, y: NEST[1] + 8 };
 const pebScale = (p) => 13 / (2.6 * p.r);                  // carried pebbles are small, beak-sized ones
 
@@ -89,14 +94,15 @@ function flutter(t, o) {
 
 // ---------------------------------------------------------------- the garden: her whole performance
 const FL = {
-  down: { t0: 58.8, toLen: 0.9, from: RIM_L, via: { x: PITCHER.x + 150, y: PITCHER.rimY + 40, t: 59.95 }, to: PUSH, touch: 60.95, ldLen: 1.1, rate: 3.0, bulge: 30, bulge2: 0 },
+  down: { t0: 58.8, toLen: 0.9, from: RIM_L, via: { x: PITCHER.x + 160, y: PITCHER.rimY + 30, t: 59.88 }, to: PUSH, touch: 61.15, ldLen: 1.1, rate: 3.0, bulge: 30, bulge2: 0 },
   up1: { t0: 81.75, toLen: 0.9, from: PICK, to: RIM_R, touch: 83.3, ldLen: 1.0, rate: 3.1, bulge: 22 },
-  up2: { t0: 93.75, toLen: 0.9, from: PICK2, to: RIM_R, touch: 95.25, ldLen: 1.0, rate: 3.1, bulge: 22 },
+  down3: { t0: 98.5, toLen: 0.9, from: RIM_R, to: PICK3, touch: 99.95, ldLen: 1.0, rate: 3.0, bulge: 18 },
+  up3: { t0: 101.35, toLen: 0.9, from: PICK3, to: RIM_R, touch: 102.95, ldLen: 1.0, rate: 3.1, bulge: 22 },
   home: { t0: 129.6, toLen: 1.0, from: RIM_R, via: { x: PITCHER.x - 90, y: PITCHER.rimY - 120, t: 130.85 }, to: NEST_ROOT, touch: 134.0, ldLen: 1.5, rate: 2.7, bulge: 0, bulge2: 46,
     glide: (t) => bump(t, 131.6, 132.1, 132.7, 133.2) * 0.8 },
 };
 const HOP = { t0: 72.6, len: 1.15, from: PUSH, to: WALK.from };
-const REL1 = 84.1, REL2 = 95.45;        // the moments she lets go of a pebble over the mouth
+const REL1 = 84.1, REL3 = 103.5;        // the moments she lets go of a pebble over the mouth
 
 // local rig coordinates of a page point, for a crow at root r facing `face`
 const toLocal = (r, face, px, py) => ({ x: (px - r.x) / (-face * CS), y: (py - r.y) / CS });
@@ -116,8 +122,7 @@ function G(t) {
   } else if (t < FL.down.t0) { x = RIM_L.x; y = RIM_L.y; if (t < 42.6) st.land = (t - (41.9 - 0.825)) / 1.5; }
   else if (t < FL.down.touch + 0.6) {
     const f = flutter(t, FL.down); x = f.x; y = f.y; Object.assign(st, f.st); air = f.air;
-    face = flip(t, 59.55, 60.0, 1);
-    if (t > FL.down.touch - 0.2) ground = PUSH.y;
+    face = t < TURNS[0].swap ? 1 : -1; if (t > FL.down.touch - 0.2) ground = PUSH.y;
   } else if (t < HOP.t0) { x = PUSH.x; y = PUSH.y; face = -1; ground = y; }
   else if (t < FL.up1.t0) {
     const u = clamp((t - HOP.t0) / HOP.len), k = hopX(u);
@@ -130,21 +135,19 @@ function G(t) {
   } else if (t < 88) {
     const f = flutter(t, FL.up1); x = f.x; y = f.y; Object.assign(st, f.st); face = -1; air = f.air;
     if (t < FL.up1.t0 + 0.42 * FL.up1.toLen) ground = PICK.y;
-  } else if (t < 98.7) { // (after an ellipsis: she has fetched another pebble)
-    const f = flutter(t, FL.up2); x = f.x; y = f.y; Object.assign(st, f.st); face = -1; air = f.air;
-    if (t < FL.up2.t0 + 0.42 * FL.up2.toLen) ground = PICK2.y;
-  } else if (t < 103) { // off she goes for more: down and away to the left, out of the shot
-    const t0 = 98.7, launch = t0 + 0.38, u = clamp((t - launch) / 1.5);
-    x = lerp(RIM_R.x, RIM_R.x - 520, u * u * (3 - 2 * u) * 0.6 + u * 0.4); y = RIM_R.y - 40 * Math.sin(Math.PI * Math.min(1, u * 1.3)) + 200 * u * u;
-    if (t < launch) { x = RIM_R.x; y = RIM_R.y; }
-    st.beat = Math.max(0, t - launch) * 3; face = -1; air = t > launch;
-    if (t < t0 + 0.9) st.takeoff = Math.max(0.001, (t - t0) / 0.9); else st.fly = 1;
-  } else if (t < FL.home.t0) { x = RIM_R.x; y = RIM_R.y; face = -1; }
+  } else if (t < FL.down3.t0) { x = RIM_R.x; y = RIM_R.y; face = -1; } // (the montage: she has been to and fro)
+  else if (t < FL.up3.t0) { // down to the path for one more pebble ...
+    const f = flutter(t, FL.down3); x = f.x; y = f.y; Object.assign(st, f.st); face = -1; air = f.air;
+    if (t > FL.down3.touch - 0.2) ground = PICK3.y;
+  } else if (t < FL.home.t0) { // ... and up again with it
+    const f = flutter(t, FL.up3); x = f.x; y = f.y; Object.assign(st, f.st); face = -1; air = f.air;
+    if (t < FL.up3.t0 + 0.42 * FL.up3.toLen) ground = PICK3.y;
+  }
   else if (t < FL.home.touch + 1) {
     const f = flutter(t, FL.home); x = f.x; y = f.y; Object.assign(st, f.st); air = f.air;
-    face = flip(t, 130.35, 130.85, -1);
-    s = lerp(CS, 0.36, sm(t, 130.4, 133.6));
+    face = t < TURNS[1].swap ? -1 : 1; s = lerp(CS, 0.36, sm(t, 130.4, 133.6));
   } else { x = NEST_ROOT.x; y = NEST_ROOT.y; face = 1; s = 0.36; }
+  const tu = turning(t); if (tu) { face = tu.face; st.turn = tu.turn; }
   const r = { x, y };
 
   // ---- how she feels and what she does (every weight eases)
@@ -160,12 +163,12 @@ function G(t) {
   st.lookUp = -0.9 * bump(t, 71.0, 71.6, 74.8, 75.6) + 0.3 * bump(t, 113.9, 114.3, 115.8, 116.4);
   // peering into the pitcher (n04, c02), and down at the pebbles (n07)
   st.peer = bump(t, 42.45, 43.2, 49.0, 49.4) + 0.8 * bump(t, 51.2, 51.9, 53.5, 54.3) + 0.35 * bump(t, 73.9, 74.4, 75.3, 75.8)
-    + 0.7 * bump(t, 95.55, 95.95, 96.8, 97.3) + 0.55 * bump(t, 104.0, 104.6, 105.9, 106.5);
+    + 0.7 * bump(t, 94.2, 94.9, 96.8, 97.3) + 0.55 * bump(t, 105.4, 105.8, 105.9, 106.5);
   // n05: the beak in as far as it will go, wriggling, then giving up
   st.reach = bump(t, 54.5, 55.6, 57.2, 58.0);
-  st.strain = 0.85 * bump(t, 55.4, 55.8, 56.8, 57.25) + 0.9 * bump(t, 61.3, 61.6, 62.85, 63.25);
-  // n06: braced against the pitcher
-  st.push = bump(t, 60.95, 61.45, 62.95, 63.5);
+  st.strain = 0.85 * bump(t, 55.4, 55.8, 56.8, 57.25) + 0.85 * bump(t, 61.75, 62.05, 63.0, 63.4);
+  // n06: her chest against the pitcher's side
+  st.pushChest = bump(t, 61.3, 61.85, 63.1, 63.7);
   // c03: thinking
   st.think = bump(t, 65.3, 66.1, 69.9, 70.8);
   // the idea! (n07 "...she had an idea!")
@@ -173,9 +176,9 @@ function G(t) {
   st.happy = 0.6 * bump(t, 78.0, 78.4, 79.4, 80.1) + 0.65 * bump(t, 96.0, 96.5, 98.3, 98.9) + 0.9 * bump(t, 113.15, 113.5, 116.2, 116.9)
     + 0.25 * bump(t, 117.0, 118.0, 126.0, 128.0);
   // n08: the peck
-  st.peck = bump(t, 80.45, 81.0, 81.3, 81.85);
+  st.peck = bump(t, 80.45, 81.0, 81.3, 81.85) + bump(t, 100.35, 100.85, 101.05, 101.5);
   // dropping pebbles over the mouth
-  st.aim = bump(t, 83.55, 84.0, 84.55, 85.1) + bump(t, 95.0, 95.35, 95.6, 96.0);
+  st.aim = bump(t, 83.55, 84.0, 84.55, 85.1) + bump(t, 103.0, 103.4, 103.75, 104.2);
   st.aimTilt = 1.3;
   // n12: drinking
   st.drink = bump(t, 106.35, 106.95, 110.7, 111.4);
@@ -188,17 +191,19 @@ function G(t) {
   let tg;
   if (t < 59) tg = toLocal(r, 1, PITCHER.x + 4, PITCHER.rimY + 26);              // deep in the neck (n05)
   else if (t < 82.5) tg = toLocal(r, -1, PEB1.x, PEB1.y - 0.62 * PEB1.r * pebScale(PEB1)); // the pebble
-  else if (t < 104) tg = toLocal(RIM_R, -1, PITCHER.x - 8, PITCHER.rimY + 2);    // over the mouth
+  else if (t < 99) tg = toLocal(RIM_R, -1, PITCHER.x - 8, PITCHER.rimY + 2);     // over the mouth
+  else if (t < 102) tg = toLocal(PICK3, -1, PEB3_AT.x, PEB3_AT.y - 0.62 * PEB3.r * pebScale(PEB3)); // the last pebble
+  else if (t < 104.5) tg = toLocal(RIM_R, -1, PITCHER.x - 8, PITCHER.rimY + 2);
   else tg = toLocal(RIM_R, -1, PITCHER.x - 12, PITCHER.rimY + 4);                 // the water at the brim
   st.aimX = tg.x; st.aimY = tg.y;
   // talking
   const talk = Math.max(say('c02', t), say('c03', t), say('c04', t), say('c05', t), say('c06', t));
   st.beak = Math.max(talk * 0.85, 0.7 * bump(t, 80.6, 80.75, 80.92, 81.02), 0.65 * bump(t, REL1 - 0.03, REL1 + 0.06, REL1 + 0.3, REL1 + 0.5),
-    0.65 * bump(t, REL2 - 0.03, REL2 + 0.06, REL2 + 0.3, REL2 + 0.5));
+    0.7 * bump(t, 100.45, 100.6, 100.77, 100.87), 0.65 * bump(t, REL3 - 0.03, REL3 + 0.06, REL3 + 0.3, REL3 + 0.5));
   // carrying a pebble?
   let held = null;
   if (t >= 81.0 && t < REL1) held = PEB1;
-  else if (t >= 92 && t < REL2) held = PEB2;
+  else if (t >= 100.85 && t < REL3) held = PEB3;
   return { x: r.x, y: r.y, s, face, st, ground, air, held };
 }
 const poseG = (t) => G(t).st;
@@ -208,14 +213,16 @@ const USED_LATER = [0, 1, 2, 3, 6, 7, 8, 9, 10, 13];
 function pathPebbles(t) {
   return PEBBLES.filter((p, i) => {
     if (i === 3) return false;                          // drawn by us (small), until she picks it up
+    if (i === 9) return false;                          // the last one: drawn by us beside PICK3
     if (i === 5) return t < 90;
-    if (t > 99.6 && USED_LATER.includes(i)) return false;
+    if (t > 104 && USED_LATER.includes(i)) return false;
     return true;
   });
 }
 // the water in the pitcher, 0 (a little at the bottom) .. 1 (at the brim), and the pebbles in it
-const DROPS = [WORD.plip, WORD.plop, WORD.another1, WORD.another2, 90.9, 91.7, 92.5, 93.3, REL2 + 0.3, 100.5, 101.5];
-const INC = [0.06, 0.06, 0.06, 0.06, 0.12, 0.12, 0.12, 0.12, 0.06, 0.11, 0.11];
+const CUT_DROPS = [89.6, 90.7, 91.8, 92.9];              // seen through the clay, one by one
+const DROPS = [WORD.plip, WORD.plop, ...CUT_DROPS, REL3 + 0.55];
+const INC = [0.06, 0.06, 0.17, 0.17, 0.17, 0.17, 0.2];
 const level = (t) => DROPS.reduce((a, d, i) => a + INC[i] * sm(t, d + 0.05, d + 0.8), 0);
 const landed = (t) => DROPS.filter((d) => t >= d).length;
 const lastDrop = (t) => { let l = -1; for (const d of DROPS) if (t >= d) l = d; return l; };
@@ -227,8 +234,6 @@ function drawCrowAt(g, r, poseFn, t, since, filter) {
   crow.drawAt(g, poseFn, t, { since });
   g.restore();
 }
-// a rig point (local) to the page, for a crow at r
-const toPage = (r, p) => ({ x: r.x + p.x * (-r.face * r.s), y: r.y + p.y * r.s });
 
 // the garden with her in it: mood, camera, the shot's start (for follow-through)
 function garden(g, t, c, mood, since, o = {}) {
@@ -236,7 +241,7 @@ function garden(g, t, c, mood, since, o = {}) {
   const r = G(t);
   // she pushes from the right: it rocks a hair to the left, and settles back with a tiny wobble
   const lv = level(t);
-  const tilt = -0.028 * bump(t, 61.6, 62.25, 62.6, 63.25) + (t > 63.25 ? 0.006 * Math.sin((t - 63.25) * 10) * Math.exp(-(t - 63.25) * 3) : 0);
+  const tilt = keys(t, [[61.8, 0], [62.2, -0.042], [62.5, -0.014], [62.85, -0.036], [63.25, 0], [63.45, 0.007], [63.75, -0.002], [64.0, 0]]);
   drawGarden(g, t, c, mood, {
     pebbles: pathPebbles(t), pitcher: { tilt }, sky: mood !== 'night', starsK: 0, glow: o.glow,
     behind: o.behind,
@@ -244,47 +249,32 @@ function garden(g, t, c, mood, since, o = {}) {
       // the water, once it has come up near the brim
       if (lv > 0.85 && mood !== 'night') drawMouthWater(h, t, sm(lv, 0.85, 0.97), mood);
       if (t < 81.0 && t > 60) drawPebble(h, PEB1, { scale: pebScale(PEB1), mood });
+      if (t < 100.85 && t > 93) drawPebble(h, PEB3, { x: PEB3_AT.x, y: PEB3_AT.y, scale: pebScale(PEB3), mood });
       if (!o.crowAfter) actor(h);
       if (o.actors) o.actors(h);
     },
     after: (h) => { if (o.crowAfter) actor(h); if (o.after) o.after(h); },
   });
   function actor(h) {
-      drawCrowAt(h, r, poseG, t, since, mood === 'night' ? 'brightness(0.62) saturate(0.85)' : mood === 'sunset' ? 'sepia(0.12) brightness(0.92)' : null);
-      if (t > FL.home.touch - 0.8) nestFront(h, mood);
+      const sn = Math.max(since, lastSwap(t));
+      drawCrowAt(h, r, poseG, t, sn, mood === 'night' ? 'brightness(0.42) saturate(0.8)' : mood === 'sunset' ? 'sepia(0.12) brightness(0.92)' : null);
+      if (t > FL.home.touch - 0.8) drawNestFront(h, mood);
       // a pebble in her beak, exactly at the grip; and the one she lets go, falling into the mouth
       if (r.held) {
-        const tip = crow.beakTipAt(poseG, t, { since }), q = toPage(r, { x: tip.gripX, y: tip.gripY });
-        drawPebble(h, r.held, { x: q.x, y: q.y + r.held.r * 0.62 * pebScale(r.held), scale: pebScale(r.held), rot: 0.2 * Math.sin(t * 2), shadow: false, mood });
+        const q = crow.beakTipAt(poseG, t, { since: sn, x: r.x, y: r.y, scale: r.s, face: -r.face });
+        drawPebble(h, r.held, { x: q.gripX, y: q.gripY + r.held.r * 0.62 * pebScale(r.held), scale: pebScale(r.held), rot: 0.2 * Math.sin(t * 2), shadow: false, mood });
       }
-      for (const [rel, p] of [[REL1, PEB1], [REL2, PEB2]]) {
+      for (const [rel, p] of [[REL1, PEB1], [REL3, PEB3]]) {
         const dt = t - rel; if (dt <= 0 || dt > 0.5) continue;
-        const rr = G(rel), tip = crow.beakTipAt(poseG, rel, { since }), q = toPage(rr, { x: tip.gripX, y: tip.gripY });
-        drawPebble(h, p, { x: q.x, y: q.y + 2200 * 0.5 * dt * dt + p.r * 0.62 * pebScale(p), scale: pebScale(p), shadow: false, mood });
+        const rr = G(rel), q = crow.beakTipAt(poseG, rel, { since: sn, x: rr.x, y: rr.y, scale: rr.s, face: -rr.face });
+        drawPebble(h, p, { x: q.gripX, y: q.gripY + 2200 * 0.5 * dt * dt + p.r * 0.62 * pebScale(p), scale: pebScale(p), shadow: false, mood });
       }
       // the pitcher's front lip in front of anything that dips into its mouth
       if (r.y < PITCHER.rimY + 60) {
-        h.save(); h.beginPath(); h.ellipse(MOUTH.x, MOUTH.y, MOUTH.rx, MOUTH.ry, 0, 0, Math.PI);
-        h.lineTo(MOUTH.x - MOUTH.rx, PITCHER.y + 20); h.lineTo(MOUTH.x + MOUTH.rx, PITCHER.y + 20); h.closePath(); h.clip();
-        drawPitcher(h, mood, { shadow: false });
+        drawPitcher(h, mood, { lipOnly: true });
         if (lv > 0.85 && mood !== 'night') drawMouthWater(h, t, sm(lv, 0.85, 0.97), mood, true);
-        h.restore();
       }
   }
-}
-// The nest's front rim, drawn over her. The glazed (sunset/night) sprites carry a faint veil over their whole box,
-// which would grey her out, so they are cut back to the clean shape of the unglazed one.
-const NESTF = {};
-function nestFront(g, mood) {
-  if (mood === 'hot') return drawNestFront(g, mood);
-  if (!NESTF[mood]) {
-    const x0 = NEST[0] - 80, y0 = NEST[1] - 40, w = 160, h = 84, r = 3, c = canvas(w * r, h * r, false), cg = c.getContext('2d');
-    cg.setTransform(r, 0, 0, r, -x0 * r, -y0 * r);
-    drawNestFront(cg, mood);
-    cg.globalCompositeOperation = 'destination-in'; drawNestFront(cg, 'hot');
-    NESTF[mood] = { c, x0, y0, w, h };
-  }
-  const n = NESTF[mood]; g.drawImage(n.c, n.x0, n.y0, n.w, n.h);
 }
 // cool water right up at the brim, seen in the pitcher's mouth (and its near half again over a dipping beak)
 function drawMouthWater(g, t, k, mood, front = false) {
@@ -309,8 +299,8 @@ function camGarden(t) {
   c = mixv(c, view(PITCHER.x + 45, PITCHER.rimY + 125, 2.05), sm(t, 58.7, 61.0));      // down with her to the ground
   c = mixv(c, view(PITCHER.x + 60, PITCHER.rimY + 120, 2.25), sm(t, 64.8, 68.6));      // in a little while she thinks
   c = mixv(c, view(PITCHER.x + 45, PITCHER.rimY + 125, 2.05), sm(t, 70.4, 73.2));
-  c = mixv(c, view(PITCHER.x + 10, PITCHER.rimY - 25, 3.0), sm(t, 103.5, 104.2));     // (s4 starts on this, after a dissolve)
-  c = mixv(c, view(PITCHER.x + 10, PITCHER.rimY - 20, 3.25), sm(t, 104.5, 112.0));
+  c = mixv(c, view(PITCHER.x + 10, PITCHER.rimY - 25, 3.0), sm(t, 103.9, 104.5));     // (during the look down the neck)
+  c = mixv(c, view(PITCHER.x + 10, PITCHER.rimY - 20, 3.25), sm(t, 105.6, 112.0));
   c = mixv(c, view(960, 540, 1.0), sm(t, 117.6, 126.2));                               // n13: pull back over the garden
   return c;
 }
@@ -354,10 +344,13 @@ function titleCrow(t) {
 }
 
 // the opening: the parched fields from high up, the tired little crow flying over them
+// the ground travels under her: the multiplane fields scroll (near planes faster), easing in and out
+const fieldsScroll = (t) => FIELDS_PAN.max * walkDist(clamp((t - 5.0) / (37.0 - 5.0)));
 function fieldsCam(t) {
-  let c = view(900, 540, 1.04);
-  c = mixv(c, view(1080, 520, 1.16), Math.max(0, t - 5) / 28.5); // a slow, steady drift with her (the push-in below takes over)
-  c = mixv(c, view(FIELDS_PITCHER[0], FIELDS_PITCHER[1] - 10, 2.7), sm(t, 33.0, 40.6));
+  const P = fieldsGardenAt(fieldsScroll(t)).pitcher;
+  let c = view(940, 540, 1.1);                                  // (the garden starts just out of the picture, on the right)
+  c = mixv(c, view(970, 530, 1.13), sm(t, 6, 30));
+  c = mixv(c, view(P[0], P[1] - 10, 2.7), sm(t, 33.0, 40.6));
   return c;
 }
 function fieldsCrow(t) {
@@ -369,16 +362,15 @@ function fieldsCrow(t) {
   st.headTilt = -0.12 - 0.3 * bump(t, 31.0, 31.8, 35, 36.5); st.lookUp = -0.9 * bump(t, 31.0, 31.6, 36, 37);
   st.eyeBig = 0.7 * bump(t, 31.6, 31.9, 33.2, 34.0);
   // across the frame, slowing as she talks, then down toward the garden far below
-  const x = keys(t, [[16.4, -180], [24.0, 470], [33.4, 1020]]);
+  const x = keys(t, [[16.4, -180], [23.0, 520], [33.4, 820]]);
   const y = 330 + 14 * Math.sin(t * 0.55) + 30 * sm(t, 20, 30);
-  const c = fieldsCam(t), gx = (FIELDS_PITCHER[0] - W / 2 - c.x) * c.z + W / 2, gy = (FIELDS_PITCHER[1] - 18 - H / 2 - c.y) * c.z + H / 2;
+  const c = fieldsCam(t), P = fieldsGardenAt(fieldsScroll(t)).pitcher, gx = (P[0] - W / 2 - c.x) * c.z + W / 2, gy = (P[1] - 18 - H / 2 - c.y) * c.z + H / 2;
   const k = sm(t, 33.6, 38.3);
   return { x: lerp(x, gx, k), y: lerp(y, gy, k * k), s: lerp(0.62, 0.05, Math.pow(k, 0.8)), st };
 }
 function drawFields(g, t) {
-  const L = fieldsLayer('hot'), c = fieldsCam(t);
-  S.paperBg(g); drawH(g, c, L);
-  heatShimmer(g, L, c, t, SHIMMER_FIELDS, 1.2);
+  const c = fieldsCam(t);
+  S.paperBg(g); drawFieldsParallax(g, fieldsParallax('hot'), c, fieldsScroll(t), { t });
   cam(g, c, 1); dustMotes(g, t, 20, { x0: 0, x1: 1920, y0: 300, y1: 1000 }, 3);
   if (t > 16 && t < 38.3) {
     const r = fieldsCrow(t);
@@ -404,8 +396,8 @@ function drawPOV(g, t) {
 }
 // the peek through the clay: pebble by pebble, the water rises
 function drawCutaway(g, t) {
-  S.paperBg(g); cam(g, { z: 1.0 + 0.03 * sm(t, 90, 94.5), x: 0, y: 0 }, 1);
-  const n = landed(90.0) + DROPS.filter((d) => d > 90 && d < 94).reduce((a, d) => a + clamp((t - (d - 0.32)) / 0.72), 0);
+  S.paperBg(g); cam(g, { z: 1.0 + 0.04 * sm(t, 88.8, 94.8), x: 0, y: 0 }, 1);
+  const n = 2 + CUT_DROPS.reduce((a, d) => a + clamp((t - (d - 0.32)) / 0.72), 0);
   drawPitcherCutaway(g, level(t), n, t, { x: 960, base: 860, h: 640 });
 }
 const gardenShot = (since, mood = 'hot') => (g, t) => {
@@ -475,7 +467,7 @@ window.FABLE = {
     await S.setup(document.getElementById('c'));
     crow = makeCrow3(2.0, 4);
     BUF_A = canvas(W, H, false); BUF_B = canvas(W, H, false); MASKC = canvas(240, 135, false);
-    fieldsLayer('hot'); for (const m of ['hot', 'sunset', 'night']) gardenLayers(m);
+    fieldsParallax('hot'); for (const m of ['hot', 'sunset', 'night']) gardenLayers(m);
     { const g = canvas(8, 8, false).getContext('2d'); drawPitcherCloseup(g, 0, 0); drawPitcherCutaway(g, 0.2, 1, 0, { x: 960, base: 860, h: 640 }); }
     SHOTS = [
       [0, drawTitle],
@@ -483,11 +475,11 @@ window.FABLE = {
       [38.6, gardenShot(38.6), 2.0],          // she flies down onto the rim
       [43.45, drawPOV, 0.7],                  // "There was water! But only a little..."
       [48.5, gardenShot(48.4), 0.9],          // c02 .. n08
-      [84.22, drawPOV, 0],                    // cut down the neck: "Plip!" ... "Plop!" ... and another, and another
-      [90.2, drawCutaway, 1.0],               // pebble by pebble, the water rose
-      [93.4, gardenShot(93.3), 1.0],          // one more; "It's working!"
-      [99.6, drawPOV, 1.0],                   // right up to the top
-      [104.0, gardenShot(103.9), 1.2],        // she drinks; the lesson; pull back as the light warms
+      [84.22, drawPOV, 0],                    // cut down the neck: "Plip!" ... then another: "Plop!"
+      [88.8, drawCutaway, 1.2],               // and another, and another: pebble by pebble, the water rose
+      [93.6, gardenShot(93.5), 1.2],          // "It's working! Just a few more..." - down for one more, and up
+      [103.62, drawPOV, 0],                   // the last one: right up to the top
+      [105.6, gardenShot(105.5), 1.0],        // she drinks; the lesson; pull back as the light warms
       [127.0, (g, t) => drawEvening(g, t, false), 2.2],
       [142.8, (g, t) => drawEvening(g, t, true), { fade: 4.5 }],
     ];
