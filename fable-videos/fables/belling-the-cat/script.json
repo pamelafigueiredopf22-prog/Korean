@@ -1,0 +1,29 @@
+{
+  "title": "Belling the Cat",
+  "source": "Aesop's Fables (public domain), gently retold for bedtime",
+  "lines": [
+    {"id": "n01", "scene": "s1_house", "speaker": "narrator", "pause": 1.6, "text": "Once upon a time, in a cosy old farmhouse, there lived a family of little mice, tucked away behind the kitchen wall."},
+    {"id": "n02", "scene": "s1_house", "speaker": "narrator", "pause": 1.4, "text": "They had everything a mouse could wish for. Warm nests, crumbs of cheese, and the sweetest seed cake. But they had one big worry."},
+    {"id": "n03", "scene": "s1_house", "speaker": "narrator", "pause": 2.0, "text": "The farmhouse cat. She was big and fluffy, and very, very quiet. And whenever a mouse came out for a crumb, she would creep up, soft as a shadow... and pounce!"},
+
+    {"id": "n04", "scene": "s2_council", "speaker": "narrator", "pause": 1.2, "text": "So one night, all the mice gathered for a meeting, by the light of a little candle."},
+    {"id": "e01", "scene": "s2_council", "speaker": "elder", "speech": "[old, kind, a little creaky] Friends, we must find a way to keep ourselves safe from the cat. Who has an idea?", "pause": 1.4, "text": "Friends, we must find a way to keep ourselves safe from the cat. Who has an idea?"},
+    {"id": "n05", "scene": "s2_council", "speaker": "narrator", "pause": 1.0, "text": "The mice whispered and wondered. Then a bright young mouse jumped up onto a cotton reel."},
+    {"id": "y01", "scene": "s2_council", "speaker": "young", "speech": "[eager, excited] I know! Let's tie a little bell around the cat's neck!", "pause": 0.8, "text": "I know! Let's tie a little bell around the cat's neck!"},
+    {"id": "y02", "scene": "s2_council", "speaker": "young", "speech": "[proud, explaining] Then, whenever she comes near, we'll hear it go jingle, jingle, and we can all run and hide!", "pause": 1.4, "text": "Then, whenever she comes near, we'll hear it go jingle, jingle, and we can all run and hide!"},
+    {"id": "n06", "scene": "s2_council", "speaker": "narrator", "pause": 1.4, "text": "What a wonderful idea! The mice cheered and clapped their tiny paws, and danced around the candle."},
+
+    {"id": "e02", "scene": "s3_question", "speaker": "elder", "speech": "[gently, after a pause] It is a very good plan. But tell me, little ones...", "pause": 0.8, "text": "It is a very good plan. But tell me, little ones..."},
+    {"id": "e03", "scene": "s3_question", "speaker": "elder", "speech": "[softly, with a twinkle] Who will put the bell on the cat?", "pause": 2.2, "text": "Who will put the bell on the cat?"},
+    {"id": "n07", "scene": "s3_question", "speaker": "narrator", "pause": 1.4, "text": "Suddenly, the room went very, very quiet."},
+    {"id": "n08", "scene": "s3_question", "speaker": "narrator", "pause": 1.4, "text": "One mouse looked at his toes. Another looked at the ceiling. And the bright young mouse slowly sat back down."},
+    {"id": "y03", "scene": "s3_question", "speaker": "young", "speech": "[sheepish, small voice] Oh... I didn't think of that part.", "pause": 1.6, "text": "Oh... I didn't think of that part."},
+    {"id": "e04", "scene": "s3_question", "speaker": "elder", "speech": "[warm, wise, kindly chuckle] It is easy to have a clever idea. The hard part, my dears, is carrying it out.", "pause": 2.2, "text": "It is easy to have a clever idea. The hard part, my dears, is carrying it out."},
+
+    {"id": "n09", "scene": "s4_goodnight", "speaker": "narrator", "pause": 1.6, "text": "And so, the little mice decided to be extra careful, and to always stay close together."},
+    {"id": "n10", "scene": "s4_goodnight", "speaker": "narrator", "pause": 2.0, "text": "They blew out the candle, and snuggled into their soft nests of wool and feathers."},
+    {"id": "n11", "scene": "s4_goodnight", "speaker": "narrator", "pause": 2.0, "text": "And out in the kitchen, by the warm stove, the big fluffy cat curled up too, and purred herself to sleep."},
+    {"id": "n12", "scene": "s4_goodnight", "speaker": "narrator", "pause": 2.6, "text": "The moon peeked in through the window, and the whole farmhouse was quiet and still."},
+    {"id": "n13", "scene": "s4_goodnight", "speaker": "narrator", "voice": "whisper", "speech": "[whispers] Goodnight, little one... [softly] Sweet dreams.", "pause": 30.0, "text": "Goodnight, little one. Sweet dreams."}
+  ]
+}
