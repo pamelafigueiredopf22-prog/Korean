@@ -1,0 +1,28 @@
+<!doctype html><html><body style="margin:0"><canvas id="c" width="1920" height="1080"></canvas>
+<script type="module">
+// Numeric check of the reel: does a planted foot / paw ever slide? (results go to the console)
+//   PAGE=check.html node tools/render.js _bell --stills 0
+import { REEL, SEGS } from './reel.js';
+window.FABLE = {
+  async setup() {
+    await REEL.setup();
+    const fps = 60, out = [];
+    for (const [t0, t1, label, fn] of SEGS) {
+      let prev = null, worst = 0, at = 0, n = 0;
+      for (let t = t0; t < t1 - 1e-6; t += 1 / fps) {
+        const acts = fn(t - t0).filter((a) => !a.prop);
+        const cur = acts.map((a) => {
+          const poseFn = (tt) => ({ t: tt, ...a.poseK(tt - t0) }), o = { since: t0 + (a.sinceK || 0), x: a.x, y: a.y, scale: a.s, face: a.face };
+          return { face: a.face, since: a.sinceK, f: a.rig.feetAt ? a.rig.feetAt(poseFn, t, o) : a.rig.pawsAt(poseFn, t, o) };
+        });
+        if (prev) cur.forEach((c, j) => { const p = prev[j]; if (!p || p.face !== c.face || p.since !== c.since) return;
+          c.f.forEach((q, i) => { const r = p.f[i]; if (q.planted && r.planted) { const d = Math.hypot(q.x - r.x, q.y - r.y); n++; if (d > worst) { worst = d; at = t - t0; } } }); });
+        prev = cur;
+      }
+      out.push(`${label}: planted max slip ${worst.toFixed(2)} px/frame at ${at.toFixed(2)}s (${n} samples)`);
+    }
+    console.warn(out.join('\n'));
+  },
+  frame() {}
+};
+</script></body></html>

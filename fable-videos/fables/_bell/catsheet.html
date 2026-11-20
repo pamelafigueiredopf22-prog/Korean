@@ -1,0 +1,23 @@
+<!doctype html><html><body style="margin:0"><canvas id="c" width="1920" height="1080"></canvas>
+<script type="module">
+// cat3 pose sheet:  PAGE=catsheet.html node tools/render.js _bell --stills 1,2
+import { paper } from '../../engine/watercolor.js';
+import { makeCatRig } from '../../engine/characters/cat3.js';
+const g = document.getElementById('c').getContext('2d');
+let P, cat;
+const SHEETS = {
+  1: [{}, { sit: 1 }, { sleep: 1 }, { creep: 1 }],
+  2: [{ pounce: 0.3 }, { pounce: 0.55 }, { stretch: 0.45 }, { yawn: 0.5, sit: 1 }],
+};
+window.FABLE = {
+  async setup() { P = paper(); cat = makeCatRig(1.2); },
+  frame(t) {
+    g.drawImage(P, 0, 0);
+    (SHEETS[Math.round(t)] || SHEETS[1]).forEach((st, i) => {
+      const x = 260 + (i % 2) * 900, y = 470 + Math.floor(i / 2) * 520, S = 0.9;
+      g.save(); g.translate(x + 200, y); g.scale(S, S); cat.shadow(g, st); cat.drawAt(g, (tt) => ({ t: 3, life: 0, ...st }), 5, { since: 0 }); g.restore();
+      g.save(); g.fillStyle = '#4a3a2c'; g.font = 'italic 26px serif'; g.fillText(JSON.stringify(st), x, y + 40); g.restore();
+    });
+  },
+};
+</script></body></html>

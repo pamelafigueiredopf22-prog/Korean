@@ -1,0 +1,30 @@
+<!doctype html><html><body style="margin:0"><canvas id="c" width="1920" height="1080"></canvas>
+<script type="module">
+// a pose sheet: mice3 outfits and poses (drawAt with a constant pose so the springs have settled)
+//   PAGE=sheet.html node tools/render.js _bell --stills 1,2,3
+import { paper } from '../../engine/watercolor.js';
+import { makeMouseRig } from '../../engine/characters/mice3.js';
+const g = document.getElementById('c').getContext('2d');
+let P, M = {};
+const SHEETS = {
+  1: [['elder', {}], ['young', { mouth: 0.5 }], ['mother', { wave: 1 }], ['baby', { cheer: 1 }], ['plump', { tummy: 1 }], ['shy', { shy: 1 }], ['granny', { explain: 1, mouth: 0.4 }]],
+  2: [['young', { turn: 0.25 }], ['young', { turn: 0.5 }], ['young', { turn: 0.75 }], ['elder', { turn: 0.5 }], ['mother', { turn: 0.5, clap: 1, clapPhase: 0.5 }], ['young', { headTurn: 0.5 }], ['plump', { turn: 0.4 }]],
+  3: [['young', { sit: 1 }], ['shy', { sleep: 1 }], ['young', { sheepish: 1 }], ['plump', { toes: 1 }], ['mother', { ceiling: 1 }], ['young', { whisper: 1 }], ['elder', { chuckle: 1 }]],
+  4: [['young', { cover: 1 }], ['young', { cover: 1, peek: 1 }], ['young', { shrug: 1 }], ['young', { point: 1 }], ['young', { dance: 1, dancePhase: 0.5 }], ['young', { yawn: 0.45 }], ['elder', { specs: 0.55 }]],
+};
+window.FABLE = {
+  async setup() { P = paper(); for (const n of ['elder', 'young', 'mother', 'baby', 'plump', 'shy', 'granny']) M[n] = makeMouseRig(2, 60 + Object.keys(M).length, n); },
+  frame(t) {
+    g.drawImage(P, 0, 0);
+    const row = SHEETS[Math.round(t)] || SHEETS[1];
+    row.forEach(([n, st], i) => {
+      const x = 170 + i * 265, y = 760, S = 1.5;
+      g.save(); g.translate(x, y); g.scale(S, S);
+      M[n].shadow(g, {});
+      M[n].drawAt(g, (tt) => ({ t: 3 + tt * 0, life: 0, ...st }), 5, { since: 0 });
+      g.restore();
+      g.save(); g.fillStyle = '#4a3a2c'; g.font = 'italic 24px serif'; g.fillText(n + ' ' + JSON.stringify(st).slice(1, -1), x - 120, 850); g.restore();
+    });
+  },
+};
+</script></body></html>
