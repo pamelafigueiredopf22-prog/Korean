@@ -60,7 +60,8 @@ const TAIL_ROOT = [-200, -200];
 const LEGS = [ // [name, root (body-local), paw rest x (root space), hind?, near?, phase offset]
   ['hindFar', [-118, -170], -108, true, false, 0.5], ['foreFar', [138, -175], 138, false, false, 0.75],
   ['hindNear', [-132, -160], -128, true, true, 0], ['foreNear', [120, -165], 120, false, true, 0.25]];
-const UP_L = { hind: 104, fore: 92 }, LO_L = { hind: 96, fore: 96 };
+// hind leg: thigh (hip -> knee, knee FORWARD), shin (knee -> hock, the hock points BACK), foot (hock -> paw: digitigrade)
+const UP_L = { hind: 76, fore: 92 }, LO_L = { hind: 80, fore: 96 }, FOOT_L = 62;
 
 export const STRIDE = 120;
 const BETA = 0.8, LIFT = 24;
@@ -117,7 +118,7 @@ function solve(st, dl = 0) {
   const P = { bx: 0, by: 0, pitch: 0, sx: 1, sy: 1, nvx: 0, nvy: 0, ha: v('headTilt'), hturn: v('headTurn'),
     eye: v('eye'), happy: v('happy'), big: v('eyeBig'), mouth: v('mouth'), smile: v('smile'), mdeep: 12,
     earBack: v('earsBack'), twN: 0, twF: 0, tLift: v('tailLift'), tCurl: v('tailCurl'), tSway: 0, tWrap: 0, tTwitch: 0, rdy: 0, air: 0, breath: 0,
-    paw: { fore: [0, 0], hind: [0, 0], foreLift: 0, hindLift: 0 }, sit: 0, sleep: 0, creep: 0 };
+    paw: { fore: [0, 0], hind: [0, 0], foreLift: 0, hindLift: 0 }, hk: 0, sit: 0, sleep: 0, creep: 0 };
   const sit = clamp(v('sit')), sleep = clamp(v('sleep')), creep = clamp(v('creep')), wa = clamp(v('walkAmt'));
   const blink = v('blink'), yawn = v('yawn'), stretch = v('stretch'), pounce = v('pounce'), purr = Math.max(clamp(v('purr')), sleep);
   const busy = clamp(Math.max(wa * 0.7, on(yawn), on(stretch), on(pounce), sleep, creep));
@@ -143,7 +144,7 @@ function solve(st, dl = 0) {
     P.ha -= wa * 0.03; P.nvy += wa * 3 * Math.cos(ph * 2 * TAU + 0.6);
     P.tSway += wa * 0.6 * Math.sin(ph * TAU); P.tLift -= wa * 0.1;
   }
-  if (creep > 0) { P.by += creep * 46; P.nvy += creep * 46; P.nvx += creep * 22; P.ha -= creep * 0.05; P.tLift -= creep * 0.35; P.tCurl -= creep * 0.4; P.earBack += creep * 0.1; P.creep = creep; P.eye = lerp(P.eye, 0.8, creep); P.big += creep * 0.2; }
+  if (creep > 0) { P.by += creep * 46; P.nvy += creep * 46; P.nvx += creep * 22; P.ha -= creep * 0.05; P.tLift -= creep * 0.35; P.tCurl -= creep * 0.4; P.earBack += creep * 0.1; P.creep = creep; P.hk += creep * 0.8; P.eye = lerp(P.eye, 0.8, creep); P.big += creep * 0.2; }
   // sit up
   if (sit > 0) { const k = ease(sit); P.sit = k; P.pitch -= k * 0.78; P.sx *= 1 - 0.2 * k; P.bx -= k * 62; P.by += k * 20; P.nvx -= k * 40; P.nvy += k * 18; P.ha += k * 0.06; P.tWrap = Math.max(P.tWrap, k * 0.8); }
   // stretch (phase): a play bow
@@ -168,6 +169,7 @@ function solve(st, dl = 0) {
     const u = pounce, H = v('pounceHeight');
     const crouch = key(u, [[0, 0], [0.16, 1], [0.4, 1], [0.44, 0], [0.7, 0], [0.76, 0.45], [0.9, 0.1], [1, 0]]);
     const wig = bell(u, 0.18, 0.4) * Math.sin(u * 60);
+    P.hk += crouch * 0.9;
     P.by += crouch * 50; P.pitch += crouch * 0.12 + wig * 0.04; P.bx -= crouch * 12;
     P.nvy += crouch * 40; P.nvx += crouch * 26 + key(u, [[0.4, 0], [0.5, 20], [0.7, 0]]); P.ha -= crouch * 0.05;
     P.big += key(u, [[0, 0], [0.12, 1], [0.7, 1], [0.86, 0]]); P.happy = Math.max(P.happy, key(u, [[0.76, 0], [0.86, 1], [1, 0]]));
@@ -217,12 +219,13 @@ export function makeCatRig(res = 1, seed = 61) {
   const ear = furry(res, EAR, COL, s(30), { fur: 16, furLen: 8, shadeW: 10, paint: (g) => { wash(g, EAR_IN, { color: PINK, opacity: 0.85, seed: s(31) }); glaze(g, EAR_IN, 0, -14, 6, 12, '#ffe0da', 0.6); } });
   const earF = darker(ear, 0.82);
   const mkLeg = (hind, sd) => ({
-    up: furry(res, UPPER(hind ? 50 : 34, hind ? 28 : 24, hind ? UP_L.hind : UP_L.fore), COL, s(sd), { fur: 80, furLen: 13, hatch: 30, shadeW: 22, sdx: 6, sdy: 0, pen: false, paint: (g) => stripes(g, UPPER(hind ? 50 : 34, hind ? 28 : 24, 100), 36, 9, 0.3, 1.4) }),
-    lo: furry(res, LOWER(hind ? 22 : 22, hind ? 19 : 20, hind ? LO_L.hind : LO_L.fore), COL, s(sd + 10), { fur: 30, furLen: 9, hatch: 14, shadeW: 14, sdx: 5, sdy: 0, paint: (g) => { stripes(g, LOWER(22, 20, 96), 30, 7, 0.28, 1.5); glaze(g, LOWER(22, 20, 96), 0, 90, 24, 20, CREAM, 0.7); } }),
+    up: furry(res, UPPER(hind ? 52 : 34, hind ? 26 : 24, hind ? UP_L.hind : UP_L.fore), COL, s(sd), { fur: 80, furLen: 13, hatch: 30, shadeW: 22, sdx: 6, sdy: 0, pen: false, paint: (g) => stripes(g, UPPER(hind ? 50 : 34, hind ? 28 : 24, 100), 36, 9, 0.3, 1.4) }),
+    ft: hind ? furry(res, LOWER(15, 12, FOOT_L), COL, s(sd + 20), { fur: 20, furLen: 7, hatch: 8, shadeW: 10, sdx: 4, sdy: 0, paint: (g) => glaze(g, LOWER(15, 12, FOOT_L), 0, FOOT_L, 16, 16, CREAM, 0.7) }) : null,
+    lo: furry(res, LOWER(hind ? 20 : 22, hind ? 15 : 20, hind ? LO_L.hind : LO_L.fore), COL, s(sd + 10), { fur: 30, furLen: 9, hatch: 14, shadeW: 14, sdx: 5, sdy: 0, paint: (g) => { stripes(g, LOWER(22, 20, 96), 30, 7, 0.28, 1.5); glaze(g, LOWER(22, 20, 96), 0, 90, 24, 20, CREAM, 0.7); } }),
   });
   const legH = mkLeg(true, 40), legF = mkLeg(false, 60);
   const paw = furry(res, PAW, CREAM, s(80), { fur: 26, furLen: 6, blooms: ['#fff2dc'], shadow: '#b89070', shadeA: 0.25, shadeW: 10, sdy: -4, last: (g) => { for (const x of [4, 16]) penLine(g, [[x, -4], [x + 2, 2]], { w: 1.2, alpha: 0.5 }); } });
-  const LEGSPR = { hindNear: legH, foreNear: legF, hindFar: { up: darker(legH.up), lo: darker(legH.lo) }, foreFar: { up: darker(legF.up), lo: darker(legF.lo) } };
+  const LEGSPR = { hindNear: legH, foreNear: legF, hindFar: { up: darker(legH.up), lo: darker(legH.lo), ft: darker(legH.ft) }, foreFar: { up: darker(legF.up), lo: darker(legF.lo) } };
   const pawFar = darker(paw, 0.85);
   const tail = furry(res, TAILS, COL, s(90), { fur: 120, furLen: 14, hatch: 50, shadeW: 22, sdy: -8, dir: () => 0, paint: (g) => {
     g.save(); path(g, TAILS); g.clip(); for (let x = 30; x < TAIL_L; x += 42) penLine(g, [[x, -30], [x - 6, 0], [x, 30]], { color: DARK, w: 12, alpha: 0.4 }); g.restore();
@@ -245,7 +248,13 @@ export function makeCatRig(res = 1, seed = 61) {
       // in the air (pounce): front legs reach forward, hind legs trail
       const air = hind ? raw.air : (raw.airFore ?? raw.air);
       if (air > 0) { const tk = hind ? [R[0] - 60, R[1] + 120] : [R[0] + 90, R[1] + 110]; x = lerp(x, tk[0], air); y = lerp(y, tk[1] + raw.rdy, air); }
-      out[name] = { R: [R[0], R[1] + raw.rdy], P: [x, y], hind, near, planted: air <= 0 && Math.abs(y) < 0.01 };
+      // the hind foot's angle from the vertical (+ = hock behind the paw): standing a little back, lower when crouching,
+      // flat on the ground sitting / asleep, toes trailing (hock ahead of the paw) while the paw swings, trailing in the air
+      let fa = 0.5 + 0.55 * clamp(raw.hk) - 1.0 * (lift / LIFT);
+      if (sk > 0) fa = lerp(fa, 1.5, ease(sk));
+      if (raw.sleep > 0) fa = lerp(fa, 1.45, raw.sleep);
+      if (air > 0) fa = lerp(fa, -0.5, air);
+      out[name] = { R: [R[0], R[1] + raw.rdy], P: [x, y], hind, near, fa, planted: air <= 0 && Math.abs(y) < 0.01 };
     }
     return out;
   }
@@ -291,14 +300,23 @@ export function makeCatRig(res = 1, seed = 61) {
 
   // ---- painting (internal: facing right)
   function drawLeg(g, L, spr, far) {
-    const hint = L.hind ? [1, 0.2] : [-1, 0.1];
-    const a = UP_L[L.hind ? 'hind' : 'fore'] * (L.hind ? 0.92 : 0.95), b = LO_L[L.hind ? 'hind' : 'fore'];
-    const ank = [L.P[0] + (L.hind ? -6 : 0), L.P[1] - 14];
-    const { E, T } = ik2(L.R, ank, a, b, hint, 1.25);
     const bone = (sp, A, B, len) => { const d = Math.hypot(B[0] - A[0], B[1] - A[1]); g.save(); g.translate(A[0], A[1]); g.rotate(Math.atan2(B[1] - A[1], B[0] - A[0]) - Math.PI / 2); g.scale(1, Math.max(0.6, d / len)); drawSprite(g, sp); g.restore(); };
+    if (L.hind) { // three segments: the foot from the paw up to the hock, then hip -> knee (forward) -> hock
+      const toe = [L.P[0] + 8, L.P[1] - 10];
+      const hock = [toe[0] - FOOT_L * Math.sin(L.fa), toe[1] - FOOT_L * Math.cos(L.fa)];
+      const { E, T } = ik2(L.R, hock, UP_L.hind, LO_L.hind, [1, 0.25], 1.2);
+      bone(spr.ft, T, toe, FOOT_L);
+      bone(spr.lo, E, T, LO_L.hind);
+      bone(spr.up, L.R, E, UP_L.hind);
+      g.save(); g.translate(toe[0] - 6, L.P[1]); drawSprite(g, far ? pawFar : paw); g.restore();
+      return;
+    }
+    // front leg: elbow BACK, the wrist just behind the paw
+    const a = UP_L.fore * 0.95, b = LO_L.fore;
+    const { E, T } = ik2(L.R, [L.P[0] - 5, L.P[1] - 14], a, b, [-1, 0.1], 1.25);
     bone(spr.lo, E, T, b);
     bone(spr.up, L.R, E, a);
-    g.save(); g.translate(T[0], L.P[1]); drawSprite(g, far ? pawFar : paw); g.restore();
+    g.save(); g.translate(T[0] + 5, L.P[1]); drawSprite(g, far ? pawFar : paw); g.restore();
   }
   function drawHead(g, R) {
     const h = R.head, P = h.P, e = h.ears;
