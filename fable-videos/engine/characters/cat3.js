@@ -41,10 +41,10 @@ const COL = '#e09a52', DARK = '#b8703a', CREAM = '#f8e6c8', PINK = '#e8a8a0';
 const BODY = smooth([[-215, -170], [-200, -232], [-140, -268], [-40, -280], [70, -276], [160, -256], [215, -214], [222, -168], [196, -128], [120, -112], [20, -110], [-90, -112], [-180, -124]]);
 const RUFF = smooth([[-34, -50], [0, -62], [36, -44], [46, -6], [36, 34], [10, 58], [-14, 50], [-34, 24], [-44, -12]]);
 // the head is ONE 3/4 view built on a sphere: every feature is a point on it seen at the same yaw
-const HR = 66, HSX = 1.12, YAW0 = 0.5;
+const HR = 72, HSX = 1.1, YAW0 = 0.5;
 const HEAD = (() => { const pts = []; for (let i = 0; i < 36; i++) { const t = i / 36 * Math.PI * 2, c = Math.cos(t), sn = Math.sin(t);
   const tuft = sn > 0 ? 0.09 * Math.max(0, Math.sin(t * 2)) ** 2 + 0.09 * Math.max(0, -Math.sin(t * 2)) ** 2 : 0; // soft cheek ruffs low on each side
-  pts.push([c * HR * HSX * (1 + tuft * 1.2), sn * HR * (sn > 0 ? 0.96 : 0.94) + tuft * 14]); } return smooth(pts, true, 3); })();
+  pts.push([c * HR * HSX * (1 + tuft * 1.2), sn * HR * (sn > 0 ? 1.03 : 0.95) + tuft * 16]); } return smooth(pts, true, 3); })();
 // a point on the head: azimuth a (0 = middle of the face, + = toward the side it looks to), elevation e (+ = down), radius r
 function hp(a, e, r, yaw) { const az = yaw + a; return { x: HSX * HR * r * Math.sin(az) * Math.cos(e), y: HR * r * Math.sin(e), z: HR * r * Math.cos(az) * Math.cos(e) }; }
 const EAR = smooth([[-26, 10], [-18, -28], [-4, -52], [10, -30], [24, 8], [0, 14]]);
@@ -215,9 +215,15 @@ export function makeCatRig(res = 1, seed = 61) {
     stripes(g, BODY, 52, 16, 0.32); glaze(g, BODY, 60, -120, 130, 26, CREAM, 0.85); glaze(g, BODY, -60, -255, 120, 20, '#f0b070', 0.35); } });
   const ruff = furry(res, RUFF, CREAM, s(10), { fur: 70, furLen: 14, blooms: ['#fff2dc', '#f0dcc0'], shadow: '#b89070', shadeA: 0.25, shadeW: 18, sdx: -6, sdy: 0, pen: false });
   // the skull: round and symmetric (it looks the same at every yaw); stripes, muzzle and face are drawn on it per frame
-  const head = furry(res, HEAD, COL, s(20), { fur: 110, furLen: 12, hatch: 50, shadeW: 26, sdy: -12, reserves: 1, paint: (g) => { glaze(g, HEAD, 0, -30, 60, 26, '#f0b878', 0.45); } });
+  const head = furry(res, HEAD, COL, s(20), { fur: 170, furLen: 15, hatch: 50, shadeW: 26, sdy: -12, reserves: 1,
+    penPts: HEAD.filter(([, y]) => y < 18).sort((a, b) => Math.atan2(a[1], a[0]) - Math.atan2(b[1], b[0])), // ink only round the top: no line across the throat
+    paint: (g) => { glaze(g, HEAD, 0, -30, 60, 26, '#f0b878', 0.45); glaze(g, HEAD, 0, HR * 0.8, HR * 0.9, 30, CREAM, 0.9); } });
+  // soft fur that blends the head into the neck and chest: a ginger nape tuft behind, a cream chest ruff rising into the chin
+  const NAPE = smooth([[-46, -30], [10, -40], [46, -10], [40, 30], [-10, 40], [-50, 12]]);
+  const nape = furry(res, NAPE, COL, s(26), { fur: 90, furLen: 14, shadeW: 20, sdy: -8, pen: false });
+  const CHIN = smooth([[-50, -14], [0, -26], [50, -14], [56, 14], [30, 36], [0, 42], [-30, 36], [-56, 14]]);
+  const chinRuff = furry(res, CHIN, CREAM, s(27), { fur: 120, furLen: 13, blooms: ['#fff2dc', '#f0dcc0'], shadow: '#b89070', shadeA: 0.18, shadeW: 14, sdy: 4, pen: false });
   const ear = furry(res, EAR, COL, s(30), { fur: 16, furLen: 8, shadeW: 10, paint: (g) => { wash(g, EAR_IN, { color: PINK, opacity: 0.85, seed: s(31) }); glaze(g, EAR_IN, 0, -14, 6, 12, '#ffe0da', 0.6); } });
-  const earF = darker(ear, 0.82);
   const mkLeg = (hind, sd) => ({
     up: furry(res, UPPER(hind ? 52 : 34, hind ? 26 : 24, hind ? UP_L.hind : UP_L.fore), COL, s(sd), { fur: 80, furLen: 13, hatch: 30, shadeW: 22, sdx: 6, sdy: 0, pen: false, paint: (g) => stripes(g, UPPER(hind ? 50 : 34, hind ? 28 : 24, 100), 36, 9, 0.3, 1.4) }),
     ft: hind ? furry(res, LOWER(15, 12, FOOT_L), COL, s(sd + 20), { fur: 20, furLen: 7, hatch: 8, shadeW: 10, sdx: 4, sdy: 0, paint: (g) => glaze(g, LOWER(15, 12, FOOT_L), 0, FOOT_L, 16, 16, CREAM, 0.7) }) : null,
@@ -332,8 +338,10 @@ export function makeCatRig(res = 1, seed = 61) {
       g.save(); g.translate(B.x, B.y); g.rotate(Math.atan2(T.y - B.y, T.x - B.x) + Math.PI / 2);
       g.scale(Math.max(0.62, w / 40), len / 62); g.translate(0, -8); drawSprite(g, sp); g.restore();
     };
-    earAt(+1, e.twF, earF); earAt(-1, e.twN, ear);
+    earAt(+1, e.twF, ear); earAt(-1, e.twN, ear);
+    { const n = H(-0.9, 0.55, 0.9); g.save(); g.translate(n.x, n.y + 10); drawSprite(g, nape); g.restore(); }
     drawSprite(g, head);
+    { const c = H(0, 0.92, 0.92); g.save(); g.translate(c.x * 0.6, c.y + 6); g.scale(0.86, 0.82); drawSprite(g, chinRuff); g.restore(); }
     // everything below lies on the skull: clip to it
     g.save(); g.beginPath(); for (const [x, y] of HEAD) g.lineTo(x, y); g.closePath(); g.clip();
     const lineOn = (pts, col, w, alpha) => { // a stroke along sphere points, only where they face us
@@ -342,28 +350,34 @@ export function makeCatRig(res = 1, seed = 61) {
       for (const p of q) { if (p.z > 4) run.push([p.x, p.y]); else flush(); } flush();
     };
     // tabby: an M on the forehead, lines back over the crown, stripes on the cheeks following the form
-    lineOn([[-0.34, -0.42], [-0.22, -0.74], [-0.1, -0.48], [0, -0.66], [0.1, -0.48], [0.22, -0.74], [0.34, -0.42]], DARK, 6, 0.42);
-    for (const a of [-0.14, 0.14]) lineOn([[a, -0.8], [a * 1.2, -1.05], [a * 1.4, -1.3]], DARK, 6, 0.36);
-    for (const sd of [-1, 1]) for (let k = 0; k < 3; k++) lineOn([[sd * 0.95, 0.0 + k * 0.17], [sd * 1.2, 0.04 + k * 0.17], [sd * 1.45, 0.1 + k * 0.16]], DARK, 5, 0.38);
+    for (const a of [-0.2, 0, 0.2]) lineOn([[a * 1.05, -0.46], [a * 1.12, -0.66], [a * 1.25, -0.9]], DARK, a ? 8 : 9, 0.24);
+    for (const sd of [-1, 1]) for (let k = 0; k < 2; k++) lineOn([[sd * 1.0, 0.04 + k * 0.2], [sd * 1.22, 0.07 + k * 0.2], [sd * 1.45, 0.12 + k * 0.19]], DARK, 6, 0.2);
     // cream chin and muzzle (whisker pads), soft rosy cheeks under the eyes
     const chin = H(0, 0.78, 1); pool(g, chin.x, chin.y, 52, 34, CREAM, 0.95);
     const lowF = H(0, 0.42, 1.02); pool(g, lowF.x, lowF.y, 44, 30, CREAM, 0.75);
-    for (const sd of [-1, 1]) { const p = H(sd * 0.24, 0.42, 1.08), k = clamp(p.z / (HR * 1.08), 0.3, 1);
-      g.save(); g.translate(p.x, p.y); g.scale(k, 1); g.fillStyle = rgba('#fbf0dc', 0.95); g.beginPath(); g.ellipse(0, 0, 19, 14, 0, 0, 7); g.fill(); g.restore(); }
+    for (const sd of [-1, 1]) { const p = H(sd * 0.25, 0.42, 1.09), k = clamp(p.z / (HR * 1.09), 0.45, 1);
+      g.save(); g.translate(p.x, p.y); g.scale(k, 1); pool(g, 0, 2, 26, 20, '#fbf0dc', 0.9); g.fillStyle = rgba('#fcf3e2', 0.97); g.beginPath(); g.ellipse(0, 0, 21, 17, 0, 0, 7); g.fill();
+      g.fillStyle = rgba(INK, 0.32); for (const [dx, dy] of [[-6, -3], [1, -5], [7, -2], [-3, 3], [4, 2]]) { g.beginPath(); g.arc(dx * -sd, dy, 1.1, 0, 7); g.fill(); }
+      g.restore(); }
     g.restore(); // (unclip)
     // eyes: button eyes on the 3/4 face, the far one narrower and nearer the far edge; a gentle upper lid
     const big = clamp(P.big), R0 = 10.5 * (1 + 0.18 * big), eo = clamp(P.eye * (1 + 0.5 * big), 0, 1);
-    for (const sd of [1, -1]) {
-      const p = H(sd * 0.5, -0.1, 0.99), w = clamp(p.z / (HR * 0.99), 0.4, 1);
-      const ch = H(sd * 0.55, 0.22, 1.0); pool(g, ch.x, ch.y, 15 * w, 9, '#ec8a80', 0.4);
-      g.save(); g.translate(p.x, p.y); g.scale(w, 1); buttonEye(g, 0, 0, eo, { R: R0, happy: P.happy > 0.5 }); g.restore();
+    const pN = H(-0.46, -0.08, 0.99), pF = H(0.46, -0.08, 0.99), ey = (pN.y + pF.y) / 2;
+    const wN = clamp(0.55 + 0.45 * pN.z / (HR * 0.99), 0.6, 1), wF = Math.max(0.88 * wN, clamp(0.55 + 0.45 * pF.z / (HR * 0.99), 0.6, 1));
+    for (const [p, w, k] of [[pF, wF, 0.9], [pN, wN, 1]]) {
+      const ch = { x: p.x * 1.08, y: ey + 26 }; pool(g, ch.x, ch.y, 15 * w, 9, '#ec8a80', 0.4);
+      g.save(); g.translate(p.x, ey); g.scale(w * k, k); buttonEye(g, 0, 0, eo, { R: R0, happy: P.happy > 0.5 });
+      if (eo > 0.12 && P.happy <= 0.5) { // a soft upper lid: cosy, not sleepy-grumpy
+        const ry = R0 * 0.95 * eo; g.strokeStyle = rgba('#7a4a2a', 0.45); g.lineWidth = 2.2; g.lineCap = 'round';
+        g.beginPath(); g.moveTo(-R0 - 3, -ry * 0.15); g.quadraticCurveTo(0, -ry - 7, R0 + 3, -ry * 0.3); g.stroke(); }
+      g.restore();
     }
     // nose (small pink triangle), the little w mouth under it (one piece when it opens), whiskers both sides
     const nz = H(0, 0.2, 1.12), nk = 0.65 + 0.35 * Math.cos(yaw);
     g.save(); g.translate(nz.x, nz.y); g.scale(nk, 1);
-    g.fillStyle = '#d87a7c'; g.beginPath(); g.moveTo(-8, -4); g.quadraticCurveTo(0, -7, 8, -4); g.quadraticCurveTo(2, 4, 0, 5.5); g.quadraticCurveTo(-2, 4, -8, -4); g.fill();
+    g.fillStyle = '#d87a7c'; g.beginPath(); g.moveTo(-10, -5); g.bezierCurveTo(-9, -11, 9, -11, 10, -5); g.quadraticCurveTo(3, 4, 0, 6.5); g.quadraticCurveTo(-3, 4, -10, -5); g.fill();
     g.strokeStyle = rgba(INK, 0.45); g.lineWidth = 1; g.stroke();
-    g.fillStyle = 'rgba(255,255,255,0.55)'; g.beginPath(); g.ellipse(-2.5, -3.2, 2.2, 1.2, 0, 0, 7); g.fill();
+    g.fillStyle = 'rgba(255,255,255,0.55)'; g.beginPath(); g.ellipse(-3, -5, 2.8, 1.5, 0, 0, 7); g.fill();
     g.restore();
     const mz = H(0, 0.46, 1.06);
     catMouth(g, nz.x, nz.y + 5, mz.x, mz.y, 26 * nk, clamp(P.mouth), P.smile, P.mdeep);
