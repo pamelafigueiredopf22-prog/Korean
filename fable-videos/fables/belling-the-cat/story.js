@@ -370,7 +370,7 @@ function makeCouncil() {
 // the thought bubble: the belled cat (cat3, a ribbon and a little bell at her neck), above the reel
 const BUB = { x: 1000, y: 418, w: 580, h: 350, t0: WORD.bell - 0.35, t1: 77.9 };
 const bubK = (t) => sm(t, BUB.t0, BUB.t0 + 1.3) * (1 - sm(t, BUB.t1 - 0.9, BUB.t1));
-const BC = { s: 0.38, x0: BUB.x + 140, y: BUB.y + 90, walk: { t0: WORD.near - 0.1, t1: 73.85, d: 2.5 } };
+const BC = { s: 0.38, x0: BUB.x + 105, y: BUB.y + 90, walk: { t0: WORD.near - 0.1, t1: 73.85, d: 2.0 } };
 function bubbleCatX(t) { return BC.x0 - BC.walk.d * CAT.STRIDE * BC.s * walkDist(clamp((t - BC.walk.t0) / (BC.walk.t1 - BC.walk.t0))); }
 function bubbleCatSt(t) {
   const w = BC.walk;
@@ -385,18 +385,16 @@ const bellSwing = (t) => 0.22 * Math.sin(t * 7.4) * bump(t, BC.walk.t0, BC.walk.
 function drawBelledCat(g, x, y, s, poseFn, t, since) {
   g.save(); g.translate(x, y); g.scale(s, s); CAT.shadow(g, poseFn(t), 0); CAT.drawAt(g, poseFn, t, { since }); g.restore();
   const n = CAT.neckAt(poseFn, t, { x, y, scale: s, face: 1 });
-  // a red ribbon round the neck, a bow at the back, a golden bell hanging at the throat
-  const r = 34 * s;
+  // a red ribbon round the neck (its near half, from the throat back to the nape), the bell hanging at the throat
+  const r = 34 * s, k = s * 2.2;
+  const p0 = [n.x - r * 0.45, n.y + r * 0.42], pc = [n.x + r * 0.2, n.y + r * 0.62], p1 = [n.x + r * 0.95, n.y - r * 0.2];
   g.save(); g.lineCap = 'round';
-  g.strokeStyle = rgba('#3a1c18', 0.7); g.lineWidth = 9.5 * s * 2.2;
-  g.beginPath(); g.moveTo(n.x + r * 0.95, n.y - r * 1.25); g.quadraticCurveTo(n.x + r * 0.05, n.y + r * 0.05, n.x - r * 0.55, n.y + r * 0.5); g.stroke();
-  g.strokeStyle = '#c8443c'; g.lineWidth = 7 * s * 2.2; g.stroke();
-  g.strokeStyle = 'rgba(255,190,170,0.6)'; g.lineWidth = 1.6 * s * 2.2; g.beginPath(); g.moveTo(n.x + r * 0.85, n.y - r * 1.2); g.quadraticCurveTo(n.x + r * 0.0, n.y - r * 0.05, n.x - r * 0.5, n.y + r * 0.4); g.stroke();
-  // the bow
-  g.fillStyle = '#c8443c'; g.strokeStyle = rgba('#3a1c18', 0.7); g.lineWidth = 1.2;
-  for (const sd of [-1, 1]) { g.beginPath(); g.ellipse(n.x + r * 1.0 + sd * 6 * s * 2.2, n.y - r * 1.3 - 2, 6 * s * 2.2, 3.6 * s * 2.2, sd * 0.5, 0, TAU); g.fill(); g.stroke(); }
+  g.strokeStyle = rgba('#3a1c18', 0.7); g.lineWidth = 7.4 * k;
+  g.beginPath(); g.moveTo(...p0); g.quadraticCurveTo(...pc, ...p1); g.stroke();
+  g.strokeStyle = '#c8443c'; g.lineWidth = 5.4 * k; g.stroke();
+  g.strokeStyle = 'rgba(255,190,170,0.6)'; g.lineWidth = 1.2 * k; g.beginPath(); g.moveTo(p0[0], p0[1] - 1.2 * k); g.quadraticCurveTo(pc[0], pc[1] - 1.2 * k, p1[0], p1[1] - 1.2 * k); g.stroke();
   // the bell
-  const bx = n.x - r * 0.3, by = n.y + r * 0.38, a = bellSwing(t), L = 12 * s * 2.2, R = 9 * s * 2.2;
+  const bx = n.x - r * 0.2, by = n.y + r * 0.55, a = bellSwing(t), L = 12 * s * 2.2, R = 9 * s * 2.2;
   const cx = bx + Math.sin(a) * L, cy = by + Math.cos(a) * L;
   g.strokeStyle = rgba('#5a3a18', 0.8); g.lineWidth = 1.4; g.beginPath(); g.moveTo(bx, by); g.lineTo(cx, cy - R * 0.7); g.stroke();
   const gr = g.createRadialGradient(cx - R * 0.35, cy - R * 0.35, 1, cx, cy, R * 1.1); gr.addColorStop(0, '#fff2b0'); gr.addColorStop(0.45, '#e8c050'); gr.addColorStop(1, '#a87a20');
