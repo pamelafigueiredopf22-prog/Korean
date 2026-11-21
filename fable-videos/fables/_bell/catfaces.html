@@ -1,0 +1,34 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>@font-face { font-family: Fell; src: url(../../engine/fonts/im-fell-english-latin-400-italic.woff2); }</style>
+</head><body style="margin:0"><canvas id="c" width="1920" height="1080"></canvas>
+<script type="module">
+// cat3 head close-ups in every expression (the whole cat is drawn; each panel is framed on the head)
+//   PAGE=catfaces.html node tools/render.js _bell --stills 1   (2 = a headTurn sweep)
+import { paper } from '../../engine/watercolor.js';
+import { makeCatRig } from '../../engine/characters/cat3.js';
+const g = document.getElementById('c').getContext('2d');
+await document.fonts.load('34px Fell');
+let P, cat;
+const SHEETS = {
+  1: [['neutral', {}], ['slow blink', { blink: 0.5 }], ['happy', { happy: 1 }], ['talking', { mouth: 0.6 }],
+      ['yawn', { sit: 1, yawn: 0.5 }], ['purring asleep', { sleep: 1 }], ['pounce eyes', { pounce: 0.3 }], ['ears back', { earsBack: 1 }]],
+  2: [['headTurn -1', { headTurn: -1 }], ['headTurn -0.5', { headTurn: -0.5 }], ['headTurn 0', {}], ['headTurn 0.5', { headTurn: 0.5 }],
+      ['headTurn 1', { headTurn: 1 }], ['sitting', { sit: 1 }], ['creeping', { creep: 1, walkAmt: 1, walk: 0 }], ['stretch', { stretch: 0.45 }]],
+};
+window.FABLE = {
+  async setup() { P = paper(); cat = makeCatRig(2.2); },
+  frame(t) {
+    g.drawImage(P, 0, 0);
+    (SHEETS[Math.round(t)] || SHEETS[1]).forEach(([name, st], i) => {
+      const W = 480, Hh = 540, px = (i % 4) * W, py = Math.floor(i / 4) * Hh, S = 1.9;
+      const pose = () => ({ t: 3, life: 0, ...st });
+      const hd = cat.headAt(pose, 5, { since: 0 });
+      g.save(); g.beginPath(); g.rect(px + 4, py + 4, W - 8, Hh - 8); g.clip();
+      g.translate(px + W / 2 - hd.x * S, py + Hh / 2 + 20 - hd.y * S); g.scale(S, S);
+      cat.drawAt(g, pose, 5, { since: 0 });
+      g.restore();
+      g.save(); g.fillStyle = '#4a3a2c'; g.font = 'italic 34px Fell, serif'; g.fillText(name, px + 20, py + 46); g.restore();
+    });
+  },
+};
+</script></body></html>
