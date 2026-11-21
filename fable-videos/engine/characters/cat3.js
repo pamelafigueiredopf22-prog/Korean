@@ -217,12 +217,11 @@ export function makeCatRig(res = 1, seed = 61) {
   // the skull: round and symmetric (it looks the same at every yaw); stripes, muzzle and face are drawn on it per frame
   const head = furry(res, HEAD, COL, s(20), { fur: 170, furLen: 15, hatch: 50, shadeW: 26, sdy: -12, reserves: 1,
     penPts: HEAD.filter(([, y]) => y < 18).sort((a, b) => Math.atan2(a[1], a[0]) - Math.atan2(b[1], b[0])), // ink only round the top: no line across the throat
-    paint: (g) => { glaze(g, HEAD, 0, -30, 60, 26, '#f0b878', 0.45); glaze(g, HEAD, 0, HR * 0.8, HR * 0.9, 30, CREAM, 0.9); } });
-  // soft fur that blends the head into the neck and chest: a ginger nape tuft behind, a cream chest ruff rising into the chin
+    paint: (g) => { glaze(g, HEAD, 0, -30, 60, 26, '#f0b878', 0.45); glaze(g, HEAD, 0, HR * 0.82, HR * 0.4, 16, CREAM, 0.7); } });
+  // soft fur that blends the head into the neck and chest: a ginger nape tuft behind and soft fur at the throat
   const NAPE = smooth([[-46, -30], [10, -40], [46, -10], [40, 30], [-10, 40], [-50, 12]]);
   const nape = furry(res, NAPE, COL, s(26), { fur: 90, furLen: 14, shadeW: 20, sdy: -8, pen: false });
-  const CHIN = smooth([[-50, -14], [0, -26], [50, -14], [56, 14], [30, 36], [0, 42], [-30, 36], [-56, 14]]);
-  const chinRuff = furry(res, CHIN, CREAM, s(27), { fur: 120, furLen: 13, blooms: ['#fff2dc', '#f0dcc0'], shadow: '#b89070', shadeA: 0.18, shadeW: 14, sdy: 4, pen: false });
+
   const ear = furry(res, EAR, COL, s(30), { fur: 16, furLen: 8, shadeW: 10, paint: (g) => { wash(g, EAR_IN, { color: PINK, opacity: 0.85, seed: s(31) }); glaze(g, EAR_IN, 0, -14, 6, 12, '#ffe0da', 0.6); } });
   const mkLeg = (hind, sd) => ({
     up: furry(res, UPPER(hind ? 52 : 34, hind ? 26 : 24, hind ? UP_L.hind : UP_L.fore), COL, s(sd), { fur: 80, furLen: 13, hatch: 30, shadeW: 22, sdx: 6, sdy: 0, pen: false, paint: (g) => stripes(g, UPPER(hind ? 50 : 34, hind ? 28 : 24, 100), 36, 9, 0.3, 1.4) }),
@@ -340,8 +339,9 @@ export function makeCatRig(res = 1, seed = 61) {
     };
     earAt(+1, e.twF, ear); earAt(-1, e.twN, ear);
     { const n = H(-0.9, 0.55, 0.9); g.save(); g.translate(n.x, n.y + 10); drawSprite(g, nape); g.restore(); }
+    { const c = H(0.05, 0.9, 0.9); g.save(); g.translate(c.x, c.y + 6); g.scale(0.72, 0.5); drawSprite(g, nape); g.restore(); } // soft throat fur, tucked behind the head's lower edge
     drawSprite(g, head);
-    { const c = H(0, 0.92, 0.92); g.save(); g.translate(c.x * 0.6, c.y + 6); g.scale(0.86, 0.82); drawSprite(g, chinRuff); g.restore(); }
+
     // everything below lies on the skull: clip to it
     g.save(); g.beginPath(); for (const [x, y] of HEAD) g.lineTo(x, y); g.closePath(); g.clip();
     const lineOn = (pts, col, w, alpha) => { // a stroke along sphere points, only where they face us
@@ -353,7 +353,7 @@ export function makeCatRig(res = 1, seed = 61) {
     for (const a of [-0.2, 0, 0.2]) lineOn([[a * 1.05, -0.46], [a * 1.12, -0.66], [a * 1.25, -0.9]], DARK, a ? 8 : 9, 0.24);
     for (const sd of [-1, 1]) for (let k = 0; k < 2; k++) lineOn([[sd * 1.0, 0.04 + k * 0.2], [sd * 1.22, 0.07 + k * 0.2], [sd * 1.45, 0.12 + k * 0.19]], DARK, 6, 0.2);
     // cream chin and muzzle (whisker pads), soft rosy cheeks under the eyes
-    const chin = H(0, 0.78, 1); pool(g, chin.x, chin.y, 52, 34, CREAM, 0.95);
+    const chin = H(0, 0.78, 1); pool(g, chin.x, chin.y, 26, 14, CREAM, 0.8);
     const lowF = H(0, 0.42, 1.02); pool(g, lowF.x, lowF.y, 44, 30, CREAM, 0.75);
     for (const sd of [-1, 1]) { const p = H(sd * 0.25, 0.42, 1.09), k = clamp(p.z / (HR * 1.09), 0.45, 1);
       g.save(); g.translate(p.x, p.y); g.scale(k, 1); pool(g, 0, 2, 26, 20, '#fbf0dc', 0.9); g.fillStyle = rgba('#fcf3e2', 0.97); g.beginPath(); g.ellipse(0, 0, 21, 17, 0, 0, 7); g.fill();
