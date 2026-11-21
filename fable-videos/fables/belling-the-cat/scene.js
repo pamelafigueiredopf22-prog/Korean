@@ -8,21 +8,26 @@
 //
 // Places
 //   homeLayers()                   the mice's home behind the kitchen wall (mouse scale, the main set, 2x), both
-//                                  moods: { candle: {back, nests, front}, dark: {...} }
-//   drawHome(g, t, c, o)           the whole home for one frame, with hooks for the actors and the candle blown out
-//   kitchenLayers()                the farmhouse kitchen at human scale seen low (2x), both moods:
-//                                  { evening: {back, front}, night: {...} }
-//   drawKitchen(g, t, c, o)        the whole kitchen for one frame (curtains, clock, embers, moon, lamp: all live)
-//   drawThoughtBubble(g, x, y, w, h, t, k, o)   the storybook "imagination" vignette (paper cloud, painted inside)
+//                                  moods painted at once: { candle: {back, nests, front}, dark: {...} }
+//   drawHome(g, t, c, o)           the whole home for one frame: hooks behind / sleepers / actors / after, and
+//                                  o.outAt (blow the candle out: flame bends and goes, smoke, the dark fades in)
+//   kitchenLayers()                the farmhouse kitchen at human scale seen low (2x), both moods painted at once:
+//                                  { evening: {back, table, front, bars}, night: {...} }
+//   drawKitchen(g, t, c, mood, o)  the whole kitchen for one frame (curtains, clock, fire, moon, lamp: all live)
+//   drawThoughtBubble(g, x, y, w, h, t, k, o)   the storybook "imagination" vignette (paper cloud, painted inside;
+//                                  the stager paints the belled cat with o.inside); bubbleInner(w, h) its picture oval
 // Moods: home 'candle' (one candle stub, warm and golden, soft dark edges) and 'dark' (candle out: deep blue-violet,
 // a thread of moonlight through the door's crack); kitchen 'evening' (lamplight, dusk in the window) and 'night'
-// (moonlight through the window, embers in the range).
-// Ambient life (functions of t): flicker, candleLight, drawCandle (flame, blow-out, smoke), candleMotes,
-// candleShadow (for actors), drawNestFronts; curtains, pendulum, embers, lampGlow, kettleSteam, kitchenMoon, moth.
+// (moonlight through the window, embers in the range). Set constants: HOME, KITCHEN (positions for staging).
+// Ambient life (functions of t), all smooth (no frame-to-frame jumps at 30 fps):
+//   home:    flicker, candleK, darkK, candleLight, drawCandle, candleMotes, moonMotes, candleShadow (for actors),
+//            drawNestFronts, councilSpot
+//   kitchen: drawCurtains, pendulum, embers, lampGlow, kettleSteam, kitchenMoon / moonPos, moth, mouseDoorGlow
 //
-// Scale: the home is drawn for mice about 160-220 px tall (makeMouse2 at ~1.2-1.6); the kitchen for a cat about
-// 520-600 px long curled on the rug (makeCat at ~0.8) and mice about 40-50 px tall at the mouse door.
-// Keep the lower ~180 px for the captions: nothing important is painted below y = 900.
+// Scale: the home is drawn for mice about 160-220 px tall (makeMouse2 at ~1.2-1.6: the cotton reel is 150 px high);
+// the kitchen for a cat about 300-340 px long curled on the rug (makeCat at ~0.55) and mice about 40 px tall at the
+// mouse door (makeMouse2 at ~0.3). Keep the lower ~180 px for the captions: nothing important is painted below y = 900.
+// Cost: painting both sets takes ~20 s at set-up; per frame each set is ~20-30 ms (one 2x layer and a few pieces).
 import { W, H, rng, canvas, wash, pool, smooth, ellipse, rgba, shade, tint, mix, noise1, glaze, penLine, sprite, drawSprite,
   bbox, path, ink, sketch, hatch, clamp, lerp, ease, span, granulate, shadeEdge, blooms, speckle, ribbon } from '../../engine/watercolor.js';
 import { M, MY, LW, LH, cam } from '../../engine/stage.js';
@@ -236,7 +241,7 @@ export const HOME = {
   SHELF: { x0: 198, x1: 548, y: 346 },
   STAMPS: [[640, 300], [760, 288], [880, 304]],
   DOILY: { x: 960, y: 818, rx: 382, ry: 86 },
-  COUNCIL: { x: 960, y: 814, rx: 430, ry: 96 },               // a ring of places around the candle for the meeting / the dance
+  COUNCIL: { x: 960, y: 806, rx: 430, ry: 80 },               // a ring of places around the candle for the meeting / the dance
   // nests (for sleeping at the end): x, y = base on the floor; sleep: where a curled-up mouse lies (its bottom, on the
   // wool), pillow: the little pillow for its head; s: a size hint for the sleeper. Draw sleepers with drawHome's
   // o.sleepers hook (or before drawNestFronts): the quilt turned down over each rim then tucks them in.
@@ -250,6 +255,13 @@ export const HOME = {
 };
 const C0 = HOME.CANDLE;
 const awayX = (x) => Math.sign(C0.x - x) || 1;   // +1 when the candle is to the right of x
+// The i-th of n places round the council ring (for the meeting, or the dance round the candle with turn = t * speed):
+// { x, y (feet), s (a size factor: smaller at the back), back (true: behind the candle, draw with drawHome's o.behind),
+// face (+1 facing right, -1 facing left: towards the candle) }. a0 starts the ring (0 = front middle).
+export function councilSpot(i, n, turn = 0, a0 = 0) {
+  const { x, y, rx, ry } = HOME.COUNCIL, a = Math.PI / 2 + a0 + (i / n) * TAU + turn, px = x + Math.cos(a) * rx, py = y + Math.sin(a) * ry;
+  return { x: px, y: py, s: 0.86 + 0.14 * (py - (y - ry)) / (2 * ry), back: py < C0.y, face: px < x ? 1 : -1 };
+}
 
 // ---- the back wall: big old bricks (at mouse scale a brick is a great block), crumbling lime mortar
 const BRICK = ['#a8644a', '#9a5a44', '#b07858', '#8e5444', '#a86e52', '#9c6250', '#b48464', '#86503e', '#a07060'];
@@ -923,7 +935,7 @@ function candleSprite(mood) {
     thing(g, stub, '#eedab0', { seed: 804, line: 1.7, blooms: ['#f6e8c8', '#e4c89a', '#f2dcb4'], sdx: 12, sw: 22, sa: 0.32, hi: [x - 8, top + 30, 14, 40], hiCol: '#fff6e0' });
     shadeEdge(g, stub, { color: '#a88458', alpha: 0.35, width: 30, dy: -16 });          // darker toward the foot, away from the flame
     // drips: thin runs ending in round beads, one long one pooling on the penny
-    for (const [dx, L] of [[-27, 40], [-12, 18], [10, 74], [24, 30]]) {
+    for (const [dx, L] of [[-27, 40], [-12, 28], [10, 74], [24, 34]]) {
       const x0 = x + dx, y0 = top + 6, w0 = dx === 10 ? 5.5 : 4.2;
       const d = smooth([[x0 - w0, y0], [x0 - w0 * 0.9, y0 + L * 0.6], [x0 - w0 * 1.4, y0 + L - 3], [x0, y0 + L + w0 * 0.9], [x0 + w0 * 1.4, y0 + L - 3], [x0 + w0 * 0.9, y0 + L * 0.6], [x0 + w0, y0]], true, 4);
       thing(g, d, '#f4e6c4', { seed: 810 + dx, line: 1.1, hi: [x0 - 1, y0 + L * 0.4, 1.6, L * 0.35], hiCol: '#fffaf0', hiA: 0.7, sdx: 2, sw: 3 });
@@ -935,8 +947,10 @@ function candleSprite(mood) {
   }, { grain: 0.12, seed: 807 });
   if (mood === 'dark') { // the same stub, in the dark: cooled to blue-violet, the wick a dull ember for a moment
     const g = s.c.getContext('2d'), keep = canvas(s.c.width, s.c.height, false); keep.getContext('2d').drawImage(s.c, 0, 0);
-    g.globalCompositeOperation = 'multiply'; g.fillStyle = '#4a4c86'; g.fillRect(0, 0, s.c.width, s.c.height);
-    g.globalCompositeOperation = 'destination-in'; g.drawImage(keep, 0, 0); g.globalCompositeOperation = 'source-over';
+    g.save(); g.setTransform(1, 0, 0, 1, 0, 0);
+    g.globalCompositeOperation = 'multiply'; g.fillStyle = '#3e4078'; g.fillRect(0, 0, s.c.width, s.c.height);
+    g.globalCompositeOperation = 'soft-light'; g.fillStyle = 'rgba(40,40,110,0.4)'; g.fillRect(0, 0, s.c.width, s.c.height);
+    g.globalCompositeOperation = 'destination-in'; g.drawImage(keep, 0, 0); g.restore();
   }
   return (CANDLE_SPR[mood] = s);
 }
@@ -951,29 +965,35 @@ function flame(g, t, x, y, k) {
   pool(g, x + sway * 0.4, y - 6, 60 * k, 74 * k, '#ffb050', 0.4 * k * f);
   pool(g, x + sway * 0.5, y - h * 0.3, 26 * k, 44 * k, "#ff9a40", 0.22 * k * f);
   g.globalCompositeOperation = 'source-over';
-  const outer = smooth(shape(1)), grd = g.createLinearGradient(0, tipY, 0, y + 18);
-  grd.addColorStop(0, `rgba(255,170,70,${0.0})`); grd.addColorStop(0.18, `rgba(255,186,90,${0.85 * k})`); grd.addColorStop(0.6, `rgba(255,226,150,${0.95 * k})`); grd.addColorStop(0.86, `rgba(255,240,200,${0.9 * k})`); grd.addColorStop(1, `rgba(120,150,230,${0.75 * k})`);
-  g.fillStyle = grd; path(g, outer); g.fill();
-  const inner = smooth(shape(0.55)); g.fillStyle = `rgba(255,252,236,${0.9 * k})`; path(g, inner); g.fill();
-  g.fillStyle = `rgba(80,110,200,${0.55 * k})`; g.beginPath(); g.ellipse(x, y + 12, w * 0.6, 5, 0, 0, TAU); g.fill();
-  g.strokeStyle = `rgba(180,90,30,${0.35 * k})`; g.lineWidth = 1; path(g, outer); g.stroke();
+  // a soft fringe, the body (orange at the tip to pale gold), a bright heart low down, a faint blue root
+  const grd = (a) => { const gr = g.createLinearGradient(0, tipY, 0, y + 18); gr.addColorStop(0, 'rgba(255,150,60,0)'); gr.addColorStop(0.2, `rgba(255,170,80,${0.8 * a})`); gr.addColorStop(0.62, `rgba(255,222,140,${0.95 * a})`); gr.addColorStop(0.88, `rgba(255,236,190,${0.85 * a})`); gr.addColorStop(1, `rgba(150,160,220,${0.4 * a})`); return gr; };
+  g.fillStyle = grd(0.3 * k); path(g, smooth(shape(1.25))); g.fill();
+  g.fillStyle = grd(k); path(g, smooth(shape(1))); g.fill();
+  const heart = g.createRadialGradient(x + sway * 0.15, y + 2, 0, x + sway * 0.15, y + 2, h * 0.4);
+  heart.addColorStop(0, `rgba(255,253,240,${0.95 * k})`); heart.addColorStop(0.6, `rgba(255,246,210,${0.6 * k})`); heart.addColorStop(1, 'rgba(255,240,200,0)');
+  g.fillStyle = heart; path(g, smooth(shape(0.7))); g.fill();
+  const root = g.createRadialGradient(x, y + 13, 0, x, y + 13, w * 0.8); root.addColorStop(0, `rgba(110,130,210,${0.35 * k})`); root.addColorStop(1, 'rgba(110,130,210,0)');
+  g.fillStyle = root; g.fillRect(x - w, y + 4, w * 2, 18);
+  // the wick, dark inside the flame's root
+  g.strokeStyle = `rgba(40,26,20,${0.75 * k})`; g.lineWidth = 2.4; g.lineCap = 'round'; g.beginPath(); g.moveTo(x + 1, y + 22); g.quadraticCurveTo(x + 2, y + 12, x + 4, y + 7); g.stroke();
   g.restore();
 }
 // A curl of smoke rising from the wick after the candle is blown out (age: seconds since it went out)
 function smoke(g, t, x, y, age) {
   if (age < 0 || age > 7) return;
-  const a0 = clamp(age / 0.3) * clamp((7 - age) / 4);
+  // one thin ribbon rising and slowly unravelling (a fainter twin beside it), drifting a little as it climbs
+  const a0 = clamp(age / 0.25) * clamp((7 - age) / 4.5);
   g.save(); g.lineCap = 'round';
-  for (let s = 0; s < 3; s++) {
-    const pts = [];
-    for (let i = 0; i <= 26; i++) {
-      const u = i / 26, hgt = u * (40 + age * 70) * (1 - s * 0.12);
-      const curl = Math.sin(u * 7 + age * 1.4 + s * 1.3) * (4 + u * 26) + (noise1(u * 3 + age * 0.4, 30 + s) - 0.5) * 30 * u;
-      pts.push([x + curl + s * 3, y - hgt]);
+  for (let s = 0; s < 2; s++) {
+    const pts = [], L = (30 + age * 55) * (s ? 0.75 : 1), fq = s ? 5.3 : 4.1, ph = s ? 1.9 : 0;
+    for (let i = 0; i <= 30; i++) {
+      const u = i / 30, hgt = u * L;
+      const curl = Math.sin(u * fq - age * 0.9 + ph) * (1.5 + u * u * 22) + (noise1(u * 2.2 + age * 0.35, 30 + s) - 0.5) * 36 * u * u + u * age * 4;
+      pts.push([x + curl + s * 2, y - hgt]);
     }
     for (let i = 1; i < pts.length; i++) {
       const u = i / pts.length;
-      g.strokeStyle = `rgba(222,214,214,${a0 * (1 - u) * 0.5 * (1 - s * 0.25)})`; g.lineWidth = 2 + u * 7;
+      g.strokeStyle = `rgba(226,220,222,${a0 * Math.pow(1 - u, 1.3) * (s ? 0.25 : 0.5)})`; g.lineWidth = 1.6 + u * u * 9;
       g.beginPath(); g.moveTo(...pts[i - 1]); g.lineTo(...pts[i]); g.stroke();
     }
   }
@@ -1000,17 +1020,18 @@ export function drawCandle(g, t, o = {}) {
 // The candle's live warm glow on everything (draw it after the actors). k: 0..1 (candleK when blowing it out).
 export function candleLight(g, t, x = C0.flame[0], y = C0.flame[1], k = 1) {
   if (k <= 0.01) return;
-  const f = flicker(t) * k, jx = (noise1(t * 1.7, 21) - 0.5) * 5;
+  // pulse: 0..1 as the flame dips and swells (smooth, so the light breathes rather than strobes)
+  const pulse = clamp((flicker(t) - 0.76) / 0.2), jx = (noise1(t * 1.7, 21) - 0.5) * 5;
   g.save(); g.globalCompositeOperation = 'lighter';
-  pool(g, x + jx, y + 60, 760 * (0.97 + 0.03 * f), 520, '#ff9a40', 0.07 * f);
-  pool(g, x + jx, y + 20, 300, 240, '#ffbe68', 0.09 * f);
-  pool(g, x + jx * 0.6, y, 90, 100, '#ffe8b0', 0.18 * f);
+  pool(g, x + jx, y + 60, 760 * (0.97 + 0.03 * pulse), 520, '#ff9a40', (0.04 + 0.06 * pulse) * k);
+  pool(g, x + jx, y + 20, 300, 240, '#ffbe68', (0.06 + 0.07 * pulse) * k);
+  pool(g, x + jx * 0.6, y, 90, 100, '#ffe8b0', (0.12 + 0.1 * pulse) * k);
   g.restore();
   // the edges breathe darker as the flame dips
-  const dip = clamp((0.95 - f) * 3) * k;
+  const dip = (1 - pulse) * k;
   if (dip > 0.01) {
     g.save(); g.globalCompositeOperation = 'multiply'; g.translate(x, y); g.scale(1, 0.62);
-    const gr = g.createRadialGradient(0, 0, 300, 0, 0, 1300); gr.addColorStop(0, 'rgba(255,255,255,0)'); gr.addColorStop(1, `rgba(90,60,50,${0.5 * dip})`);
+    const gr = g.createRadialGradient(0, 0, 260, 0, 0, 1300); gr.addColorStop(0, 'rgba(255,255,255,0)'); gr.addColorStop(1, `rgba(80,52,44,${0.32 * dip})`);
     g.fillStyle = gr; g.fillRect(-1400, -1400, 2800, 2800); g.restore();
   }
 }
@@ -1104,7 +1125,7 @@ function kitchenWall(g, seed) {
   brushWash(g, wall, ['#e8d8b8', '#e0cca6', '#ecdcc0', '#d8c49c', '#e4d2b0'], { seed, count: 70, width: [30, 70], len: [200, 600], alpha: [0.18, 0.34], base: 0.95, under: true, angle: () => -0.1 });
   for (let k = 0; k < 9; k++) pool(g, r.range(-M, W + M), r.range(-MY, 700), r.range(80, 240), r.range(60, 160), r.pick(['#c8a878', '#d8bc90', '#f2e6cc']), 0.25);
   // patches where the plaster has fallen away, showing bricks
-  for (const [px, py, pw, ph] of [[1040, 560, 40, 26]]) {
+  for (const [px, py, pw, ph] of []) {
     const sh = fluffyPatch(px, py, pw, ph, r);
     wash(g, sh, { color: '#a8684c', opacity: 0.85, seed: seed + px, layers: 8, edge: 0.4 });
     g.save(); path(g, sh); g.clip(); g.strokeStyle = rgba('#e0d0b0', 0.8); g.lineWidth = 2.4;
@@ -1231,7 +1252,7 @@ function curtainSprites(mood) {
 function tintSprite(s, mood, b) {
   const L = KITCHEN_LIGHT[mood], g = s.c.getContext('2d'), keep = canvas(s.c.width, s.c.height, false);
   keep.getContext('2d').drawImage(s.c, 0, 0);
-  g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'multiply'; g.globalAlpha = L.ambK * 0.85; g.fillStyle = L.amb; g.fillRect(0, 0, s.c.width, s.c.height); g.restore();
+  g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'multiply'; g.globalAlpha = L.ambK * (mood === 'night' ? 0.97 : 0.85); g.fillStyle = L.amb; g.fillRect(0, 0, s.c.width, s.c.height); g.restore();
   const res = s.c.width / s.w;
   g.save(); g.setTransform(res, 0, 0, res, -s.x0 * res, -s.y0 * res); g.globalCompositeOperation = 'screen';
   for (const gl of L.spriteGlows || []) pool(g, gl.x, gl.y, gl.rx, gl.ry, gl.col, gl.a);

@@ -1,0 +1,27 @@
+<!doctype html><html><head><meta charset="utf-8"></head><body style="margin:0"><canvas id="c" width="1920" height="1080"></canvas>
+<script type="module">
+// Per-frame cost of the sets (PAGE=perf.html node tools/render.js _bellset --stills 1): logs ms per frame
+import { makeStage } from '../../engine/stage.js';
+import * as SC from '../belling-the-cat/scene.js';
+let S;
+window.FABLE = {
+  async setup(tl) {
+    S = makeStage(tl); await S.setup(document.getElementById('c')); S.captions = false; SC.homeLayers(); SC.kitchenLayers();
+    const ctx = document.getElementById('c').getContext('2d');
+    for (const [name, fn] of [['home wide', (g, t) => SC.drawHome(g, t, SC.view(960, 540, 1))], ['home close', (g, t) => SC.drawHome(g, t, SC.view(760, 620, 2.2))],
+      ['home blow-out', (g, t) => SC.drawHome(g, t, SC.view(960, 540, 1), { outAt: 1.0 })], ['kitchen evening', (g, t) => SC.drawKitchen(g, t, SC.view(960, 540, 1), 'evening')],
+      ['kitchen night', (g, t) => SC.drawKitchen(g, t, SC.view(960, 540, 1), 'night')], ['bubble', (g, t) => SC.drawHome(g, t, SC.view(960, 540, 1), { after: (g) => SC.drawThoughtBubble(g, 1000, 320, 620, 400, t, 1, { tail: [580, 560] }) })]]) {
+      for (let i = 0; i < 5; i++) { S.paperBg(ctx); fn(ctx, i * 0.033); }
+      ctx.getImageData(0, 0, 1, 1);
+      const t0 = performance.now(), N = 40;
+      for (let i = 0; i < N; i++) { S.paperBg(ctx); fn(ctx, 1 + i * 0.033); }
+      ctx.getImageData(0, 0, 1, 1);
+      const t1 = performance.now();
+      for (let i = 0; i < N; i++) S.frame(1 + i * 0.033, [[0, (g, t) => { S.paperBg(g); fn(g, t); }]], 0.001);
+      ctx.getImageData(0, 0, 1, 1);
+      console.warn(`${name}: set ${((t1 - t0) / N).toFixed(1)} ms/frame, with stage finish ${((performance.now() - t1) / N).toFixed(1)} ms/frame`);
+    }
+  },
+  frame(t) {},
+};
+</script></body></html>

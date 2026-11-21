@@ -11,7 +11,7 @@ const { HOME, view } = SC;
 let S, cat;
 const SEGS = [];
 const seg = (label, fn) => SEGS.push([label, fn]);
-const LEN = 6;
+const LEN = 6, CLEAN = location.search.includes('clean');   // index.html?clean: no labels (for preview stills)
 // 0-5: the mice's home
 seg('home - candle - wide', (g, t) => SC.drawHome(g, t, view(960, 540, 1)));
 seg('home - candle - close on the reel and candle', (g, t) => SC.drawHome(g, t, view(720, 640, 2.2)));
@@ -41,7 +41,7 @@ function draw(g, t) {
   const i = Math.min(SEGS.length - 1, Math.floor(t / LEN)), u = t - i * LEN;
   S.paperBg(g);
   SEGS[i][1](g, t, u);
-  g.setTransform(1, 0, 0, 1, 0, 0); g.font = '22px Georgia'; g.fillStyle = 'rgba(255,250,240,0.85)'; g.fillText(`${i}: ${SEGS[i][0]}`, 60, 70);
+  if (!CLEAN) { g.setTransform(1, 0, 0, 1, 0, 0); g.font = '22px Georgia'; g.fillStyle = 'rgba(255,250,240,0.85)'; g.fillText(`${i}: ${SEGS[i][0]}`, 60, 70); }
 }
 window.FABLE = {
   async setup(tl) {
