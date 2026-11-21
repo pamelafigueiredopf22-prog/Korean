@@ -1,0 +1,54 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Belling the Cat: sets</title>
+<style>html,body{margin:0;background:#222}canvas{display:block;max-width:100vw;height:auto}</style></head>
+<body><canvas id="c" width="1920" height="1080"></canvas>
+<script type="module">
+// Test reel of the Belling the Cat scenery: every set in every mood, wide and close, with the ambient life.
+//   node tools/render.js _bellset --stills 3,9,15,...      (each segment is 6 s; see SEGS)
+import { makeStage } from '../../engine/stage.js';
+import * as SC from '../belling-the-cat/scene.js';
+import { makeCat } from '../../engine/characters/mice.js';
+const { HOME, view } = SC;
+let S, cat;
+const SEGS = [];
+const seg = (label, fn) => SEGS.push([label, fn]);
+const LEN = 6, CLEAN = location.search.includes('clean');   // index.html?clean: no labels (for preview stills)
+// 0-5: the mice's home
+seg('home - candle - wide', (g, t) => SC.drawHome(g, t, view(960, 540, 1)));
+seg('home - candle - close on the reel and candle', (g, t) => SC.drawHome(g, t, view(720, 640, 2.2)));
+seg('home - candle - close on the button table', (g, t) => SC.drawHome(g, t, view(800, 620, 2.6)));
+seg('home - candle blown out at 2s (dark fades in)', (g, t, u) => SC.drawHome(g, t, view(960, 560, 1.25), { outAt: t - u + 2 }));
+seg('home - dark - wide', (g, t) => SC.drawHome(g, t, view(960, 540, 1), { dark: 1 }));
+seg('home - dark - close on the nests', (g, t) => SC.drawHome(g, t, view(420, 700, 2.0), { dark: 1 }));
+// 6-11: the kitchen
+seg('kitchen - evening - wide', (g, t) => SC.drawKitchen(g, t, view(960, 540, 1), 'evening'));
+seg('kitchen - evening - close on the rug and range', (g, t) => SC.drawKitchen(g, t, view(1420, 640, 2.0), 'evening'));
+seg('kitchen - evening - close on the mouse door', (g, t) => SC.drawKitchen(g, t, view(1060, 660, 2.6), 'evening'));
+seg('kitchen - night - wide', (g, t) => SC.drawKitchen(g, t, view(960, 540, 1), 'night'));
+seg('kitchen - night - close on the window', (g, t) => SC.drawKitchen(g, t, view(760, 300, 2.0), 'night'));
+seg('kitchen - night - close on the rug', (g, t) => SC.drawKitchen(g, t, view(1400, 720, 2.0), 'night'));
+// 12-13: the young mouse's idea, over the home
+// (the cat and bell inside are only a stand-in for the stager's: engine makeCat, a ribbon and a bell)
+const imagined = (x, y) => (g, s) => {
+  g.save(); g.translate(x - 20, y + 70); g.scale(0.42, 0.42); cat.draw(g, { t: 0 });
+  g.strokeStyle = '#c0403a'; g.lineWidth = 12; g.beginPath(); g.moveTo(170, -236); g.quadraticCurveTo(220, -214, 280, -228); g.stroke();
+  g.fillStyle = '#e8c050'; g.beginPath(); g.arc(226, -206, 17, 0, 7); g.fill(); g.strokeStyle = '#6a4a20'; g.lineWidth = 3; g.stroke();
+  g.fillStyle = '#4a3020'; g.beginPath(); g.arc(226, -198, 4, 0, 7); g.fill(); g.restore();
+};
+seg('thought bubble appearing over the home (close)', (g, t, u) => { const c = view(760, 520, 1.5); SC.drawHome(g, t, c, { after: (g) => SC.drawThoughtBubble(g, 900, 330, 520, 340, t, Math.min(1, u / 2), { tail: [600, 600], inside: imagined(900, 330) }) }); });
+seg('thought bubble, wide', (g, t, u) => { SC.drawHome(g, t, view(960, 540, 1), { after: (g) => SC.drawThoughtBubble(g, 1000, 320, 620, 400, t, 1, { tail: [580, 560], inside: imagined(1000, 320) }) }); });
+window.SEGS = SEGS;
+function draw(g, t) {
+  const i = Math.min(SEGS.length - 1, Math.floor(t / LEN)), u = t - i * LEN;
+  S.paperBg(g);
+  SEGS[i][1](g, t, u);
+  if (!CLEAN) { g.setTransform(1, 0, 0, 1, 0, 0); g.font = '22px Georgia'; g.fillStyle = 'rgba(255,250,240,0.85)'; g.fillText(`${i}: ${SEGS[i][0]}`, 60, 70); }
+}
+window.FABLE = {
+  async setup(tl) {
+    S = makeStage(tl); await S.setup(document.getElementById('c')); S.captions = false; cat = makeCat(1);
+    const t0 = performance.now(); SC.homeLayers(); if (SC.kitchenLayers) SC.kitchenLayers();
+    console.warn('sets painted in', ((performance.now() - t0) / 1000).toFixed(1), 's', JSON.stringify(Object.fromEntries(Object.entries(SC.TIMING).map(([k, v]) => [k, Math.round(v)]))));
+  },
+  frame(t) { S.frame(t, [[0, draw]], 0.001); },
+};
+</script></body></html>
