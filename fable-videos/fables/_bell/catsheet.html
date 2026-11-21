@@ -1,6 +1,6 @@
 <!doctype html><html><body style="margin:0"><canvas id="c" width="1920" height="1080"></canvas>
 <script type="module">
-// cat3 pose sheet:  PAGE=catsheet.html node tools/render.js _bell --stills 1,2
+// cat3 pose sheet:  PAGE=catsheet.html node tools/render.js _bell --stills 1,2,3,4
 import { paper } from '../../engine/watercolor.js';
 import { makeCatRig } from '../../engine/characters/cat3.js';
 const g = document.getElementById('c').getContext('2d');
@@ -8,6 +8,8 @@ let P, cat;
 const SHEETS = {
   1: [{}, { sit: 1 }, { sleep: 1 }, { creep: 1 }],
   2: [{ pounce: 0.3 }, { pounce: 0.55 }, { stretch: 0.45 }, { yawn: 0.5, sit: 1 }],
+  3: [{}, { walk: 0.88, walkAmt: 1 }, { sit: 1 }, { pounce: 0.3 }],   // anatomy: stand, mid-stride, sit, crouch before a pounce
+  4: [{ creep: 1, walk: 0.88, walkAmt: 1 }, { sleep: 1 }, { stretch: 0.45 }, { pounce: 0.6 }],
 };
 window.FABLE = {
   async setup() { P = paper(); cat = makeCatRig(1.2); },
