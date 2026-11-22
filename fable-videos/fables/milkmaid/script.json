@@ -1,0 +1,29 @@
+{
+  "title": "The Milkmaid and Her Pail",
+  "source": "Aesop's Fables (public domain), gently retold for bedtime",
+  "lines": [
+    {"id": "n01", "scene": "s1_farm", "speaker": "narrator", "pause": 1.6, "text": "Once upon a time, on a little farm at the edge of a green valley, there lived a young milkmaid called Molly."},
+    {"id": "n02", "scene": "s1_farm", "speaker": "narrator", "pause": 1.2, "text": "Every morning, she milked Buttercup, the gentle brown cow, while the hens clucked and the sun came up over the hills."},
+    {"id": "m01", "scene": "s1_farm", "speaker": "molly", "speech": "[cheerful, fond] Good morning, Buttercup! What lovely creamy milk you've given me today.", "pause": 1.0, "text": "Good morning, Buttercup! What lovely creamy milk you've given me today."},
+    {"id": "n03", "scene": "s1_farm", "speaker": "narrator", "pause": 1.2, "text": "Molly's mother gave her a kind smile."},
+    {"id": "w01", "scene": "s1_farm", "speaker": "mother", "speech": "[warm, motherly] Take the milk to market, my dear. Whatever you earn, you may keep.", "pause": 1.8, "text": "Take the milk to market, my dear. Whatever you earn, you may keep."},
+
+    {"id": "n04", "scene": "s2_lane", "speaker": "narrator", "pause": 1.4, "text": "So Molly set the pail of milk upon her head, and off she went, down the winding country lane."},
+    {"id": "n05", "scene": "s2_lane", "speaker": "narrator", "pause": 1.2, "text": "And as she walked, she began to dream."},
+    {"id": "m02", "scene": "s2_lane", "speaker": "molly", "speech": "[dreamy, thinking aloud] With the money from this milk, I'll buy some eggs.", "pause": 1.0, "text": "With the money from this milk, I'll buy some eggs."},
+    {"id": "m03", "scene": "s2_lane", "speaker": "molly", "speech": "[excited, imagining] The eggs will hatch into fluffy little chicks. And the chicks will grow into fine, fat hens!", "pause": 1.0, "text": "The eggs will hatch into fluffy little chicks. And the chicks will grow into fine, fat hens!"},
+    {"id": "m04", "scene": "s2_lane", "speaker": "molly", "speech": "[delighted] I'll sell the hens, and buy a beautiful new dress. A blue one, with ribbons!", "pause": 1.0, "text": "I'll sell the hens, and buy a beautiful new dress. A blue one, with ribbons!"},
+    {"id": "m05", "scene": "s2_lane", "speaker": "molly", "speech": "[proud, playful] And when I wear it to the fair, everyone will look at me. And I'll just toss my head, like this!", "pause": 0.6, "text": "And when I wear it to the fair, everyone will look at me. And I'll just toss my head, like this!"},
+
+    {"id": "n06", "scene": "s3_spill", "speaker": "narrator", "pause": 1.2, "text": "And Molly tossed her head. Splash! Down came the pail, and all the milk spilled out onto the lane."},
+    {"id": "m06", "scene": "s3_spill", "speaker": "molly", "speech": "[small gasp, then sad] Oh no! The milk... and the eggs, and the chicks, and the hens, and my blue dress. All gone!", "pause": 1.4, "text": "Oh no! The milk... and the eggs, and the chicks, and the hens, and my blue dress. All gone!"},
+    {"id": "n07", "scene": "s3_spill", "speaker": "narrator", "pause": 1.6, "text": "Molly walked slowly home, with her empty pail, and told her mother what had happened."},
+    {"id": "w02", "scene": "s3_spill", "speaker": "mother", "speech": "[gentle, comforting, a soft smile] Oh, my darling. Never mind. But remember, don't count your chickens before they are hatched.", "pause": 1.4, "text": "Oh, my darling. Never mind. But remember, don't count your chickens before they are hatched."},
+    {"id": "m07", "scene": "s3_spill", "speaker": "molly", "speech": "[small laugh, wiser] I'll remember, Mother. One step at a time.", "pause": 2.0, "text": "I'll remember, Mother. One step at a time."},
+
+    {"id": "n08", "scene": "s4_goodnight", "speaker": "narrator", "pause": 2.0, "text": "That evening, the sun set softly over the valley, and Buttercup lay down in the warm straw."},
+    {"id": "n09", "scene": "s4_goodnight", "speaker": "narrator", "pause": 2.0, "text": "The hens tucked their heads under their wings, and Molly curled up in her little bed by the window."},
+    {"id": "n10", "scene": "s4_goodnight", "speaker": "narrator", "pause": 2.6, "text": "And as the stars came out, she dreamed, not of dresses and fairs, but of tomorrow's sunny morning, one step at a time."},
+    {"id": "n11", "scene": "s4_goodnight", "speaker": "narrator", "voice": "whisper", "speech": "[whispers] Goodnight, little one... [softly] Sweet dreams.", "pause": 30.0, "text": "Goodnight, little one. Sweet dreams."}
+  ]
+}
