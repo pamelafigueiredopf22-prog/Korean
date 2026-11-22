@@ -1,0 +1,54 @@
+{
+  "pause_scale": 1.2,
+  "lead_in": 7.0,
+  "narrator": {
+    "engine": "elevenlabs",
+    "model": "eleven_v3",
+    "voice_id": "4dZr8J4CBeokyRkTRpoN",
+    "name": "Peter (narrator)",
+    "stability": 0.5,
+    "gain": 2.0,
+    "tag": "[warm, gentle bedtime storytelling]",
+    "filters": [
+      "loudnorm=I=-28.5:TP=-6",
+      "aecho=0.8:0.5:40|75:0.10|0.06"
+    ]
+  },
+  "molly": {
+    "engine": "elevenlabs",
+    "model": "eleven_v3",
+    "voice_id": "cgSgspJ2msm6clMCkdW9",
+    "name": "Jessica",
+    "stability": 0.45,
+    "gain": 2.0,
+    "filters": [
+      "loudnorm=I=-28.5:TP=-6",
+      "aecho=0.8:0.5:30:0.05"
+    ]
+  },
+  "mother": {
+    "engine": "elevenlabs",
+    "model": "eleven_v3",
+    "voice_id": "8N2ng9i2uiUWqstgmWlH",
+    "name": "Beth",
+    "stability": 0.5,
+    "gain": 2.0,
+    "filters": [
+      "loudnorm=I=-28.5:TP=-6",
+      "aecho=0.8:0.5:40:0.06"
+    ]
+  },
+  "whisper": {
+    "engine": "elevenlabs",
+    "model": "eleven_v3",
+    "voice_id": "4dZr8J4CBeokyRkTRpoN",
+    "name": "Peter (whisper)",
+    "stability": 0.5,
+    "gain": 1.6,
+    "tag": "",
+    "filters": [
+      "loudnorm=I=-28.5:TP=-8",
+      "aecho=0.8:0.5:40:0.06"
+    ]
+  }
+}
