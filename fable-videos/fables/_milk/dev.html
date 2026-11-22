@@ -1,0 +1,14 @@
+<!doctype html><html><head><meta charset="utf-8"></head><body style="margin:0"><canvas id="c" width="1920" height="1080"></canvas>
+<script type="module">
+// development sheet: a grid of poses (edit dev-poses.js)
+import { paper } from '../../engine/watercolor.js';
+import { SETUP, POSES } from './dev-poses.js';
+const ctx = document.getElementById('c').getContext('2d');
+let P, R;
+window.FABLE = { setup: async () => { P = paper(); R = await SETUP(); }, frame: (t) => {
+  ctx.drawImage(P, 0, 0);
+  const n = POSES.length, cols = POSES.cols || Math.min(5, n), rows = Math.ceil(n / cols), S = POSES.S || (rows > 1 ? 1.15 : 1.6);
+  POSES.forEach((st, i) => { const x = (POSES.cols ? 300 : 190) + (i % cols) * (POSES.cols ? 460 : 380) + (st.dx || 0), y = (POSES.Y || 500) + Math.floor(i / cols) * 520;
+    ctx.save(); ctx.translate(x, y); ctx.scale((st.s || S) * (st.face || 1), st.s || S); const rig = R[st.rig || 'molly']; rig.shadow(ctx, st); rig.draw(ctx, { ...st, t: (st.t || 0) + t }); ctx.restore(); });
+} };
+</script></body></html>
