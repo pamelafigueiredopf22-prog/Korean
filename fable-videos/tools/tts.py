@@ -85,7 +85,7 @@ def main():
         if (a.force and (not only or line["speaker"] in only)) or not os.path.exists(final):
             raw = os.path.join(clips, f"{line['id']}.raw" + (".mp3" if v.get("engine") == "elevenlabs" else ".wav"))
             if v.get("engine") == "elevenlabs":
-                elevenlabs(line.get("speech", line["text"]), v, line.get("speed_scale", 1.0), raw)
+                elevenlabs(line.get("speech", (v.get("tag", "") + " " + line["text"]).strip()), v, line.get("speed_scale", 1.0), raw)  # a voice can carry a default tone tag (e.g. the narrator's "[warm, gentle storytelling]")
             else:
                 style = voice_style(kokoro, v["voice"]); spd = v.get("speed", 1.0) * line.get("speed_scale", 1.0)
                 audio, sr = kokoro.create(line.get("speech", line["text"]), voice=style, speed=spd, lang=v.get("lang", "en-us"))

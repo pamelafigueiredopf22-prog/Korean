@@ -1,0 +1,10 @@
+{
+  "engine": "elevenlabs",
+  "model": "eleven_v3",
+  "voice_id": "4dZr8J4CBeokyRkTRpoN",
+  "name": "Peter (narrator)",
+  "stability": 0.5,
+  "gain": 2.0,
+  "tag": "[warm, gentle bedtime storytelling]",
+  "filters": ["loudnorm=I=-28.5:TP=-6", "aecho=0.8:0.5:40|75:0.10|0.06"]
+}
