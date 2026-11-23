@@ -53,9 +53,9 @@ const HOOF = '#2e2320', NOSEC = '#5c4a46', UDC = '#ebc6b2', TEAT = '#e0a296', SH
 
 // ---------------------------------------------------------------- body landmarks (standing, internal, facing right)
 const W0 = [124, -306];                                     // withers
-const TOP = [[94, -298], [44, -289], [-12, -290], [-62, -294], [-90, -304], [-108, -313], [-132, -306], [-158, -304], [-178, -305], [-196, -292], [-205, -276]];
+const TOP = [[96, -297], [56, -287], [4, -287], [-48, -292], [-84, -300], [-108, -306], [-134, -304], [-158, -303], [-178, -304], [-196, -292], [-205, -276]];
 const THIGH = [[-204, -250, 0.2], [-200, -222, 0.5], [-192, -196, 0.8], [-180, -174, 1], [-164, -158, 1]];
-const UNDER = [[-90, -168, 0.2], [-58, -146, 0.8], [-12, -128, 1], [38, -130, 1], [84, -144, 0.5], [116, -151, 0], [150, -153, 0], [182, -170, 0], [192, -188, 0]];
+const UNDER = [[-90, -168, 0.2], [-60, -144, 0.8], [-14, -124, 1], [34, -125, 1], [84, -144, 0.5], [116, -151, 0], [150, -153, 0], [182, -170, 0], [192, -188, 0]];
 const SJ = [165, -200], HJ = [-148, -240];                  // shoulder joint, hip joint
 const TAIL_ROOT = [-176, -300], TAIL_N = 14, TAIL_L = 205;
 const H0 = [248, -294];                                     // cranium centre (standing)
@@ -73,14 +73,14 @@ function walkHoof(q) { q = fr(q + 0.02) - 0.02; if (q < 0.76) return [-STRIDE * 
 // ---------------------------------------------------------------- head model: local [f (poll -> nose), y (down, toward the jaw), l (her near side)]
 const HS = 1.14;
 const E = (c, r) => ({ c, r });
-const CRAN = E([0, 0, 0], [37, 35, 42]), FACE = E([50, 4, 0], [31, 25, 28]), CHEEK = E([28, 18, 0], [34, 22, 33]);
-const MUZ = E([86, 11, 0], [25, 25, 31]), CHIN = E([60, 29, 0], [34, 11, 21]);
+const CRAN = E([0, 0, 0], [39, 37, 43]), FACE = E([42, 5, 0], [28, 26, 28]), CHEEK = E([30, 18, 0], [36, 24, 33]);
+const MUZ = E([73, 12, 0], [26, 30, 32]), CHIN = E([56, 29, 0], [32, 11, 21]);
 const ORB = (sg) => E([24, 3, sg * 34], [14, 13, 11]);
 const HINGE = [0, 24, 0];
-const EYE_AT = (sg) => [26, 5, sg * 44.5], EYE_N = (sg) => nrm([0.28, -0.08, sg]), ER = 12.5;
+const EYE_AT = (sg) => [26, 9, sg * 44], EYE_N = (sg) => nrm([0.28, -0.08, sg]), ER = 14;
 const POLL = [-34, -14, 0], THROAT = [22, 38, 0], JAWB = [-12, 28, 0];
 
-const DEF = { life: 1, eye: 0.9 };
+const DEF = { life: 1, eye: 0.84 };
 const PHASES = new Set(['walk']);
 const filtered = makeFilter(PHASES, DEF);
 function solve(st, dl = 0) {
@@ -194,8 +194,8 @@ export function makeCow(res = 2, seed = 91) {
   const faceCoat = fillSprite(res, [-130, -130, 130, 130], '#b88454', s(12), { base: 0.92, blooms: ['#a06a40', '#c9965f', '#8d5c38', '#d4a46c'], nb: 14, bsize: 0.14, ba: 0.4,
     weave: 260, wlen: 7, wa: 0.24, dir: () => Math.PI / 2 + 0.35 });
   // ear: a broad leaf, base at x = 0, tip at x = 58; y across (the ear's width)
-  const EAR = smooth([[0, -8], [14, -15], [32, -19], [48, -14], [58, -3], [55, 8], [42, 16], [24, 16], [8, 11], [0, 7]]);
-  const EAR_IN = smooth([[6, -4], [18, -10], [33, -13], [46, -9], [52, -1], [47, 7], [34, 11], [18, 10], [7, 5]]);
+  const EAR = smooth([[0, -6], [12, -12], [28, -16], [44, -13], [56, -6], [63, 0], [56, 5], [44, 12], [28, 15], [12, 11], [0, 6]]);
+  const EAR_IN = smooth([[6, -3], [16, -8], [29, -11], [42, -8], [53, -3], [57, 0], [52, 3], [42, 7], [28, 10], [15, 7], [6, 3]]);
   const earPaint = (inner) => sprite(bbox(EAR), res, (g) => {
     wash(g, EAR, { color: PAPER, opacity: 1, under: PAPER, seed: s(20), edge: 0 });
     looseWash(g, EAR, '#ae7a4c', { opacity: 0.9, seed: s(21), shift: 1.5, reserves: 1 });
@@ -287,11 +287,11 @@ export function makeCow(res = 2, seed = 91) {
       // the shoulder blade swings a little with the leg (more reach)
       const R = bodyPt(pb, [root0[0] + clamp(dx * 0.1, -9, 9) * (1 - lieK), root0[1]]);
       let pitch, a;
-      if (!hind) { const phi = Math.atan2(R[0] - H[0], H[1] - R[1]); a = 0.8 * phi + 0.95 * sw; pitch = 1.1 * sw; }
+      if (!hind) { const phi = Math.atan2(R[0] - H[0], H[1] - R[1]); a = 0.8 * phi + (near ? 0.95 : 0.6) * sw; pitch = (near ? 1.1 : 0.8) * sw; }
       else { const phi = Math.atan2(H[0] - R[0], H[1] - R[1]); a = 0.06 + 0.55 * phi + 0.5 * sw; pitch = 0.5 * sw; }
       // folded (lying): joint targets on the straw (knee / hock, fetlock, coronet), see legBones
       const fold = !hind ? { K: [156 + (near ? 0 : 14), -11 - (near ? 0 : 4)], F: [104 + (near ? 0 : 16), -10 - (near ? 0 : 4)], C: [88 + (near ? 0 : 16), -14 - (near ? 0 : 4)], pitch: 2.0 }
-        : { K: [-160 + (near ? 0 : 18), -20 - (near ? 0 : 5)], F: [-92 + (near ? 0 : 14), -12 - (near ? 0 : 4)], C: [-76 + (near ? 0 : 14), -12 - (near ? 0 : 4)], pitch: -1.25 };
+        : { K: [-180 + (near ? 0 : 18), -20 - (near ? 0 : 5)], F: [-104 + (near ? 0 : 14), -12 - (near ? 0 : 4)], C: [-88 + (near ? 0 : 14), -13 - (near ? 0 : 4)], pitch: -1.3 };
       out[name] = { R, H, hind, near, a, pitch, sw, planted: lift < 0.5 && raw.lie < 0.01, lieK, fold };
     }
     return out;
@@ -333,7 +333,7 @@ export function makeCow(res = 2, seed = 91) {
       if (low > -3) { Hc = [Hc[0], Hc[1] - (low + 3)]; Hx = headXf(ph, Hc); }
     }
     // tail chain
-    const shapes = tails.map((x) => tailShape(x.P)), ds = TAIL_L / TAIL_N; let p = bodyPt(pb, TAIL_ROOT); const tail = [p];
+    const shapes = tails.map((x) => tailShape(x.P)), ds = TAIL_L / TAIL_N; let p = bodyPt(pb, TAIL_ROOT); p = [p[0] + 5 * pb.lieR, p[1] + 18 * pb.lieR]; const tail = [p];
     for (let i = 0; i < TAIL_N; i++) { const f = i / (TAIL_N - 1), tau = f * (tails.length - 1), j = Math.min(tails.length - 2, Math.floor(tau)), k = tau - j; const a = lerp(shapes[j][i], shapes[j + 1][i], k); p = [p[0] + Math.cos(a) * ds, Math.min(p[1] + Math.sin(a) * ds, -4)]; tail.push(p); }
     return { raw, pb, ph, pe, Hx, Hc, legs, bones, tail };
   }
@@ -341,16 +341,17 @@ export function makeCow(res = 2, seed = 91) {
   function outline(Rg) {
     const pb = Rg.pb, Hx = Rg.Hx, bn = Rg.bones.hindNear;
     const W = bodyPt(pb, W0), pts = [];
-    for (const q of TOP) pts.push(bodyPt(pb, q));
+    const lr = pb.lieR;
+    for (const q of TOP) { const p = bodyPt(pb, q), r = clamp((-q[0] - 40) / 170); pts.push([p[0] + lr * 8 * r * r, p[1] + lr * (34 * r * r - 10 * Math.sin(Math.PI * clamp((q[0] + 120) / 230)))]); }
     const topN = pts.length + 1;
     // the thigh turns with the near femur about the hip joint
     const st0 = [-105, -150], d = ang(bn.R, bn.E) - ang(HJ, st0);
     const hj = bodyPt(pb, HJ);
     const bulge = [0.35, 0.8, 1, 0.75, 0.2];
-    THIGH.forEach(([x, y, w], i) => { const q = rot2([x, y], HJ, d * w); pts.push([q[0] - HJ[0] + hj[0] - 16 * pb.lieR * bulge[i], Math.min(-4, q[1] - HJ[1] + hj[1] + 10 * pb.lieR * bulge[i])]); });
+    THIGH.forEach(([x, y, w], i) => { const q = rot2([x, y], HJ, d * w); pts.push([q[0] - HJ[0] + hj[0] - 14 * pb.lieR * bulge[i], Math.min(-4, q[1] - HJ[1] + hj[1] + pb.lieR * (10 * bulge[i] + 30 * [1, 0.75, 0.5, 0.3, 0.1][i]))]); });
     pts.push([bn.E[0] + 6, bn.E[1] - 4]);
     const iU = pts.length;
-    for (const [x, y, u] of UNDER) pts.push(bodyPt(pb, [x, y], u || -1));
+    for (const [x, y, u] of UNDER) { const p = bodyPt(pb, [x, y], u || -1); pts.push([p[0] + (x - 20) * 0.1 * lr * (u || 0), p[1]]); }
     const CF = pts[pts.length - 1];
     // the neck: dewlap from the chest up the throat, then (inside the head) jaw and poll, then the crest to the withers
     const th = Hx.at(THROAT), jb = Hx.at(JAWB), po = Hx.at(POLL);
@@ -514,8 +515,8 @@ export function makeCow(res = 2, seed = 91) {
     const earAt = (sg, fl) => {
       const eb = clamp(pe.earBack + P.sleep * 0.4);
       // world-ish directions at the rest pitch -> head-local: back (-0.58, 0.81), down (0.81, 0.58), up (-0.81, -0.58)
-      const bk = 0.8 + 0.5 * eb, dn = 0.3 + 0.35 * fl + 0.5 * P.sleep - 0.4 * eb;
-      const d = nrm([-0.58 * bk + 0.81 * dn, 0.81 * bk + 0.58 * dn, sg * 0.42]), w0 = [-0.81, -0.58, 0];
+      const bk = 0.7 + 0.5 * eb, dn = 0.62 + 0.35 * fl + 0.5 * P.sleep - 0.4 * eb;
+      const d = nrm([-0.58 * bk + 0.81 * dn, 0.81 * bk + 0.58 * dn, sg * 0.5]), w0 = [-0.81, -0.58, 0];
       const w = nrm(w0.map((x, i) => x - d[i] * dot3(w0, d)));
       const base = Hx.at([-10, -14, sg * 36]), D = Hx.dir(d), Wd = Hx.dir(w);
       const n = cross(d, w), facing = Hx.vis(n) * (n[0] >= 0 ? 1 : -1) * sg; // the inner (cupped) side faces forward
@@ -529,10 +530,12 @@ export function makeCow(res = 2, seed = 91) {
     };
     if (part === 'back') { earAt(-nearSg, -nearSg > 0 ? pe.flN : pe.flF); hornAt(-nearSg); return; }
     const chin = chinE(P);
-    const parts = [CRAN, ORB(1), ORB(-1), FACE, CHEEK, MUZ, chin].map((e) => Hx.ell(e));
-    // union ink, then the fills over it
-    parts.forEach((q, i) => penLine(g, q.pts, { closed: true, w: 3.8, alpha: 0.85, seed: s(90 + i), weight: (t) => 0.55 + 0.6 * Math.max(0, Math.sin(t * TAU + i)) }));
-    const clipAll = () => { g.beginPath(); for (const q of parts) { g.moveTo(q.pts[0][0], q.pts[0][1]); for (const p of q.pts) g.lineTo(p[0], p[1]); g.closePath(); } g.clip('nonzero'); };
+    // ONE calm contour: the hull of the head's masses (forehead curve, a straight-ish nose line, a round muzzle);
+    // the bones (eye bumps, cheeks, the dish) only as soft shading inside
+    const parts = [CRAN, FACE, CHEEK, MUZ, chin].map((e) => Hx.ell(e, 48));
+    const HULL = hullPts([].concat(...parts.map((q) => q.pts)));
+    penLine(g, HULL, { closed: true, w: 3.8, alpha: 0.85, seed: s(90), weight: (t) => 0.5 + 0.6 * Math.max(0, Math.sin(t * TAU * 2 + 0.5)) });
+    const clipAll = () => { path(g, HULL); g.clip(); };
     const C = Hx.at([40, 8, 0]);
     g.save(); clipAll();
     g.save(); g.translate(C[0], C[1]); drawSprite(g, faceCoat); g.restore();
@@ -546,7 +549,8 @@ export function makeCow(res = 2, seed = 91) {
     if (P.jaw) { const sg = P.jaw > 0 ? 1 : -1; if (Hx.vis([0, 0.3, sg]) > 0) pl([40, 22, sg * 32], 20, 14, '#6a4026', 0.25 * Math.abs(P.jaw)); }
     // the pale band round the muzzle, the dark wet nose
     { const m = Hx.ell(MUZ), ch = Hx.ell(chin);
-      for (const [q, k] of [[m, 0.88], [ch, 0.7]]) { g.save(); g.translate(q.c[0], q.c[1]); g.rotate(q.th); g.scale(q.rx * k, q.ry * k); const gr = g.createRadialGradient(0, 0, 0, 0, 0, 1.12); gr.addColorStop(0, rgba(PALE, 0.95)); gr.addColorStop(0.6, rgba(PALE, 0.88)); gr.addColorStop(0.95, rgba(PALE, 0)); g.fillStyle = gr; g.fillRect(-1.2, -1.2, 2.4, 2.4); g.restore(); } }
+      void ch; const nc = Hx.at([MUZ.c[0] + 10, MUZ.c[1] + 3, 0]);
+      for (const [q, k] of [[m, 0.82]]) { g.save(); g.translate(nc[0], nc[1]); g.rotate(q.th); g.scale(q.rx * k, q.ry * k); const gr = g.createRadialGradient(0, 0, 0, 0, 0, 1.12); gr.addColorStop(0, rgba(PALE, 0.95)); gr.addColorStop(0.6, rgba(PALE, 0.88)); gr.addColorStop(0.95, rgba(PALE, 0)); g.fillStyle = gr; g.fillRect(-1.2, -1.2, 2.4, 2.4); g.restore(); } }
     const cap = (e, axis, k, sc = 1) => { const out = []; for (let i = 0; i < 14; i++) for (let j = 0; j <= 6; j++) { const th = Math.acos(lerp(1, k, j / 6)), ph = TAU * i / 14; const ax = nrm(axis), t1 = nrm(cross(ax, Math.abs(ax[2]) < 0.9 ? [0, 0, 1] : [0, 1, 0])), t2 = cross(ax, t1); const d = [0, 1, 2].map((z) => ax[z] * Math.cos(th) + (t1[z] * Math.cos(ph) + t2[z] * Math.sin(ph)) * Math.sin(th)); out.push(at([e.c[0] + e.r[0] * d[0] * sc, e.c[1] + e.r[1] * d[1] * sc, e.c[2] + e.r[2] * d[2] * sc])); } return hullPts(out); };
     const NOSE_AX = [1, -0.3, 0];
     { const pad = cap(MUZ, NOSE_AX, 0.7, 1.01);
@@ -583,7 +587,7 @@ export function makeCow(res = 2, seed = 91) {
     const eo = clamp(P.eye), happy = P.happy > 0.5;
     for (const sg of [-1, 1]) {
       const n = EYE_N(sg), v = Hx.vis(n); if (v < 0.02) continue;
-      const c = Hx.at(EYE_AT(sg)), t1 = nrm([1, 0, 0].map((x, i) => x - n[i] * n[0])), t2 = cross(n, t1).map((x) => x * sg);
+      const fw = [0.58, -0.81, 0], fd = dot3(fw, n), c = Hx.at(EYE_AT(sg)), t1 = nrm(fw.map((x, i) => x - n[i] * fd)), t2 = cross(n, t1).map((x) => x * sg);
       const T1 = Hx.dir(t1), T2 = Hx.dir(t2);
       g.save(); g.translate(c[0], c[1]); g.transform(T1[0], T1[1], T2[0], T2[1], 0, 0); g.globalAlpha *= clamp(v * 5);
       drawEye(g, eo, happy, P.sleep);
@@ -600,7 +604,8 @@ export function makeCow(res = 2, seed = 91) {
   }
   // the eye in its surface frame: x forward (toward the nose), y down; one unit = one head unit
   function drawEye(g, eo, happy, sleep) {
-    const R = ER, ry = R * 0.84;
+    const R = ER, ry = R * 0.86;
+    g.rotate(-0.2); // a level, open, friendly look (not drooping toward the nose)
     g.lineCap = 'round'; g.lineJoin = 'round';
     if (eo < 0.12 || happy) {
       if (!happy) pool(g, 0, 0, R * 1.3, R * 1.0, '#d8b48a', 0.4);
@@ -616,14 +621,16 @@ export function makeCow(res = 2, seed = 91) {
     const ig = g.createRadialGradient(R * 0.15, -ry * 0.1, 1, 0, 0, R * 1.05); ig.addColorStop(0, '#5a3824'); ig.addColorStop(0.5, '#2a1a10'); ig.addColorStop(1, '#100805');
     g.fillStyle = ig; g.fillRect(-R - 2, -R - 2, 2 * R + 4, 2 * R + 4);
     pool(g, -R * 0.1, ry * 0.55, R * 0.6, ry * 0.35, '#7a5238', 0.45);     // light through the iris
-    g.fillStyle = 'rgba(255,255,255,0.94)'; g.beginPath(); g.ellipse(R * 0.34, -ry * 0.36, R * 0.27, R * 0.22, 0, 0, 7); g.fill();
+    g.fillStyle = '#0c0604'; g.beginPath(); g.ellipse(R * 0.2, ry * 0.02, R * 0.48, ry * 0.5, 0, 0, 7); g.fill();   // the pupil, looking forward
+    g.fillStyle = 'rgba(255,255,255,0.94)'; g.beginPath(); g.ellipse(R * 0.38, -ry * 0.34, R * 0.26, R * 0.21, 0, 0, 7); g.fill();
     g.fillStyle = 'rgba(255,255,255,0.6)'; g.beginPath(); g.arc(-R * 0.34, ry * 0.42, R * 0.1, 0, 7); g.fill();
     // the upper lid comes down (skin colour), soft
     g.fillStyle = '#a2704a'; g.fillRect(-R - 2, -R - 2, 2 * R + 4, top + R + 2);
     g.restore();
     g.strokeStyle = rgba(INK, 0.92); g.lineWidth = 2.1;
     g.beginPath(); g.moveTo(-R * 1.08, top * 0.4 + 1); g.quadraticCurveTo(0, top - 3.5, R * 1.06, top * 0.5 + 0.5); g.stroke();
-    g.lineWidth = 1.1; g.strokeStyle = rgba(INK, 0.45); g.beginPath(); g.moveTo(-R * 0.8, ry * 0.75); g.quadraticCurveTo(0, ry * 1.18, R * 0.85, ry * 0.65); g.stroke();
+    g.lineWidth = 1.1; g.strokeStyle = rgba(INK, 0.45); g.beginPath(); g.moveTo(-R * 0.85, ry * 0.6); g.quadraticCurveTo(0, ry * 1.05, R * 0.85, ry * 0.5); g.stroke();
+    g.strokeStyle = rgba(INK, 0.22); g.beginPath(); g.moveTo(-R * 0.6, ry * 1.25); g.quadraticCurveTo(0, ry * 1.5, R * 0.6, ry * 1.2); g.stroke(); // a soft cheek: content
     // long lashes, sweeping up and back
     g.strokeStyle = rgba(INK, 0.9); g.lineWidth = 1.3;
     const lid = (u) => { const x = u * R * 1.06, t = (u + 1) / 2, a = (1 - t) * (1 - t) * (top * 0.4 + 1) + 2 * t * (1 - t) * (top - 3.5) + t * t * (top * 0.5 + 0.5); return [x, a]; };
@@ -644,7 +651,7 @@ export function makeCow(res = 2, seed = 91) {
     g.save(); g.scale(-1, 1);
     const B = Rg.bones, L = Rg.legs;
     // far legs (behind everything; their paler inner side, in shadow)
-    for (const k of ['hindFar', 'foreFar']) { const ls = limb(B[k].pts, B[k].ws); penLine(g, ls.shape, { closed: true, w: 3.2, alpha: 0.7, seed: s(60) }); legFill(g, L[k], B[k], true); legExtras(g, B[k], L[k].hind, true); drawHoof(g, L[k], B[k], true); dewClaw(g, B[k], true); }
+    for (const k of ['hindFar', 'foreFar']) { const fa = 1 - clamp((L[k].lieK - 0.5) / 0.4); if (fa <= 0) continue; g.save(); g.globalAlpha *= fa; const ls = limb(B[k].pts, B[k].ws); penLine(g, ls.shape, { closed: true, w: 3.2, alpha: 0.7, seed: s(60) }); legFill(g, L[k], B[k], true); legExtras(g, B[k], L[k].hind, true); drawHoof(g, L[k], B[k], true); dewClaw(g, B[k], true); g.restore(); }
     drawUdder(g, Rg);
     drawHead(g, Rg, 'back');
     // ONE silhouette: body + neck + near forearm + near gaskin are inked together, then filled over
@@ -662,7 +669,7 @@ export function makeCow(res = 2, seed = 91) {
     for (const k of nears) {
       const Lg = L[k], lk = Lg.lieK; if (lk < 0.02) continue;
       const Bk = B[k], pts = Bk.hind ? [L2(Bk.E, Bk.K, 0.35), Bk.K, ...Bk.pts.slice(4)] : [L2(Bk.E, Bk.K, 0.3), Bk.K, ...Bk.pts.slice(4)];
-      const ws = Bk.hind ? [34, 28, 19, 22, 17] : [32, 26, 18, 22, 17];
+      const ws = Bk.hind ? [42, 34, 23, 25, 19] : [34, 27, 19, 23, 18];
       const ls = limb(pts, ws);
       g.save(); g.globalAlpha *= clamp((lk - 0.15) / 0.5);
       const bx = bbox(ls.shape); bx.x0 -= 12; bx.y0 -= 12; bx.x1 += 12; bx.y1 += 12; bx.w += 24; bx.h += 24;
