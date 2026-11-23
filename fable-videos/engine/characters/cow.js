@@ -32,14 +32,15 @@ import { wash, pool, smooth, bbox, sprite, drawSprite, shadeEdge, glaze, rgba, s
   blooms, soften, path, ellipse, furEdge } from '../watercolor.js';
 import { buttonEye, PAPER, INK } from './kit.js';
 import { TAU, fr, easeInOut, bell, key, glance, event, kernel, makeFilter, ik2, taper, on } from './rig3.js';
-import { headRot, proj, hull, unionInk, fillSprite, A3, M3 } from './folk3.js';
+import { headRot, proj, hull, unionInk, fillSprite, A3, M3, limbShape, paintLimb } from './folk3.js';
 
-const FAWN = '#c4905e', DARK = '#8a5a38', CREAM = '#f2e2c4', PINK = '#e9a7a0', HOOF = '#4a3a30';
+const FAWN = '#c99c6c', DARK = '#8a5e3e', LEGC = '#9a6c48', CREAM = '#f4e6cc', PINK = '#e9a7a0', HOOF = '#4a3a30';
 // ---- geometry (internal: facing RIGHT, ground y = 0)
-const BODY = smooth([[-206, -292], [-184, -310], [-120, -306], [-40, -298], [60, -304], [130, -318], [176, -306], [204, -262], [206, -212], [184, -170], [130, -150], [30, -140], [-70, -144], [-150, -158], [-198, -196], [-214, -250]]);
+// withers, a soft dip in the back, the hooks (hip bones), the rump sloping to the pin bones, a round belly, a deep chest
+const BODY = smooth([[-218, -286], [-210, -300], [-180, -306], [-150, -326], [-126, -330], [-104, -312], [-60, -300], [-10, -296], [50, -300], [104, -312], [146, -320], [184, -304], [204, -278], [214, -236], [208, -186], [186, -150], [150, -132], [100, -128], [40, -118], [-26, -118], [-84, -128], [-128, -146], [-172, -168], [-204, -196], [-224, -244]]);
 const BCN = [0, -230];
-const NECK_T = [160, -306], NECK_B = [192, -184];
-const H0 = [300, -318]; // cranium centre (standing)
+const NECK_T = [168, -322], NECK_B = [206, -160];
+const H0 = [302, -326]; // cranium centre (standing)
 const TAIL_ROOT = [-200, -296], TAIL_N = 14, TAIL_L = 210;
 // legs: [name, root (body-local), hoof rest x, hind?, near?, phase]
 const LEGS = [['hindFar', [-140, -232], -128, true, false, 0.5], ['foreFar', [138, -222], 150, false, false, 0.75],
@@ -98,8 +99,12 @@ export function makeCow(res = 2, seed = 91) {
     hatch(g, BODY, { color: '#7a4e2e', count: 160, len: 12, width: 0.8, alpha: 0.35, seed: s(4), dir: () => Math.PI / 2 + 0.2 });
     furEdge(g, BODY, { color: FAWN, count: 90, len: 8, width: 1.4, alpha: 0.6, seed: s(5) });
     // hip bone and the ribs, softly
-    penLine(g, smooth([[-170, -300], [-150, -286], [-128, -296]], false), { w: 1.2, alpha: 0.35 });
-    for (let k = 0; k < 3; k++) penLine(g, [[20 + k * 26, -270], [30 + k * 26, -200]], { w: 0.9, alpha: 0.15 });
+    // the hooks (hip bone), the pin bone by the tail, the shoulder blade, a few ribs: soft pen and shadow
+    penLine(g, smooth([[-156, -312], [-128, -300], [-104, -306]], false), { w: 1.3, alpha: 0.45 }); glaze(g, BODY, -128, -292, 26, 14, '#7a5030', 0.4);
+    penLine(g, smooth([[-206, -276], [-196, -268], [-188, -276]], false), { w: 1.1, alpha: 0.35 });
+    penLine(g, smooth([[150, -306], [160, -260], [176, -214]], false), { w: 1.1, alpha: 0.25 });
+    for (let k = 0; k < 4; k++) penLine(g, smooth([[0 + k * 24, -268], [-4 + k * 24, -230], [4 + k * 24, -190]], false), { w: 0.9, alpha: 0.14 });
+    glaze(g, BODY, -10, -150, 120, 22, CREAM, 0.5);
     penLine(g, BODY, { closed: true, color: INK, w: 2.2, alpha: 0.8, seed: s(6), weight: (t) => 0.35 + 0.8 * Math.max(0, Math.sin(t * TAU + 1)) });
   }, { seed: s(7), grain: 0.12 });
   const fur = fillSprite(res, [-160, -160, 160, 160], FAWN, s(10), { base: 0.85, blooms: ['#d6a272', '#b07a4c', '#c89464'], weave: 120, wlen: 9, wa: 0.25, dir: () => Math.PI / 2 });
@@ -160,7 +165,7 @@ export function makeCow(res = 2, seed = 91) {
     const angs = [];
     for (let i = 0; i < TAIL_N; i++) { const f = (i + 1) / TAIL_N;
       let a = Math.PI / 2 + 0.38 - 0.3 * f + P.tSw * 0.22 * Math.sin(f * 2.6) * f;
-      a = lerp(a, lerp(Math.PI / 2 + 0.3, Math.PI - 0.12, ease(f / 0.5)), ease(P.tWrap || 0)); // lying: back along the straw
+      a = lerp(a, lerp(Math.PI / 2 + 0.22, Math.PI - 0.08, ease((f - 0.6) / 0.3)), ease(P.tWrap || 0)); // lying: down the rump, then back along the straw
       angs.push(a); }
     return angs;
   }
@@ -203,25 +208,25 @@ export function makeCow(res = 2, seed = 91) {
     g.restore();
   }
   function drawLeg(g, L, far) {
-    const col = far ? shade(FAWN, 0.2) : FAWN, low = far ? shade(mix(FAWN, DARK, 0.35), 0.15) : mix(FAWN, DARK, 0.3);
-    const hoof = L.P, fet = [hoof[0] - 6 * Math.cos(L.lie * 1.4), hoof[1] - PAST * (1 - 0.7 * L.lie) - 4];
-    if (L.hind) {
+    const col = far ? shade(FAWN, 0.2) : FAWN, low = far ? shade(LEGC, 0.2) : LEGC;
+    const hoof = L.P, fet = [hoof[0] - 6 * Math.cos(L.lie * 1.4), hoof[1] - PAST * (1 - 0.7 * L.lie) - 4], toe = [hoof[0] + 2, hoof[1] - 9];
+    let pts, ws, split;
+    if (L.hind) { // thigh, stifle (forward), gaskin, the hock pointing back, cannon, fetlock, pastern
       const hock = [fet[0] - CAN.hind * Math.sin(L.ang), fet[1] - CAN.hind * Math.cos(L.ang)];
-      const { E: stifle, T: hk } = ik2(L.R, hock, UP.hind, LO.hind, [1, 0.1], 1.15); // stifle FORWARD, so the hock points back
-      legTube(g, [L.R, stifle, hk], 56, 27, col);
-      legTube(g, [hk, fet], 23, 19, low);
-      g.fillStyle = col; g.beginPath(); g.ellipse(hk[0] - 6, hk[1] - 2, 9, 10, 0, 0, 7); g.fill(); // the point of the hock
-      g.strokeStyle = rgba(INK, 0.6); g.lineWidth = 1.3; g.beginPath(); g.arc(hk[0] - 6, hk[1] - 2, 9, Math.PI * 0.6, Math.PI * 1.5); g.stroke();
-    } else {
-      const knee = [fet[0] - CAN.fore * Math.sin(-L.ang) - 2, fet[1] - CAN.fore * Math.cos(L.ang)];
-      const kn = [fet[0] + CAN.fore * Math.sin(L.ang) * 1, fet[1] - CAN.fore * Math.cos(L.ang)];
-      const { E: elbow, T: kk } = ik2(L.R, kn, UP.fore, LO.fore, [-1, 0.1], 1.15); // elbow BACK
-      legTube(g, [L.R, elbow, kk], 50, 26, col);
-      legTube(g, [kk, fet], 22, 19, low);
-      g.fillStyle = low; g.beginPath(); g.ellipse(kk[0] + 1, kk[1], 11, 9, 0, 0, 7); g.fill(); g.strokeStyle = rgba(INK, 0.5); g.lineWidth = 1.2; g.beginPath(); g.arc(kk[0] + 1, kk[1], 11, -Math.PI * 0.4, Math.PI * 0.4); g.stroke();
+      const { E: stifle, T: hk } = ik2(L.R, hock, UP.hind, LO.hind, [1, 0.1], 1.15);
+      const gas = [lerp(stifle[0], hk[0], 0.5) - 3, lerp(stifle[1], hk[1], 0.5)], can = [lerp(hk[0], fet[0], 0.5), lerp(hk[1], fet[1], 0.5)];
+      pts = [L.R, stifle, gas, [hk[0] - 3, hk[1]], can, fet, toe]; ws = [74, 58, 36, 30, 19, 24, 18]; split = hk[1];
+    } else { // forearm (elbow back), the knee, cannon, fetlock, pastern
+      const kn = [fet[0] + CAN.fore * Math.sin(L.ang), fet[1] - CAN.fore * Math.cos(L.ang)];
+      const { E: elbow, T: kk } = ik2(L.R, kn, UP.fore, LO.fore, [-1, 0.1], 1.15);
+      const fa = [lerp(elbow[0], kk[0], 0.4), lerp(elbow[1], kk[1], 0.4)], can = [lerp(kk[0], fet[0], 0.5), lerp(kk[1], fet[1], 0.5)];
+      pts = [L.R, elbow, fa, kk, can, fet, toe]; ws = [64, 50, 38, 27, 20, 24, 18]; split = kk[1] - 10;
     }
-    // pastern, dew claw, hoof
-    legTube(g, [fet, [hoof[0] + 2, hoof[1] - 8]], 19, 17, low);
+    paintLimb(g, limbShape(pts, ws, 5), col, { w: 26, seed: 21 + (far ? 1 : 0), pw: 1.9, after: () => {
+      const gr = g.createLinearGradient(0, split - 30, 0, split + 30); gr.addColorStop(0, rgba(low, 0)); gr.addColorStop(1, rgba(low, 0.9));
+      g.fillStyle = gr; g.fillRect(-2000, split - 30, 4000, 400);
+      hatch(g, limbShape(pts, ws, 5).shape, { color: '#6a4628', count: 30, len: 7, width: 0.7, alpha: 0.3, seed: 33, dir: () => Math.PI / 2 });
+    } });
     drawHoof(g, hoof[0] + 2, hoof[1], L.lie * (L.hind ? -0.2 : 1.2), far);
   }
   function drawTail(g, R) {
@@ -237,8 +242,8 @@ export function makeCow(res = 2, seed = 91) {
   function neckShape(R) {
     const Mb = R.Mb, Hx = R.Hx, t = Mb(NECK_T), b = Mb(NECK_B);
     const poll = Hx.at([-20, 0, -34]), throat = Hx.at([30, 0, 40]), jawB = Hx.at([-10, 0, 34]);
-    const mid = [lerp(b[0], throat[0], 0.5) - 6, Math.max(b[1], throat[1]) + 26]; // the dewlap
-    return smooth([[t[0] - 30, t[1] + 20], [t[0], t[1] - 2], [lerp(t[0], poll[0], 0.5), lerp(t[1], poll[1], 0.5) - 8], [poll[0], poll[1]], [jawB[0], jawB[1]], [throat[0], throat[1]], mid, [b[0], b[1]], [b[0] - 40, b[1] - 10]]);
+    const mid = [lerp(b[0], throat[0], 0.5) - 8, Math.max(b[1], throat[1]) + 40]; // the dewlap: soft loose skin under the neck
+    return smooth([[t[0] - 50, t[1] + 26], [t[0] - 10, t[1] - 4], [lerp(t[0], poll[0], 0.5), lerp(t[1], poll[1], 0.5) - 10], [poll[0], poll[1]], [jawB[0], jawB[1]], [throat[0], throat[1]], mid, [b[0], b[1]], [b[0] - 50, b[1] - 10]]);
   }
   function drawHead(g, R, part) {
     const Hx = R.Hx, P = R.ph, pe = R.pe, V = Hx.view;
@@ -297,8 +302,9 @@ export function makeCow(res = 2, seed = 91) {
       const a = Math.atan2(Hx.at([40, sg * 30, -9])[1] - Hx.at([12, sg * 34, -9])[1], Hx.at([40, sg * 30, -9])[0] - Hx.at([12, sg * 34, -9])[0]);
       const fwdX = Math.sign(Hx.at([60, 0, 0])[0] - Hx.at([0, 0, 0])[0]) || 1;
       g.save(); g.translate(p[0], p[1]); g.rotate(clamp(a, -0.5, 0.5) * 0.5); g.scale(w, 1);
-      buttonEye(g, 0, 0, eo, { R: 8.5, happy });
-      if (eo > 0.12 && !happy) { g.strokeStyle = rgba(INK, 0.85); g.lineWidth = 1.3; g.lineCap = 'round'; const ry = 8.5 * 0.95 * eo;
+      if (eo > 0.12 && !happy) pool(g, 0, 1, 15, 13, '#f2dcc0', 0.7); // the pale ring round a Jersey's eye
+      buttonEye(g, 0, 0, eo, { R: 10, happy });
+      if (eo > 0.12 && !happy) { g.strokeStyle = rgba(INK, 0.85); g.lineWidth = 1.3; g.lineCap = 'round'; const ry = 10 * 0.95 * eo;
         for (let k = 0; k < 3; k++) { const x = (-3 + k * 4) * -fwdX; g.beginPath(); g.moveTo(x, -ry + 0.5); g.lineTo(x - fwdX * -(2 + k * 1.5), -ry - 5 - k * 0.5); g.stroke(); } }
       else if (!happy) { g.strokeStyle = rgba(INK, 0.8); g.lineWidth = 1.1; for (let k = 0; k < 3; k++) { const x = -5 + k * 5; g.beginPath(); g.moveTo(x, -3); g.lineTo(x + (k - 1) * 1.5, 2); g.stroke(); } }
       g.restore();
