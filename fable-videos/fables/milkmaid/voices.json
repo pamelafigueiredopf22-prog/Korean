@@ -1,5 +1,5 @@
 {
-  "pause_scale": 1.2,
+  "pause_scale": 1.0,
   "lead_in": 7.0,
   "narrator": {
     "engine": "elevenlabs",
