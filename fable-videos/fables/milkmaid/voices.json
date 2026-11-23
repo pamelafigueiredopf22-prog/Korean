@@ -6,7 +6,7 @@
     "model": "eleven_v3",
     "voice_id": "4dZr8J4CBeokyRkTRpoN",
     "name": "Peter (narrator)",
-    "stability": 0.5,
+    "stability": 0.4,
     "gain": 2.0,
     "tag": "[warm, gentle bedtime storytelling]",
     "filters": [
@@ -19,7 +19,7 @@
     "model": "eleven_v3",
     "voice_id": "cgSgspJ2msm6clMCkdW9",
     "name": "Jessica",
-    "stability": 0.45,
+    "stability": 0.4,
     "gain": 2.0,
     "filters": [
       "loudnorm=I=-28.5:TP=-6",
@@ -31,7 +31,7 @@
     "model": "eleven_v3",
     "voice_id": "8N2ng9i2uiUWqstgmWlH",
     "name": "Beth",
-    "stability": 0.5,
+    "stability": 0.45,
     "gain": 2.0,
     "filters": [
       "loudnorm=I=-28.5:TP=-6",
