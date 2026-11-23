@@ -45,8 +45,8 @@ const brushW = (g, shape, cols, o) => brushWash(g, dz(shape, 40), cols, o);
 // ---------------------------------------------------------------- moods
 // The land's own colours are painted once (a fresh June morning); a mood is its sky, a painterly glaze and a light pass.
 export const MOODS = {
-  dawn: { name: 'dawn', sky: ['#97a3cc', '#e6b8c0', '#fcdcae'], cloud: '#fde6d8', cloudShade: '#c29ab8', sun: [1092, 378], sunCol: '#fff2cc', glow: '#ffd49a',
-    haze: '#f6d6cc', hazeK: 0.34, shadow: '#6a5c96', shadowA: 0.34 },
+  dawn: { name: 'dawn', sky: ['#a8b4d2', '#f2c6ac', '#fde2a6'], cloud: '#fde8d8', cloudShade: '#d0a4a8', sun: [1092, 340], sunCol: '#fff2cc', glow: '#ffd49a',
+    haze: '#fadcc0', hazeK: 0.34, shadow: '#866a8c', shadowA: 0.28 },
   morning: { name: 'morning', sky: ['#88b0d4', '#cde0e6', '#f4eed8'], cloud: '#fffaf0', cloudShade: '#b4c0d4', sun: [240, 40], sunCol: '#fffbea', glow: '#fff4d0',
     haze: '#e8eee8', hazeK: 0.4, shadow: '#5c6894', shadowA: 0.3 },
   dusk: { name: 'dusk', sky: ['#8a84b8', '#e4a6a2', '#f9cc8a'], cloud: '#fbdcc4', cloudShade: '#bc88a2', sun: [690, 452], sunCol: '#ffe0a0', glow: '#ffbe78',
@@ -123,11 +123,11 @@ export function moodGlaze(c, mood, res = 1, seed = 5, o = {}) {
   } else if (m.name === 'dawn') {
     // rose-gold light from the sun's side, cool lavender in the shade, pearly and soft
     const sx = (m.sun[0] + M) * res, lg = t.createRadialGradient(sx, 0, 0, sx, 0, w * 0.7);
-    lg.addColorStop(0, 'rgba(255,206,150,1)'); lg.addColorStop(0.5, 'rgba(246,176,170,1)'); lg.addColorStop(1, 'rgba(176,156,206,1)');
-    t.fillStyle = lg; t.fillRect(0, 0, w, h); strokesOf(['#ffc89a', '#f2a8b0', '#c4a8dc', '#ffe0b0'], 36, 80, 0.45, 0.02);
+    lg.addColorStop(0, 'rgba(255,206,150,1)'); lg.addColorStop(0.5, 'rgba(246,176,170,1)'); lg.addColorStop(1, 'rgba(214,170,170,1)');
+    t.fillStyle = lg; t.fillRect(0, 0, w, h); strokesOf(['#ffc89a', '#f8b898', '#e8c0b0', '#ffe0b0'], 36, 80, 0.45, 0.02);
     apply('soft-light', 0.62 * k);
-    t.fillStyle = '#ece0ea'; t.fillRect(0, 0, w, h); strokesOf(['#e4d0e4', '#f2dcd0', '#d8d0e8'], 30, 90, 0.55, 0.02);
-    apply('multiply', 0.26 * k);
+    t.fillStyle = '#f4e6dc'; t.fillRect(0, 0, w, h); strokesOf(['#f0dcd0', '#f6e2cc', '#e8d8d8'], 30, 90, 0.55, 0.02);
+    apply('multiply', 0.16 * k);
   } else {
     t.fillStyle = 'rgba(255,226,160,1)'; t.fillRect(0, 0, w, h); strokesOf(['#ffe8b0', '#f8d890', '#fff4d8'], 30, 90, 0.5, 0.02);
     apply('soft-light', 0.32 * k);
@@ -300,7 +300,7 @@ export function paintSky(g, mood, o = {}) {
     for (let i = 0; i < (o.clouds ?? 10); i++) {
       const x = r.range(x0 - 60, x1), y = r.range(60, hz - 110), w = r.range(140, 380), hh = r.range(9, 20);
       const sh = smooth([[x - w, y + hh * 0.3], [x - w * 0.5, y - hh * 0.6], [x + w * 0.2, y - hh], [x + w, y], [x + w * 0.4, y + hh * 0.7], [x - w * 0.5, y + hh * 0.7]]);
-      wash(g, sh, { color: m.name === 'dawn' ? r.pick(['#b8a0c4', '#c8a4bc', '#a8a0c8']) : r.pick(['#c88aa4', '#b88aa8']), opacity: 0.55, seed: seed + 50 + i, bleed: 0.06, layers: 14, edge: 0.15 });
+      wash(g, sh, { color: m.name === 'dawn' ? r.pick(['#d8a8b0', '#e0b0a8', '#c8a4b8']) : r.pick(['#c88aa4', '#b88aa8']), opacity: 0.55, seed: seed + 50 + i, bleed: 0.06, layers: 14, edge: 0.15 });
       glaze(g, sh, x + (sunX - x) * 0.05, y + hh * 0.6, w * 0.9, hh * 0.7, m.name === 'dawn' ? '#ffd0b0' : '#ffc888', 0.75);
       ink(g, sh.slice(0, Math.floor(sh.length * 0.5)), { width: 0.8, alpha: 0.28, gaps: 1.5, seed: seed + 70 + i });
     }
@@ -903,7 +903,7 @@ function farmLight(g, m) {
   if (m.name === 'dawn') {
     // the sun is behind the buildings: their faces are in cool shade; their shadows run toward us across the yard
     g.save(); g.globalCompositeOperation = 'multiply';
-    for (const [shp, a] of [[FREF.houseWall, 0.28], [FREF.byreWall, 0.26], [FREF.hen, 0.22], [FREF.pump, 0.2], [FREF.door, 0.2]]) wash(g, shp, { color: '#9890c4', opacity: a, seed: 501, layers: 8, bleed: 0.005, edge: 0 });
+    for (const [shp, a] of [[FREF.houseWall, 0.28], [FREF.byreWall, 0.26], [FREF.hen, 0.22], [FREF.pump, 0.2], [FREF.door, 0.2]]) wash(g, shp, { color: '#b89aa8', opacity: a, seed: 501, layers: 8, bleed: 0.005, edge: 0 });
     g.restore();
     bases.forEach(([x0, x1, gy], i) => { const L = hts[i] * 0.42, sk = (x) => (x - m.sun[0]) * 0.22 * (L / 120);
       softShadow(g, [[x0, gy - 2], [x1, gy - 2], [x1 + sk(x1), gy + L], [x0 + sk(x0), gy + L]], m, 0.9, 8, 510 + i); });
@@ -992,7 +992,7 @@ export function farmLayers(mood = 'dawn') {
   grain(back, 0.2, 5); grain(near, 0.2, 6);
   const front = cloneC(B.front);
   moodGlaze(front, m, RES, 13);
-  if (m.name !== 'morning') { const g = pageG(front); g.save(); g.globalCompositeOperation = 'source-atop'; g.fillStyle = { night: 'rgba(30,36,80,0.3)', dawn: 'rgba(90,70,120,0.16)', dusk: 'rgba(110,60,90,0.12)' }[m.name]; g.fillRect(-M, -MY, LW, LH); g.restore(); }
+  if (m.name !== 'morning') { const g = pageG(front); g.save(); g.globalCompositeOperation = 'source-atop'; g.fillStyle = { night: 'rgba(30,36,80,0.3)', dawn: 'rgba(150,100,90,0.1)', dusk: 'rgba(110,60,90,0.12)' }[m.name]; g.fillRect(-M, -MY, LW, LH); g.restore(); }
   grain(front, 0.2, 7);
   return (FL[m.name] = { back: to8(back), near: to8(near), front: to8(front), skyMask, mood: m.name });
 }
@@ -1177,7 +1177,7 @@ export function drawFarm(g, t, c, mood = 'dawn', o = {}) {
   if (m.name === 'night') nightSky(g, t, c, L.skyMask, o.starsK ?? 1, o.starsAppear ?? -99);
   cam(g, c, 1);
   const amb = o.ambient !== false;
-  if (amb && m.name === 'dawn') { mist(g, t, o.mistK ?? 0.6, o.mistLift ?? 0, { y: 505 }); sunRays(g, t, m.sun, (o.sunK ?? 1) * 0.7); }
+  if (amb && m.name === 'dawn') { mist(g, t, o.mistK ?? 0.45, o.mistLift ?? 0, { y: 505 }); sunRays(g, t, m.sun, (o.sunK ?? 1) * 0.7); }
   if (amb && m.name === 'night') mist(g, t, 0.25, 0, { y: 520 });
   g.drawImage(L.near, -M, -MY, LW, LH);
   chimneySmoke(g, t, FREF.chim1, o.smoke ?? (m.name === 'night' ? 0.4 : 1), m.name === 'dusk' ? 6 : 12, m.name === 'night' ? { color: '160,170,200' } : {});
@@ -1266,18 +1266,19 @@ function laneMid(g, x0, x1, o = {}) {
   g.save(); path(g, sh); g.clip();
   // fields: strips with hedgerows between, a few in hay or plough for a patchwork
   const rows = [];
-  for (let k = 0; k < 5; k++) rows.push(top.map(([x, y]) => [x, y + 12 + k * k * 10 + 7 * Math.sin(x * 0.002 + k) + 22 * (noise1(x * 0.0016, k + 20) - 0.5) * (k ? 1 : 0)]));
+  for (let k = 0; k < 5; k++) { const fq = 0.0014 + 0.0011 * ((k * 7) % 5) / 4, amp = 5 + k * 9, ph = k * 2.3; rows.push(top.map(([x, y]) => [x, y + 12 + k * k * 10 + (k ? amp * Math.sin(x * fq + ph) + amp * 1.2 * (noise1(x * 0.0021, k + 20) - 0.5) : 0)])); }
   for (let k = 0; k < 4; k++) {
     for (let xa = x0; xa < x1; ) { const w = r.range(260, 620), xb = Math.min(x1, xa + w), c = r.pick(['#b4c27c', '#a8bc70', '#98ac64', '#d4c890', '#bcc684', '#c8b88a', '#8ea85e', '#c0c47c']);
       const strip = rows[k].filter(([x]) => x >= xa && x <= xb), nxt = rows[k + 1].filter(([x]) => x >= xa && x <= xb);
       if (strip.length > 1) { const f = strip.concat(nxt.slice().reverse()); wash(g, f, { color: c, opacity: 0.72, seed: 410 + k * 50 + Math.round(xa), bleed: 0.02, layers: 8, edge: 0.05 });
         if (c === '#d4c890' || c === '#c8b88a') { g.save(); path(g, f); g.clip(); for (let q = 0; q < 14; q++) { const yy = lerp(strip[0][1], nxt[0][1], q / 14); ink(g, [[xa, yy], [xb, yy + 4]], { color: shade(c, 0.3), width: 0.6, alpha: 0.25, gaps: 1.4, seed: 420 + q + Math.round(xa) }); } g.restore(); } }
       // a cross hedge down the slope
-      const ya = yOn(rows[k], xb), yb2 = yOn(rows[k + 1], xb + 18);
+      const ya = yOn(rows[k], xb), yb2 = yOn(rows[k + 1], xb + 18); if (yb2 - ya > 70 || yb2 < ya) { xa = xb; continue; }
       for (let u = 0; u <= 1; u += 0.08) { const s0 = 2 + k * 1.2; g.fillStyle = rgba(r.pick(C.hedge), 0.9); g.beginPath(); g.ellipse(xb + 18 * u, lerp(ya, yb2, u) - s0 * 0.5, s0 * 1.2, s0 * 0.8, 0, 0, TAU); g.fill(); }
       xa = xb; }
-    { const pts = rows[k + 1].filter((_, i) => i % 3 === 0); let i0 = 0; while (i0 < pts.length - 2) { const n = 14 + Math.floor(r() * 30), seg = pts.slice(i0, i0 + n); if (seg.length > 1) hedgerow(g, seg, 6 + k * 4, 440 + k * 50 + i0, { step: 2, lw: 0.6, inkA: 0.35, dabs: 0.6 }); i0 += n - 1 + (r() < 0.3 ? 2 : 0); } }
-    for (let q = 0; q < (x1 - x0) / 420; q++) { const tx = r.range(x0, x1); roundTree(g, tx, yOn(rows[k + 1], tx) - 2, 9 + k * 5, 450 + k * 40 + q, { inkA: 0.45 }); }
+    { const pts = rows[k + 1].filter((_, i) => i % 3 === 0); let i0 = 0; while (i0 < pts.length - 2) { const n = 8 + Math.floor(r() * 26), seg = pts.slice(i0, i0 + n); if (seg.length > 1) hedgerow(g, seg, (6 + k * 4) * r.range(0.6, 1.5), 440 + k * 50 + i0, { step: 2, lw: 0.6, inkA: 0.35, dabs: 0.6 }); i0 += n - 1 + (r() < 0.45 ? 2 + Math.floor(r() * 4) : 0); } }
+    for (let q = 0; q < (x1 - x0) / 300; q++) { const tx = r.range(x0, x1); roundTree(g, tx, yOn(rows[k + 1], tx) - 2, (9 + k * 5) * r.range(0.7, 1.4), 450 + k * 40 + q, { inkA: 0.45 }); }
+    for (let q = 0; q < (x1 - x0) / 1100; q++) { const cx = r.range(x0, x1), n = 3 + Math.floor(r() * 3); for (let j = 0; j < n; j++) { const tx = cx + r.range(-40, 40) * (1 + k * 0.4); roundTree(g, tx, yOn(rows[k + 1], tx) + r.range(-6, 4), (11 + k * 6) * r.range(0.8, 1.3), 470 + k * 90 + q * 7 + j, { inkA: 0.45 }); } }   // little copses
   }
   g.restore();
   if (o.brook !== false) {
@@ -1632,19 +1633,22 @@ export function drawSpill(g, x, y, k, t = 0, o = {}) {
   if (!SPILLS[key]) { const r = rng(seed); const lobes = []; for (let i = 0; i < 6; i++) lobes.push([r.range(-1.1, 1.1), r.range(-0.4, 0.6), r.range(0.25, 0.5), r.range(0.5, 1)]);
     const drops = []; for (let i = 0; i < 16; i++) { const a = r.range(-0.3, Math.PI + 0.3) + Math.PI, d = r.range(1.05, 1.8); drops.push([Math.cos(a) * d, Math.sin(a) * d * 0.35 + r.range(-0.1, 0.25), r.range(0.02, 0.06)]); }
     SPILLS[key] = { lobes, outline: fluffy(0, 0, 1, 1, 7, 0.12, seed), drops }; }
-  const S = SPILLS[key], spread = ease(clamp(k / 0.55)), soak = clamp((k - 0.4) / 0.6), R = (18 + 78 * spread) * sc, ry = 0.3;
+  const S = SPILLS[key], spread = ease(clamp(k / 0.55)), soak = clamp((k - 0.3) / 0.7), R = (18 + 78 * spread) * sc, ry = 0.3;
   g.save(); g.translate(x, y);
   // the dark wet ring soaking into the dust
-  if (soak > 0) { g.save(); g.scale(1, ry); g.filter = `blur(${(4 * sc).toFixed(1)}px)`; g.fillStyle = `rgba(120,92,66,${0.28 * soak})`; g.beginPath(); for (const [i, [px, py]] of S.outline.entries()) { const X = px * R * 1.12, Y = py * R * 1.12; i ? g.lineTo(X, Y) : g.moveTo(X, Y); } g.closePath(); g.fill(); g.restore(); }
+  { const wk = clamp(k / 0.3) * 0.5 + soak * 0.5; g.save(); g.scale(1, ry); g.filter = `blur(${(5 * sc).toFixed(1)}px)`; g.fillStyle = `rgba(112,84,58,${0.42 * wk})`; g.beginPath(); for (const [i, [px, py]] of S.outline.entries()) { const X = px * R * (1.1 + 0.12 * soak), Y = py * R * (1.14 + 0.2 * soak); i ? g.lineTo(X, Y) : g.moveTo(X, Y); } g.closePath(); g.fill(); g.restore(); }   // the dust darkening as it drinks the milk
   // the creamy pool, its lobes running between the stones
   g.save(); g.scale(1, ry);
-  const a = 0.86 - 0.36 * soak;
-  g.filter = `blur(${(1.2 * sc).toFixed(1)}px)`; g.fillStyle = `rgba(247,240,222,${a})`; g.beginPath(); for (const [i, [px, py]] of S.outline.entries()) { const X = px * R, Y = py * R; i ? g.lineTo(X, Y) : g.moveTo(X, Y); } g.closePath(); g.fill();
+  const a = 0.86 - 0.24 * soak;
+  g.filter = `blur(${(1.2 * sc).toFixed(1)}px)`; g.fillStyle = `rgba(243,234,210,${a})`; g.beginPath(); for (const [i, [px, py]] of S.outline.entries()) { const X = px * R, Y = py * R; i ? g.lineTo(X, Y) : g.moveTo(X, Y); } g.closePath(); g.fill();
   for (const [lx, ly, lr, lk] of S.lobes) { const e = clamp(spread * 1.3 - (1 - lk) * 0.5); if (e <= 0) continue; g.beginPath(); g.ellipse(lx * R * 0.8, ly * R * 0.8, lr * R * e, lr * R * e * 0.8, 0, 0, TAU); g.fill(); }
   // a cool shadow at its far edge, a sheen near ours
   g.globalCompositeOperation = 'source-atop';
   g.fillStyle = `rgba(200,200,214,${0.35 * a})`; g.beginPath(); g.ellipse(R * 0.1, -R * 0.55, R * 0.9, R * 0.35, 0, 0, TAU); g.fill();
   g.fillStyle = `rgba(255,255,255,${(0.5 + 0.15 * Math.sin(t * 1.3)) * a})`; g.beginPath(); g.ellipse(-R * 0.25 + Math.sin(t * 0.4) * 3, R * 0.15, R * 0.35, R * 0.12, 0, 0, TAU); g.fill();
+  // a creamy, thicker rim where the milk gathers at its edge, and little ripples spreading slowly over it
+  g.filter = `blur(${(2.5 * sc).toFixed(1)}px)`; g.strokeStyle = `rgba(226,206,160,${0.75 * a})`; g.lineWidth = 9 * sc; g.beginPath(); S.outline.forEach(([px, py], i) => (i ? g.lineTo(px * R, py * R) : g.moveTo(px * R, py * R))); g.closePath(); g.stroke(); g.filter = 'none';
+  for (let i = 0; i < 3; i++) { const u = (t * 0.12 + i / 3) % 1, rr = R * (0.15 + 0.6 * u); g.strokeStyle = `rgba(255,253,245,${0.5 * a * Math.sin(u * Math.PI) * (1 - soak * 0.7)})`; g.lineWidth = 1.3 * sc; g.beginPath(); g.ellipse(-R * 0.1, 0, rr, rr * 0.85, 0, 0, TAU); g.stroke(); }
   g.restore();
   // the inked edge, broken
   g.save(); g.strokeStyle = `rgba(90,80,90,${0.35 * a})`; g.lineWidth = 1.1 * sc; g.beginPath(); S.outline.forEach(([px, py], i) => { if (i % 5 === 4) { g.moveTo(px * R, py * R * ry); return; } i ? g.lineTo(px * R, py * R * ry) : g.moveTo(px * R, py * R * ry); }); g.stroke(); g.restore();
@@ -1671,7 +1675,7 @@ export function dreamInner(w, h) { const rx = w * 0.4, ry = h * 0.37; return { r
 export const DREAM_SPOTS = {
   eggs: { basket: [0, 0.32], eggs: [[-0.26, 0.12], [-0.1, 0.06], [0.07, 0.1], [0.23, 0.08], [-0.17, 0.2], [0.0, 0.2], [0.17, 0.21]], chicks: [0, 0.55], ground: [0, 0.62] },
   hens: { ground: [0, 0.62], hen1: [-0.45, 0.6], hen2: [0.05, 0.68], hen3: [0.45, 0.58], chicks: [-0.1, 0.72], henhouse: [0.55, 0.2] },
-  shop: { dress: [0.02, 0.05], window: [0, -0.05], molly: [0, 0.78], ground: [0, 0.9] },
+  shop: { dress: [0, 0.05], window: [0, 0.05], molly: [0, 0.78], ground: [0, 0.9] },
   fair: { molly: [0.0, 0.78], ground: [0, 0.78], carousel: [0.38, 0.02], tent: [-0.5, 0.1] },
 };
 // a named spot inside the dream at (x, y) of size w x h, as a page point (for o.inside or anything drawn with the dream)
@@ -1726,50 +1730,76 @@ function dreamPicture(g, scene, rx, ry) {
     buttercups(g, { x0: -rx, x1: rx, y0: V(0.5), y1: V(0.95) }, 50, 4111, 2 * s);
     for (let k = 0; k < 30; k++) { const x = U(r.range(-1, 1)), y = V(r.range(0.5, 0.9)); g.fillStyle = rgba('#f0d890', 0.8); g.beginPath(); g.ellipse(x, y, 2.4 * s, 1.2 * s, r() * 3, 0, TAU); g.fill(); } // corn scattered for the hens
   } else if (scene === 'shop') {
-    // the shop front: rosy plaster, a bow window of small panes, a striped awning; inside, the blue dress
+    // the shop front: rosy plaster, a striped awning, a painted fascia with gilt lettering, a three-bay window; inside,
+    // ribbon bolts and a straw hat on the left, hat boxes and cotton reels on the right, the blue dress on its form between
     g.fillStyle = '#f0d8cc'; g.fillRect(-rx, -ry, rx * 2, ry * 2);
     blooms(g, box, ['#f4e0d4', '#e8c8c0', '#f8ecdc'], { n: 8, seed: 4201, alpha: 0.5, size: 0.3 });
-    const wx0 = U(-0.66), wx1 = U(0.66), wy0 = V(-0.55), wy1 = V(0.5);
-    wash(g, rect(wx0 - 18 * s, wy0 - 10 * s, wx1 + 18 * s, wy1 + 34 * s), { color: '#5a7a8a', opacity: 0.97, seed: 4202, under: true });  // painted wooden frame
+    const wx0 = U(-0.7), wx1 = U(0.7), wy0 = V(-0.5), wy1 = V(0.6), b0 = U(-0.3), b1 = U(0.3);
+    wash(g, rect(wx0 - 16 * s, wy0 - 12 * s, wx1 + 16 * s, wy1 + 30 * s), { color: '#4e7484', opacity: 0.97, seed: 4202, under: true });  // the painted wooden frame
     const glass = rect(wx0, wy0, wx1, wy1);
-    wash(g, glass, { color: '#f6ecd8', opacity: 0.98, seed: 4203, under: true }); blooms(g, glass, ['#fff4e0', '#f4e0c8', '#e8e8f0'], { n: 6, seed: 4204, alpha: 0.5 });
-    // inside: shelves with hat boxes and ribbon reels, the dress on its stand in the middle
-    for (const [hx, hy, hw2, hc] of [[-0.5, 0.36, 0.13, '#e8a8b8'], [-0.36, 0.38, 0.1, '#a8c8d8'], [0.4, 0.36, 0.14, '#f0d090'], [0.53, 0.4, 0.09, '#c8a8d8']]) {
-      const b = rect(U(hx - hw2), V(hy - 0.14), U(hx + hw2), V(hy)); wash(g, b, { color: hc, opacity: 0.96, seed: 4205 + Math.round(hx * 100), under: true }); penLine(g, b, { sharp: true, closed: true, w: 1.2 * s, alpha: 0.7 });
-      ink(g, [[U(hx - hw2), V(hy - 0.1)], [U(hx + hw2), V(hy - 0.1)]], { width: 1 * s, alpha: 0.5 }); }
-    for (let k = 0; k < 5; k++) { const cx = U(-0.52 + k * 0.08), cy = V(-0.3), c = ['#e86a7a', '#f4c040', '#6a9ad8', '#8ac080', '#d890c8'][k];
-      g.fillStyle = rgba(c, 0.95); g.beginPath(); g.ellipse(cx, cy, 11 * s, 14 * s, 0, 0, TAU); g.fill(); g.strokeStyle = rgba(shade(c, 0.3), 0.8); g.lineWidth = 1 * s; g.stroke(); g.fillStyle = '#f8f0e0'; g.beginPath(); g.ellipse(cx, cy, 3 * s, 4 * s, 0, 0, TAU); g.fill();
-      ink(g, [[cx, cy + 14 * s], [cx + r.range(-6, 6) * s, cy + 34 * s]], { color: c, width: 2 * s, alpha: 0.9 }); }
-    ink(g, [[U(-0.62), V(-0.18)], [U(-0.18), V(-0.18)]], { width: 2 * s, alpha: 0.7 });
-    // the blue dress: fitted bodice, puffed sleeves, a full skirt, a sash and ribbons, on a turned wooden stand
-    const [dx, dy] = [U(DREAM_SPOTS.shop.dress[0]), V(DREAM_SPOTS.shop.dress[1])], ds = ry / 210;
-    ink(g, [[dx, dy + 150 * ds], [dx, dy + 190 * ds]], { color: '#6a4a34', width: 4 * ds, alpha: 0.9 }); ink(g, [[dx - 30 * ds, dy + 192 * ds], [dx + 30 * ds, dy + 192 * ds]], { color: '#6a4a34', width: 4 * ds, alpha: 0.9 });
-    const skirt = smooth([[dx - 30 * ds, dy + 10 * ds], [dx + 30 * ds, dy + 10 * ds], [dx + 70 * ds, dy + 110 * ds], [dx + 86 * ds, dy + 158 * ds], [dx + 30 * ds, dy + 166 * ds], [dx - 30 * ds, dy + 166 * ds], [dx - 86 * ds, dy + 158 * ds], [dx - 70 * ds, dy + 110 * ds]]);
-    wash(g, skirt, { color: '#6a9ad8', opacity: 0.97, seed: 4220, under: true }); blooms(g, skirt, ['#8ab4e8', '#5a86c8', '#a8c8f0'], { n: 6, seed: 4221, alpha: 0.5 });
-    for (let k = -2; k <= 2; k++) ink(g, [[dx + k * 12 * ds, dy + 14 * ds], [dx + k * 30 * ds, dy + 160 * ds]], { color: '#3a5a98', width: 1 * ds, alpha: 0.45, seed: 4222 + k }); // folds
-    const hem = []; for (let k = 0; k <= 16; k++) { const u = k / 16; hem.push([dx - 86 * ds + u * 172 * ds, dy + 158 * ds + Math.sin(u * Math.PI) * 9 * ds + (k % 2 ? 4 : 0) * ds]); }
-    ink(g, hem, { color: '#fbf6ee', width: 3 * ds, alpha: 0.9 }); // a lace hem
-    const bod = smooth([[dx - 26 * ds, dy - 62 * ds], [dx + 26 * ds, dy - 62 * ds], [dx + 32 * ds, dy + 12 * ds], [dx - 32 * ds, dy + 12 * ds]]);
-    wash(g, bod, { color: '#5a8ad0', opacity: 0.97, seed: 4223, under: true });
-    for (const sd of [-1, 1]) { const sl = ellipse(dx + sd * 38 * ds, dy - 52 * ds, 20 * ds, 16 * ds, 18); wash(g, sl, { color: '#7aa6e0', opacity: 0.97, seed: 4224 + sd, under: true }); ink(g, sl, { closed: true, width: 1.2 * ds, alpha: 0.7 }); }
-    ink(g, ellipse(dx, dy - 64 * ds, 16 * ds, 6 * ds, 16).slice(8, 16), { color: '#fbf6ee', width: 3 * ds, alpha: 0.9 });  // the lace collar
-    ink(g, ellipse(dx, dy - 84 * ds, 7 * ds, 20 * ds, 12), { closed: true, color: '#8a6a50', width: 2 * ds, alpha: 0.8 }); // the stand's neck
-    const sash = rect(dx - 33 * ds, dy + 2 * ds, dx + 33 * ds, dy + 16 * ds); wash(g, sash, { color: '#f4b8c8', opacity: 0.97, seed: 4225, under: true });
-    for (const sd of [-1, 1]) { const lp = ellipse(dx + sd * 16 * ds, dy + 6 * ds, 16 * ds, 9 * ds, 14, sd * 0.4); wash(g, lp, { color: '#f0a0b8', opacity: 0.97, seed: 4226 + sd, under: true }); ink(g, lp, { closed: true, width: 1 * ds, alpha: 0.7 });
-      ink(g, [[dx + sd * 4 * ds, dy + 12 * ds], [dx + sd * 14 * ds, dy + 50 * ds], [dx + sd * 8 * ds, dy + 80 * ds]], { color: '#f0a0b8', width: 4 * ds, alpha: 0.95 }); }
-    for (const [ux, uy] of [[-50, 60], [44, 90], [-20, 120], [60, 140], [-64, 130]]) dogRose(g, dx + ux * ds, dy + uy * ds, 5 * ds, 4230 + ux, { col: '#f8d8e0' }); // little ribbon rosettes
-    ink(g, skirt, { closed: true, width: 1.6 * ds, alpha: 0.8 }); ink(g, bod, { closed: true, width: 1.4 * ds, alpha: 0.8 });
-    // glazing bars over everything, a gleam on the glass, the awning on top, a sill box of flowers
-    for (const fx of [-0.33, 0, 0.33]) penLine(g, [[U(fx * 0.66 / 0.66) * 1, wy0], [U(fx), wy1]], { sharp: true, w: 3 * s, alpha: 0.85, color: '#4a6a7a' });
-    penLine(g, [[wx0, V(-0.05)], [wx1, V(-0.05)]], { sharp: true, w: 3 * s, alpha: 0.85, color: '#4a6a7a' });
-    g.save(); g.globalCompositeOperation = 'screen'; g.fillStyle = 'rgba(255,255,255,0.35)'; g.beginPath(); g.moveTo(U(-0.6), wy0); g.lineTo(U(-0.45), wy0); g.lineTo(U(-0.7), wy1); g.lineTo(U(-0.85), wy1); g.fill(); g.restore();
+    wash(g, glass, { color: '#f8eee0', opacity: 0.98, seed: 4203, under: true });
+    g.save(); path(g, glass); g.clip(); for (let x = wx0; x < wx1; x += 16 * s) { g.fillStyle = 'rgba(232,180,190,0.28)'; g.fillRect(x, wy0, 7 * s, wy1 - wy0); } g.restore();   // striped paper inside
+    blooms(g, glass, ['#fff4e0', '#f4e0c8', '#f0e4ec'], { n: 6, seed: 4204, alpha: 0.4 });
+    // left bay: a shelf of ribbon bolts with their ends trailing, a straw hat on a stand
+    const sh1 = V(0.02); ink(g, [[wx0 + 6 * s, sh1], [b0 - 6 * s, sh1]], { color: '#8a6a4c', width: 4 * s, alpha: 0.9 });
+    ['#e86a7a', '#f4c040', '#6a9ad8', '#8ac080', '#d890c8'].forEach((c, k) => { const bx = wx0 + 16 * s + k * 21 * s, bw = 18 * s, bh = 34 * s, bl = rect(bx, sh1 - bh, bx + bw, sh1 - 2 * s);
+      wash(g, bl, { color: c, opacity: 0.97, seed: 4205 + k, under: true, layers: 6 }); for (let q = 1; q < 4; q++) ink(g, [[bx + 2 * s, sh1 - q * bh / 4], [bx + bw - 2 * s, sh1 - q * bh / 4]], { color: shade(c, 0.3), width: 0.7 * s, alpha: 0.6 });
+      ink(g, bl, { closed: true, width: 1 * s, alpha: 0.7 }); if (k % 2 === 0) ink(g, [[bx + bw * 0.5, sh1 - 2 * s], [bx + bw * 0.6 + 3 * s, sh1 + 18 * s], [bx + bw * 0.3, sh1 + 34 * s]], { color: c, width: 3 * s, alpha: 0.95 }); });
+    { const hx = U(-0.5), hy = V(0.42); ink(g, [[hx, hy + 60 * s], [hx, hy]], { color: '#8a6a4c', width: 3 * s, alpha: 0.9 }); ink(g, [[hx - 18 * s, hy + 60 * s], [hx + 18 * s, hy + 60 * s]], { color: '#8a6a4c', width: 3 * s, alpha: 0.9 });
+      const brim = ellipse(hx, hy, 46 * s, 11 * s, 30), crown = smooth([[hx - 22 * s, hy], [hx - 20 * s, hy - 24 * s], [hx, hy - 30 * s], [hx + 20 * s, hy - 24 * s], [hx + 22 * s, hy]]);
+      wash(g, brim, { color: '#e8cc84', opacity: 0.98, seed: 4210, under: true }); hatch(g, brim, { color: '#a8843c', count: 40, len: 6 * s, width: 0.7, alpha: 0.5, seed: 4211, dir: () => 0.2 }); ink(g, brim, { closed: true, width: 1.1 * s, alpha: 0.75 });
+      wash(g, crown, { color: '#ecd494', opacity: 0.98, seed: 4212, under: true }); wash(g, rect(hx - 21 * s, hy - 10 * s, hx + 21 * s, hy - 2 * s), { color: '#e88aa0', opacity: 0.98, seed: 4213, under: true });
+      dogRose(g, hx + 16 * s, hy - 8 * s, 6 * s, 4214, { col: '#f4b8c8' }); ink(g, crown, { closed: true, width: 1.1 * s, alpha: 0.75 }); ink(g, [[hx + 18 * s, hy - 4 * s], [hx + 34 * s, hy + 26 * s]], { color: '#e88aa0', width: 2.6 * s, alpha: 0.95 }); }
+    // right bay: hat boxes, cotton reels on a shelf
+    for (const [hx, hy, hw2, hc] of [[0.42, 0.56, 0.1, '#e8a8b8'], [0.58, 0.56, 0.08, '#a8c8d8'], [0.5, 0.4, 0.09, '#f0d090']]) {
+      const b = rect(U(hx - hw2), V(hy - 0.16), U(hx + hw2), V(hy)); wash(g, b, { color: hc, opacity: 0.96, seed: 4215 + Math.round(hx * 100 + hy * 10), under: true }); penLine(g, b, { sharp: true, closed: true, w: 1.1 * s, alpha: 0.7 });
+      ink(g, [[U(hx - hw2), V(hy - 0.12)], [U(hx + hw2), V(hy - 0.12)]], { width: 0.9 * s, alpha: 0.5 }); ink(g, [[U(hx), V(hy - 0.16)], [U(hx) - 6 * s, V(hy - 0.24)], [U(hx) + 6 * s, V(hy - 0.24)], [U(hx), V(hy - 0.16)]], { color: shade(hc, 0.3), width: 1.4 * s, alpha: 0.8 }); }
+    ink(g, [[b1 + 6 * s, sh1], [wx1 - 6 * s, sh1]], { color: '#8a6a4c', width: 4 * s, alpha: 0.9 });
+    ['#e86a7a', '#6a9ad8', '#f4c040', '#8ac080', '#d890c8', '#f8f0e0'].forEach((c, k) => { const cx = b1 + 20 * s + k * 18 * s, h2 = 20 * s;
+      wash(g, rect(cx - 6 * s, sh1 - h2 + 3 * s, cx + 6 * s, sh1 - 3 * s), { color: c, opacity: 0.97, seed: 4220 + k, under: true, layers: 5 });
+      for (const yy of [sh1 - h2, sh1 - 3 * s]) { g.fillStyle = '#c8a070'; g.fillRect(cx - 8 * s, yy, 16 * s, 3 * s); } ink(g, rect(cx - 8 * s, sh1 - h2, cx + 8 * s, sh1), { closed: true, width: 0.8 * s, alpha: 0.6 }); });
+    // the dress on a dress form: a turned wooden knob, a cloth-covered form, the stand's pole and tripod feet
+    const dx = U(DREAM_SPOTS.shop.dress[0]), dy = V(-0.04), ds = ry / 300;
+    ink(g, [[dx, dy + 120 * ds], [dx, dy + 200 * ds]], { color: '#6a4a34', width: 4 * ds, alpha: 0.9 });
+    for (const sd of [-1, 0, 1]) ink(g, [[dx, dy + 196 * ds], [dx + sd * 30 * ds, dy + 214 * ds]], { color: '#6a4a34', width: 3.4 * ds, alpha: 0.9 });
+    wash(g, rect(dx - 7 * ds, dy - 92 * ds, dx + 7 * ds, dy - 74 * ds), { color: '#d8c4a4', opacity: 0.98, seed: 4230, under: true });
+    g.fillStyle = '#9a7048'; g.beginPath(); g.arc(dx, dy - 96 * ds, 6 * ds, 0, TAU); g.fill(); ink(g, ellipse(dx, dy - 96 * ds, 6 * ds, 6 * ds, 12), { closed: true, width: 1 * ds, alpha: 0.8 });
+    // the full skirt, gathered at the waist, flaring out, with soft folds and a lace hem
+    const skirt = smooth([[dx - 26 * ds, dy - 6 * ds], [dx + 26 * ds, dy - 6 * ds], [dx + 58 * ds, dy + 60 * ds], [dx + 82 * ds, dy + 128 * ds], [dx + 40 * ds, dy + 140 * ds], [dx, dy + 142 * ds], [dx - 40 * ds, dy + 140 * ds], [dx - 82 * ds, dy + 128 * ds], [dx - 58 * ds, dy + 60 * ds]]);
+    wash(g, skirt, { color: '#6a9ad8', opacity: 0.97, seed: 4231, under: true }); blooms(g, skirt, ['#8ab4e8', '#5a86c8', '#a8c8f0'], { n: 6, seed: 4232, alpha: 0.5 });
+    shadeEdge(g, skirt, { color: '#2a4a88', alpha: 0.35, width: 26 * ds, dx: 10 * ds, dy: 0 });
+    for (let k = -3; k <= 3; k++) ink(g, [[dx + k * 7 * ds, dy], [dx + k * 16 * ds, dy + 70 * ds], [dx + k * 25 * ds, dy + 134 * ds]], { color: '#3a5a98', width: 0.9 * ds, alpha: 0.45, seed: 4233 + k });
+    const hem = []; for (let k = 0; k <= 20; k++) { const u = k / 20; hem.push([dx - 82 * ds + u * 164 * ds, dy + 130 * ds + Math.sin(u * Math.PI) * 12 * ds]); }
+    for (let k = 0; k < 20; k++) { const [hx, hy] = hem[k], [qx, qy] = hem[k + 1]; g.fillStyle = 'rgba(252,248,240,0.97)'; g.beginPath(); g.arc((hx + qx) / 2, (hy + qy) / 2 + 3 * ds, 4.8 * ds, 0, Math.PI); g.fill(); g.strokeStyle = rgba(INKC, 0.4); g.lineWidth = 0.7 * ds; g.stroke(); }
+    ink(g, hem, { color: '#fbf6ee', width: 4 * ds, alpha: 0.95 });
+    for (const [ux, uy] of [[-56, 118], [-20, 128], [20, 128], [56, 118]]) { for (const sd of [-1, 1]) { const lp = ellipse(dx + (ux + sd * 4) * ds, dy + uy * ds, 4.5 * ds, 3 * ds, 10, sd * 0.4); g.fillStyle = '#f0a0b8'; path(g, lp); g.fill(); } } // little bows round the hem
+    // the fitted bodice with a little lace collar and buttons; short puffed sleeves set low on the shoulders
+    for (const sd of [-1, 1]) { const sl = smooth([[dx + sd * 20 * ds, dy - 66 * ds], [dx + sd * 34 * ds, dy - 66 * ds], [dx + sd * 40 * ds, dy - 54 * ds], [dx + sd * 34 * ds, dy - 44 * ds], [dx + sd * 22 * ds, dy - 46 * ds]]);
+      wash(g, sl, { color: '#7aa6e0', opacity: 0.98, seed: 4240 + sd, under: true }); ink(g, sl, { closed: true, width: 1.1 * ds, alpha: 0.75 }); ink(g, [[dx + sd * 26 * ds, dy - 46 * ds], [dx + sd * 37 * ds, dy - 46 * ds]], { color: '#fbf6ee', width: 2.4 * ds, alpha: 0.95 }); }
+    const bod = smooth([[dx - 16 * ds, dy - 74 * ds], [dx + 16 * ds, dy - 74 * ds], [dx + 26 * ds, dy - 66 * ds], [dx + 22 * ds, dy - 40 * ds], [dx + 18 * ds, dy - 4 * ds], [dx - 18 * ds, dy - 4 * ds], [dx - 22 * ds, dy - 40 * ds], [dx - 26 * ds, dy - 66 * ds]]);
+    wash(g, bod, { color: '#5a8ad0', opacity: 0.98, seed: 4243, under: true }); shadeEdge(g, bod, { color: '#2a4a88', alpha: 0.3, width: 14 * ds, dx: 6 * ds, dy: 0 }); ink(g, bod, { closed: true, width: 1.3 * ds, alpha: 0.8 });
+    for (const sd of [-1, 1]) { const col = ellipse(dx + sd * 7 * ds, dy - 70 * ds, 8 * ds, 5 * ds, 14, sd * 0.3); g.fillStyle = '#fbf6ee'; path(g, col); g.fill(); ink(g, col, { closed: true, width: 0.8 * ds, alpha: 0.6 }); }
+    for (let k = 0; k < 3; k++) { g.fillStyle = '#f8f0e4'; g.beginPath(); g.arc(dx, dy - 56 * ds + k * 14 * ds, 2 * ds, 0, TAU); g.fill(); }
+    // the pink sash, tied in a big bow at the front, its long tails falling over the skirt
+    const sash = smooth([[dx - 22 * ds, dy - 10 * ds], [dx + 22 * ds, dy - 10 * ds], [dx + 24 * ds, dy + 2 * ds], [dx - 24 * ds, dy + 2 * ds]]); wash(g, sash, { color: '#f4b0c4', opacity: 0.98, seed: 4244, under: true }); ink(g, sash, { closed: true, width: 0.9 * ds, alpha: 0.6 });
+    for (const sd of [-1, 1]) { ink(g, [[dx + sd * 3 * ds, dy], [dx + sd * 12 * ds, dy + 30 * ds], [dx + sd * 8 * ds, dy + 62 * ds]], { color: '#f0a0b8', width: 5 * ds, alpha: 0.95 });
+      const lp = smooth([[dx, dy - 4 * ds], [dx + sd * 14 * ds, dy - 16 * ds], [dx + sd * 22 * ds, dy - 8 * ds], [dx + sd * 16 * ds, dy + 4 * ds]]); wash(g, lp, { color: '#f0a0b8', opacity: 0.98, seed: 4245 + sd, under: true }); ink(g, lp, { closed: true, width: 1 * ds, alpha: 0.75 }); }
+    g.fillStyle = '#e0849c'; g.beginPath(); g.ellipse(dx, dy - 4 * ds, 4 * ds, 5 * ds, 0, 0, TAU); g.fill();
+    ink(g, skirt, { closed: true, width: 1.5 * ds, alpha: 0.8 });
+    // glazing: the window in three bays (the dress has the middle one to itself), a gleam on the glass
+    for (const fx of [b0, b1]) penLine(g, [[fx, wy0], [fx, wy1]], { sharp: true, w: 4 * s, alpha: 0.9, color: '#4a6a7a' });
+    for (const [a0, a1] of [[wx0, b0], [b1, wx1]]) { penLine(g, [[a0, V(-0.2)], [a1, V(-0.2)]], { sharp: true, w: 2.6 * s, alpha: 0.85, color: '#4a6a7a' }); penLine(g, [[(a0 + a1) / 2, wy0], [(a0 + a1) / 2, V(-0.2)]], { sharp: true, w: 2.6 * s, alpha: 0.85, color: '#4a6a7a' }); }
+    g.save(); g.globalCompositeOperation = 'screen'; g.fillStyle = 'rgba(255,255,255,0.3)'; g.beginPath(); g.moveTo(U(-0.62), wy0); g.lineTo(U(-0.5), wy0); g.lineTo(U(-0.68), wy1); g.lineTo(U(-0.8), wy1); g.fill(); g.restore();
     penLine(g, glass, { sharp: true, closed: true, w: 2.4 * s, alpha: 0.85 });
-    const aw = []; for (let k = 0; k <= 10; k++) aw.push([U(-1.05 + k * 0.21), V(-0.68)]);
-    for (let k = 0; k < 10; k++) { const st = [[aw[k][0], V(-1.1)], [aw[k + 1][0], V(-1.1)], [aw[k + 1][0], V(-0.68)], [(aw[k][0] + aw[k + 1][0]) / 2, V(-0.6)], [aw[k][0], V(-0.68)]];
-      wash(g, st, { color: k % 2 ? '#f8f0e4' : '#d86a7a', opacity: 0.97, seed: 4240 + k, under: true, layers: 8 }); penLine(g, st, { sharp: true, closed: true, w: 1 * s, alpha: 0.6 }); }
-    const sb = rect(wx0 - 10 * s, wy1 + 34 * s, wx1 + 10 * s, wy1 + 56 * s); wash(g, sb, { color: '#5a7a8a', opacity: 0.97, seed: 4250, under: true });
-    for (let k = 0; k < 26; k++) { const fx = r.range(wx0, wx1), fy = wy1 + 34 * s - r.range(0, 14) * s; g.fillStyle = rgba(r.pick(['#e86a7a', '#f4c040', '#f8f0e0', '#c890d8']), 0.95); g.beginPath(); g.arc(fx, fy, 4.5 * s, 0, TAU); g.fill(); }
-    g.save(); g.fillStyle = rgba('#3a2a2a', 0.75); g.font = `italic ${Math.round(26 * s)}px "Fell", Georgia, serif`; g.textAlign = 'center'; g.fillText('Ribbons & Gowns', 0, V(-0.76)); g.restore();
+    // the fascia board with gilt lettering, the striped awning over it, a window box of flowers below
+    const fas = rect(wx0 - 30 * s, V(-0.78), wx1 + 30 * s, V(-0.56)); wash(g, fas, { color: '#3e6a5c', opacity: 0.98, seed: 4250, under: true }); penLine(g, fas, { sharp: true, closed: true, w: 1.6 * s, alpha: 0.85 });
+    g.save(); g.font = `italic ${Math.round(28 * s)}px "Fell", Georgia, serif`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = 'rgba(60,40,20,0.5)'; g.fillText('Ribbons & Gowns', 1.5 * s, V(-0.67) + 1.5 * s); g.fillStyle = '#ecc860'; g.fillText('Ribbons & Gowns', 0, V(-0.67)); g.restore();
+    const aw = []; for (let k = 0; k <= 10; k++) aw.push([U(-1.05 + k * 0.21), V(-0.84)]);
+    for (let k = 0; k < 10; k++) { const st = [[aw[k][0], V(-1.15)], [aw[k + 1][0], V(-1.15)], [aw[k + 1][0], V(-0.84)], [(aw[k][0] + aw[k + 1][0]) / 2, V(-0.77)], [aw[k][0], V(-0.84)]];
+      wash(g, st, { color: k % 2 ? '#f8f0e4' : '#d86a7a', opacity: 0.97, seed: 4255 + k, under: true, layers: 8 }); penLine(g, st, { sharp: true, closed: true, w: 1 * s, alpha: 0.6 }); }
+    const sb = rect(wx0 - 10 * s, wy1 + 30 * s, wx1 + 10 * s, wy1 + 52 * s); wash(g, sb, { color: '#4e7484', opacity: 0.97, seed: 4266, under: true }); penLine(g, sb, { sharp: true, closed: true, w: 1.2 * s, alpha: 0.7 });
+    for (let k = 0; k < 40; k++) { const fx = r.range(wx0, wx1), fy = wy1 + 30 * s - r.range(0, 14) * s; g.fillStyle = rgba(r.pick(['#6f8a46', '#7f9a52']), 0.9); g.beginPath(); g.ellipse(fx, fy + 4 * s, 6 * s, 3 * s, r() * 3, 0, TAU); g.fill(); }
+    for (let k = 0; k < 26; k++) { const fx = r.range(wx0, wx1), fy = wy1 + 30 * s - r.range(2, 14) * s; dogRose(g, fx, fy, 4 * s, 4270 + k, { col: r.pick(['#e86a7a', '#f4c040', '#f8f0e0', '#c890d8']) }); }
   } else if (scene === 'fair') {
     const lg = g.createLinearGradient(0, -ry, 0, V(0.3)); lg.addColorStop(0, '#a8c8e4'); lg.addColorStop(1, '#f4ecd8'); g.fillStyle = lg; g.fillRect(-rx, -ry, rx * 2, ry * 2);
     blooms(g, box, ['#c4dcee', '#f8ecd8', '#f4d8d0'], { n: 8, seed: 4301, alpha: 0.5, size: 0.3 });
@@ -1932,19 +1962,21 @@ export function drawDream(g, x, y, w, h, t, k = 1, o = {}) {
 
 // ================================================================ MOLLY'S BEDROOM (night)
 // A cosy attic under the thatch: the gable wall with the little window (stars and the moon outside), the sloping ceiling
-// with its rafters and a tie-beam, wide floorboards, a rag rug. Under the window her little bed with a patchwork quilt and
-// a rag doll; on the stool beside it a candle in a brass holder; on the right a washstand with a jug and basin; in front
-// a ladder-back chair with her apron over it and the empty milk pail beside it, her bonnet on a peg.
+// with its rafters and a tie-beam, wide floorboards, a rag rug. Under the window her little wooden bed (arched headboard with a
+// heart cut in it, a frilled valance, a plump pillow) with a puffy patchwork quilt and
+// a rag doll; on the stool beside it a candle in a brass holder; on the left a little bookshelf with a teddy and a wooden
+// horse under a picture of a cow; on the right a chest of drawers with a jug and bowl and a jar of roses, pegs with her
+// apron and bonnet, and the empty milk pail on the floor.
 // Painted once in its own colours, glazed for the night, a moonbeam falling from the window; the candlelight is live.
 //   bedroomLayers() -> { back, quilt, quiltHump, front, windowMask }
 //   drawBedroom(g, t, c, o): o.sleeper(g) (Molly in bed: between the bed and the quilt; the quilt then has the shape of
 //   someone curled under it), o.actors(g) (in the room, over the quilt, behind the chair), o.after(g); o.candle 0..1
 //   (1 lit, 0 out: the warm light fades), o.starsK, o.moonK.
 // BEDROOM: head (where her head lies on the pillow), bed {x0, x1, top}, window {x, y, w, h}, flame (the candle flame's
-// foot), floor (a standing figure's feet), personH (a good height for Molly standing in the room), chair, pail, doll.
+// foot), floor (a standing figure's feet), personH (a good height for Molly standing in the room), pegs (her apron), pail, doll.
 export const BEDROOM = {
   head: [752, 604], bed: { x0: 650, x1: 1300, top: 632, front: 812 }, window: { x: 960, y: 344, w: 236, h: 196 },
-  flame: [520, 566], floor: 900, personH: 360, chair: [1756, 904], pail: [1620, 904], doll: [1232, 630], vp: [960, 560],
+  flame: [520, 566], floor: 900, personH: 360, pegs: [1752, 452], pail: [1640, 906], doll: [1192, 630], vp: [960, 560],
 };
 const BR_WALL = [[200, 784], [200, 380], [960, -300], [1720, 380], [1720, 784]];
 const slopeY = (x) => (x < 960 ? 380 - (x - 200) * (680 / 760) : 380 - (1720 - x) * (680 / 760));
@@ -2009,30 +2041,64 @@ function bedroomBack(g) {
   { const y0 = 112, y1 = 146, x0 = 200 + (380 - y1) / (680 / 760) - 6, x1 = 1720 - (380 - y1) / (680 / 760) + 6, beam = [[x0, y0 + 4], [x1, y0 + 4], [x1, y1], [x0, y1]];
     wash(g, beam, { color: '#6a4a34', opacity: 0.98, seed: 6100, under: true }); hatch(g, beam, { color: '#3a2a1c', count: 160, len: 26, width: 1, alpha: 0.4, seed: 6101, dir: () => 0 }); penLine(g, beam, { sharp: true, closed: true, w: 2, alpha: 0.85 });
     shadeEdge(g, BR_WALL, { edge: [[x0, y1 + 4], [x1, y1 + 4]], color: '#5a4030', alpha: 0.3, width: 50, dy: 18 }); }
-  { const fx = 420, fy = 470, frame = rect(fx - 58, fy - 46, fx + 58, fy + 46); wash(g, frame, { color: '#8a6a4c', opacity: 0.98, seed: 6110, under: true });
-    const pic = rect(fx - 46, fy - 34, fx + 46, fy + 34); wash(g, pic, { color: '#e8dcc0', opacity: 0.98, seed: 6111, under: true }); wash(g, rect(fx - 46, fy + 8, fx + 46, fy + 34), { color: '#a8bc78', opacity: 0.9, seed: 6112 });
-    const cow = smooth([[fx - 26, fy + 2], [fx - 22, fy - 12], [fx + 14, fy - 12], [fx + 22, fy - 18], [fx + 30, fy - 12], [fx + 26, fy - 4], [fx + 16, fy + 2], [fx + 16, fy + 14], [fx + 12, fy + 14], [fx + 10, fy + 4], [fx - 18, fy + 4], [fx - 20, fy + 14], [fx - 24, fy + 14]]);
+  // a framed picture of a cow over a little bookshelf (books, a teddy and a wooden horse on top, a basket of wool below)
+  { const fx = 326, fy = 430, frame = rect(fx - 54, fy - 42, fx + 54, fy + 42); wash(g, frame, { color: '#8a6a4c', opacity: 0.98, seed: 6110, under: true });
+    const pic = rect(fx - 42, fy - 30, fx + 42, fy + 30); wash(g, pic, { color: '#e8dcc0', opacity: 0.98, seed: 6111, under: true }); wash(g, rect(fx - 42, fy + 6, fx + 42, fy + 30), { color: '#a8bc78', opacity: 0.9, seed: 6112 });
+    const cow = smooth([[fx - 24, fy + 2], [fx - 20, fy - 11], [fx + 13, fy - 11], [fx + 20, fy - 16], [fx + 28, fy - 11], [fx + 24, fy - 4], [fx + 15, fy + 2], [fx + 15, fy + 13], [fx + 11, fy + 13], [fx + 9, fy + 4], [fx - 16, fy + 4], [fx - 18, fy + 13], [fx - 22, fy + 13]]);
     wash(g, cow, { color: '#a8643c', opacity: 0.95, seed: 6113, under: true, layers: 8 }); ink(g, cow, { closed: true, width: 1, alpha: 0.7 });
     penLine(g, pic, { sharp: true, closed: true, w: 1.4, alpha: 0.7 }); penLine(g, frame, { sharp: true, closed: true, w: 1.8, alpha: 0.8 });
-    ink(g, [[fx - 40, fy - 46], [fx, fy - 76], [fx + 40, fy - 46]], { width: 1, alpha: 0.6 }); g.fillStyle = '#5a4030'; g.beginPath(); g.arc(fx, fy - 76, 3, 0, TAU); g.fill(); }
-  { const py = 470; ink(g, [[1480, py], [1660, py]], { color: '#6a4a34', width: 8, alpha: 0.95 }); for (const px of [1510, 1580, 1640]) { ink(g, [[px, py], [px + 4, py + 16]], { color: '#5a3a28', width: 5, alpha: 0.95 }); }
-    // her sun bonnet
-    const bon = smooth([[1556, py + 14], [1604, py + 14], [1618, py + 50], [1600, py + 74], [1560, py + 74], [1542, py + 50]]); wash(g, bon, { color: '#f4e4d0', opacity: 0.98, seed: 6120, under: true }); ink(g, bon, { closed: true, width: 1.3, alpha: 0.7 });
-    ink(g, [[1564, py + 70], [1556, py + 120], [1562, py + 150]], { color: '#e8a8b8', width: 3, alpha: 0.95 }); ink(g, [[1594, py + 70], [1600, py + 116], [1594, py + 140]], { color: '#e8a8b8', width: 3, alpha: 0.95 });
-    // a knitted shawl
-    const sh = smooth([[1622, py + 14], [1660, py + 16], [1670, py + 120], [1640, py + 160], [1616, py + 110]]); wash(g, sh, { color: '#9aa8c8', opacity: 0.97, seed: 6121, under: true }); hatch(g, sh, { color: '#5a6888', count: 60, len: 6, width: 1, alpha: 0.5, seed: 6122, dir: () => Math.PI / 2 }); ink(g, sh, { closed: true, width: 1.2, alpha: 0.7 }); }
-  // the washstand with jug and basin, a towel
-  { const x0 = 1380, x1 = 1600, ty = 640, top = rect(x0, ty - 14, x1, ty), body = rect(x0 + 8, ty, x1 - 8, 790);
-    wash(g, body, { color: '#9a7452', opacity: 0.98, seed: 6130, under: true }); for (const dx of [0.33, 0.66]) ink(g, [[lerp(x0, x1, dx), ty + 6], [lerp(x0, x1, dx), 784]], { width: 1, alpha: 0.5 });
-    for (const yy of [700, 740]) { g.fillStyle = '#c8a060'; g.beginPath(); g.arc(lerp(x0, x1, 0.16), yy, 3.4, 0, TAU); g.fill(); g.beginPath(); g.arc(lerp(x0, x1, 0.84), yy, 3.4, 0, TAU); g.fill(); }
-    penLine(g, body, { sharp: true, closed: true, w: 1.8, alpha: 0.8 }); wash(g, top, { color: '#b08a64', opacity: 0.98, seed: 6131, under: true }); penLine(g, top, { sharp: true, closed: true, w: 1.6, alpha: 0.8 });
-    const towel = smooth([[x1 - 6, ty + 8], [x1 + 14, ty + 8], [x1 + 18, ty + 100], [x1 + 2, ty + 110], [x1 - 6, ty + 96]]); wash(g, towel, { color: '#f4ecdc', opacity: 0.98, seed: 6132, under: true }); for (const yy of [ty + 80, ty + 88]) ink(g, [[x1 - 4, yy], [x1 + 16, yy]], { color: '#8aa0c8', width: 2, alpha: 0.8 }); ink(g, towel, { closed: true, width: 1.2, alpha: 0.7 });
-    const bx = 1478, by = ty - 14, basin = smooth([[bx - 74, by - 30], [bx + 74, by - 30], [bx + 56, by], [bx - 56, by]]); wash(g, basin, { color: '#f6f2ea', opacity: 0.98, seed: 6133, under: true }); ink(g, [[bx - 70, by - 22], [bx + 70, by - 22]], { color: '#6a88c0', width: 3, alpha: 0.85 }); ink(g, basin, { closed: true, width: 1.4, alpha: 0.75 });
-    const jug = smooth([[bx - 22, by - 26], [bx - 30, by - 70], [bx - 20, by - 100], [bx - 18, by - 120], [bx + 14, by - 124], [bx + 30, by - 132], [bx + 22, by - 112], [bx + 22, by - 96], [bx + 32, by - 66], [bx + 22, by - 26]]);
-    wash(g, jug, { color: '#f8f4ec', opacity: 0.98, seed: 6134, under: true }); glaze(g, jug, bx - 12, by - 80, 8, 30, '#ffffff', 0.7); shadeEdge(g, jug, { color: '#8a8aa0', alpha: 0.4, width: 18, dx: 8, dy: 0 });
-    for (let k = 0; k < 5; k++) { const fx = bx - 12 + (k % 3) * 12, fy = by - 52 - Math.floor(k / 3) * 22; for (let p = 0; p < 5; p++) { g.fillStyle = rgba('#6a88c0', 0.85); g.beginPath(); g.ellipse(fx + Math.cos(p * 1.26) * 4, fy + Math.sin(p * 1.26) * 4, 2.6, 1.6, p * 1.26, 0, TAU); g.fill(); } }
-    ink(g, [[bx - 24, by - 102], [bx - 46, by - 96], [bx - 44, by - 64], [bx - 28, by - 60]], { width: 3, alpha: 0.75 }); ink(g, jug, { closed: true, width: 1.5, alpha: 0.8 }); }
-  // the candle's stool, the bed (frame, mattress, pillow): the quilt is a separate layer, over the sleeper
+    ink(g, [[fx - 36, fy - 42], [fx, fy - 70], [fx + 36, fy - 42]], { width: 1, alpha: 0.6 }); g.fillStyle = '#5a4030'; g.beginPath(); g.arc(fx, fy - 70, 3, 0, TAU); g.fill(); }
+  { const x0 = 236, x1 = 420, y0 = 572, y1 = 786, sh = [y0 + 8, 650, 720], r2 = rng(6200);
+    const carcass = rect(x0, y0, x1, y1); wash(g, carcass, { color: '#5a3e2a', opacity: 0.98, seed: 6201, under: true });
+    for (const sy of sh) { const pl = rect(x0, sy - 6, x1, sy); wash(g, pl, { color: '#9a7452', opacity: 0.98, seed: 6202 + sy, under: true }); penLine(g, pl, { sharp: true, closed: true, w: 1, alpha: 0.7 }); }
+    for (const [sy, top] of [[650, sh[0]], [720, 650]]) for (let x = x0 + 10; x < x1 - 14; ) { const bw = r2.range(10, 18), bh = r2.range(34, 52), c = r2.pick(['#a84a3a', '#4a6a8a', '#6a8a4a', '#c89a3a', '#7a4a6a', '#3a5a5a']);
+      if (r2() < 0.12) { x += 10; continue; } const bk = rect(x, sy - 6 - bh, x + bw, sy - 6); wash(g, bk, { color: c, opacity: 0.97, seed: 6210 + Math.round(x + sy), under: true, layers: 5 });
+      ink(g, [[x + 2, sy - 12 - bh * 0.7], [x + bw - 2, sy - 12 - bh * 0.7]], { color: '#e8c870', width: 1.2, alpha: 0.8 }); penLine(g, bk, { sharp: true, closed: true, w: 0.9, alpha: 0.7 }); x += bw + 1; }
+    const bas = smooth([[x0 + 30, 780], [x0 + 26, 740], [x0 + 100, 740], [x0 + 96, 780]]); wash(g, bas, { color: '#b8864c', opacity: 0.98, seed: 6230, under: true }); hatch(g, bas, { color: '#6a4a24', count: 40, len: 6, width: 0.8, alpha: 0.6, seed: 6231, dir: () => 0.4 });
+    for (const [bx, c] of [[x0 + 48, '#c86a6a'], [x0 + 70, '#e8d0a0'], [x0 + 88, '#7a9ac8']]) { g.fillStyle = c; g.beginPath(); g.arc(bx, 738, 12, 0, TAU); g.fill(); ink(g, ellipse(bx, 738, 12, 12, 14), { closed: true, width: 0.9, alpha: 0.6 }); }
+    ink(g, bas, { closed: true, width: 1.2, alpha: 0.8 }); penLine(g, carcass, { sharp: true, closed: true, w: 1.8, alpha: 0.85 });
+    // the teddy, sitting on top
+    { const tx = x0 + 60, ty = y0; const bear = '#b8844c';
+      for (const sd of [-1, 1]) { g.fillStyle = bear; g.beginPath(); g.ellipse(tx + sd * 14, ty - 6, 10, 7, 0, 0, TAU); g.fill(); }
+      g.fillStyle = bear; g.beginPath(); g.ellipse(tx, ty - 26, 20, 24, 0, 0, TAU); g.fill(); g.beginPath(); g.arc(tx, ty - 60, 17, 0, TAU); g.fill();
+      for (const sd of [-1, 1]) { g.beginPath(); g.arc(tx + sd * 13, ty - 74, 7, 0, TAU); g.fill(); g.fillStyle = '#e8c098'; g.beginPath(); g.arc(tx + sd * 13, ty - 74, 3.5, 0, TAU); g.fill(); g.fillStyle = bear; }
+      g.fillStyle = '#e8c098'; g.beginPath(); g.ellipse(tx, ty - 54, 8, 6, 0, 0, TAU); g.fill(); g.fillStyle = '#3a2a20'; g.beginPath(); g.arc(tx, ty - 57, 2.4, 0, TAU); g.fill(); for (const sd of [-1, 1]) { g.beginPath(); g.arc(tx + sd * 6, ty - 64, 2, 0, TAU); g.fill(); }
+      ink(g, [[tx - 14, ty - 40], [tx, ty - 36], [tx + 14, ty - 40]], { color: '#c84a4a', width: 3, alpha: 0.9 });
+      ink(g, ellipse(tx, ty - 26, 20, 24, 20), { closed: true, width: 1.1, alpha: 0.7 }); ink(g, ellipse(tx, ty - 60, 17, 17, 18), { closed: true, width: 1.1, alpha: 0.7 }); }
+    // a little wooden horse on wheels
+    { const hx = x0 + 136, hy = y0 - 6; const body = smooth([[hx - 22, hy - 16], [hx + 12, hy - 18], [hx + 18, hy - 34], [hx + 28, hy - 30], [hx + 22, hy - 14], [hx + 20, hy - 6], [hx - 22, hy - 6]]);
+      wash(g, body, { color: '#e8d4b4', opacity: 0.98, seed: 6240, under: true }); for (const k of [0, 1, 2]) { g.fillStyle = '#c84a4a'; g.beginPath(); g.arc(hx - 12 + k * 10, hy - 12, 2.4, 0, TAU); g.fill(); }
+      ink(g, body, { closed: true, width: 1.1, alpha: 0.75 }); for (const wx of [hx - 16, hx + 14]) { g.fillStyle = '#c84a4a'; g.beginPath(); g.arc(wx, hy - 2, 5, 0, TAU); g.fill(); ink(g, ellipse(wx, hy - 2, 5, 5, 10), { closed: true, width: 0.9, alpha: 0.7 }); }
+      ink(g, [[hx + 20, hy - 32], [hx + 14, hy - 20]], { color: '#5a3a28', width: 3, alpha: 0.9 }); } }
+  // pegs on the side wall: her bonnet and her white apron hanging by its ties
+  { const py = 452, pegs = [1752, 1820]; ink(g, [[1736, py - 4], [1880, py - 14]], { color: '#6a4a34', width: 9, alpha: 0.95 });
+    for (const px of pegs) ink(g, [[px, py - 6], [px + 4, py + 10]], { color: '#4a3020', width: 5, alpha: 0.95 });
+    const ax = 1752, ap = smooth([[ax - 8, py + 8], [ax + 8, py + 8], [ax + 40, py + 60], [ax + 46, py + 190], [ax + 20, py + 214], [ax - 24, py + 214], [ax - 48, py + 190], [ax - 40, py + 60]]);
+    wash(g, ap, { color: '#fbf8f0', opacity: 0.99, seed: 6250, under: true }); glaze(g, ap, ax - 12, py + 100, 22, 60, '#ffffff', 0.6); shadeEdge(g, ap, { color: '#a8a0b8', alpha: 0.3, width: 22, dx: 8, dy: 0 });
+    for (let k = -1; k <= 1; k++) ink(g, [[ax + k * 6, py + 40], [ax + k * 18, py + 206]], { width: 0.9, alpha: 0.35, seed: 6251 + k });
+    ink(g, rect(ax - 18, py + 120, ax + 16, py + 154), { closed: true, width: 1.1, alpha: 0.55 }); const fr = []; for (let k = 0; k <= 12; k++) fr.push([ax - 48 + k * 8, py + 212 + (k % 2) * 5]); ink(g, fr, { width: 1.2, alpha: 0.6 });
+    ink(g, ap, { closed: true, width: 1.4, alpha: 0.75 }); ink(g, [[ax - 6, py + 30], [ax - 30, py + 70], [ax - 22, py + 110]], { color: '#f4eee4', width: 4, alpha: 1 });
+    const bx = 1824, bon = smooth([[bx - 22, py + 10], [bx + 24, py + 8], [bx + 34, py + 44], [bx + 20, py + 66], [bx - 18, py + 66], [bx - 32, py + 44]]);
+    wash(g, bon, { color: '#f4e4d0', opacity: 0.98, seed: 6255, under: true }); ink(g, ellipse(bx, py + 58, 24, 10, 20).slice(0, 11), { width: 1, alpha: 0.5 }); ink(g, bon, { closed: true, width: 1.3, alpha: 0.75 });
+    ink(g, [[bx - 12, py + 64], [bx - 18, py + 120], [bx - 10, py + 150]], { color: '#e8a8b8', width: 3, alpha: 0.95 }); ink(g, [[bx + 14, py + 64], [bx + 20, py + 116], [bx + 14, py + 140]], { color: '#e8a8b8', width: 3, alpha: 0.95 }); }
+  // a chest of drawers with a jug and bowl and a jar of roses on it
+  { const x0 = 1388, x1 = 1612, ty = 604, top = rect(x0 - 8, ty - 14, x1 + 8, ty), body = rect(x0, ty, x1, 778);
+    wash(g, body, { color: '#9a7050', opacity: 0.98, seed: 6130, under: true }); blooms(g, body, ['#a87c58', '#8a6444'], { n: 4, seed: 6131, alpha: 0.4 });
+    for (const [d0, d1] of [[ty + 10, ty + 62], [ty + 68, ty + 118], [ty + 124, 768]]) { const dr = rect(x0 + 10, d0, x1 - 10, d1); wash(g, dr, { color: '#a87c58', opacity: 0.9, seed: 6132 + d0, layers: 6 }); penLine(g, dr, { sharp: true, closed: true, w: 1.2, alpha: 0.75 });
+      for (const kx of [x0 + 56, x1 - 56]) { g.fillStyle = '#d8b060'; g.beginPath(); g.arc(kx, (d0 + d1) / 2, 4.5, 0, TAU); g.fill(); ink(g, ellipse(kx, (d0 + d1) / 2, 4.5, 4.5, 10), { closed: true, width: 0.8, alpha: 0.7 }); } }
+    for (const fx of [x0 + 4, x1 - 4]) ink(g, [[fx, 778], [fx, 790]], { color: '#5a3a28', width: 6, alpha: 0.95 });
+    penLine(g, body, { sharp: true, closed: true, w: 1.8, alpha: 0.85 }); wash(g, top, { color: '#b08a64', opacity: 0.98, seed: 6134, under: true }); penLine(g, top, { sharp: true, closed: true, w: 1.6, alpha: 0.85 });
+    // a crocheted runner
+    const run = rect(x0 + 20, ty - 18, x1 - 20, ty - 12); g.fillStyle = 'rgba(250,246,236,0.95)'; path(g, run); g.fill(); for (let x = x0 + 24; x < x1 - 20; x += 8) { g.beginPath(); g.arc(x, ty - 12, 3, 0, Math.PI); g.fill(); }
+    const bx = 1470, by = ty - 16, basin = smooth([[bx - 64, by - 26], [bx + 64, by - 26], [bx + 48, by], [bx - 48, by]]); wash(g, basin, { color: '#f6f2ea', opacity: 0.98, seed: 6135, under: true }); ink(g, [[bx - 60, by - 19], [bx + 60, by - 19]], { color: '#6a88c0', width: 3, alpha: 0.85 }); ink(g, basin, { closed: true, width: 1.4, alpha: 0.75 });
+    const jug = smooth([[bx - 20, by - 22], [bx - 28, by - 64], [bx - 18, by - 92], [bx - 16, by - 110], [bx + 13, by - 114], [bx + 28, by - 122], [bx + 20, by - 102], [bx + 20, by - 88], [bx + 30, by - 60], [bx + 20, by - 22]]);
+    wash(g, jug, { color: '#f8f4ec', opacity: 0.98, seed: 6136, under: true }); glaze(g, jug, bx - 10, by - 70, 7, 26, '#ffffff', 0.7); shadeEdge(g, jug, { color: '#8a8aa0', alpha: 0.35, width: 16, dx: 7, dy: 0 });
+    for (let k = 0; k < 5; k++) { const fx = bx - 10 + (k % 3) * 11, fy = by - 48 - Math.floor(k / 3) * 20; for (let p = 0; p < 5; p++) { g.fillStyle = rgba('#6a88c0', 0.85); g.beginPath(); g.ellipse(fx + Math.cos(p * 1.26) * 4, fy + Math.sin(p * 1.26) * 4, 2.4, 1.5, p * 1.26, 0, TAU); g.fill(); } }
+    ink(g, [[bx - 22, by - 94], [bx - 42, by - 88], [bx - 40, by - 58], [bx - 26, by - 54]], { width: 3, alpha: 0.75 }); ink(g, jug, { closed: true, width: 1.4, alpha: 0.8 });
+    const jx = 1574, jy = ty - 16, jar = smooth([[jx - 13, jy], [jx - 15, jy - 34], [jx - 10, jy - 40], [jx + 10, jy - 40], [jx + 15, jy - 34], [jx + 13, jy]]);
+    for (let k = 0; k < 4; k++) { const fx = jx - 16 + k * 11, fy = jy - 78 - (k % 2) * 14; ink(g, [[jx, jy - 26], [fx, fy]], { color: '#5e7640', width: 1.4, alpha: 0.85 }); g.save(); g.translate(fx, fy); g.rotate(k - 1.5); g.fillStyle = rgba('#6f8a46', 0.9); g.beginPath(); g.ellipse(8, 10, 7, 3, 0.4, 0, TAU); g.fill(); g.restore(); dogRose(g, fx, fy, 8, 6140 + k, { col: k % 2 ? '#f0a8b8' : '#e8788a' }); }
+    wash(g, jar, { color: '#d8e4e4', opacity: 0.55, seed: 6137 }); glaze(g, jar, jx - 5, jy - 20, 4, 12, '#ffffff', 0.7); ink(g, jar, { closed: true, width: 1.1, alpha: 0.6 }); }
+  // the candle's stool, the bed (frame, mattress, pillow, frill): the quilt is a separate layer, over the sleeper
   { const sx = 520, sy = 648, top = smooth([[sx - 64, sy - 10], [sx + 64, sy - 10], [sx + 70, sy + 6], [sx - 70, sy + 6]]);
     for (const lx of [-50, -14, 22, 52]) { const leg = rect(sx + lx - 5, sy + 4, sx + lx + 5, 800 + (lx > 0 ? 6 : 0)); wash(g, leg, { color: '#7a5a40', opacity: 0.98, seed: 6140 + lx, under: true }); penLine(g, leg, { sharp: true, closed: true, w: 1.3, alpha: 0.8 }); }
     wash(g, top, { color: '#9a7452', opacity: 0.98, seed: 6144, under: true }); penLine(g, top, { sharp: true, closed: true, w: 1.6, alpha: 0.85 });
@@ -2043,67 +2109,95 @@ function bedroomBack(g) {
     const holder = rect(cx - 10, sy - 40, cx + 10, sy - 16); wash(g, holder, { color: '#c8a050', opacity: 0.98, seed: 6147, under: true }); penLine(g, holder, { sharp: true, closed: true, w: 1.2, alpha: 0.8 });
     const candle = rect(cx - 8, cy, cx + 8, sy - 38); wash(g, candle, { color: '#f6efe0', opacity: 0.98, seed: 6148, under: true }); ink(g, [[cx + 2, cy], [cx + 4, cy + 14], [cx + 3, cy + 22]], { color: '#e8dcc4', width: 3, alpha: 0.9 }); penLine(g, candle, { sharp: true, closed: true, w: 1.2, alpha: 0.75 });
     ink(g, [[cx, cy], [cx + 1, cy - 6]], { color: '#2a2018', width: 1.6, alpha: 0.9 }); }
-  { const { x0, x1, top: ty, front } = B.bed;
-    // headboard (left) and footboard (right): turned posts, arched panels
-    for (const [hx, hh, sd] of [[x0, 160, 1], [x1, 90, 2]]) { const panel = smooth([[hx - 14, ty + 10], [hx - 14, ty - hh * 0.7], [hx, ty - hh], [hx + 14, ty - hh * 0.7], [hx + 14, ty + 10]]);
-      wash(g, panel, { color: '#8a6040', opacity: 0.98, seed: 6150 + sd, under: true }); hatch(g, panel, { color: '#4a3020', count: 40, len: 14, width: 0.9, alpha: 0.4, seed: 6152 + sd, dir: () => Math.PI / 2 }); penLine(g, panel, { sharp: true, closed: true, w: 1.6, alpha: 0.85 });
-      for (const px of [hx - 16, hx + 16]) { const post = rect(px - 8, ty - hh - 18, px + 8, front - 6); wash(g, post, { color: '#7a5434', opacity: 0.98, seed: 6154 + px, under: true }); penLine(g, post, { sharp: true, closed: true, w: 1.4, alpha: 0.85 });
-        g.fillStyle = '#8a6040'; g.beginPath(); g.arc(px, ty - hh - 22, 10, 0, TAU); g.fill(); ink(g, ellipse(px, ty - hh - 22, 10, 10, 14), { closed: true, width: 1.2, alpha: 0.8 }); } }
-    // the mattress and sheet, the pillow at the head
-    const mat = rect(x0 + 18, ty - 6, x1 - 18, ty + 40); wash(g, mat, { color: '#f4ece0', opacity: 0.98, seed: 6160, under: true }); ink(g, [[x0 + 18, ty + 38], [x1 - 18, ty + 38]], { width: 1.2, alpha: 0.5 });
-    const [hx, hy] = B.head, pil = smooth([[hx - 74, hy + 14], [hx - 78, hy - 14], [hx - 50, hy - 30], [hx + 40, hy - 30], [hx + 70, hy - 18], [hx + 74, hy + 12], [hx + 40, hy + 26], [hx - 50, hy + 26]]);
-    wash(g, pil, { color: '#fbf6ee', opacity: 0.99, seed: 6161, under: true }); glaze(g, pil, hx - 10, hy - 6, 50, 14, '#ffffff', 0.7); shadeEdge(g, pil, { color: '#9a90a8', alpha: 0.35, width: 18, dy: -6 });
-    ink(g, pil, { closed: true, width: 1.4, alpha: 0.7 }); for (let k = 0; k < 7; k++) ink(g, [[hx - 70 + k * 21, hy + 24], [hx - 64 + k * 21, hy + 30]], { color: '#d8a8b8', width: 2, alpha: 0.8 }); }
+  { const { x0, x1, top: ty, front } = B.bed, wood = '#9a6a44';
+    // the headboard (left, tall) and footboard (right, low): rounded arched boards, a heart cut in the headboard,
+    // little turned knobs at the corners
+    bedBoard(g, x0, ty, front, 176, 62, 1);
+    { const hx = x0, hy = ty - 104, heart = []; for (let a = 0; a <= TAU + 0.01; a += 0.2) heart.push([hx + 16 * Math.pow(Math.sin(a), 3) * 0.9, hy - (13 * Math.cos(a) - 5 * Math.cos(2 * a) - 2 * Math.cos(3 * a) - Math.cos(4 * a)) * 0.9]);
+      wash(g, heart, { color: '#4a2e1e', opacity: 0.95, seed: 6158, under: true, layers: 6 }); ink(g, heart, { closed: true, width: 1, alpha: 0.7 }); }
+    // the side rail and four short turned legs
+    const rail = rect(x0 + 30, ty + 40, x1 - 30, ty + 70); wash(g, rail, { color: wood, opacity: 0.98, seed: 6160, under: true }); penLine(g, rail, { sharp: true, closed: true, w: 1.4, alpha: 0.8 });
+    for (const lx of [x0 + 36, x1 - 36]) { const leg = smooth([[lx - 9, front - 30], [lx + 9, front - 30], [lx + 6, front - 16], [lx + 9, front - 8], [lx + 5, front + 4], [lx - 5, front + 4], [lx - 9, front - 8], [lx - 6, front - 16]]); wash(g, leg, { color: '#7a5434', opacity: 0.98, seed: 6162 + lx, under: true }); ink(g, leg, { closed: true, width: 1.1, alpha: 0.8 }); }
+    // the plump mattress (rounded), the frilled valance (white eyelet) hanging to the floor
+    const mat = smooth([[x0 + 34, ty + 2], [x0 + 46, ty - 10], [x1 - 46, ty - 10], [x1 - 34, ty + 2], [x1 - 34, ty + 36], [x1 - 46, ty + 44], [x0 + 46, ty + 44], [x0 + 34, ty + 36]]);
+    wash(g, mat, { color: '#f2eadc', opacity: 0.99, seed: 6164, under: true }); for (let x = x0 + 50; x < x1 - 40; x += 26) ink(g, [[x, ty + 4], [x + 2, ty + 38]], { color: '#c8a8a8', width: 1, alpha: 0.35 }); ink(g, mat, { closed: true, width: 1.2, alpha: 0.6 });
+    const fr = [[x0 + 40, ty + 40]]; for (let x = x0 + 40; x <= x1 - 40; x += 14) fr.push([x, front - 34 + 5 * Math.sin((x - x0) * 0.45)]); fr.push([x1 - 40, ty + 40]);
+    wash(g, fr, { color: '#f8f2e8', opacity: 0.98, seed: 6166, under: true }); for (let x = x0 + 46; x < x1 - 40; x += 14) ink(g, [[x, ty + 48], [x + 3, front - 38]], { width: 0.8, alpha: 0.3, seed: 6167 + x });
+    for (let x = x0 + 50; x < x1 - 46; x += 22) for (let yy = ty + 58; yy < front - 46; yy += 22) { g.strokeStyle = rgba('#b8a8b0', 0.5); g.lineWidth = 1; g.beginPath(); g.ellipse(x + ((yy / 22) % 2) * 11, yy, 3, 2, 0, 0, TAU); g.stroke(); } // eyelet holes
+    ink(g, fr.slice(1, -1), { width: 1.2, alpha: 0.6 });
+    // the pillow: plump, ruffled, a dent where her head goes
+    const [hx, hy] = B.head, pil = smooth([[hx - 76, hy + 16], [hx - 82, hy - 12], [hx - 58, hy - 34], [hx + 40, hy - 36], [hx + 76, hy - 22], [hx + 80, hy + 12], [hx + 44, hy + 28], [hx - 50, hy + 28]]);
+    wash(g, pil, { color: '#fbf6ee', opacity: 0.99, seed: 6168, under: true }); glaze(g, pil, hx - 20, hy - 14, 50, 14, '#ffffff', 0.8); shadeEdge(g, pil, { color: '#9a90a8', alpha: 0.35, width: 20, dy: -7 }); pool(g, hx, hy + 2, 34, 12, '#c8bcc8', 0.35);
+    const ruf = []; for (let k = 0; k < pil.length; k += 3) { const [px, py] = pil[k]; ruf.push([px + (px - hx) * 0.06 + (k % 2 ? 2 : -2), py + (py - hy) * 0.12]); }
+    ink(g, ruf, { closed: true, width: 1.2, alpha: 0.45, gaps: 0.6 }); ink(g, pil, { closed: true, width: 1.4, alpha: 0.7 }); }
+  // the footboard is drawn with the quilt (so it is in front of the quilt's end)
   // the rag rug in front of the bed
   { const [rx0, ry0] = [960, 912], rings = 7; for (let k = rings; k >= 1; k--) { const rr = ellipse(rx0, ry0, 300 * k / rings, 58 * k / rings, 60); wash(g, rr, { color: ['#c8786a', '#d8b878', '#8aa0b8', '#a8b880', '#d89a8a', '#e8d4a8', '#9a7aa0'][k % 7], opacity: 0.96, seed: 6170 + k, under: true, layers: 8, edge: 0.3 });
       ink(g, rr, { closed: true, width: 0.8, alpha: 0.35, gaps: 0.8, seed: 6180 + k }); }
     hatch(g, ellipse(rx0, ry0, 300, 58, 60), { color: '#5a3a2a', count: 600, len: 6, width: 0.8, alpha: 0.3, seed: 6190, dir: (x, y) => Math.atan2(y - ry0, (x - rx0) * 0.2) + Math.PI / 2, curve: 0.2 }); }
 }
-// the patchwork quilt (over the sleeper): a top in perspective and a front panel hanging down, squares of soft colours,
-// running stitches, a scalloped edge; hump: the shape of a little girl curled up under it
+// a bed's end board (headboard or footboard) at hx: two turned posts with round knobs and an arched panel between them
+// rising hh over the mattress top ty; w: half its width
+function bedBoard(g, hx, ty, front, hh, w, sd) {
+  const wood = '#9a6a44', top = ty - hh;
+  const panel = smooth([[hx - w, ty + 34], [hx - w, top + hh * 0.42], [hx - w * 0.6, top + hh * 0.1], [hx, top], [hx + w * 0.6, top + hh * 0.1], [hx + w, top + hh * 0.42], [hx + w, ty + 34]], true, 6);
+  wash(g, panel, { color: wood, opacity: 0.98, seed: 6150 + sd, under: true }); blooms(g, panel, ['#b07c54', '#84583a'], { n: 4, seed: 6152 + sd, alpha: 0.45 });
+  hatch(g, panel, { color: '#4a3020', count: 60, len: 18, width: 0.8, alpha: 0.3, seed: 6154 + sd, dir: () => Math.PI / 2, curve: 0.2 });
+  glaze(g, panel, hx - w * 0.3, top + hh * 0.3, w * 0.5, hh * 0.18, '#e8c898', 0.5);
+  const inner = smooth([[hx - w + 12, ty + 24], [hx - w + 12, top + hh * 0.46], [hx, top + 14], [hx + w - 12, top + hh * 0.46], [hx + w - 12, ty + 24]], false, 6);
+  ink(g, inner, { width: 1, alpha: 0.45, seed: 6155 + sd });     // a moulded edge
+  penLine(g, panel, { sharp: true, closed: true, w: 1.8, alpha: 0.85 });
+  for (const px of [hx - w, hx + w]) {
+    const post = smooth([[px - 8, top + hh * 0.3], [px + 8, top + hh * 0.3], [px + 7, ty + 40], [px + 9, front - 10], [px + 5, front + 4], [px - 5, front + 4], [px - 9, front - 10], [px - 7, ty + 40]]);
+    wash(g, post, { color: '#8a5a38', opacity: 0.98, seed: 6157 + px, under: true }); shadeEdge(g, post, { color: '#3a2214', alpha: 0.4, width: 8, dx: 4, dy: 0 }); ink(g, post, { closed: true, width: 1.2, alpha: 0.8 });
+    const kn = ellipse(px, top + hh * 0.3 - 9, 11, 11, 16); wash(g, kn, { color: '#8a5a38', opacity: 0.98, seed: 6159 + px, under: true }); glaze(g, kn, px - 3, top + hh * 0.3 - 12, 5, 4, '#e8c898', 0.6); ink(g, kn, { closed: true, width: 1.1, alpha: 0.8 });
+  }
+  return panel;
+}
+// the patchwork quilt (over the sleeper): puffy squares in soft colours with running stitches, a scalloped bound edge,
+// soft drapery folds where it hangs over the side; hump: the shape of a little girl curled up under it.
+// The rag doll sits on it at the foot, and the footboard stands in front of its end.
 function bedroomQuilt(g, hump = false) {
-  const r = rng(6300), { x0, x1, top: ty, front } = BEDROOM.bed, qx0 = BEDROOM.head[0] + 34, qx1 = x1 - 12;
-  const hTop = (x) => ty + 6 - (hump ? 46 * Math.pow(Math.max(0, Math.sin(Math.PI * clamp((x - qx0 + 10) / 420))), 0.8) + 14 * Math.max(0, Math.sin(Math.PI * clamp((x - qx0 - 300) / 200))) : 0);
+  const { x0, x1, top: ty, front } = BEDROOM.bed, qx0 = BEDROOM.head[0] + 30, qx1 = x1 - 30;
+  const hTop = (x) => ty - 4 - (hump ? 50 * Math.pow(Math.max(0, Math.sin(Math.PI * clamp((x - qx0 + 10) / 420))), 0.8) + 16 * Math.max(0, Math.sin(Math.PI * clamp((x - qx0 - 300) / 200))) : 6 * Math.sin(Math.PI * clamp((x - qx0) / (qx1 - qx0))));
   const topEdge = []; for (let x = qx0; x <= qx1; x += 10) topEdge.push([x, hTop(x)]);
-  const q = [[qx0 - 14, ty + 30]].concat(topEdge, [[qx1 + 8, ty + 20], [qx1 + 8, front - 18], [qx0 - 4, front - 12]]);
+  const hemY = (x) => front - 44 + 10 * Math.sin((x - qx0) * 0.03) + 6 * Math.sin((x - qx0) * 0.011 + 1);
+  const hem = []; for (let x = qx1 + 6; x >= qx0 - 10; x -= 8) hem.push([x, hemY(x)]);
+  const q = [[qx0 - 18, ty + 24]].concat(topEdge, [[qx1 + 10, ty + 14]], hem);
   wash(g, q, { color: '#f0e0cc', opacity: 0.99, seed: 6301, under: true });
   const cols = ['#e8a8a8', '#a8c0dc', '#f4dca0', '#b8cc98', '#d8b4d8', '#f0c8a0', '#c8d8e8', '#e8b8c8'];
   g.save(); path(g, q); g.clip();
-  const cs = 52; for (let row = 0; row < 7; row++) for (let col = 0; col < 14; col++) { const x = qx0 - 20 + col * cs, y = ty - 60 + row * cs; const sq = rect(x + 2, y + 2, x + cs - 2, y + cs - 2);
-    wash(g, sq, { color: cols[(row * 3 + col * 5 + (row % 2)) % cols.length], opacity: 0.88, seed: 6310 + row * 20 + col, layers: 6, edge: 0.2 });
-    if ((row + col) % 3 === 0) { for (let k = 0; k < 4; k++) { g.fillStyle = 'rgba(255,250,240,0.6)'; g.beginPath(); g.arc(x + 12 + (k % 2) * 26, y + 12 + Math.floor(k / 2) * 26, 3, 0, TAU); g.fill(); } } // sprigged prints
-    g.save(); g.setLineDash([4, 4]); g.strokeStyle = rgba('#7a5a4a', 0.5); g.lineWidth = 1; g.strokeRect(x + 5, y + 5, cs - 10, cs - 10); g.restore(); }
-  // the fold over the bed's front edge: the top in light, the hanging part in soft shade
-  g.globalCompositeOperation = 'multiply'; const sg = g.createLinearGradient(0, ty + 30, 0, front); sg.addColorStop(0, 'rgba(255,255,255,0)'); sg.addColorStop(0.12, 'rgba(200,180,200,0.5)'); sg.addColorStop(1, 'rgba(150,130,160,0.55)'); g.fillStyle = sg; g.fillRect(qx0 - 20, ty + 34, qx1 - qx0 + 40, front - ty);
-  if (hump) { g.globalCompositeOperation = 'source-over'; shadeEdge(g, q, { edge: topEdge, color: '#6a5a7a', alpha: 0.3, width: 30, dy: 16 }); }
+  const cs = 46; for (let row = 0; row < 8; row++) for (let col = 0; col < 16; col++) { const x = qx0 - 30 + col * cs + (row % 2) * 4, y = ty - 70 + row * cs; const c = cols[(row * 3 + col * 5 + (row % 2)) % cols.length];
+    const sq = rect(x + 2, y + 2, x + cs - 2, y + cs - 2); wash(g, sq, { color: c, opacity: 0.9, seed: 6310 + row * 20 + col, layers: 6, edge: 0.2 });
+    // each patch puffs up: lit at the top left, shaded at the bottom right, a sunk stitch line round it
+    pool(g, x + cs * 0.38, y + cs * 0.36, cs * 0.34, cs * 0.26, '#fffaf0', 0.45); pool(g, x + cs * 0.75, y + cs * 0.8, cs * 0.4, cs * 0.2, shade(c, 0.4), 0.3);
+    if ((row + col) % 3 === 0) { for (let k = 0; k < 4; k++) { g.fillStyle = 'rgba(255,250,240,0.6)'; g.beginPath(); g.arc(x + 12 + (k % 2) * 22, y + 12 + Math.floor(k / 2) * 22, 2.6, 0, TAU); g.fill(); } }
+    g.save(); g.setLineDash([4, 4]); g.strokeStyle = rgba('#7a5a4a', 0.5); g.lineWidth = 1; g.strokeRect(x + 3, y + 3, cs - 6, cs - 6); g.restore(); }
+  // the fold over the edge of the bed, and soft drapery folds in the hanging part
+  g.globalCompositeOperation = 'multiply'; const sg = g.createLinearGradient(0, ty + 20, 0, front); sg.addColorStop(0, 'rgba(255,255,255,0)'); sg.addColorStop(0.1, 'rgba(210,190,210,0.45)'); sg.addColorStop(1, 'rgba(160,140,170,0.5)'); g.fillStyle = sg; g.fillRect(qx0 - 30, ty + 26, qx1 - qx0 + 60, front - ty);
+  for (let x = qx0 + 40; x < qx1; x += 70) { g.filter = 'blur(6px)'; g.fillStyle = 'rgba(120,100,140,0.35)'; g.beginPath(); g.ellipse(x, (ty + 30 + hemY(x)) / 2 + 20, 7, (hemY(x) - ty) * 0.4, 0, 0, TAU); g.fill(); g.filter = 'none'; }
+  g.globalCompositeOperation = 'source-over';
+  if (hump) shadeEdge(g, q, { edge: topEdge, color: '#6a5a7a', alpha: 0.3, width: 30, dy: 16 });
   g.restore();
-  ink(g, topEdge, { width: 1.6, alpha: 0.75, seed: 6302 }); ink(g, [[qx0 - 14, ty + 30], [qx1 + 8, ty + 24]], { width: 1, alpha: 0.4, gaps: 1, seed: 6303 });
-  const sc = []; for (let x = qx0 - 4; x <= qx1 + 8; x += 6) sc.push([x, front - 14 + 4 * Math.abs(Math.sin((x - qx0) * Math.PI / 26))]);
-  ink(g, sc, { width: 1.5, alpha: 0.75, seed: 6304 }); ink(g, [[qx1 + 8, ty + 20], [qx1 + 8, front - 18]], { width: 1.5, alpha: 0.75 }); ink(g, [[qx0 - 14, ty + 30], [qx0 - 4, front - 12]], { width: 1.5, alpha: 0.75 });
-  // the rag doll sitting at the foot of the bed, leaning on the footboard
+  ink(g, topEdge, { width: 1.6, alpha: 0.75, seed: 6302 }); ink(g, [[qx0 - 18, ty + 24], [qx1 + 10, ty + 16]], { width: 1, alpha: 0.35, gaps: 1, seed: 6303 });
+  // the bound, scalloped edge
+  const sc = hem.map(([x, y]) => [x, y + 3 * Math.abs(Math.sin((x - qx0) * Math.PI / 24))]);
+  g.save(); g.strokeStyle = rgba('#c86a7a', 0.9); g.lineWidth = 5; g.lineCap = 'round'; path(g, sc, false); g.stroke(); g.restore(); ink(g, sc, { width: 1.3, alpha: 0.7, seed: 6304 });
+  ink(g, [[qx1 + 10, ty + 14], hem[0]], { width: 1.5, alpha: 0.75 }); ink(g, [[qx0 - 18, ty + 24], hem[hem.length - 1]], { width: 1.5, alpha: 0.75 });
+  // the rag doll sitting at the foot of the bed
   { const [dx, dy] = BEDROOM.doll, dt = hTop(dx) - ty;
     g.save(); g.translate(0, dt);
     const dress = smooth([[dx - 24, dy + 6], [dx - 14, dy - 34], [dx + 14, dy - 34], [dx + 24, dy + 6]]); wash(g, dress, { color: '#8ab0d8', opacity: 0.98, seed: 6320, under: true }); for (let k = 0; k < 6; k++) { g.fillStyle = '#f8f0e4'; g.beginPath(); g.arc(dx - 12 + (k % 3) * 12, dy - 20 + Math.floor(k / 3) * 14, 2, 0, TAU); g.fill(); } ink(g, dress, { closed: true, width: 1.2, alpha: 0.8 });
     for (const sd of [-1, 1]) { ink(g, [[dx + sd * 12, dy - 30], [dx + sd * 26, dy - 12]], { color: '#f0d8c0', width: 6, alpha: 1 }); ink(g, [[dx + sd * 10, dy + 4], [dx + sd * 16, dy + 22]], { color: '#e8d0b8', width: 7, alpha: 1 }); g.fillStyle = '#c85a5a'; g.beginPath(); g.ellipse(dx + sd * 17, dy + 24, 5, 3.4, 0, 0, TAU); g.fill(); }
     g.fillStyle = '#f2dcc4'; g.beginPath(); g.arc(dx, dy - 50, 16, 0, TAU); g.fill(); ink(g, ellipse(dx, dy - 50, 16, 16, 20), { closed: true, width: 1.2, alpha: 0.8 });
-    for (let k = 0; k < 9; k++) { const a = Math.PI * (1.05 + k * 0.1); ink(g, [[dx + Math.cos(a) * 14, dy - 50 + Math.sin(a) * 14], [dx + Math.cos(a) * 22, dy - 48 + Math.sin(a) * 20 + (k % 2) * 4]], { color: '#c87838', width: 3, alpha: 0.95 }); } // woollen hair
+    for (let k = 0; k < 9; k++) { const a = Math.PI * (1.05 + k * 0.1); ink(g, [[dx + Math.cos(a) * 14, dy - 50 + Math.sin(a) * 14], [dx + Math.cos(a) * 22, dy - 48 + Math.sin(a) * 20 + (k % 2) * 4]], { color: '#c87838', width: 3, alpha: 0.95 }); }
     g.fillStyle = '#3a2a24'; for (const sd of [-1, 1]) { g.beginPath(); g.arc(dx + sd * 6, dy - 52, 2, 0, TAU); g.fill(); }
     ink(g, [[dx - 5, dy - 44], [dx, dy - 42], [dx + 5, dy - 44]], { color: '#b85a5a', width: 1.4, alpha: 0.9 }); pool(g, dx - 9, dy - 46, 5, 3, '#e89898', 0.6); pool(g, dx + 9, dy - 46, 5, 3, '#e89898', 0.6);
     g.restore(); }
+  bedBoard(g, x1, ty, front, 104, 56, 2);
 }
-// the chair with the apron, the empty pail beside it (in front of everything; right foreground)
+// the empty milk pail on the floor by the chest of drawers (in front of everything)
 function bedroomFront(g) {
-  const [cx, cy] = BEDROOM.chair, seatY = cy - 150;
-  for (const [lx, ly, h] of [[cx - 70, cy, 150], [cx + 60, cy + 6, 150], [cx - 46, cy - 20, 130], [cx + 76, cy - 16, 130]]) { const leg = rect(lx - 6, ly - h, lx + 6, ly); wash(g, leg, { color: '#7a5434', opacity: 0.98, seed: 6400 + lx, under: true }); penLine(g, leg, { sharp: true, closed: true, w: 1.4, alpha: 0.85 }); }
-  const back = []; for (const px of [cx - 64, cx + 66]) { const post = rect(px - 7, seatY - 250, px + 7, seatY); wash(g, post, { color: '#7a5434', opacity: 0.98, seed: 6410 + px, under: true }); penLine(g, post, { sharp: true, closed: true, w: 1.5, alpha: 0.85 }); back.push(px); }
-  for (let k = 0; k < 4; k++) { const sl = rect(cx - 60, seatY - 230 + k * 50, cx + 62, seatY - 214 + k * 50); wash(g, sl, { color: '#8a6040', opacity: 0.98, seed: 6420 + k, under: true }); penLine(g, sl, { sharp: true, closed: true, w: 1.3, alpha: 0.8 }); }
-  const seat = [[cx - 84, seatY], [cx + 80, seatY + 4], [cx + 96, seatY + 26], [cx - 70, seatY + 24]]; wash(g, seat, { color: '#c8a868', opacity: 0.98, seed: 6430, under: true }); hatch(g, seat, { color: '#7a5a30', count: 80, len: 10, width: 1, alpha: 0.5, seed: 6431, dir: () => 0.1 }); penLine(g, seat, { sharp: true, closed: true, w: 1.6, alpha: 0.85 });
-  // the white apron draped over the chair's back, its ties hanging
-  const ap = smooth([[cx - 70, seatY - 236], [cx + 72, seatY - 236], [cx + 80, seatY - 180], [cx + 54, seatY - 60], [cx + 10, seatY - 40], [cx - 40, seatY - 60], [cx - 76, seatY - 170]]);
-  wash(g, ap, { color: '#fbf8f0', opacity: 0.99, seed: 6440, under: true }); glaze(g, ap, cx - 20, seatY - 180, 40, 40, '#ffffff', 0.6); shadeEdge(g, ap, { color: '#a8a0b8', alpha: 0.35, width: 30, dx: 10, dy: 0 });
-  for (let k = 0; k < 4; k++) ink(g, [[cx - 40 + k * 26, seatY - 226], [cx - 34 + k * 24, seatY - 70]], { width: 1, alpha: 0.35, seed: 6441 + k });
-  const pk = rect(cx - 24, seatY - 140, cx + 24, seatY - 100); ink(g, pk, { closed: true, width: 1.2, alpha: 0.6 }); ink(g, ap, { closed: true, width: 1.5, alpha: 0.8 });
-  for (const sd of [-1, 1]) ink(g, [[cx + sd * 70, seatY - 230], [cx + sd * 84, seatY - 160], [cx + sd * 78, seatY - 90]], { color: '#f4eee4', width: 5, alpha: 1 });
   // the milk pail on the floor (empty now)
   const [px, py] = BEDROOM.pail, pl = [[px - 44, py - 96], [px + 44, py - 96], [px + 34, py], [px - 34, py]];
   wash(g, pl, { color: '#b8b4ac', opacity: 0.98, seed: 6450, under: true }); glaze(g, pl, px - 18, py - 50, 10, 40, '#f4f4f0', 0.7); shadeEdge(g, pl, { color: '#5a5868', alpha: 0.45, width: 24, dx: 10, dy: 0 });
@@ -2127,7 +2221,7 @@ function roomNight(c, seed = 1) {
   const g = pageG(c), r = rng(seed), [fx, fy] = BEDROOM.flame, keep = canvas(c.width, c.height, false); keep.getContext('2d').drawImage(c, 0, 0);
   const tmp = canvas(c.width, c.height), t = pageG(tmp);
   const rg = t.createRadialGradient(fx + 60, fy + 40, 120, fx + 60, fy + 40, 1500);
-  rg.addColorStop(0, '#fff4e4'); rg.addColorStop(0.18, '#f4dcc0'); rg.addColorStop(0.42, '#a8a0c4'); rg.addColorStop(0.75, '#6a6aa0'); rg.addColorStop(1, '#4a4c84');
+  rg.addColorStop(0, '#fff4e4'); rg.addColorStop(0.18, '#f4dcc0'); rg.addColorStop(0.45, '#c0b0c8'); rg.addColorStop(0.78, '#8078a8'); rg.addColorStop(1, '#5a5890');
   t.fillStyle = rg; t.fillRect(-M, -MY, LW, LH);
   t.lineCap = 'round'; t.filter = `blur(${30 * RES}px)`;
   for (let i = 0; i < 40; i++) { const x = r.range(-M, W + M), y = r.range(-MY, H + MY), d = Math.hypot(x - fx, y - fy); if (d < 380) continue; t.strokeStyle = rgba(r.pick(['#5a5a98', '#6a6aa8', '#4e5290', '#7a74b0']), r.range(0.15, 0.35)); t.lineWidth = r.range(60, 160); t.beginPath(); t.moveTo(x - 200, y + r.gauss(0, 30)); t.quadraticCurveTo(x, y + r.gauss(0, 40), x + 200, y + r.gauss(0, 30)); t.stroke(); }
