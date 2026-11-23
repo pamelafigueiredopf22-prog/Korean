@@ -244,7 +244,7 @@ function solve(st, SP, dl = 0) {
   P.sit = sit; P.kneel = kneel;
   if (sit > 0) { P.lean -= sit * 0.04; P.plSwing *= 1 - 0.5 * sit; }
   if (kneel > 0) { P.lean += kneel * 0.06; }
-  if (bend > 0) { P.lean += bend * 0.45; P.pitch += bend * 0.2; }
+  if (bend > 0) { P.lean += bend * 0.85; P.pitch += bend * 0.45; }
   // breathing
   const sleep = clamp(v('sleep'));
   P.breath = Math.sin(t * TAU * lerp(0.28, 0.17, sleep)) * (1 + 1.2 * sleep);
@@ -263,13 +263,13 @@ function solve(st, SP, dl = 0) {
   P.sgnH = 1 - 2 * tH; P.sgnB = 1 - 2 * tB;
   P.front = front;
   P.spin = 0; P.spinH = 0;
-  if (twirl > 0 && twirl < 1) { P.spin = TAU * easeInOut(clamp((twirl - 0.04) / 0.92)); P.spinH = TAU * easeInOut(clamp((twirl - 0.02) / 0.88)); }
+  if (twirl > 0 && twirl < 1) { P.spin = TAU * easeInOut(clamp((twirl - 0.04) / 0.92)); P.spinH = TAU * easeInOut(clamp((twirl - 0.035) / 0.91)); }
   P.skip = skip; P.sadW = sadW; P.wa = wa;
   return P;
 }
 
 // ---------------------------------------------------------------- springs
-const K = { head: kernel(3.0, 0.6, 0.45, 9), body: kernel(2.4, 0.55, 0.6, 9), arm: kernel(2.3, 0.5, 0.7, 9), skirt: kernel(1.8, 0.42, 0.9, 11), plait: kernel(1.6, 0.32, 1.1, 11), pail: kernel(1.4, 0.3, 1.2, 11) };
+const K = { head: kernel(3.0, 0.6, 0.45, 9), body: kernel(2.4, 0.55, 0.6, 9), arm: kernel(2.3, 0.5, 0.7, 9), skirt: kernel(2.2, 0.45, 0.75, 11), plait: kernel(1.6, 0.32, 1.1, 11), pail: kernel(1.4, 0.3, 1.2, 11) };
 const LAG = { head: 0, body: 0.04, arm: 0.07, skirt: 0.08, plait: 0.1, pail: 0.12 };
 const PLAIT_DELAYS = [0, 0.06, 0.13, 0.21, 0.3];
 
@@ -325,8 +325,8 @@ export function makeFolk(res, seed, SP) {
   const inv = (M) => { const det = M[0] * M[3] - M[1] * M[2]; return [M[3] / det, -M[1] / det, -M[2] / det, M[0] / det, (M[2] * M[5] - M[3] * M[4]) / det, (M[1] * M[4] - M[0] * M[5]) / det]; };
 
   // ---- the head: where it is and how it is turned, as a 3D transform (head-local unit sphere -> body 3D)
-  function headXf(P, yawB) {
-    const yawH = (SP.headYaw - 0.5 * P.turnH) * P.sgnH * (1 - P.front * 0.92) - P.spinH;
+  function headXf(P, yawB, spinH) {
+    const yawH = (SP.headYaw - 0.5 * P.turnH) * P.sgnH * (1 - P.front * 0.92) - (spinH ?? P.spinH);
     const R = headRot(yawH - yawB, P.pitch, P.roll);
     const C3 = [SP.neck[0] + 4 + P.hx, 0, SP.neck[2] - SP.neckLen - HR * 0.82 + P.hy];
     return { R, C3, yawH, toBody: (u, r = 1) => A3(C3, mv(R, M3(u, HR * r))) };
@@ -378,7 +378,7 @@ export function makeFolk(res, seed, SP) {
   // ---- the rig: postures -> geometry (internal, facing right; root at (0, 0))
   function rig(raw, ph, pb, pa, psk, pls, ppa) {
     const R = { raw, pb };
-    const yawB = (SP.yaw * pb.sgnB) * (1 - pb.front * 0.95) - pb.spin;
+    const yawB = (SP.yaw * pb.sgnB) * (1 - pb.front * 0.95) - raw.spin; // the spin itself is not delayed (head and body turn together; only the skirt swirls behind)
     const yawS = (SP.yaw * psk.sgnB) * (1 - psk.front * 0.95) - psk.spin; // the skirt's own (lagging) yaw
     R.yawB = yawB; R.yawS = yawS;
     const pr = proj(yawB), prC = proj(yawB, 0.1), prS = proj(yawS, 0.1);
@@ -395,7 +395,7 @@ export function makeFolk(res, seed, SP) {
       const Rw = [c, sn, -sn, c, w[0] - c * w[0] + sn * w[1], w[1] - sn * w[0] - c * w[1]];
       R.Ms = [M[0] * Rw[0] + M[2] * Rw[1], M[1] * Rw[0] + M[3] * Rw[1], M[0] * Rw[2] + M[2] * Rw[3], M[1] * Rw[2] + M[3] * Rw[3], M[0] * Rw[4] + M[2] * Rw[5] + M[4], M[1] * Rw[4] + M[3] * Rw[5] + M[5]]; }
     // ---- head transform from the head posture (its own spring), placed on the body
-    const Hx = headXf(ph, yawB);
+    const Hx = headXf(ph, yawB, raw.spinH);
     const Rt = mT(Hx.R), c = Math.cos(yawB), sn = Math.sin(yawB);
     Hx.view = N3(mv(Rt, [c, -sn, 0])); Hx.xL = N3(mv(Rt, [sn, c, 0])); Hx.yL = N3(mv(Rt, [0, 0, 1]));
     R.H = Hx; R.ph = ph;
@@ -473,7 +473,9 @@ export function makeFolk(res, seed, SP) {
     if (W.hold) g(W.hold, T(8, SP.restOut + 4, SP.sh[2] + SP.armA + SP.armB - 4), rest.p, [-1, side * 0.4, 0.1], { fist: 1 });
     if (W.give) { const gv = raw.giveY ?? SP.giveAt[2]; g(W.give, T(SP.giveAt[0], 8, gv), T(SP.giveAt[0] - 2, 8, gv + 2), [-0.4, side * 1, 0.6], { fist: 1 }); }
     if (W.brush) { const o = Math.sin(t * TAU * 0.9); const tgt = raw.brushAt ? raw.brushAt : T(SP.giveAt[0] + 10, 10, SP.sh[2] - 30); g(W.brush, [tgt[0], tgt[1] + 0 * o, tgt[2] + 4 * o], rest.p, [-0.6, side * 1, 0.6], { palm: 1 }); }
-    if (W.tuck) { const o = Math.sin(t * TAU * 0.7 + side); const tgt = raw.tuckAt || [SP.giveAt[0] + 20, 0, -40]; g(W.tuck, [tgt[0] + 10 * o, side * 16, tgt[2]], [tgt[0] - 10 * o - 20, side * 20, tgt[2] + 2], [-0.4, side * 1, 0.6], { palm: 1 }); }
+    if (W.tuck) { const o = Math.sin(t * TAU * 0.7 + side); const tw = raw.tuckAt || [SP.giveAt[0] + 20, 0, -40];
+      // tuckAt stays put in the room: undo the body's lean (the quilt does not tilt when she bends)
+      const L = P.lean, c = Math.cos(L), sn = Math.sin(L), rx = tw[0], ry = tw[2] - SP.hipY, tgt = [rx * c + ry * sn, tw[1], SP.hipY - rx * sn + ry * c]; g(W.tuck, [tgt[0] + 10 * o, side * 16, tgt[2]], [tgt[0] - 10 * o - 20, side * 20, tgt[2] + 2], [-0.4, side * 1, 0.6], { palm: 1 }); }
     if (W.lap) g(W.lap, T(40, 18, SP.hipY + 6), T(38, 18, SP.hipY + 8), [-0.5, side * 1, 0.3], { palm: 0.5 });
     if (W.hips) g(W.hips, T(-4, SP.skirtOut - 6, SP.waistY + 4), T(-4, SP.skirtOut - 6, SP.waistY + 4), [-0.6, side * 1, -0.2], { fist: 0.8 });
     if (W.reach) g(W.reach, T(70, 16, SP.sh[2] - 4), rest.p, [-0.5, side * 0.8, 0.4], { palm: 1 });
@@ -500,9 +502,11 @@ export function makeFolk(res, seed, SP) {
   // visible-clamped surface polygon on a ring stack: rows [y, a, b], azimuth range
   function surfPoly(rows, t0, t1, prX, Y, n = 12) {
     const vis = (a, b) => Math.atan2(b * Math.cos(Y), a * Math.sin(Y)); // the far-limb azimuth (visible: (vis - pi, vis))
-    const pt = (r, th) => {
+    const thm = (t0 + t1) / 2;
+    const pt = (r, th) => { // clamp to the limb, measured continuously from the patch's middle (a patch wholly round
+      // the back collapses onto ONE limb instead of spreading across the front)
       const [y, a, b, rm = 1, dy = 0] = r; const lim = vis(a, b), cc = lim - Math.PI / 2;
-      let d = wrapA(th - cc); d = clamp(d, -Math.PI / 2, Math.PI / 2); const th2 = cc + d;
+      let d = wrapA(thm - cc) + (th - thm); d = clamp(d, -Math.PI / 2, Math.PI / 2); const th2 = cc + d;
       return prX(ringPt(y + dy, a, b, th2, rm));
     };
     const top = [], bot = [], L = [], Rr = [];
@@ -544,7 +548,8 @@ export function makeFolk(res, seed, SP) {
       const rr = []; for (let i = 0; i <= 5; i++) { const u = lerp(u0, u1, i / 5), j = u * (NRW - 1), j0 = Math.min(NRW - 2, Math.floor(j)), kk = j - j0;
         const r0 = rows[j0], r1 = rows[j0 + 1]; rr.push([lerp(r0[0], r1[0], kk), lerp(r0[1], r1[1], kk), lerp(r0[2], r1[2], kk), u]); }
       const vis = (a, b) => Math.atan2(b * Math.cos(Y), a * Math.sin(Y));
-      const cl = (r, th) => { const lim = vis(r[1], r[2]), cc = lim - Math.PI / 2; let d = wrapA(th - cc); d = clamp(d, -Math.PI / 2 + 0.02, Math.PI / 2 - 0.02); return pt(r, cc + d); };
+      const thm = (t0 + t1) / 2;
+      const cl = (r, th) => { const lim = vis(r[1], r[2]), cc = lim - Math.PI / 2; let d = wrapA(thm - cc) + (th - thm); d = clamp(d, -Math.PI / 2 + 0.02, Math.PI / 2 - 0.02); return pt(r, cc + d); };
       const o = []; for (let i = 0; i <= n; i++) o.push(cl(rr[0], lerp(t0, t1, i / n)));
       for (let i = 1; i <= 5; i++) o.push(cl(rr[i], t1));
       for (let i = n; i >= 0; i--) o.push(cl(rr[5], lerp(t0, t1, i / n)));
@@ -580,7 +585,7 @@ export function makeFolk(res, seed, SP) {
       const ang = a0 + sw * fe * 1.6 + fly * fe * (1.25 + 0.25 * side) - lift * fe * 0.4;
       pts.push(p = [p[0] + Math.cos(ang) * ds, p[1] + Math.sin(ang) * ds]);
     }
-    return { pts, root: r, d: r[2], side };
+    return { pts, root: r, d: r[2], side, dChest: b[2] };
   }
 
   function pailSolve(ppa, raw, R) {
@@ -947,11 +952,13 @@ export function makeFolk(res, seed, SP) {
       const farLate = far.d > SP.farLate;
       body(() => {
         if (!farLate && !inBed) drawArm(g, far, true, R);
+        const plB = R.plaits ? R.plaits.filter((p) => p.dChest < 0) : [], plF = R.plaits ? R.plaits.filter((p) => p.dChest >= 0) : [];
+        for (const p of plB) drawPlait(g, p);
         if (!inBed) { g.save(); g.setTransform(...mulT(base, R.Ms)); drawSkirt(g, R, st); g.restore(); }
         drawNeck(g, R);
         drawBodice(g, R, st);
         if (farLate && !inBed) drawArm(g, far, true, R);
-        if (R.plaits) for (const p of R.plaits.slice().sort((a, b) => a.d - b.d)) drawPlait(g, p);
+        for (const p of plF.sort((a, b) => a.d - b.d)) drawPlait(g, p);
         drawHead(g, R, st);
         if (R.pail && R.pail.at === 'head') drawPail(g, pailSpr, R.pail.x, R.pail.y, R.pail.ang, R.pail.milk, { bail: 1.35 });
       });

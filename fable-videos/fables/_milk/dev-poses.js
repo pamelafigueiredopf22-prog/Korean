@@ -1,4 +1,4 @@
-import { makeMother } from '../../engine/characters/farmwife.js';
-export async function SETUP() { return { mum: makeMother(2) }; }
-export const POSES = [{ t: 1, rig: 'mum', tuck: 1, tuckAt: [120, 0, -250] }, { t: 1, rig: 'mum', tuck: 1, bend: 1, tuckAt: [120, 0, -250] }, { t: 1, rig: 'mum', reach: 1 }, { t: 1, rig: 'mum', brush: 1 }];
-POSES.S = 0.9; POSES.cols = 4;
+import { makeMilkmaid } from '../../engine/characters/milkmaid.js';
+export async function SETUP() { return { molly: makeMilkmaid(2) }; }
+export const POSES = [0.3, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.8, 0.9].map((tw) => ({ t: 0, twirl: tw, life: 0 }));
+POSES.S = 1.0;

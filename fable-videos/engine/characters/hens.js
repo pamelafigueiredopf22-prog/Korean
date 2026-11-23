@@ -221,7 +221,7 @@ export function makeChick(res = 2, seed = 47) {
     // legs
     if (P.sleep < 0.7) for (const near of [false, true]) {
       let [dx, lift] = walkFootH((raw.walk || 0) + (near ? 0 : 0.5)); dx *= (raw.walkAmt || 0) * STRIDE_C / STRIDE_H; lift *= (raw.walkAmt || 0) * 0.5;
-      const fx = (near ? 3 : -3) + dx, fy = -lift - (P.lift || 0) * 0.6;
+      const fx = (near ? 3 : -3) + dx, fy = -lift - (P.lift || 0);
       g.save(); g.globalAlpha *= 1 - P.sleep; g.strokeStyle = '#d89a3a'; g.lineWidth = 1.8; g.lineCap = 'round'; g.beginPath(); g.moveTo(fx - 1, by - 6); g.lineTo(fx, fy); g.stroke();
       for (const a of [-0.2, 0.15, 0.45]) { g.beginPath(); g.moveTo(fx, fy); g.lineTo(fx + Math.cos(a) * 5, fy + Math.sin(a) * 1.5); g.stroke(); } g.restore();
     }

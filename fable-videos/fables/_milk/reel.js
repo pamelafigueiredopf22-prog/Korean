@@ -104,10 +104,10 @@ seg(4.2, 'Twirling (as if in a new blue dress with ribbons)', () =>
 // milking: Molly on her stool by the udder, facing it; the pail under the udder
 seg(5, 'Milking Buttercup: sitting on the little stool, hands working', () => {
   const CX = 1180, S = 1.35, U = R.cow.udderAt({}, { x: CX, y: GROUND, scale: S, face: 1 });
-  const MX = U.x - 170;
+  const MX = U.x - 118;
   return [act(R.cow, CX, GROUND, S, (q) => ({ chew: 1, lookBack: 0.35 * on(q, 1.5, 4.5, 0.8) })),
     prop((g) => R.molly.drawPail(g, U.x + 6, GROUND - 2, 0, 0.5, { scale: S * 0.95, bail: 1.2 })),
-    act(R.molly, MX, GROUND + 20, S, (q) => ({ sit: 1, stool: true, milk: 1, milkAt: [108, 4, -150], smile: 0.8 }), { face: -1 })];
+    act(R.molly, MX, GROUND + 20, S, (q) => ({ sit: 1, stool: true, milk: 1, milkAt: [74, 4, -214], smile: 0.8 }), { face: -1 })];
 });
 seg(4, 'Stroking Buttercup\'s nose', () => {
   const CX = 1150, S = 1.4;
@@ -126,7 +126,7 @@ seg(4.5, 'Mother hands Molly the pail', (k) => {
 });
 seg(3, 'Mother waves goodbye', () => [act(R.mum, 960, GROUND, 1.45, (q) => ({ wave: on(q, 0.2, 2.9, 0.4), smile: 0.9 }))]);
 seg(6, 'The comforting hug: Mother kneels, hugs Molly, brushes a tear', (k) => {
-  const S = 1.5, MX = 860, WX = 1090;
+  const S = 1.5, MX = 860, WX = 1010;
   const mum = (q) => ({ kneel: on(q, 0.2, 6, 0.9), comfort: on(q, 1.2, 3.8, 0.6), brush: on(q, 3.8, 5.8, 0.5), brushAt: [92, -8, -318], mouth: q > 4.2 && q < 5.6 ? talk(q) * 0.7 : 0 });
   const mol = (q) => ({ sad: 1 - span(q, 4.4, 5.4), tear: clamp((q - 0.2) / 2.5) * (1 - span(q, 4.2, 4.8)), hug: on(q, 1.3, 3.8, 0.6), smile: lerp(0.3, 0.8, span(q, 4.6, 5.6)) });
   return [act(R.mum, WX, GROUND, S, mum, { layer: 'back' }), act(R.molly, MX, GROUND, S, mol, { face: -1 }), act(R.mum, WX, GROUND, S, mum, { layer: 'front', noShadow: true })];
@@ -142,10 +142,10 @@ seg(3.5, 'Sitting on Mother\'s lap', () => {
 seg(7, 'Bedtime: sitting up in bed, lying back, Mother tucks her in, asleep', () => {
   const S = 1.45, MX = 1000, BY = GROUND - 80 * S;
   const mol = (q) => ({ bed: 1, nightgown: true, lie: span(q, 1.2, 3.0), sleep: span(q, 3.6, 5.2), mouth: q < 1.1 ? talk(q) * 0.5 : 0, smile: 0.75, happy: on(q, 0.2, 1.0, 0.2) });
-  const mum = (q) => ({ bend: on(q, 2.6, 6.4, 0.8), tuck: on(q, 3.0, 6.0, 0.6), tuckAt: [110, 0, -240], smile: 0.85, eye: 0.8 });
+  const mum = (q) => ({ bend: on(q, 2.6, 6.4, 0.8), tuck: on(q, 3.0, 6.0, 0.6), tuckAt: [150, 0, -40], smile: 0.85, eye: 0.8 });
   const bed = (g) => { g.save(); g.translate(MX + 260 * S, GROUND - 28 * S); g.scale(-S, S); g.drawImage(BED.c, BED.x0, BED.y0, BED.w, BED.h); g.restore(); };
-  return [act(R.mum, MX - 170, GROUND - 40, S * 0.98, mum, { layer: 'back', noShadow: true, face: -1 }), prop(bed),
-    act(R.molly, MX, BY, S, mol, { noShadow: true }), act(R.mum, MX - 170, GROUND - 40, S * 0.98, mum, { layer: 'front', noShadow: true, face: -1 })];
+  return [act(R.mum, MX - 110, GROUND - 40, S * 0.98, mum, { layer: 'back', noShadow: true, face: -1 }), prop(bed),
+    act(R.molly, MX, BY, S, mol, { noShadow: true }), act(R.mum, MX - 110, GROUND - 40, S * 0.98, mum, { layer: 'front', noShadow: true, face: -1 })];
 });
 
 // ================================================================ BUTTERCUP

@@ -74,7 +74,7 @@ function solve(st, dl = 0) {
   if (wa > 0) { const ph = v('walk'); P.by -= wa * 4 * Math.cos(ph * 2 * TAU); P.pitchB += wa * 0.012 * Math.sin(ph * TAU); P.hy += wa * 8 * Math.cos(ph * 2 * TAU + 0.8); P.hx += wa * 6 * Math.sin(ph * TAU); P.nod -= wa * 0.08; P.tSw += wa * 0.4 * Math.sin(ph * TAU); }
   if (P.moo > 0) { P.nod += P.moo * 0.45; P.hy -= P.moo * 16; P.hx += P.moo * 10; P.mouth = Math.max(P.mouth, P.moo * (0.7 + 0.15 * Math.sin(t * 9))); P.eye *= 1 - 0.45 * P.moo; P.earBack += P.moo * 0.4; P.turn -= P.moo * 0.15; }
   if (P.down > 0) { P.nod -= P.down * 0.5; P.hy += P.down * 70; P.hx += P.down * 24; }
-  if (P.back > 0) { P.turn -= P.back * 1.55; P.hx -= P.back * 120; P.hy += P.back * 34; P.nod -= P.back * 0.12; }
+  if (P.back > 0) { P.turn += P.back * 2.3; P.hx -= P.back * 70; P.hy += P.back * 40; P.nod -= P.back * 0.12; }
   const br = Math.sin(t * TAU * lerp(0.22, 0.14, P.sleep)); P.sy = 1 + br * 0.008 * (1 + P.sleep);
   if (P.lie > 0) { const k = ease(P.lie); P.by += k * 128; P.hy += k * 52; P.hx -= k * 30; P.nod += k * 0.05; P.turn += k * 0.1; P.tWrap = k; }
   if (P.sleep > 0) { P.eye *= 1 - ease(P.sleep / 0.6); P.hy += P.sleep * 14; P.hx -= P.sleep * 6; P.nod -= P.sleep * 0.12; P.earBack += P.sleep * 0.5; P.turn += P.sleep * 0.25; P.happy *= 1 - P.sleep; P.tSw *= 1 - 0.8 * P.sleep; }
@@ -141,7 +141,9 @@ export function makeCow(res = 2, seed = 91) {
     for (const [name, root, px, hind, near, off] of LEGS) {
       const R = Mb(root);
       let [dx, lift, sw] = walkHoof((raw.walkPhase || 0) + off);
-      const stand = 1 - clamp(raw.wa || 0); dx *= 1 - stand * 0.85; // standing square
+      // standing square: each hoof steps into place in its own window (no sliding while the walk eases in or out)
+      const stand = 1 - clamp(raw.wa || 0), su = clamp((stand - off * 0.6) / 0.4);
+      if (su > 0) { const d0 = Math.abs(dx); dx *= 1 - easeInOut(su); if (su < 1) lift += 16 * Math.sin(Math.PI * su) * clamp(d0 / 8); }
       let x = px + dx, y = -lift;
       // fore: the cannon's angle from straight down (+ = hoof behind the knee: folding back); hind: the cannon's angle
       // (+ = hoof ahead of the hock)
