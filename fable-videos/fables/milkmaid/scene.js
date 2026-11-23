@@ -937,6 +937,8 @@ function farmLight(g, m) {
     for (const c of FREF.ash) { g.strokeStyle = 'rgba(170,190,240,0.25)'; g.lineWidth = 5; path(g, fluffy(c[0], c[1], c[2], c[2] * 0.78, 8, 0.2, 1).slice(10, 22), false); g.stroke(); }
     g.restore();
     glaze(g, FREF.puddle, 760, 858, 60, 10, '#a8b8e8', 0.6);
+    // the lantern's warm light on the byre post, the straw bed and the cobbles before it
+    g.save(); g.globalCompositeOperation = 'screen'; const [lx, ly] = BYRE.lantern; pool(g, lx + 140, ly + 110, 420, 200, '#ffb060', 0.32); pool(g, lx + 30, ly + 30, 160, 140, '#ffc878', 0.3); pool(g, lx + 60, BYRE.ground + 40, 300, 50, '#ffa850', 0.18); g.restore();
   } else {
     bases.forEach(([x0, x1, gy], i) => { const L = hts[i] * 0.2; softShadow(g, [[x0, gy], [x1, gy], [x1 + L, gy + L * 0.3], [x0 + L, gy + L * 0.3]], m, 0.8, 5, 550 + i); });
   }
@@ -1163,7 +1165,7 @@ function lanternSprite() {
 }
 export function drawLantern(g, t, x, y, k = 1) {
   const sw = Math.sin(t * 0.7) * 0.03;
-  candleGlow(g, t, x, y - 18, 230, k, 3);
+  candleGlow(g, t, x, y - 18, 340, k, 3);
   g.save(); g.translate(x, y - 46); g.rotate(sw); g.translate(-x, -y + 46); g.translate(x, y); drawSprite(g, lanternSprite(), 1); flame(g, t, 0, -8, 16, k, 3); g.restore();
 }
 // The whole farmyard for one frame. c: camera (view()). o: behind(g) (after the gate, before the actors), actors(g),
@@ -1505,7 +1507,7 @@ export function drawLaneParallax(g, P, c, scroll = 0, t = 0, o = {}) {
 // a figure there, 1 = LANE_PAN.feetH tall), SPILL (the stony bit on the lane in the foreground), BRIDGE, STILE.
 const LW_PATH = smooth([[1196, 516], [1150, 534], [1070, 560], [1010, 596], [1030, 640], [1150, 690], [1250, 744], [1240, 806], [1130, 866], [1010, 930], [940, 1010], [910, 1150]], false, 8);
 const lwWidth = (y) => 6 + Math.pow(clamp((y - 510) / 640), 1.15) * 520;
-const lwScale = (y) => Math.max(0.05, 0.75 * (y - 450) / 330);
+const lwScale = (y) => Math.max(0.05, 0.62 * (y - 470) / 330);
 const LW_BROOK = smooth([[380, 556], [540, 596], [760, 628], [930, 660], [1060, 684], [1150, 698], [1270, 724], [1430, 774], [1590, 846], [1720, 940], [1830, 1046], [1900, 1160]], false, 8);
 function lwEdges() {
   const A = [], B = [];
