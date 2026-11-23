@@ -1,0 +1,40 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>@font-face { font-family: Fell; src: url(../../engine/fonts/im-fell-english-latin-400-italic.woff2); }</style>
+</head><body style="margin:0"><canvas id="c" width="1920" height="1080"></canvas>
+<script type="module">
+// Face sheet (PAGE=faces.html node tools/render.js _milk --stills 0) and full-body line-up (PAGE=faces.html?lineup ... ).
+import { paper } from '../../engine/watercolor.js';
+import { makeMilkmaid } from '../../engine/characters/milkmaid.js';
+import { makeMother } from '../../engine/characters/farmwife.js';
+import { makeCow } from '../../engine/characters/cow.js';
+import { makeHen, makeChick } from '../../engine/characters/hens.js';
+const ctx = document.getElementById('c').getContext('2d');
+await document.fonts.load('30px Fell');
+const LINEUP = location.search.includes('lineup');
+let P, R = {};
+const EX = [['calm', {}], ['smile, talking', { mouth: 0.5, smile: 0.9 }], ['happy', { happy: 1, mouth: 0.35 }], ['sad, a tear', { sad: 1, tear: 0.55 }],
+  ['gasp', { gasp: 1 }], ['wide eyes', { eyeBig: 1, browUp: 1, mouth: 0.15 }], ['dreamy', { daydream: 1 }], ['toward us', { headTurn: 1 }], ['eyes closed', { sleep: 1 }]];
+const EXM = [['calm', {}], ['talking', { mouth: 0.5 }], ['kind smile', { happy: 1, mouth: 0.3 }], ['sad', { sad: 1 }], ['surprised', { gasp: 1 }], ['wide eyes', { eyeBig: 1, browUp: 1 }], ['nodding', { nod: -0.2, smile: 0.9 }], ['toward us', { headTurn: 1 }], ['eyes closed', { sleep: 1 }]];
+window.FABLE = { setup: async () => { P = paper(); R.molly = makeMilkmaid(2); R.blue = makeMilkmaid(2, 71, { dress: 'blue' }); R.ker = makeMilkmaid(2, 71, { kerchief: true }); R.mum = makeMother(2);
+  if (LINEUP) { R.cow = makeCow(2); R.h1 = makeHen(2, 41, 'brown'); R.h2 = makeHen(2, 42, 'speckled'); R.h3 = makeHen(2, 43, 'white'); R.c1 = makeChick(2, 47); } },
+  frame: (t) => {
+    ctx.drawImage(P, 0, 0);
+    const label = (s, x, y, size = 26) => { ctx.save(); ctx.fillStyle = '#4a3a2c'; ctx.font = `italic ${size}px Fell, serif`; ctx.textAlign = 'center'; ctx.fillText(s, x, y); ctx.restore(); };
+    if (!LINEUP) {
+      const W = 1920 / 9;
+      const row = (rig, list, y0, S, headY) => list.forEach(([name, st], i) => {
+        const cx = W * i + W / 2;
+        ctx.save(); ctx.beginPath(); ctx.rect(W * i + 2, y0, W - 4, 520); ctx.clip();
+        ctx.translate(cx + 6, y0 + 230 - headY * S); ctx.scale(S, S); rig.draw(ctx, { t: 2.2, life: 0, noBlink: true, ...st }); ctx.restore();
+        label(name, cx, y0 + 40);
+      });
+      row(R.molly, EX, 10, 1.85, -290); row(R.mum, EXM, 545, 1.6, -390);
+      return;
+    }
+    const G = 960, items = [[R.molly, 150, 1.25, {}], [R.ker, 330, 1.25, {}], [R.blue, 510, 1.25, { happy: 1 }], [R.molly, 690, 1.25, { front: 1 }], [R.mum, 900, 1.25, {}], [R.cow, 1330, 0.85, {}],
+      [R.h1, 1660, 1.35, {}], [R.h2, 1760, 1.35, {}, 1000], [R.h3, 1860, 1.35, {}], [R.c1, 1580, 1.8, {}]];
+    ctx.save(); ctx.strokeStyle = 'rgba(90,70,50,0.25)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(40, G + 2); ctx.lineTo(1880, G + 2); ctx.stroke(); ctx.restore();
+    for (const [rig, x, s, st, y] of items) { ctx.save(); ctx.translate(x, y || G); ctx.scale(s, s); rig.shadow(ctx, st); rig.draw(ctx, { t: 2.2, life: 0, noBlink: true, ...st }); ctx.restore(); }
+    label('Molly', 150, G + 60); label('kerchief', 330, G + 60); label('blue dress', 510, G + 60); label('front view', 690, G + 60); label('Mother', 900, G + 60); label('Buttercup', 1330, G + 60); label('hens and a chick', 1740, G + 75);
+  } };
+</script></body></html>
