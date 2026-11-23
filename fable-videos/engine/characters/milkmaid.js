@@ -53,7 +53,7 @@ const HAIRLINE = [[0, -0.5], [0.35, -0.4], [0.75, -0.22], [1.05, -0.02], [1.25, 
 export function makeMilkmaid(res = 2, seed = 71, look = {}) {
   const blue = look.dress === 'blue';
   const SP = {
-    seed: seed % 7, HR: 43, hairR: 1.09, yaw: 0.85, headYaw: 0.62,
+    seed: seed % 7, HR: 43, hairR: 1.11, yaw: 0.85, headYaw: 0.62,
     col: { dress: blue ? '#8fa6c8' : '#9aae8c', apron: '#f6f0e4', skin: '#f3d6c0', cheek: '#ec9a8a', hair: '#9a5a32', sock: '#efe4d0', boot: '#7a5236',
       ribbon: blue ? '#e8a0b0' : '#d8706a', collar: '#f8f2e6', kerchief: look.kerchief ? '#c8604c' : null },
     boxBody: [-110, -290, 110, 10],

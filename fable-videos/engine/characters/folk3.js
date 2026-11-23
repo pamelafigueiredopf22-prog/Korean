@@ -80,7 +80,8 @@ export function fillSprite(res, box, col, sd, o = {}) {
   const sh = [[box[0], box[1]], [box[2], box[1]], [box[2], box[3]], [box[0], box[3]]];
   return sprite(bbox(sh), res, (g) => {
     g.fillStyle = PAPER; g.fillRect(box[0] - 20, box[1] - 20, box[2] - box[0] + 40, box[3] - box[1] + 40);
-    g.fillStyle = rgba(col, o.base ?? 0.72); g.fillRect(box[0] - 20, box[1] - 20, box[2] - box[0] + 40, box[3] - box[1] + 40);
+    g.fillStyle = rgba(col, (o.base ?? 0.72) * 0.75); g.fillRect(box[0] - 20, box[1] - 20, box[2] - box[0] + 40, box[3] - box[1] + 40);
+    looseWash(g, sh, col, { opacity: 0.55, seed: sd + 9, shift: 6, reserves: 6, reserveSize: 0.1 });
     blooms(g, sh, o.blooms || [tint(col, 0.25), shade(col, 0.14), tint(col, 0.4), col], { n: o.nb ?? 18, size: o.bsize ?? 0.16, seed: sd + 2, alpha: o.ba ?? 0.4 });
     if (o.paint) o.paint(g, sh);
     soften(g, 0.9 * res);
@@ -97,11 +98,40 @@ function clipFill(g, poly, spr, o = {}) {
     g.fillStyle = gr; g.fillRect(b.x0 - 2, b.y0 - 2, b.w + 4, b.h + 4);
     if (o.top) { const gv = g.createLinearGradient(0, b.y0, 0, b.y1); gv.addColorStop(0, rgba(o.shade, 0)); gv.addColorStop(1, rgba(o.shade, o.top)); g.fillStyle = gv; g.fillRect(b.x0 - 2, b.y0 - 2, b.w + 4, b.h + 4); }
   }
+  if (o.shade) { // shadeEdge, cheaply: soft darker strokes just inside the outline
+    g.lineJoin = 'round'; g.strokeStyle = rgba(o.shade, 0.16); g.lineWidth = 14; path(g, poly); g.stroke();
+    g.strokeStyle = rgba(o.shade, 0.14); g.lineWidth = 5; path(g, poly); g.stroke(); }
   if (o.after) o.after();
   g.restore();
 }
-const ink = (g, pts, w = 1.8, a = 0.8, o = {}) => { if (pts.length > 1) penLine(g, pts, { closed: !!o.closed, color: o.color || INK, w, alpha: a, seed: o.seed || 7, wobble: 0.3, weight: o.weight || ((t) => 0.45 + 0.7 * Math.sin(Math.PI * t)) }); };
+const ink = (g, pts, w = 1.8, a = 0.8, o = {}) => { const ph = (o.seed || 7) * 0.7; if (pts.length > 1) penLine(g, pts, { closed: !!o.closed, color: o.color || INK, w: w * 0.95, alpha: a, seed: o.seed || 7, wobble: 0.45, weight: o.weight || ((t) => 0.3 + 0.85 * Math.abs(Math.sin(t * Math.PI * (o.closed ? 3 : 1.5) + ph))) }); };
 const thin = (g, pts, w, col, a = 1) => { if (pts.length < 2) return; g.save(); g.strokeStyle = rgba(col, a); g.lineWidth = w; g.lineCap = 'round'; g.lineJoin = 'round'; g.beginPath(); g.moveTo(pts[0][0], pts[0][1]); for (const p of pts) g.lineTo(p[0], p[1]); g.stroke(); g.restore(); };
+
+// ---------------------------------------------------------------- soft painted limbs
+// ONE closed outline round a smooth centre line with a width profile (widths per control point), rounded ends
+export function limbShape(pts, widths, seg = 6) {
+  const c = smooth(pts, false, seg), n = c.length, L = [], R = [];
+  const wAt = (t) => { const x = t * (widths.length - 1), i = Math.min(widths.length - 2, Math.floor(x)); return lerp(widths[i], widths[i + 1], x - i); };
+  const nrm = (i) => { const a = c[Math.max(0, i - 1)], b = c[Math.min(n - 1, i + 1)]; let dx = b[0] - a[0], dy = b[1] - a[1]; const d = Math.hypot(dx, dy) || 1; return [dx / d, dy / d]; };
+  for (let i = 0; i < n; i++) { const [dx, dy] = nrm(i), w = wAt(i / (n - 1)) / 2; L.push([c[i][0] - dy * w, c[i][1] + dx * w]); R.push([c[i][0] + dy * w, c[i][1] - dx * w]); }
+  // round ends: from the left edge round the tip to the right edge, and round the root back to the left edge
+  const cap = (i, a0) => { const [dx, dy] = nrm(i), w = wAt(i === 0 ? 0 : 1) / 2, o = []; for (let k = 1; k < 6; k++) { const a = a0(dx, dy) - Math.PI * k / 6; o.push([c[i][0] + Math.cos(a) * w, c[i][1] + Math.sin(a) * w]); } return o; };
+  return { shape: L.concat(cap(n - 1, (dx, dy) => Math.atan2(dx, -dy)), R.reverse(), cap(0, (dx, dy) => Math.atan2(-dx, dy))), line: c };
+}
+// paint a limb shape: colour, soft shading on the far side, a light along the near side, a pen line of varying weight
+export function paintLimb(g, ls, col, o = {}) {
+  const sh = ls.shape, b = bbox(sh), w = o.w || 12;
+  g.save(); path(g, sh); g.clip();
+  g.fillStyle = col; g.fillRect(b.x0 - 2, b.y0 - 2, b.w + 4, b.h + 4);
+  if (o.spr) { g.save(); g.globalAlpha *= o.sprA ?? 0.9; g.translate(o.at[0], o.at[1]); drawSprite(g, o.spr); g.restore(); }
+  g.lineJoin = 'round'; g.lineCap = 'round';
+  g.save(); g.translate(w * 0.32, w * 0.12); g.strokeStyle = rgba(shade(col, 0.55), 0.22); g.lineWidth = w * 0.7; path(g, sh); g.stroke(); g.restore();
+  g.strokeStyle = rgba(shade(col, 0.5), 0.12); g.lineWidth = w * 0.35; path(g, sh); g.stroke();
+  g.save(); g.translate(-w * 0.2, -w * 0.05); g.strokeStyle = rgba(tint(col, 0.6), 0.35); g.lineWidth = w * 0.22; g.beginPath(); ls.line.slice(1, -2).forEach((q, i) => (i ? g.lineTo(q[0], q[1]) : g.moveTo(q[0], q[1]))); g.stroke(); g.restore();
+  if (o.after) o.after();
+  g.restore();
+  penLine(g, sh, { closed: true, color: INK, w: o.pw ?? 1.7, alpha: 0.8, seed: o.seed || 3, wobble: 0.35, weight: (t) => 0.35 + 0.8 * Math.max(0, Math.sin(t * TAU * 2 + 0.7)) });
+}
 
 // ---------------------------------------------------------------- walking (shared with the stager through STRIDE)
 // one foot of the walk cycle in ROOT space: [dx, lift, toe pitch (+ = toe up), heelOff]; planted for q in [-0.05, 0.55]
@@ -281,8 +311,8 @@ export function makeFolk(res, seed, SP) {
   const pailSpr = makePailSprite(res, s(90));
   // painted sheets
   const fills = {
-    dress: fillSprite(res, SP.boxBody, C.dress, s(1), { weave: 260, paint: SP.printDress }),
-    apron: fillSprite(res, SP.boxBody, C.apron, s(2), { base: 0.55, blooms: ['#ffffff', '#efe6d4', '#f8f2e4'], weave: 120, wa: 0.12 }),
+    dress: fillSprite(res, SP.boxBody, C.dress, s(1), { weave: 160, wa: 0.12, paint: SP.printDress }),
+    apron: fillSprite(res, SP.boxBody, C.apron, s(2), { base: 0.55, blooms: ['#ffffff', '#efe6d4', '#f8f2e4', '#e8dcc6'], weave: 60, wa: 0.08 }),
     skin: fillSprite(res, SP.boxBody, C.skin, s(3), { base: 0.75, blooms: [tint(C.skin, 0.3), C.cheek, shade(C.skin, 0.08)], ba: 0.3, nb: 10 }),
     hair: fillSprite(res, [-HR * 1.5, -HR * 1.6, HR * 1.5, HR * 1.4], C.hair, s(4), { base: 0.85, blooms: [tint(C.hair, 0.2), shade(C.hair, 0.2), mix(C.hair, '#d8a060', 0.3)], weave: 140, wlen: 10, wa: 0.25, dir: () => 0.3 }),
     sock: fillSprite(res, [-80, -140, 80, 10], C.sock, s(5), { base: 0.6, weave: 60, wa: 0.15, dir: () => 0 }),
@@ -306,8 +336,10 @@ export function makeFolk(res, seed, SP) {
     const gr = g.createRadialGradient(-HR * 0.3, -HR * 0.35, HR * 0.2, 0, 0, HR * 1.05); gr.addColorStop(0, 'rgba(255,248,236,0.35)'); gr.addColorStop(0.6, 'rgba(255,248,236,0)'); gr.addColorStop(1, rgba(shade(C.skin, 0.45), 0.4));
     g.fillStyle = gr; g.fillRect(-HR - 2, -HR - 2, 2 * HR + 4, 2 * HR + 4); g.restore();
     soften(g, 0.7 * res);
-    penLine(g, sh, { closed: true, color: INK, w: 1.9, alpha: 0.8, seed: s(12), weight: (t) => 0.4 + 0.7 * Math.max(0, Math.sin(t * TAU + 1.2)) });
   }, { seed: s(13), grain: 0.1 });
+  // the soft lower face: a jaw ellipsoid (head-local unit space) whose outline joins the skull's: an egg-shaped chin,
+  // fuller lower cheeks
+  const JAW = []; for (let i = 0; i < 16; i++) for (let j = 1; j < 8; j++) { const a = TAU * i / 16, b = Math.PI * j / 8; JAW.push([0.1 + 0.86 * Math.cos(b), 0.93 * Math.sin(b) * Math.cos(a), 0.27 + 0.76 * Math.sin(b) * Math.sin(a)]); }
   const EAR = smooth([[-3, -9], [3, -10], [7, -4], [6, 4], [2, 9], [-3, 8], [-4, 0]]);
   const earSpr = sprite(bbox(EAR), res, (g) => { wash(g, EAR, { color: C.skin, opacity: 0.9, under: PAPER, seed: s(14) }); g.fillStyle = rgba(C.cheek, 0.45); g.beginPath(); g.ellipse(1.5, 0, 2.6, 5, 0.1, 0, 7); g.fill(); penLine(g, EAR, { closed: true, w: 1.3, alpha: 0.75 }); penLine(g, [[2, -5], [4, 0], [1, 5]], { w: 0.9, alpha: 0.45 }); }, { granulate: false });
 
@@ -634,8 +666,10 @@ export function makeFolk(res, seed, SP) {
     let knee;
     if (d < a + b) { const ux = (an[0] - hip[0]) / d, uy = (an[1] - hip[1]) / d, x = (a * a - b * b + d * d) / (2 * d), h = Math.sqrt(Math.max(0, a * a - x * x)) * clamp(Math.abs(kf) * 1.6, 0.25, 1); const px = -uy, py = ux; const sgn = px * (kf >= 0 ? 1 : -1) >= 0 ? 1 : -1; knee = [hip[0] + ux * x + px * h * sgn, hip[1] + uy * x + py * h * sgn]; }
     else knee = [lerp(hip[0], an[0], a / (a + b)), lerp(hip[1], an[1], a / (a + b))];
-    const col = far ? shade(C.sock, 0.12) : C.sock;
-    tubeLeg(g, [hip, knee, an], SP.legW, col);
+    const col = far ? shade(C.sock, 0.12) : C.sock, lw = SP.legW;
+    const calf = [lerp(knee[0], an[0], 0.35), lerp(knee[1], an[1], 0.35)], th = [lerp(hip[0], knee[0], 0.5), lerp(hip[1], knee[1], 0.5)];
+    paintLimb(g, limbShape([hip, th, knee, calf, an], [lw * 1.35, lw * 1.2, lw * 0.98, lw * 1.08, lw * 0.74]), col, { w: lw, seed: 5 + (far ? 1 : 0), pw: 1.6,
+      after: () => { g.strokeStyle = rgba(shade(col, 0.3), 0.25); g.lineWidth = 0.8; for (let k = 1; k < 5; k++) { const q = [lerp(knee[0], an[0], k / 5), lerp(knee[1], an[1], k / 5)]; g.beginPath(); g.arc(q[0], q[1] - 2, lw * 0.5, 0.3, Math.PI - 0.3); g.stroke(); } } });
     drawBoot(g, L, far);
   }
   function tubeLeg(g, pts, w, col) {
@@ -670,39 +704,41 @@ export function makeFolk(res, seed, SP) {
   }
   function drawArm(g, a, far, R) {
     const skin = far ? shade(C.skin, 0.1) : C.skin, slv = far ? shade(C.dress, 0.15) : C.dress;
-    const S = a.S, E = a.E, T = a.T;
-    g.save(); g.lineCap = 'round'; g.lineJoin = 'round';
-    const seg = (p, q, w, st) => { g.strokeStyle = st; g.lineWidth = w; g.beginPath(); g.moveTo(p[0], p[1]); g.lineTo(q[0], q[1]); g.stroke(); };
-    // bare arm (sleeve rolled up above the elbow)
-    seg(S, E, SP.armW + 2.8, rgba(INK, 0.72)); seg(E, T, SP.armW * 0.88 + 2.8, rgba(INK, 0.72));
-    seg(S, E, SP.armW, skin); seg(E, T, SP.armW * 0.88, skin);
-    g.globalAlpha *= 0.3; seg([E[0] + 1.5, E[1]], [lerp(E[0], T[0], 0.8) + 1.5, lerp(E[1], T[1], 0.8)], 2.4, shade(C.skin, 0.4)); g.globalAlpha /= 0.3;
-    // the rolled sleeve: from the shoulder to most of the upper arm, a puff at the shoulder, a rolled cuff
-    const cuff = [lerp(S[0], E[0], SP.sleeve), lerp(S[1], E[1], SP.sleeve)];
-    seg(S, cuff, SP.armW * 1.75 + 2.8, rgba(INK, 0.7)); seg(S, cuff, SP.armW * 1.75, slv);
-    g.fillStyle = slv; g.strokeStyle = rgba(INK, 0.7); g.lineWidth = 1.4; g.beginPath(); g.ellipse(S[0], S[1] + 2, SP.armW * 1.15, SP.armW * 1.05, 0, 0, 7); g.fill();
-    const ang = Math.atan2(E[1] - S[1], E[0] - S[0]), nx = -Math.sin(ang), ny = Math.cos(ang), cw = SP.armW * 0.95;
-    g.strokeStyle = rgba(INK, 0.75); g.lineWidth = 2; g.beginPath(); g.moveTo(cuff[0] - nx * cw, cuff[1] - ny * cw); g.lineTo(cuff[0] + nx * cw, cuff[1] + ny * cw); g.stroke();
-    g.strokeStyle = rgba(tint(slv, 0.5), 0.9); g.lineWidth = 3; g.beginPath(); const c2 = [cuff[0] - Math.cos(ang) * 3, cuff[1] - Math.sin(ang) * 3]; g.moveTo(c2[0] - nx * cw * 0.9, c2[1] - ny * cw * 0.9); g.lineTo(c2[0] + nx * cw * 0.9, c2[1] + ny * cw * 0.9); g.stroke();
-    g.restore();
+    const S = a.S, E = a.E, T = a.T, w = SP.armW;
+    // the arm: one soft shape from the shoulder through a rounded elbow to the wrist, a gentle curve in the upper arm
+    const ux = E[0] - S[0], uy = E[1] - S[1], ul = Math.hypot(ux, uy) || 1, bow = 0.06 * ul;
+    const m1 = [lerp(S[0], E[0], 0.5) - uy / ul * bow, lerp(S[1], E[1], 0.5) + ux / ul * bow], m2 = [lerp(E[0], T[0], 0.45), lerp(E[1], T[1], 0.45)];
+    paintLimb(g, limbShape([S, m1, E, m2, T], [w * 1.15, w * 1.02, w * 0.84, w * 0.9, w * 0.66]), skin, { w, seed: 9 + (far ? 1 : 0) });
+    // the sleeve: a gathered puff growing out of the shoulder seam, narrowing to the rolled cuff above the elbow
+    const cuff = [lerp(S[0], E[0], SP.sleeve), lerp(S[1], E[1], SP.sleeve)], inS = [S[0] - ux / ul * w * 0.55, S[1] - uy / ul * w * 0.55];
+    const sm = [lerp(S[0], cuff[0], 0.45), lerp(S[1], cuff[1], 0.45)];
+    const ls = limbShape([inS, S, sm, cuff], [w * 1.7, w * 2.15, w * 2.0, w * 1.62], 5);
+    paintLimb(g, ls, slv, { w: w * 2, spr: fills.dress, at: [0, 0], sprA: 0.85, seed: 13, after: () => {
+      // gathers at the shoulder seam and soft folds down the puff
+      g.strokeStyle = rgba(shade(slv, 0.5), 0.45); g.lineWidth = 0.9; g.lineCap = 'round';
+      const nx = -uy / ul, ny = ux / ul;
+      for (let k = -2; k <= 2; k++) { const o = k * w * 0.36, p0 = [S[0] + nx * o, S[1] + ny * o], p1 = [lerp(S[0], cuff[0], 0.55) + nx * o * 1.05, lerp(S[1], cuff[1], 0.55) + ny * o * 1.05]; g.beginPath(); g.moveTo(p0[0], p0[1]); g.quadraticCurveTo((p0[0] + p1[0]) / 2 + nx * 2, (p0[1] + p1[1]) / 2 + ny * 2, p1[0], p1[1]); g.stroke(); }
+      // the rolled cuff band
+      g.strokeStyle = rgba(tint(slv, 0.45), 0.9); g.lineWidth = w * 0.55; const c2 = [cuff[0] - ux / ul * w * 0.3, cuff[1] - uy / ul * w * 0.3];
+      g.beginPath(); g.moveTo(c2[0] - nx * w * 1.2, c2[1] - ny * w * 1.2); g.quadraticCurveTo(c2[0] + ux / ul * 2, c2[1] + uy / ul * 2, c2[0] + nx * w * 1.2, c2[1] + ny * w * 1.2); g.stroke();
+      g.strokeStyle = rgba(INK, 0.45); g.lineWidth = 1; g.beginPath(); const c3 = [cuff[0] - ux / ul * w * 0.62, cuff[1] - uy / ul * w * 0.62]; g.moveTo(c3[0] - nx * w * 1.2, c3[1] - ny * w * 1.2); g.quadraticCurveTo(c3[0] + ux / ul * 2, c3[1] + uy / ul * 2, c3[0] + nx * w * 1.2, c3[1] + ny * w * 1.2); g.stroke();
+    } });
     drawHand(g, a, skin, R);
   }
   function drawHand(g, a, skin, R) {
     const E = a.E, T = a.T, ang = Math.atan2(T[1] - E[1], T[0] - E[0]);
     const hs = SP.hand, f = a.fist, op = a.palm;
-    g.save(); g.translate(T[0], T[1]); g.rotate(ang);
-    // which side the thumb is on: the thumb points forward-up for both hands (it follows the arm's side and the yaw)
+    g.save(); g.translate(T[0] - Math.cos(ang) * hs * 0.15, T[1] - Math.sin(ang) * hs * 0.15); g.rotate(ang);
     const th = (a.side < 0 ? 1 : -1) * (Math.cos(R.yawB) >= 0 ? 1 : -1) * (Math.sin(ang) > 0 ? -1 : 1) * -1;
-    const L = hs * (1.05 - 0.25 * f + 0.15 * op), Wd = hs * (0.72 + 0.12 * op);
-    g.fillStyle = skin; g.strokeStyle = rgba(INK, 0.72); g.lineWidth = 1.3;
-    g.beginPath(); g.ellipse(L * 0.5, th * 1, hs * 0.38, hs * 0.26, th * 0.7, 0, 7); g.save(); g.translate(0, th * Wd * 0.55); g.restore();
-    const thumb = () => { g.beginPath(); g.ellipse(hs * 0.25, th * Wd * 0.62, hs * 0.34, hs * 0.2, th * 0.6, 0, 7); g.fill(); g.stroke(); };
-    thumb();
-    g.beginPath(); g.ellipse(L * 0.45, 0, L * 0.55, Wd * 0.55, 0, 0, 7); g.fill(); g.stroke();
-    g.strokeStyle = rgba(INK, 0.35); g.lineWidth = 0.8;
-    if (f < 0.6) for (const y of [-0.18, 0.1]) { g.beginPath(); g.moveTo(L * 0.62, y * Wd); g.lineTo(L * 0.98, y * Wd * 1.2); g.stroke(); }
-    else { g.beginPath(); g.arc(L * 0.55, 0, Wd * 0.35, -1, 1); g.stroke(); }
-    g.fillStyle = rgba(C.cheek, 0.25); g.beginPath(); g.ellipse(L * 0.4, -th * Wd * 0.2, L * 0.2, Wd * 0.2, 0, 0, 7); g.fill();
+    const L = hs * (1.12 - 0.3 * f + 0.12 * op), Wd = hs * (0.74 + 0.1 * op);
+    // one little rounded hand: palm, fingers together, a thumb lobe
+    const P = [[0, -0.36], [0.4, -0.5], [0.82, -0.44], [1.04, -0.12], [1.0, 0.22], [0.78, 0.4], [0.68 - 0.1 * f, 0.66], [0.5 - 0.1 * f, 0.82], [0.32, 0.62], [0.12, 0.42]].map(([x, y]) => [x * L, y * Wd * th]);
+    const hand = smooth(P, true, 4);
+    g.save(); path(g, hand); g.fillStyle = skin; g.fill(); g.clip(); pool(g, L * 0.5, th * Wd * 0.3, L * 0.5, Wd * 0.5, shade(skin, 0.3), 0.25); pool(g, L * 0.55, -th * Wd * 0.15, L * 0.3, Wd * 0.25, C.cheek, 0.3); g.restore();
+    penLine(g, hand, { closed: true, w: 1.3, alpha: 0.8, wobble: 0.2, weight: (t) => 0.4 + 0.7 * Math.max(0, Math.sin(t * TAU + 1)) });
+    g.strokeStyle = rgba(INK, 0.35); g.lineWidth = 0.8; g.lineCap = 'round';
+    if (f < 0.6) for (const y of [-0.22, 0.05]) { g.beginPath(); g.moveTo(L * 0.7, y * Wd * th); g.lineTo(L * 0.98, y * Wd * th * 1.1); g.stroke(); }
+    else { g.beginPath(); g.arc(L * 0.6, 0, Wd * 0.3, -1.2, 1.2); g.stroke(); }
     g.restore();
   }
 
@@ -710,11 +746,17 @@ export function makeFolk(res, seed, SP) {
     const S = R.skirt, night = st.nightgown;
     clipFill(g, S.outline, night ? fills.night : fills.dress, { shade: shade(night ? '#d8ccb8' : C.dress, 0.5), sl: 0.2, sr: 0.34, top: 0.12, after: () => {
       // folds
-      for (const f of S.folds) { const a = clamp(f[f.length - 1][2] / 30, 0, 1); thin(g, f.map((q) => [q[0], q[1]]), 1.3, shade(night ? '#c8bca8' : C.dress, 0.45), 0.4 * a); }
+      const fc = shade(night ? '#c8bca8' : C.dress, 0.45);
+      for (const f of S.folds) { const a = clamp(f[f.length - 1][2] / 30, 0, 1); thin(g, f.map((q) => [q[0], q[1]]), 1.3, fc, 0.4 * a);
+        g.save(); g.strokeStyle = rgba(fc, 0.3 * a); g.lineWidth = 0.8; for (let i = 1; i < f.length; i++) { const q = f[i], p = f[i - 1]; for (let k = 0; k < 3; k++) { const x = lerp(p[0], q[0], k / 3) + 2.5, y = lerp(p[1], q[1], k / 3); g.beginPath(); g.moveTo(x, y); g.lineTo(x + 4, y + 3); g.stroke(); } } g.restore(); }
       // the apron
       if (SP.apron && !night) {
         const ap = S.surf(-SP.apron[0], SP.apron[0], 0.02, SP.apron[1], 12);
-        clipFill(g, ap, fills.apron, { shade: '#8a7a60', sl: 0.12, sr: 0.22 });
+        clipFill(g, ap, fills.apron, { shade: '#8a7a60', sl: 0.12, sr: 0.22, after: () => {
+          for (let k = -3; k <= 3; k++) { const th = (k + 0.5) * SP.apron[0] / 3.6, line = [0.15, 0.4, 0.65, 0.88].map((u) => { const j = u * (S.rows.length - 1), j0 = Math.min(S.rows.length - 2, Math.floor(j)), r0 = S.rows[j0], r1 = S.rows[j0 + 1], kk = j - j0; return S.pt([lerp(r0[0], r1[0], kk), lerp(r0[1], r1[1], kk), lerp(r0[2], r1[2], kk), u], th); });
+            if (line[2][2] < 4) continue; thin(g, line.map((q) => [q[0] + 1, q[1]]), 1.1, '#a8987c', 0.35);
+            g.save(); g.strokeStyle = 'rgba(150,135,110,0.25)'; g.lineWidth = 0.7; for (let i = 1; i < line.length; i++) { const q = line[i]; for (let m = 0; m < 2; m++) { g.beginPath(); g.moveTo(q[0] + 2, q[1] - m * 6); g.lineTo(q[0] + 5, q[1] - m * 6 + 2.5); g.stroke(); } } g.restore(); }
+        } });
         ink(g, ap.map((q) => [q[0], q[1]]), 1.4, 0.65, { closed: true, seed: 3 });
         // apron gathers at the waist
         for (let k = -2; k <= 2; k++) { const th = k * SP.apron[0] / 3; const a2 = S.pt(S.rows[0], th), b2 = S.pt(S.rows[2], th * 1.05); if (a2[2] > 3) thin(g, [[a2[0], a2[1]], [lerp(a2[0], b2[0], 0.45), lerp(a2[1], b2[1], 0.45)]], 1, '#8a7a60', 0.4); }
@@ -805,7 +847,16 @@ export function makeFolk(res, seed, SP) {
       const sx = Math.max(0.3, Math.abs(facing)) * (q[0] < Cs[0] ? -1 : 1);
       g.translate(q[0], q[1]); g.rotate(a - (q[0] < Cs[0] ? Math.PI : 0) * 0); g.scale(sx * SP.earS, SP.earS); drawSprite(g, earSpr); g.restore();
     };
-    g.save(); g.translate(Cs[0], Cs[1]); drawSprite(g, headSpr); g.restore();
+    { // the skin: skull + jaw as one shape, one pen line round both
+      const disc = Array.from({ length: 48 }, (_, i) => { const a = TAU * i / 48; return [Cs[0] + Math.cos(a) * HR, Cs[1] + Math.sin(a) * HR]; });
+      const jaw = hull(JAW.map((u) => { const q = pr(A3(Hx.C3, mv(Hx.R, M3(u, HR)))); return [q[0], q[1]]; }));
+      g.save(); g.lineJoin = 'round'; g.strokeStyle = rgba(INK, 0.8); g.lineWidth = 3.6; for (const sh of [disc, jaw]) { path(g, sh); g.stroke(); }
+      g.fillStyle = C.skin; for (const sh of [disc, jaw]) { path(g, sh); g.fill(); }
+      g.beginPath(); path2(g, disc); path2(g, jaw); g.clip('nonzero');
+      g.save(); g.translate(Cs[0], Cs[1]); drawSprite(g, headSpr); g.restore();
+      const gr = g.createLinearGradient(0, Cs[1] + HR * 0.3, 0, Cs[1] + HR * 1.1); gr.addColorStop(0, rgba(shade(C.skin, 0.4), 0)); gr.addColorStop(1, rgba(shade(C.skin, 0.4), 0.3));
+      g.fillStyle = gr; g.fillRect(Cs[0] - HR * 1.3, Cs[1], HR * 2.6, HR * 1.3);
+      g.restore(); }
     earAt(-1); earAt(1);
     // ---- face features (under the hair)
     const P2 = (az, el, r = 1) => at(sph(az, el), r);
@@ -879,19 +930,37 @@ export function makeFolk(res, seed, SP) {
     // strands: from the parting round to the plait roots (or the bun), where they face us
     for (const st2 of SP.strands) {
       const line = st2.map((u) => ({ q: at(u, shellR), d: depth(u) }));
-      let run = []; const flush = () => { if (run.length > 1) penLine(g, run, { color: shade(C.hair, 0.5), w: 1.2, alpha: 0.55, seed: 3, weight: (t) => 0.3 + Math.sin(Math.PI * t) }); run = []; };
+      let run = []; const flush = () => { if (run.length > 1) {
+        g.save(); g.translate(-1.5, -1); thin(g, run, 4.5, tint(C.hair, 0.45), 0.22); g.restore(); thin(g, run, 3.2, shade(C.hair, 0.3), 0.14);
+        penLine(g, run, { color: shade(C.hair, 0.5), w: 1.2, alpha: 0.55, seed: 3, weight: (t) => 0.3 + Math.sin(Math.PI * t) }); } run = []; };
       for (const p of line) { if (p.d > 0.02) run.push([p.q[0], p.q[1]]); else flush(); } flush();
     }
     // the parting
-    if (SP.parting) { const line = SP.parting.map((u) => ({ q: at(u, shellR), d: depth(u) })); let run = []; const fl = () => { if (run.length > 1) thin(g, run, 1.4, tint(C.skin, 0.2), 0.75); run = []; }; for (const p of line) { if (p.d > 0.05) run.push([p.q[0], p.q[1]]); else fl(); } fl(); }
+    if (SP.parting) { const line = SP.parting.map((u) => ({ q: at(u, shellR), d: depth(u) })); let run = []; const fl = () => { if (run.length > 1) { thin(g, run, 1.6, tint(C.skin, 0.2), 0.6);
+        g.save(); g.strokeStyle = rgba(shade(C.hair, 0.4), 0.55); g.lineWidth = 0.9; for (let i = 1; i < run.length; i++) { const a = run[i - 1], b = run[i], an = Math.atan2(b[1] - a[1], b[0] - a[0]) + Math.PI / 2, sg = i % 2 ? 1 : -1; g.beginPath(); g.moveTo(b[0], b[1]); g.lineTo(b[0] + Math.cos(an) * 3.5 * sg, b[1] + Math.sin(an) * 3.5 * sg); g.stroke(); } g.restore(); } run = []; }; for (const p of line) { if (p.d > 0.05) run.push([p.q[0], p.q[1]]); else fl(); } fl(); }
     g.restore();
     // hair outline: the limb where it is hair, and the hairline where it faces us
     { const runs = []; let run = [];
       for (let i = 0; i <= 48; i++) { const a = TAU * i / 48, u = N3(A3(M3(Hx.xL, Math.cos(a)), M3(Hx.yL, Math.sin(a)))); if (inHair(u)) run.push(at(u, shellR)); else { if (run.length > 1) runs.push(run); run = []; } }
       if (run.length > 1) runs.push(run);
-      for (const r of runs) ink(g, r.map((q) => [q[0], q[1]]), 1.9, 0.8, { seed: 17 });
-      const hl = HAIR_B.map((u) => ({ q: at(u, shellR), d: depth(u) })); let rr = []; const fl = () => { if (rr.length > 1) ink(g, rr, 1.2, 0.55, { seed: 19, color: shade(C.hair, 0.5) }); rr = []; };
-      for (const p of hl) { if (p.d > 0.03) rr.push([p.q[0], p.q[1]]); else fl(); } fl(); }
+      for (const r of runs) {
+        // soft locks bulging a little out of the outline, and a few flyaway hairs
+        g.save(); g.beginPath(); g.rect(Cs[0] - 400, Cs[1] - 400, 800, 800); path2(g, shellPts.slice().reverse()); g.clip('evenodd');
+        g.fillStyle = mix(C.hair, '#c08050', 0.15); g.strokeStyle = rgba(INK, 0.7); g.lineWidth = 1.2;
+        for (let i = 2; i < r.length - 1; i += 4) { const q = r[i], a = Math.atan2(q[1] - Cs[1], q[0] - Cs[0]); g.beginPath(); g.ellipse(q[0] - Math.cos(a) * 2.5, q[1] - Math.sin(a) * 2.5, HR * 0.17, HR * 0.075, a + Math.PI / 2 + 0.3, 0, 7); g.fill(); }
+        g.restore();
+        ink(g, r.map((q) => [q[0], q[1]]), 1.9, 0.8, { seed: 17 });
+        g.save(); g.strokeStyle = rgba(shade(C.hair, 0.3), 0.6); g.lineWidth = 0.9; g.lineCap = 'round';
+        for (let i = 3; i < r.length - 1; i += 7) { const q = r[i], a = Math.atan2(q[1] - Cs[1], q[0] - Cs[0]) + 0.5 * ((i % 2) ? 1 : -1); g.beginPath(); g.moveTo(q[0], q[1]); g.quadraticCurveTo(q[0] + Math.cos(a) * 4, q[1] + Math.sin(a) * 4, q[0] + Math.cos(a + 0.6) * 6.5, q[1] + Math.sin(a + 0.6) * 6.5); g.stroke(); }
+        g.restore();
+      }
+      // a softer hairline: a light broken line with little wisps falling onto the forehead
+      const hl = HAIR_B.map((u) => ({ q: at(u, shellR), d: depth(u) })); let rr = []; const fl = () => { if (rr.length > 1) ink(g, rr, 1.0, 0.4, { seed: 19, color: shade(C.hair, 0.4) }); rr = []; };
+      for (const p of hl) { if (p.d > 0.03) rr.push([p.q[0], p.q[1]]); else fl(); } fl();
+      g.save(); g.strokeStyle = rgba(shade(C.hair, 0.15), 0.7); g.lineWidth = 1.1; g.lineCap = 'round';
+      for (let i = 0; i < HAIR_B.length; i += 3) { const u = HAIR_B[i], dn = depth(u); if (dn < 0.25) continue; const az = Math.atan2(u[1], u[0]); if (Math.abs(az) > 1.2) continue;
+        const a = at(u, shellR), b = at(sph(az * 1.04, Math.asin(u[2]) + 0.09), 1.0); g.beginPath(); g.moveTo(a[0], a[1]); g.quadraticCurveTo(lerp(a[0], b[0], 0.5) + 1.5, lerp(a[1], b[1], 0.5), b[0], b[1]); g.stroke(); }
+      g.restore(); }
     // kerchief / mob cap on a bigger shell over the crown
     if (CAPL && (st.cap ?? SP.capOn)) drawCap(g, R, at, depth, Cs);
     if (SP.bun) { const u = sph(Math.PI, SP.bun[0]), q = at(u, SP.bun[1]); if (depth(u) >= 0) drawBun(g, q, false); }
