@@ -108,6 +108,9 @@ def main():
             filters = []
             if v.get("pitch", 1.0) != 1.0:
                 filters.append(f"rubberband=pitch={v['pitch']}:formant=preserved")
+            if v.get("model") == "eleven_v3" and line.get("speed_scale", 1.0) != 1.0:
+                # eleven_v3 ignores the API speed setting, so slow (or quicken) the take afterwards
+                filters.append(f"rubberband=tempo={line['speed_scale']}")
             if line.get("whisper"):  # a soft whisper in the same voice
                 wraw = raw + ".wh.wav"
                 if raw.endswith(".mp3"): run(["ffmpeg", "-y", "-i", raw, "-ac", "1", raw + ".tmp.wav"]); src = raw + ".tmp.wav"
