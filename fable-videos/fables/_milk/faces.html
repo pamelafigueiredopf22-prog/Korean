@@ -10,16 +10,37 @@ import { makeCow } from '../../engine/characters/cow.js';
 import { makeHen, makeChick } from '../../engine/characters/hens.js';
 const ctx = document.getElementById('c').getContext('2d');
 await document.fonts.load('30px Fell');
-const LINEUP = location.search.includes('lineup');
+const LINEUP = location.search.includes('lineup'), COW = location.search.includes('cow');
 let P, R = {};
 const EX = [['calm', {}], ['smile, talking', { mouth: 0.5, smile: 0.9 }], ['happy', { happy: 1, mouth: 0.35 }], ['sad, a tear', { sad: 1, tear: 0.55 }],
   ['gasp', { gasp: 1 }], ['wide eyes', { eyeBig: 1, browUp: 1, mouth: 0.15 }], ['dreamy', { daydream: 1 }], ['toward us', { headTurn: 1 }], ['eyes closed', { sleep: 1 }]];
 const EXM = [['calm', {}], ['talking', { mouth: 0.5 }], ['kind smile', { happy: 1, mouth: 0.3 }], ['sad', { sad: 1 }], ['surprised', { gasp: 1 }], ['wide eyes', { eyeBig: 1, browUp: 1 }], ['nodding', { nod: -0.2, smile: 0.9 }], ['toward us', { headTurn: 1 }], ['eyes closed', { sleep: 1 }]];
 window.FABLE = { setup: async () => { P = paper(); R.molly = makeMilkmaid(2); R.blue = makeMilkmaid(2, 71, { dress: 'blue' }); R.ker = makeMilkmaid(2, 71, { kerchief: true }); R.mum = makeMother(2);
-  if (LINEUP) { R.cow = makeCow(2); R.h1 = makeHen(2, 41, 'brown'); R.h2 = makeHen(2, 42, 'speckled'); R.h3 = makeHen(2, 43, 'white'); R.c1 = makeChick(2, 47); } },
+  if (LINEUP || COW) { R.cow = makeCow(2); R.h1 = makeHen(2, 41, 'brown'); R.h2 = makeHen(2, 42, 'speckled'); R.h3 = makeHen(2, 43, 'white'); R.c1 = makeChick(2, 47); } },
   frame: (t) => {
     ctx.drawImage(P, 0, 0);
     const label = (s, x, y, size = 26) => { ctx.save(); ctx.fillStyle = '#4a3a2c'; ctx.font = `italic ${size}px Fell, serif`; ctx.textAlign = 'center'; ctx.fillText(s, x, y); ctx.restore(); };
+    if (COW) { // Buttercup's sheet, with a Jersey proportion guide on the standing cow
+      const cells = [['standing', {}], ['walking, mid-stride', { walk: 0.37, walkAmt: 1 }], ['head turned to Molly', { lookBack: 0.75, happy: 0.6 }],
+        ['moo', { moo: 1 }], ['lying in the straw, chewing', { lie: 1, chew: 1, t: 2.35 }], ['asleep', { lie: 1, sleep: 1 }]];
+      const S = 0.92;
+      cells.forEach(([name, st], i) => { const x = 330 + (i % 3) * 630, y = 470 + Math.floor(i / 3) * 520;
+        ctx.save(); ctx.strokeStyle = 'rgba(90,70,50,0.25)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x - 300, y + 2); ctx.lineTo(x + 300, y + 2); ctx.stroke(); ctx.restore();
+        if (i === 2) { ctx.save(); ctx.translate(x + 120, y); ctx.scale(-S * 0.95, S * 0.95); R.molly.draw(ctx, { t: 2.2, sit: 1, stool: true, milk: 1, life: 0 }); ctx.restore(); }
+        ctx.save(); ctx.translate(x + 40, y); ctx.scale(S, S); R.cow.shadow(ctx, st); R.cow.draw(ctx, { t: 2.2, life: 0, noBlink: true, ...st }); ctx.restore();
+        label(name, x, y + 50);
+        if (i === 0) { // the guide: withers height 1, body length (point of shoulder to pin bone) 1.2, belly clearance ~0.45
+          const X = (u) => x + 40 - u * S, Y = (v) => y + v * S;
+          ctx.save(); ctx.strokeStyle = 'rgba(160,60,40,0.55)'; ctx.fillStyle = 'rgba(160,60,40,0.8)'; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]); ctx.font = 'italic 18px Fell, serif';
+          ctx.beginPath(); ctx.moveTo(X(150), Y(0)); ctx.lineTo(X(150), Y(-320)); ctx.stroke(); ctx.fillText('withers 1.0', X(150) - 40, Y(-326));
+          ctx.beginPath(); ctx.moveTo(X(196), Y(-240)); ctx.lineTo(X(-200), Y(-240)); ctx.stroke(); ctx.fillText('body 1.24', X(20), Y(-246));
+          ctx.beginPath(); ctx.moveTo(X(30), Y(0)); ctx.lineTo(X(30), Y(-130)); ctx.stroke(); ctx.fillText('belly 0.41', X(30) + 6, Y(-60));
+          ctx.restore();
+        }
+      });
+      label('Buttercup - a Jersey: withers : body length : belly clearance about 1 : 1.2 : 0.45 (here 1 : 1.24 : 0.41)', 960, 1062, 24);
+      return;
+    }
     if (!LINEUP) {
       const W = 1920 / 9;
       const row = (rig, list, y0, S, headY) => list.forEach(([name, st], i) => {

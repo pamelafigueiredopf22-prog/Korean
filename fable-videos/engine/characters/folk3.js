@@ -190,7 +190,7 @@ export function drawPail(g, spr, x, y, ang, milk = 0.8, o = {}) {
 }
 
 // ---------------------------------------------------------------- the pose solver (state -> posture numbers)
-const ARMW = ['wave', 'stroke', 'hug', 'daydream', 'gasp', 'twirlW', 'milk', 'pailUp', 'pailUp2', 'hold', 'give', 'brush', 'tuck', 'comfort', 'lap', 'clasp', 'tossW', 'skirt', 'bedArms', 'reach', 'hips', 'skipW'];
+const ARMW = ['point', 'wave', 'stroke', 'hug', 'daydream', 'gasp', 'twirlW', 'milk', 'pailUp', 'pailUp2', 'hold', 'give', 'brush', 'tuck', 'comfort', 'lap', 'clasp', 'tossW', 'skirt', 'bedArms', 'reach', 'hips', 'skipW'];
 export const DEF = { life: 1, eye: 1, smile: 0.6, seatH: 62, milkLevel: 0.85, pailHands: 1, strokeF: 74, strokeY: -232, give: 0 };
 const PHASES = new Set(['walk', 'toss', 'twirl', 'milkPhase']);
 const filtered = makeFilter(PHASES, DEF);
@@ -205,7 +205,7 @@ function solve(st, SP, dl = 0) {
     mouth: v('mouth'), smile: v('smile'), mdeep: 11, mO: 0, tear: v('tear'), blush: 0,
     swing: 0, plSwing: 0, plFly: 0, plLift: 0, skFlare: 0, skSwish: 0, pailSway: 0, pailTilt: v('pailTilt'), W: {}, A: {} };
   const W = P.W; for (const k of ARMW) W[k] = 0;
-  for (const k of ['wave', 'stroke', 'hug', 'daydream', 'gasp', 'milk', 'give', 'brush', 'tuck', 'comfort', 'lap', 'clasp', 'reach', 'hips']) W[k] = clamp(v(k));
+  for (const k of ['wave', 'stroke', 'hug', 'daydream', 'gasp', 'milk', 'give', 'brush', 'tuck', 'comfort', 'lap', 'clasp', 'reach', 'hips', 'point']) W[k] = clamp(v(k));
   const wa = clamp(v('walkAmt')), skip = clamp(v('skip')), sadW = clamp(v('sadWalk')), sit = clamp(v('sit')), kneel = clamp(v('kneel')), bend = clamp(v('bend'));
   const toss = v('toss'), twirl = v('twirl'), dream = W.daydream, gasp = W.gasp, sadV = clamp(v('sad')), turn = clamp(v('turn')), front = clamp(v('front'));
   const busy = clamp(Math.max(wa * 0.6, on(toss), on(twirl), dream * 0.7, gasp, W.milk * 0.7, W.stroke * 0.5, W.hug, W.comfort, W.tuck * 0.8, turn > 0 && turn < 1 ? 1 : 0, clamp(v('bed'))));
@@ -226,6 +226,7 @@ function solve(st, SP, dl = 0) {
     P.swing = wa * Math.cos(TAU * (ph - 0.55)) * (1 - 0.6 * sadW); P.plSwing += wa * 0.1 * Math.sin(ph * 2 * TAU - 1.2); P.skSwish += wa * 1.0 * s1; P.pailSway += wa * Math.sin(ph * TAU - 0.6);
     P.turnH -= wa * 0.05;
   }
+  P.walkYaw = 0.32 * wa;
   if (skip > 0) {
     const hp = Math.max(hopOf(ph), hopOf(ph + 0.5)), H = SP.hopH || 16;
     P.rdy -= skip * H * hp; P.sq -= skip * 0.04 * hp; P.happy = Math.max(P.happy, skip * 0.6); P.smile = lerp(P.smile, 1, skip); P.mouth = Math.max(P.mouth, skip * 0.18);
@@ -354,6 +355,7 @@ export function makeFolk(res, seed, SP) {
     return [a, b, cc, d, e, f];
   }
   const ap = (M, p) => [M[0] * p[0] + M[2] * p[1] + M[4], M[1] * p[0] + M[3] * p[1] + M[5]];
+  const mulA = (A, B) => [A[0] * B[0] + A[2] * B[1], A[1] * B[0] + A[3] * B[1], A[0] * B[2] + A[2] * B[3], A[1] * B[2] + A[3] * B[3], A[0] * B[4] + A[2] * B[5] + A[4], A[1] * B[4] + A[3] * B[5] + A[5]];
   const inv = (M) => { const det = M[0] * M[3] - M[1] * M[2]; return [M[3] / det, -M[1] / det, -M[2] / det, M[0] / det, (M[2] * M[5] - M[3] * M[4]) / det, (M[1] * M[4] - M[0] * M[5]) / det]; };
 
   // ---- the head: where it is and how it is turned, as a 3D transform (head-local unit sphere -> body 3D)
@@ -410,8 +412,8 @@ export function makeFolk(res, seed, SP) {
   // ---- the rig: postures -> geometry (internal, facing right; root at (0, 0))
   function rig(raw, ph, pb, pa, psk, pls, ppa) {
     const R = { raw, pb };
-    const yawB = (SP.yaw * pb.sgnB) * (1 - pb.front * 0.95) - raw.spin; // the spin itself is not delayed (head and body turn together; only the skirt swirls behind)
-    const yawS = (SP.yaw * psk.sgnB) * (1 - psk.front * 0.95) - psk.spin; // the skirt's own (lagging) yaw
+    const yawB = ((SP.yaw + (pb.walkYaw || 0)) * pb.sgnB) * (1 - pb.front * 0.95) - raw.spin; // the spin itself is not delayed (head and body turn together; only the skirt swirls behind)
+    const yawS = ((SP.yaw + (psk.walkYaw || 0)) * psk.sgnB) * (1 - psk.front * 0.95) - psk.spin; // the skirt's own (lagging) yaw
     R.yawB = yawB; R.yawS = yawS;
     const pr = proj(yawB), prC = proj(yawB, 0.1), prS = proj(yawS, 0.1);
     R.pr = pr; R.prC = prC;
@@ -465,7 +467,8 @@ export function makeFolk(res, seed, SP) {
       }
       if (raw.spinF) { const [fyw, u] = raw.spinF[side < 0 ? 0 : 1]; footYaw = fyw; lift2 += 8 * Math.sin(Math.PI * u); }
       // standing / walking: the ankle in root space (the cheat walk runs along the screen); feet sit a little lower nearer us
-      let X = l * Math.cos(footYaw) + dx; const gy = l * Math.sin(footYaw) * 0.1;
+      const posYaw = footYaw - (pb.walkYaw || 0) * pb.sgnB; // where the feet stand does not move as she turns side-on
+      let X = l * Math.cos(posYaw) + dx; const gy = l * Math.sin(posYaw) * 0.1;
       // sitting: feet forward on the floor under the knees
       if (sitK > 0) { const fx = SP.sitFoot * sY + l * cY; X = lerp(X, fx, sitK); lift2 *= 1 - sitK; toe *= 1 - sitK; ho *= 1 - sitK; }
       const fy = proj(footYaw);
@@ -485,14 +488,15 @@ export function makeFolk(res, seed, SP) {
     const sh = [SP.sh[0], side * SP.sh[1], SP.sh[2] - P.shUp];
     const T = (f, o, y) => [f, side * o, y];
     const items = []; let wsum = 0;
-    const g = (w, near, far, pole, o = {}) => { if (w < 0.001) return; const k = nearK; items.push([w, { p: lerp3(far, near, k), pole: pole || [-1, side * 0.6, 0.2], fist: o.fist ?? 0, palm: o.palm ?? 0 }]); wsum += w; };
+    const g = (w, near, far, pole, o = {}) => { if (w < 0.001) return; const k = nearK; items.push([w, { p: lerp3(far, near, k), pole: pole || [-1, side * 0.6, 0.2], fist: o.fist ?? 0, palm: o.palm ?? 0, point: (o.point ?? 0) * k }]); wsum += w; };
     const sw = P.swing || 0, k = SP.armK || 1;
-    const restP = T(6 * k, SP.restOut, SP.sh[2] + SP.armA + SP.armB - 6);
-    const rest = { p: [restP[0] + 26 * k * sw * (side < 0 ? 1 : -1), restP[1], restP[2] - 5 * Math.abs(sw)], pole: [-1, side * 0.5, 0.1], fist: 0.2 };
+    const brt = (P.breath || 0) * 1.4, idle = Math.sin(t * TAU * 0.13 + side) * 2.5;
+    const restP = T((15 + idle) * k, SP.restOut - 3 + 0.5 * brt, SP.sh[2] + SP.armA + SP.armB - 15 * k - brt);
+    const rest = { p: [restP[0] + 28 * k * sw * (side < 0 ? 1 : -1), restP[1], restP[2] - 6 * Math.abs(sw) - 4 * Math.max(0, sw * (side < 0 ? 1 : -1))], pole: [-1, side * 0.45, 0.15], fist: 0.25 };
     // head-attached targets come from the drawn head (no lag between the hand and the pail / cheek)
     const Hp = (u, r = 1) => R.H.toBody(N3(u), r);
     const pailSide = (sgn, dy = 0.3) => { const top = Hp([0, 0, -1], SP.pailSeat); const pr2 = R.H.R; const sideV = mv(pr2, [0, sgn, 0]), up = mv(pr2, [0, 0, -1]); return A3(A3(top, M3(sideV, PAIL.R0 + 6)), M3(up, PAIL.H * dy)); };
-    { const w = lerp(W.pailUp2, W.pailUp, nearK); if (w > 0.001) { items.push([w, { p: pailSide(side), pole: [-0.3, side * 1, 0.3], fist: 0.5, palm: 0.3 }]); wsum += w; } }
+    { const w = lerp(W.pailUp2, W.pailUp, nearK); if (w > 0.001) { items.push([w, { p: pailSide(side), pole: [-0.3, side * 1, 0.3], fist: 0.5, palm: 0.3, point: 0 }]); wsum += w; } }
     if (W.tossW) g(W.tossW * 0.8, T(18, 58, SP.sh[2] + 40), T(8, 46, SP.sh[2] + 70), [-1, side * 0.8, 0.2], { palm: 1 });
     if (W.wave) { const o = Math.sin(t * TAU * 1.9), k2 = SP.armK || 1; g(W.wave, T((-8 + 16 * o) * k2, 62 * k2, SP.sh[2] - 56 * k2 - 4 * Math.abs(o)), rest.p, [-0.3, side * 1, 0.8], { palm: 1 }); }
     if (W.stroke) { const o = Math.sin(t * TAU * 0.6); g(W.stroke, T(raw.strokeF + 8 * o, 10, raw.strokeY + 3 * Math.abs(o)), rest.p, [-0.6, side * 0.8, 0.5], { palm: 1 }); }
@@ -511,15 +515,16 @@ export function makeFolk(res, seed, SP) {
     if (W.lap) g(W.lap, T(40, 18, SP.hipY + 6), T(38, 18, SP.hipY + 8), [-0.5, side * 1, 0.3], { palm: 0.5 });
     if (W.hips) g(W.hips, T(-4, SP.skirtOut - 6, SP.waistY + 4), T(-4, SP.skirtOut - 6, SP.waistY + 4), [-0.6, side * 1, -0.2], { fist: 0.8 });
     if (W.reach) g(W.reach, T(70, 16, SP.sh[2] - 4), rest.p, [-0.5, side * 0.8, 0.4], { palm: 1 });
+    if (W.point) g(W.point, T(84 * k, 34, SP.sh[2] + 16 * k), rest.p, [-0.4, side * 0.9, 0.5], { point: 1 });
     if (W.skipW) { const q = sw * (side < 0 ? 1 : -1); g(W.skipW, T(10 + 44 * q, SP.restOut + 8, SP.sh[2] + 86 - 34 * Math.max(0, q)), T(10 + 44 * q, SP.restOut + 8, SP.sh[2] + 86 - 34 * Math.max(0, q)), [-1, side * 0.5, 0.2], { palm: 0.5 }); }
     if (W.bedArms) { const k2 = ease(P.lie || 0); g(W.bedArms, T(lerp(46, 26, k2), lerp(14, 10, k2), lerp(SP.hipY - 6, SP.sh[2] + 30, k2)), T(lerp(44, 24, k2), lerp(16, 6, k2), lerp(SP.hipY - 4, SP.sh[2] + 34, k2)), [-0.6, side * 1, 0.2], { palm: 0.5 }); }
-    const rw = Math.max(0, 1 - wsum); let tot = rw, p = M3(rest.p, rw), pole = M3(rest.pole, rw), fist = rest.fist * rw, palm = 0;
-    for (const [w, it] of items) { p = A3(p, M3(it.p, w)); pole = A3(pole, M3(it.pole, w)); fist += w * it.fist; palm += w * it.palm; tot += w; }
-    p = M3(p, 1 / tot); pole = M3(pole, 1 / tot); fist /= tot; palm /= tot;
+    const rw = Math.max(0, 1 - wsum); let tot = rw, p = M3(rest.p, rw), pole = M3(rest.pole, rw), fist = rest.fist * rw, palm = 0, point = 0;
+    for (const [w, it] of items) { p = A3(p, M3(it.p, w)); pole = A3(pole, M3(it.pole, w)); fist += w * it.fist; palm += w * it.palm; point += w * it.point; tot += w; }
+    p = M3(p, 1 / tot); pole = M3(pole, 1 / tot); fist /= tot; palm /= tot; point /= tot;
     const sol = ik3(sh, p, SP.armA, SP.armB, pole, 1.15);
     const pr = proj(yawB);
     const S2 = pr(sh), E2 = pr(sol.E), T2 = pr(sol.T);
-    return { side, nearK, S: S2, E: E2, T: T2, d: (pr(p)[2] * 0.7 + S2[2] * 0.3), fist, palm, T3: sol.T };
+    return { side, nearK, S: S2, E: E2, T: T2, d: (pr(p)[2] * 0.7 + S2[2] * 0.3), fist: Math.max(fist, point), palm, point, T3: sol.T };
   }
 
   // ---- clothing rings (body-local 3D) -> projected outlines
@@ -727,18 +732,22 @@ export function makeFolk(res, seed, SP) {
   }
   function drawHand(g, a, skin, R) {
     const E = a.E, T = a.T, ang = Math.atan2(T[1] - E[1], T[0] - E[0]);
-    const hs = SP.hand, f = a.fist, op = a.palm;
+    const hs = SP.hand, f = a.fist, op = clamp(a.palm - f), pt = a.point || 0;
     g.save(); g.translate(T[0] - Math.cos(ang) * hs * 0.15, T[1] - Math.sin(ang) * hs * 0.15); g.rotate(ang);
     const th = (a.side < 0 ? 1 : -1) * (Math.cos(R.yawB) >= 0 ? 1 : -1) * (Math.sin(ang) > 0 ? -1 : 1) * -1;
-    const L = hs * (1.12 - 0.3 * f + 0.12 * op), Wd = hs * (0.74 + 0.1 * op);
-    // one little rounded hand: palm, fingers together, a thumb lobe
-    const P = [[0, -0.36], [0.4, -0.5], [0.82, -0.44], [1.04, -0.12], [1.0, 0.22], [0.78, 0.4], [0.68 - 0.1 * f, 0.66], [0.5 - 0.1 * f, 0.82], [0.32, 0.62], [0.12, 0.42]].map(([x, y]) => [x * L, y * Wd * th]);
+    const L = hs * (1.12 - 0.32 * f + 0.14 * op), Wd = hs * (0.74 + 0.14 * op);
+    // one rounded hand: palm, fingers (a little spread when open), a thumb lobe; a fist curls; pointing adds a finger
+    const tip = op > 0.4 ? [[1.04, -0.42], [1.16, -0.3], [1.02, -0.16], [1.14, -0.04], [1.0, 0.08], [1.08, 0.2], [0.94, 0.3]] : [[0.98, -0.36], [1.04, -0.12], [1.0, 0.22]];
+    const P = [[0, -0.36], [0.4, -0.5], [0.8, -0.48]].concat(tip, [[0.78, 0.4], [0.7 - 0.1 * f, 0.66], [0.52 - 0.1 * f, 0.84], [0.32, 0.64], [0.12, 0.42]]).map(([x, y]) => [x * L, y * Wd * th]);
     const hand = smooth(P, true, 4);
+    if (pt > 0.3) { const fg = smooth([[L * 0.7, -Wd * 0.42 * th], [L * (0.7 + 0.75 * pt), -Wd * 0.4 * th], [L * (0.78 + 0.75 * pt), -Wd * 0.24 * th], [L * 0.7, -Wd * 0.1 * th]], true, 4);
+      g.save(); path(g, fg); g.fillStyle = skin; g.fill(); g.restore(); penLine(g, fg, { closed: true, w: 1.1, alpha: 0.8, wobble: 0.15 }); }
     g.save(); path(g, hand); g.fillStyle = skin; g.fill(); g.clip(); pool(g, L * 0.5, th * Wd * 0.3, L * 0.5, Wd * 0.5, shade(skin, 0.3), 0.25); pool(g, L * 0.55, -th * Wd * 0.15, L * 0.3, Wd * 0.25, C.cheek, 0.3); g.restore();
     penLine(g, hand, { closed: true, w: 1.3, alpha: 0.8, wobble: 0.2, weight: (t) => 0.4 + 0.7 * Math.max(0, Math.sin(t * TAU + 1)) });
     g.strokeStyle = rgba(INK, 0.35); g.lineWidth = 0.8; g.lineCap = 'round';
-    if (f < 0.6) for (const y of [-0.22, 0.05]) { g.beginPath(); g.moveTo(L * 0.7, y * Wd * th); g.lineTo(L * 0.98, y * Wd * th * 1.1); g.stroke(); }
-    else { g.beginPath(); g.arc(L * 0.6, 0, Wd * 0.3, -1.2, 1.2); g.stroke(); }
+    if (f < 0.6 && op <= 0.4) for (const y of [-0.22, 0.05]) { g.beginPath(); g.moveTo(L * 0.7, y * Wd * th); g.lineTo(L * 0.98, y * Wd * th * 1.1); g.stroke(); }
+    else if (f >= 0.6) { g.beginPath(); g.arc(L * 0.6, 0, Wd * 0.3, -1.2, 1.2); g.stroke(); }
+    else for (const y of [-0.23, -0.1, 0.03, 0.15]) { g.beginPath(); g.moveTo(L * 0.62, y * Wd * th); g.lineTo(L * 0.86, y * Wd * th * 1.15); g.stroke(); }
     g.restore();
   }
 
@@ -1018,16 +1027,18 @@ export function makeFolk(res, seed, SP) {
       if (st.stool && R.raw.sit > 0.01) drawStool(g, R);
       if (!inBed) for (const L of R.legs.slice().sort((a, b) => (a.near ? 1 : 0) - (b.near ? 1 : 0))) if (!(SP.longSkirt && L.knK > 0.5)) drawLeg(g, L, !L.near);
       if (R.pail && R.pail.at === 'ground') drawPail(g, pailSpr, R.pail.x, R.pail.y, 0, R.pail.milk, { bail: 1.2 });
-      const farLate = far.d > SP.farLate;
       body(() => {
-        if (!farLate && !inBed) drawArm(g, far, true, R);
-        const plB = R.plaits ? R.plaits.filter((p) => p.dChest < 0) : [], plF = R.plaits ? R.plaits.filter((p) => p.dChest >= 0) : [];
-        for (const p of plB) drawPlait(g, p);
         if (!inBed) { g.save(); g.setTransform(...mulT(base, R.Ms)); drawSkirt(g, R, st); g.restore(); }
         drawNeck(g, R);
         drawBodice(g, R, st);
-        if (farLate && !inBed) drawArm(g, far, true, R);
-        for (const p of plF.sort((a, b) => a.d - b.d)) drawPlait(g, p);
+        // the body's silhouette in this (body) space: the bodice, and the skirt carried over from its own matrix
+        const MiMs = mulA(R.Mi, R.Ms), skirtB = inBed ? null : R.skirt.outline.map((q) => ap(MiMs, q)), bod = R.bodice.outline;
+        const cx = bod.reduce((a, q) => a + q[0], 0) / bod.length, cy = bod.reduce((a, q) => a + q[1], 0) / bod.length;
+        const behind = (occ, fn) => { g.save();
+          if (occ > 0.001) for (const sh of [bod, skirtB]) { if (!sh) continue; g.beginPath(); g.rect(cx - 2000, cy - 2000, 4000, 4000); g.moveTo(cx + (sh[0][0] - cx) * occ, cy + (sh[0][1] - cy) * occ); for (const q of sh) g.lineTo(cx + (q[0] - cx) * occ, cy + (q[1] - cy) * occ); g.closePath(); g.clip('evenodd'); }
+          fn(); g.restore(); };
+        if (!inBed) behind(clamp(0.3 - far.d / 14), () => drawArm(g, far, true, R));
+        if (R.plaits) for (const pl of R.plaits.slice().sort((a, b) => a.d - b.d)) behind(clamp(Math.max(0.3 - pl.dChest / 10, (R.pb.plFly || 0) * 1.5 - 0.35)), () => drawPlait(g, pl));
         drawHead(g, R, st);
         if (R.pail && R.pail.at === 'head') drawPail(g, pailSpr, R.pail.x, R.pail.y, R.pail.ang, R.pail.milk, { bail: 1.35 });
       });

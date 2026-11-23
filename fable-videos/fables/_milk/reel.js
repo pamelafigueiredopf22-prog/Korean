@@ -114,7 +114,7 @@ seg(4, 'Stroking Buttercup\'s nose', () => {
   return [act(R.cow, CX, GROUND, S, (q) => ({ headDown: 0.7, headTurn: 0.4, happy: on(q, 1.2, 3.8, 0.4), chew: 0 })),
     act(R.molly, CX - 590, GROUND, S, (q) => ({ stroke: on(q, 0.3, 3.8, 0.5), strokeF: 118, strokeY: -205, happy: on(q, 1.5, 3.5, 0.4) }), { face: -1 })];
 });
-seg(3, 'Waving', () => [act(R.molly, 960, GROUND, 1.75, (q) => ({ wave: on(q, 0.2, 2.9, 0.4), mouth: q > 0.8 && q < 2 ? talk(q) * 0.6 : 0 }))]);
+seg(4, 'Waving (an open hand), then pointing', () => [act(R.molly, 960, GROUND, 1.75, (q) => ({ wave: on(q, 0.2, 2.1, 0.4), point: on(q, 2.3, 3.9, 0.4), mouth: q > 0.8 && q < 2 ? talk(q) * 0.6 : 0 }))]);
 
 // ================================================================ MOTHER
 seg(4.5, 'Mother: idle, talking, a kind smile, gentle nodding', () =>

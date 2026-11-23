@@ -45,7 +45,7 @@ export function makeMother(res = 2, seed = 83) {
     noseEl: 0.27, mouthEl: 0.52, mouthW: 17, mouthDeep: 0.9, earAz: 1.6, earEl: 0.14, earS: 1.1,
     freckles: null,
     torso: [[-338, 26, 19], [-330, 53, 29], [-316, 59, 39], [-298, 58, 41], [-281, 55, 39], [-269, 54, 38]],
-    sh: [-2, 49, -325], armA: 68, armB: 62, armW: 18, hand: 18, sleeve: 0.7, restOut: 60, skirtOut: 84, armK: 1.4,
+    sh: [-2, 49, -325], armA: 68, armB: 62, armW: 18, hand: 21, sleeve: 0.7, restOut: 60, skirtOut: 84, armK: 1.4,
     hug: [70, 28, -298], clasp: [40], milkAt: [90, 14, -280], giveAt: [74, 0, -288],
     waistY: -269, skirtTop: [-271, 56, 40], skirtHem: [-22, 100, 90], folds: 11, lapF: 70, apron: [1.0, 0.9], bib: null, lace: false,
     buttons: [-322, -308, -294, -280],
