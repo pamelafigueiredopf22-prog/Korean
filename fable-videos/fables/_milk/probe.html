@@ -1,0 +1,15 @@
+<!doctype html><html><head><meta charset="utf-8"></head><body style="margin:0"><canvas id="c" width="1920" height="1080"></canvas>
+<script type="module">
+// Buttercup's anchor points (for the stager): PAGE=probe.html node tools/render.js _milk --stills 0
+import { makeCow } from '../../engine/characters/cow.js';
+window.FABLE = { setup: async () => { const c = makeCow(1);
+  const P = (st) => () => ({ t: 2, ...st });
+  const o = { x: 0, y: 0, scale: 1, face: 1 };
+  const r = (v) => JSON.stringify(v, (k, x) => typeof x === 'number' ? Math.round(x) : x);
+  console.error('udder', r(c.udderAt({ t: 2 }, o)));
+  console.error('nose stand', r(c.noseAt(P({}), 2, o)), 'head', r(c.headAt(P({}), 2, o)), 'mouth', r(c.mouthAt(P({}), 2, o)));
+  console.error('nose down', r(c.noseAt(P({ headDown: 0.7, headTurn: 0.4 }), 2, o)));
+  console.error('hooves', r(c.hoovesAt(P({}), 2, o)));
+  console.error('nose lie', r(c.noseAt(P({ lie: 1 }), 2, o)), r(c.noseAt(P({ lie: 1, sleep: 1 }), 2, o)));
+}, frame: () => {} };
+</script></body></html>

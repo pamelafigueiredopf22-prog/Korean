@@ -1,0 +1,71 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>@font-face { font-family: Fell; src: url(../../engine/fonts/im-fell-english-latin-400-italic.woff2); }</style>
+</head><body style="margin:0"><canvas id="c" width="1920" height="1080"></canvas>
+<script type="module">
+// Buttercup's sheets (PAGE=cowsheet.html node tools/render.js _milk --stills 0):
+//   cowsheet.html          poses: standing (with the Jersey proportion guide), three walk frames, turned to Molly, moo,
+//                          lying chewing, asleep
+//   cowsheet.html?head     the head large: profile, toward us, looking back, moo, chewing, content, asleep
+//   cowsheet.html?strip=walk|lie   a frame strip (12 frames) of the walk / the lie-down, with the ground and hoof marks
+import { paper } from '../../engine/watercolor.js';
+import { makeCow, STRIDE } from '../../engine/characters/cow.js';
+import { makeMilkmaid } from '../../engine/characters/milkmaid.js';
+const ctx = document.getElementById('c').getContext('2d');
+await document.fonts.load('30px Fell');
+const Q = new URLSearchParams(location.search);
+let P, cow, molly;
+const label = (s, x, y, size = 26) => { ctx.save(); ctx.fillStyle = '#4a3a2c'; ctx.font = `italic ${size}px Fell, serif`; ctx.textAlign = 'center'; ctx.fillText(s, x, y); ctx.restore(); };
+const ground = (x0, x1, y) => { ctx.save(); ctx.strokeStyle = 'rgba(90,70,50,0.25)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x0, y + 2); ctx.lineTo(x1, y + 2); ctx.stroke(); ctx.restore(); };
+window.FABLE = { setup: async () => { P = paper(); cow = makeCow(2); molly = makeMilkmaid(2); },
+  frame: (t) => {
+    ctx.drawImage(P, 0, 0);
+    if (Q.has('big')) { // one pose, large: cowsheet.html?big={"walk":0.3,"walkAmt":1}
+      const st = { t: 2.2, life: 0, noBlink: true, ...JSON.parse(Q.get('big') || '{}') }, S = Number(Q.get('s') || 1.75);
+      ground(40, 1880, 1000); ctx.save(); ctx.translate(980, 1000); ctx.scale(S, S); cow.shadow(ctx, st); cow.draw(ctx, st); ctx.restore();
+      return;
+    }
+    if (Q.has('head')) {
+      const cells = [['profile', {}], ['turned toward us', { headTurn: 1 }], ['looking back (to Molly)', { lookBack: 0.75 }], ['moo', { moo: 1 }],
+        ['chewing the cud', { chew: 1, t: 2.35 }], ['content', { happy: 1, headTurn: 0.5 }], ['ears back, nose down', { headDown: 0.6, earsBack: 0.8, headTurn: 0.4 }], ['asleep', { lie: 1, sleep: 1 }]];
+      cells.forEach(([name, st], i) => { const cx = 240 + (i % 4) * 480, cy = 20 + Math.floor(i / 4) * 530;
+        ctx.save(); ctx.beginPath(); ctx.rect(cx - 238, cy, 476, 520); ctx.clip();
+        const S = 2.3, pose = { t: 2.2, life: 0, noBlink: true, ...st };
+        const h0 = cow.headAt(() => pose, pose.t, { x: 0, y: 0, scale: 1, face: 1 }), n0 = cow.noseAt(() => pose, pose.t, { x: 0, y: 0, scale: 1, face: 1 }), h = { x: (h0.x + n0.x) / 2, y: (h0.y + n0.y) / 2 };
+        ctx.translate(cx - h.x * S, cy + 250 - h.y * S); ctx.scale(S, S); cow.draw(ctx, pose); ctx.restore();
+        label(name, cx, cy + 500);
+      });
+      return;
+    }
+    if (Q.has('strip')) {
+      const kind = Q.get('strip'), N = 12, S = 0.42;
+      for (let i = 0; i < N; i++) {
+        const cx = 170 + (i % 4) * 470, gy = 300 + Math.floor(i / 4) * 340;
+        let pose, x = cx + 80;
+        if (kind === 'walk') { const ph = Number(Q.get('p0') || 0) + i / N; pose = { t: 2 + i * 0.1, life: 0, noBlink: true, walk: ph, walkAmt: 1 }; x = cx + 80 - (ph * STRIDE) * S * 0; }
+        else { const u = i / (N - 1); pose = { t: 2 + u * 4, life: 0, noBlink: true, lie: Math.min(1, u * 1.25), sleep: Math.max(0, u * 1.25 - 1) * 4, chew: 0 }; }
+        ground(cx - 160, cx + 300, gy);
+        ctx.save(); ctx.translate(x + 70, gy); ctx.scale(S * 1.6, S * 1.6); cow.shadow(ctx, pose); cow.draw(ctx, pose); ctx.restore();
+        label(kind === 'walk' ? `phase ${(pose.walk % 1).toFixed(2)}` : `lie ${pose.lie.toFixed(2)} sleep ${pose.sleep.toFixed(2)}`, cx + 70, gy + 30, 20);
+      }
+      return;
+    }
+    const cells = [['standing', {}], ['walking (near hind lifts)', { walk: 0.9, walkAmt: 1 }], ['walking (far fore lifts)', { walk: 0.15, walkAmt: 1 }], ['walking (near fore lifts)', { walk: 0.55, walkAmt: 1 }],
+      ['head turned to Molly', { lookBack: 0.75, happy: 0.0 }], ['moo', { moo: 1 }], ['lying in the straw, chewing', { lie: 1, chew: 1, t: 2.35 }], ['asleep', { lie: 1, sleep: 1 }]];
+    const S = 0.78;
+    cells.forEach(([name, st], i) => { const x = 240 + (i % 4) * 480, y = 440 + Math.floor(i / 4) * 500;
+      ground(x - 230, x + 230, y);
+      if (i === 4) { ctx.save(); ctx.translate(x + 150, y); ctx.scale(-S * 0.95, S * 0.95); molly.draw(ctx, { t: 2.2, sit: 1, stool: true, milk: 1, life: 0 }); ctx.restore(); }
+      ctx.save(); ctx.translate(x + 20, y); ctx.scale(S, S); cow.shadow(ctx, st); cow.draw(ctx, { t: 2.2, life: 0, noBlink: true, ...st }); ctx.restore();
+      label(name, x, y + 46);
+      if (i === 0) { // the guide: withers 1, body (point of shoulder to pin bone) 1.27, legs under the belly 0.4-0.45
+        const X = (u) => x + 20 - u * S, Y = (v) => y + v * S;
+        ctx.save(); ctx.strokeStyle = 'rgba(160,60,40,0.55)'; ctx.fillStyle = 'rgba(160,60,40,0.85)'; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]); ctx.font = 'italic 17px Fell, serif';
+        ctx.beginPath(); ctx.moveTo(X(125), Y(0)); ctx.lineTo(X(125), Y(-300)); ctx.stroke(); ctx.fillText('withers 1.0', X(125) - 30, Y(-306));
+        ctx.beginPath(); ctx.moveTo(X(182), Y(-215)); ctx.lineTo(X(-198), Y(-215)); ctx.stroke(); ctx.fillText('body 1.27', X(0), Y(-221));
+        ctx.beginPath(); ctx.moveTo(X(10), Y(0)); ctx.lineTo(X(10), Y(-118)); ctx.stroke(); ctx.fillText('0.4', X(10) + 6, Y(-50));
+        ctx.restore();
+      }
+    });
+    label('Buttercup, a Jersey - withers : body length : clearance under the belly = 1 : 1.27 : 0.4 (a real Jersey: about 1 : 1.2-1.3 : 0.45)', 960, 1062, 22);
+  } };
+</script></body></html>
