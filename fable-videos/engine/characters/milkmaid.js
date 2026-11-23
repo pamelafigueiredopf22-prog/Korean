@@ -69,8 +69,8 @@ export function makeMilkmaid(res = 2, seed = 71, look = {}) {
     freckles: [[0.18, 0.2], [0.27, 0.25], [0.36, 0.21], [0.45, 0.27], [0.24, 0.31], [0.4, 0.33], [0.53, 0.24]],
     // body (body-local 3D: [forward, her left, down]); rings [y, half-width, half-depth]
     torso: [[-259, 20, 13], [-252, 34, 18], [-240, 37, 20], [-222, 34, 20], [-206, 31, 19], [-194, 30, 19]],
-    sh: [-1, 30, -248], armA: 52, armB: 47, armW: 10.5, hand: 13, sleeve: 0.62, restOut: 40, skirtOut: 60,
-    hug: [46, 22, -226], clasp: [26], milkAt: [66, 10, -196], giveAt: [54, 0, -228],
+    sh: [-1, 30, -248], armA: 52, armB: 47, armW: 10.5, hand: 16, sleeve: 0.62, restOut: 40, skirtOut: 60,
+    hug: [74, 32, -238], clasp: [26], milkAt: [66, 10, -196], giveAt: [54, 0, -228],
     waistY: -194, skirtTop: [-196, 31, 21], skirtHem: [-100, 60, 52], folds: 9, lapF: 48, apron: [1.0, 0.86], bib: [0.5, -240], lace: true,
     hipY: -150, hipW: 13, footW: 11, ankleH: 12, toeL: 21, bootW: 8, thigh: 72, shin: 69, legW: 11,
     STRIDE, LIFT: 18, hopH: 16, sitFoot: 74, kneelDrop: 50, farLate: 0, pailSeat: 1.13, groundPail: 60,

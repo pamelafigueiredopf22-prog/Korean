@@ -1,0 +1,9 @@
+<!doctype html><html><head><meta charset="utf-8"></head><body style="margin:0"><canvas id="c" width="1920" height="1080"></canvas>
+<script type="module">
+// scans the whole reel for frames that throw (PAGE=scan.html node tools/render.js _milk --stills 0)
+import { REEL } from './reel.js';
+const ctx = document.getElementById('c').getContext('2d');
+window.FABLE = { setup: async () => { await REEL.setup(); let n = 0;
+  for (let f = 0; f < 125 * 30 && n < 8; f++) for (const dt of [-0.006, 0, 0.006]) { try { REEL.frame(ctx, f / 30 + dt); } catch (e) { console.error(`[scan] t=${(f / 30 + dt).toFixed(3)} ${e.message} ${e.stack.split('\n')[1]}`); n++; break; } }
+  console.error('[scan] done'); }, frame: () => {} };
+</script></body></html>
